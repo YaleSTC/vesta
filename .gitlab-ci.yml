@@ -2,6 +2,7 @@ image: ruby:2.1
 
 pages:
   cache:
+    untracked: true
     paths:
     - vendor
 
