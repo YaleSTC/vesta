@@ -1,0 +1,1 @@
+Example [Middleman](https://middlemanapp.com/) site using GitLab Pages. Read more at https://doc.gitlab.com/ee/pages/ 
