@@ -38,6 +38,8 @@ group :development, :test do
   gem "pry-byebug"
   gem "pry-rails"
   gem "rspec-rails", "~> 3.5.0.beta4"
+  gem "rubocop", "~> 0.44.1", require: false
+  gem "rubocop-rspec", "~> 1.7.0", require: false
 end
 
 group :development, :staging do
