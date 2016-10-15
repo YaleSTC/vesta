@@ -10,3 +10,7 @@ before_script:
 
 notifications:
   email: false
+
+script:
+  - rake check_style
+  - rake
