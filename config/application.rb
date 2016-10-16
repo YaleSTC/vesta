@@ -3,7 +3,7 @@
 require_relative 'boot'
 require 'rails/all'
 Bundler.require(*Rails.groups)
-module Roomer
+module Vesta
   class Application < Rails::Application
     config.assets.quiet = true
     config.generators do |generate|

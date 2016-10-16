@@ -10,10 +10,10 @@ if [ -z "$1" ]; then
 fi
 
 heroku pg:backups restore \
-  `heroku pg:backups public-url -a roomer-staging` \
+  `heroku pg:backups public-url -a vesta-staging` \
   DATABASE_URL \
-  --confirm roomer-staging-pr-$1 \
-  --app roomer-staging-pr-$1
-heroku run rake db:migrate --exit-code --app roomer-staging-pr-$1
-heroku ps:scale worker=1 --app roomer-staging-pr-$1
-heroku restart --app roomer-staging-pr-$1
+  --confirm vesta-staging-pr-$1 \
+  --app vesta-staging-pr-$1
+heroku run rake db:migrate --exit-code --app vesta-staging-pr-$1
+heroku ps:scale worker=1 --app vesta-staging-pr-$1
+heroku restart --app vesta-staging-pr-$1

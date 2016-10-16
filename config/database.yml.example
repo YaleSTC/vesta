@@ -1,6 +1,6 @@
 development: &default
   adapter: postgresql
-  database: roomer_development
+  database: vesta_development
   encoding: utf8
   min_messages: warning
   pool: <%= Integer(ENV.fetch("DB_POOL", 5)) %>
@@ -9,7 +9,7 @@ development: &default
 
 test:
   <<: *default
-  database: roomer_test
+  database: vesta_test
 
 production: &deploy
   encoding: utf8
