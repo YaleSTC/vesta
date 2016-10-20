@@ -1,0 +1,6 @@
+<h1> New Suite </h1>
+<%= simple_form_for @suite do |f| %>
+  <%= f.input :number %>
+  <%= f.association :building %>
+  <%= f.submit 'Create' %>
+<% end %>
