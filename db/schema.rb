@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161015011435) do
+ActiveRecord::Schema.define(version: 20161104145650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "buildings", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -28,6 +34,24 @@ ActiveRecord::Schema.define(version: 20161015011435) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.integer  "suite_id"
+    t.string   "number",                 null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "beds",       default: 0, null: false
+    t.index ["suite_id"], name: "index_rooms_on_suite_id", using: :btree
+  end
+
+  create_table "suites", force: :cascade do |t|
+    t.integer  "building_id"
+    t.string   "number",                  null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "size",        default: 0, null: false
+    t.index ["building_id"], name: "index_suites_on_building_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|

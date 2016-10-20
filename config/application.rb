@@ -17,5 +17,6 @@ module Vesta
     end
     config.action_controller.action_on_unpermitted_parameters = :raise
     config.active_job.queue_adapter = :delayed_job
+    config.autoload_paths += %w(creators).map { |s| "#{config.root}/lib/#{s}" }
   end
 end
