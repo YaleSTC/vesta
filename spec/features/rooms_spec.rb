@@ -2,6 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Room Creation' do
+  before { log_in FactoryGirl.create(:admin) }
   it 'succeeds' do
     suite = FactoryGirl.create(:suite)
     visit 'rooms/new'

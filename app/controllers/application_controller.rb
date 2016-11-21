@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 # Base controller class.
 class ApplicationController < ActionController::Base
+  include Pundit
   protect_from_forgery with: :exception
-  before_action :authenticate_user!, only: :index
+  before_action :authenticate_user!, unless: :devise_controller?
+  before_action :authorize!, except: :index, unless: :devise_controller?
+  after_action :verify_authorized, except: :index, unless: :devise_controller?
 
   def index
   end
@@ -23,5 +26,13 @@ class ApplicationController < ActionController::Base
     else
       render action: 'new'
     end
+  end
+
+  # Abstract method to enforce permissions authorization in all controllers.
+  # Must be overridden in all controllers.
+  #
+  # @abstract
+  def authorize!
+    raise NoMethodError
   end
 end

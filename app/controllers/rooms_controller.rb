@@ -18,11 +18,19 @@ class RoomsController < ApplicationController
 
   private
 
-  def set_room
-    @room = Room.find(params[:id])
+  def authorize!
+    if @room
+      authorize @room
+    else
+      authorize Room
+    end
   end
 
   def room_params
     params.require(:room).permit(:number, :suite_id, :beds)
+  end
+
+  def set_room
+    @room = Room.find(params[:id])
   end
 end

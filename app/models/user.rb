@@ -7,4 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :email, uniqueness: true
+  validates :role, presence: true
+
+  enum role: %w(student admin rep)
 end
