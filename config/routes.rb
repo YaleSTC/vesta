@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   resources :buildings
   resources :suites
   resources :rooms
+  resources :users
 end

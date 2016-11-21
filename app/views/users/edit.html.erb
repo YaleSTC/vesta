@@ -1,0 +1,10 @@
+<h1> Editing <%= @user.name %> </h1>
+<%= simple_form_for @user do |f| %>
+  <%= f.input :email %>
+  <%= f.input :first_name %>
+  <%= f.input :preferred_name %>
+  <%= f.input :middle_name %>
+  <%= f.input :last_name %>
+  <%= f.select :role, collection: User.roles.keys %>
+  <%= f.submit 'Save' %>
+<% end %>
