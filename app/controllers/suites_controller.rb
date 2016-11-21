@@ -18,11 +18,19 @@ class SuitesController < ApplicationController
 
   private
 
-  def set_suite
-    @suite = Suite.find(params[:id])
+  def authorize!
+    if @suite
+      authorize @suite
+    else
+      authorize Suite
+    end
   end
 
   def suite_params
     params.require(:suite).permit(:number, :building_id)
+  end
+
+  def set_suite
+    @suite = Suite.find(params[:id])
   end
 end

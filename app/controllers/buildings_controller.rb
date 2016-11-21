@@ -18,6 +18,14 @@ class BuildingsController < ApplicationController
 
   private
 
+  def authorize!
+    if @building
+      authorize @building
+    else
+      authorize Building
+    end
+  end
+
   def building_params
     params.require(:building).permit(:name)
   end
