@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Controller for Buildings
 class BuildingsController < ApplicationController
-  before_action :set_building, only: :show
+  before_action :set_building, only: %i(show edit update destroy)
 
   def show
   end
@@ -13,7 +13,21 @@ class BuildingsController < ApplicationController
   def create
     result = BuildingCreator.new(building_params).create!
     @building = result[:object] ? result[:object] : Building.new
-    handle_create(**result)
+    handle_action(action: 'new', **result)
+  end
+
+  def edit
+  end
+
+  def update
+    result = Updater.new(object: @building, name_method: :name,
+                         params: building_params).update
+    handle_action(action: 'edit', **result)
+  end
+
+  def destroy
+    result = Destroyer.new(object: @building, name_method: :name).destroy
+    handle_action(**result)
   end
 
   private

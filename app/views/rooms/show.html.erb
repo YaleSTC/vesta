@@ -1,1 +1,2 @@
-<h1><%= @room.number %></h1>
+<h1 class="room-number"><%= @room.number %></h1>
+<%= link_to 'Delete', room_path(@room), method: :delete %>

@@ -1,5 +1,3 @@
 <h1> New Building </h1>
-<%= simple_form_for @building do |f| %>
-  <%= f.input :name %>
-  <%= f.submit 'Create' %>
-<% end %>
+<%= render "form", building: @building %>
+

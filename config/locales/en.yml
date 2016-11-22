@@ -17,3 +17,8 @@ en:
 
   titles:
     application: Vesta
+
+  helpers:
+    submit:
+      create: 'Create'
+      update: 'Save'

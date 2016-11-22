@@ -1,7 +1,2 @@
 <h1> New Room </h1>
-<%= simple_form_for @room do |f| %>
-  <%= f.input :number %>
-  <%= f.input :beds %>
-  <%= f.association :suite, label_method: :number %>
-  <%= f.submit 'Create' %>
-<% end %>
+<%= render "form", room: @room %>

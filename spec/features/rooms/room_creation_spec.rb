@@ -8,7 +8,7 @@ RSpec.feature 'Room Creation' do
     visit 'rooms/new'
     fill_in_room_info(suite: suite, room_number: 'L01A', room_beds: 2)
     click_on 'Create'
-    expect(page).to have_content('L01A')
+    expect(page).to have_css('.room-number', text: 'L01A')
   end
   it 'redirects to /new on failure' do
     visit 'rooms/new'
