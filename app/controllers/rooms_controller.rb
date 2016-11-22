@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Controller for Rooms
 class RoomsController < ApplicationController
-  before_action :set_room, only: :show
+  before_action :set_room, only: [:show, :edit, :update, :destroy]
 
   def show
   end
@@ -13,7 +13,21 @@ class RoomsController < ApplicationController
   def create
     result = RoomCreator.new(room_params).create!
     @room = result[:object] ? result[:object] : Room.new
-    handle_create(**result)
+    handle_action(action: 'new', **result)
+  end
+
+  def edit
+  end
+
+  def update
+    result = Updater.new(object: @room, name_method: :number,
+                         params: room_params).update
+    handle_action(action: 'edit', **result)
+  end
+
+  def destroy
+    result = Destroyer.new(object: @room, name_method: :number).destroy
+    handle_action(**result)
   end
 
   private

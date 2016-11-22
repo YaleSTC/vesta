@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Controller for Suites
 class SuitesController < ApplicationController
-  before_action :set_suite, only: :show
+  before_action :set_suite, only: %i(show edit update destroy)
 
   def show
   end
@@ -13,7 +13,21 @@ class SuitesController < ApplicationController
   def create
     result = SuiteCreator.new(suite_params).create!
     @suite = result[:object] ? result[:object] : Suite.new
-    handle_create(**result)
+    handle_action(action: 'new', **result)
+  end
+
+  def edit
+  end
+
+  def update
+    result = Updater.new(object: @suite, name_method: :number,
+                         params: suite_params).update
+    handle_action(action: 'edit', **result)
+  end
+
+  def destroy
+    result = Destroyer.new(object: @suite, name_method: :number).destroy
+    handle_action(**result)
   end
 
   private

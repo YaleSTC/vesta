@@ -1,1 +1,3 @@
-<h1><%= @suite.number %></h1>
+<h1 class="suite-number"><%= @suite.number %></h1>
+<%= link_to 'Delete', suite_path(@suite), method: :delete %>
+

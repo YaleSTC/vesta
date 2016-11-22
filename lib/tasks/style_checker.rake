@@ -48,7 +48,8 @@ end
 def process_diff
   all = `git diff master --name-status`
   existing_files = all.split("\n").grep(EXISTING_FILES)
-  existing_files.map { |f| FILE.match(f)[1] }
+  existing_files.map! { |f| FILE.match(f) }.compact!
+  existing_files.map { |f| f[1] }
 end
 
 def files_that_match(regex)

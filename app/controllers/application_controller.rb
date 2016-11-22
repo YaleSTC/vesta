@@ -12,19 +12,31 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # Abstract method to handle object creation. Handles creation
-  # success, failure, and setting the flash appropriately.
+  # Abstract method to handle object CRUD. Handles success, failure,
+  # and setting the flash appropriately.
   #
   # @abstract
-  # @param [ApplicationRecord] object The object key from the Creator results
-  # @param [Hash{Symbol=>String}] msg The msg key from the Creator results
-  def handle_create(object:, msg:)
+  # @param [ApplicationRecord] object The object key from the service object
+  #   results
+  # @param [Hash{Symbol=>String}] msg The msg key from the service object
+  #   results
+  # @param [String] action The action to render when no object passed.
+  #   (Creation / update failure, destruction success)
+  # @param [String] path The path to redirect to when no object passed.
+  def handle_action(object:, msg:, action: nil, path: nil)
     flash_type = msg.keys.first
     flash[flash_type] = msg[flash_type]
-    if object
-      redirect_to object
+    redirect_to(object) && return if object
+    complete_request(action: action, path: path)
+  end
+
+  def complete_request(action: nil, path: nil)
+    if path
+      redirect_to path
+    elsif action
+      render action: action
     else
-      render action: 'new'
+      redirect_to root_path
     end
   end
 
