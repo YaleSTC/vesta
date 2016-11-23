@@ -36,6 +36,19 @@ ActiveRecord::Schema.define(version: 20161201211657) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
+  create_table "draws", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "draws_suites", id: false, force: :cascade do |t|
+    t.integer "draw_id",  null: false
+    t.integer "suite_id", null: false
+    t.index ["draw_id"], name: "index_draws_suites_on_draw_id", using: :btree
+    t.index ["suite_id"], name: "index_draws_suites_on_suite_id", using: :btree
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.integer  "suite_id"
     t.string   "number",                 null: false
@@ -72,7 +85,9 @@ ActiveRecord::Schema.define(version: 20161201211657) do
     t.string   "last_name",                           null: false
     t.string   "preferred_name"
     t.string   "middle_name"
+    t.integer  "draw_id"
     t.integer  "intent",                 default: 0,  null: false
+    t.index ["draw_id"], name: "index_users_on_draw_id", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
