@@ -1,0 +1,6 @@
+<%= simple_form_for @draw do |f| %>
+  <%= f.input :name %>
+  <%= f.association :students, label_method: :name %>
+  <%= f.association :suites, label_method: :number %>
+  <%= f.submit %>
+<% end %>

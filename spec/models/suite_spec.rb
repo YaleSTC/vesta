@@ -6,6 +6,7 @@ RSpec.describe Suite, type: :model do
     it { is_expected.to validate_presence_of(:number) }
     it { is_expected.to belong_to(:building) }
     it { is_expected.to have_many(:rooms) }
+    it { is_expected.to have_and_belong_to_many(:draws) }
 
     describe 'number uniqueness' do
       it 'allows duplicates that belong to separate buildings' do

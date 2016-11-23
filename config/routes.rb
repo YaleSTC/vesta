@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :suites
   resources :rooms
   resources :users
+  resources :draws
   get 'users/:id/intent', to: 'users#edit_intent'
   put 'users/:id/intent', to: 'users#update_intent'
 end
