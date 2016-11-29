@@ -10,8 +10,10 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :intent, presence: true
 
   enum role: %w(student admin rep)
+  enum intent: %w(undeclared on_campus off_campus)
 
   # Returns the user's preferred first name
   #
