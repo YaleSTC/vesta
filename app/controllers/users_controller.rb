@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 # Users Controller class
 class UsersController < ApplicationController
-  before_action :set_user, only: %i(show edit update)
+  prepend_before_action :set_user, only: %i(show edit update edit_intent
+                                            update_intent)
 
   def show
   end
@@ -10,14 +11,16 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.assign_attributes(user_params)
-    if @user.save
-      flash[:notice] = 'User successfully updated.'
-      redirect_to @user
-    else
-      flash[:error] = 'Please review the errors below.'
-      render action: 'edit'
-    end
+    result = Updater.new(object: @user, name_method: :name,
+                         params: user_params).update
+    handle_action(action: 'edit', **result)
+  end
+
+  def edit_intent
+  end
+
+  def update_intent
+    update
   end
 
   private
@@ -36,6 +39,6 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:first_name, :preferred_name, :middle_name,
-                                 :last_name, :role, :email)
+                                 :last_name, :role, :email, :intent)
   end
 end

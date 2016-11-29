@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryGirl.define do
-  factory :user do
+  factory :user, aliases: %i(student) do
     sequence(:email) { |n| "email#{n}@email.com" }
     password { 'passw0rd' }
     first_name { 'First' }
