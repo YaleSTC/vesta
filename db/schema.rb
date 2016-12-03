@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161121195134) do
+ActiveRecord::Schema.define(version: 20161203210200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,19 @@ ActiveRecord::Schema.define(version: 20161121195134) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
+  create_table "draws", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "draws_suites", id: false, force: :cascade do |t|
+    t.integer "draw_id",  null: false
+    t.integer "suite_id", null: false
+    t.index ["draw_id"], name: "index_draws_suites_on_draw_id", using: :btree
+    t.index ["suite_id"], name: "index_draws_suites_on_suite_id", using: :btree
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.integer  "suite_id"
     t.string   "number",                 null: false
@@ -52,6 +65,19 @@ ActiveRecord::Schema.define(version: 20161121195134) do
     t.datetime "updated_at",              null: false
     t.integer  "size",        default: 0, null: false
     t.index ["building_id"], name: "index_suites_on_building_id", using: :btree
+  end
+
+  create_table "suites_tags", id: false, force: :cascade do |t|
+    t.integer "tag_id"
+    t.integer "suite_id"
+    t.index ["suite_id"], name: "index_suites_tags_on_suite_id", using: :btree
+    t.index ["tag_id"], name: "index_suites_tags_on_tag_id", using: :btree
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -72,6 +98,9 @@ ActiveRecord::Schema.define(version: 20161121195134) do
     t.string   "last_name",                           null: false
     t.string   "preferred_name"
     t.string   "middle_name"
+    t.integer  "draw_id"
+    t.integer  "intent"
+    t.index ["draw_id"], name: "index_users_on_draw_id", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
