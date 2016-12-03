@@ -13,6 +13,7 @@
 class Suite < ApplicationRecord
   belongs_to :building
   has_many :rooms
+  has_and_belongs_to_many :tags
 
   validates :building, presence: true
   validates :number, presence: true, uniqueness: { scope: :building }

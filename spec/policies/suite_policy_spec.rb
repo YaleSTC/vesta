@@ -27,7 +27,7 @@ RSpec.describe SuitePolicy do
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :index?, :show?, :update?, :create?, :destroy? do
+    permissions :index?, :show?, :update?, :create?, :destroy?, :edit_tags? do
       it { is_expected.to permit(user, suite) }
     end
   end

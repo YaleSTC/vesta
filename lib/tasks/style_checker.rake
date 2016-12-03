@@ -38,7 +38,7 @@ def passed?
 end
 
 def rubocop(files)
-  "rubocop -D --force-exclusion #{files}"
+  "rubocop -Da --force-exclusion #{files}"
 end
 
 def diff

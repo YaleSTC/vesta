@@ -13,6 +13,10 @@ class SuitePolicy < ApplicationPolicy
     true
   end
 
+  def edit_tags?
+    user.admin?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

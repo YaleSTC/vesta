@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Controller for Suites
-class SuitesController < ApplicationController
-  before_action :set_suite, only: %i(show edit update destroy)
+class SuitesController < TaggableController
+  before_action :set_suite, except: %i(new)
 
   def show
   end
@@ -30,6 +30,12 @@ class SuitesController < ApplicationController
     handle_action(**result)
   end
 
+  def edit_tags
+    @taggable = @suite
+    @name = @suite.number
+    super
+  end
+
   private
 
   def authorize!
@@ -41,7 +47,7 @@ class SuitesController < ApplicationController
   end
 
   def suite_params
-    params.require(:suite).permit(:number, :building_id)
+    params.require(:suite).permit(:number, :building_id, :tag_ids)
   end
 
   def set_suite

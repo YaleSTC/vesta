@@ -1,0 +1,6 @@
+<h1> Adding Tags to <%= @name %> <\h1>
+<%= simple_form_for @taggable do |f| %>
+  <%= f.association :tags, collection: @tags, label_method: :name %>
+  <%= f.submit 'Add Tag' %>
+<% end %>
+
