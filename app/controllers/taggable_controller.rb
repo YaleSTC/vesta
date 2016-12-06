@@ -1,4 +1,5 @@
 class TaggableController < ApplicationController
+  helper TagDisplayer
   before_action :set_tag, only: %i(add_tag remove_tag)
 
   def edit_tags

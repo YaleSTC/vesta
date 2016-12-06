@@ -10,12 +10,14 @@ RSpec.feature 'Suite Tagging' do
     click_on 'Add Tag'
     select(tag.name, from: 'suite_tag_ids')
     click_on 'Add Tag'
-    expect(page).to have_content('.suite-tags', text: tag.name)
+    expect(page).to have_css('.suite-tags', text: tag.name)
   end
 
   it 'can be untagged' do
-    suite.update_attributes(tags: [tag])
-    click_on ".remove-#{tag.name.downcase}"
-    expect(page).not_to have_content('.suite-tags', text: tag.name)
+    tag = FactoryGirl.create(:tag, name: 'Elevator Access')
+    suite.update_attribute(:tags, [tag])
+    visit suite_path(suite)
+    click_link 'remove-elevator-access'
+    expect(page).not_to have_css('.suite-tags', text: tag.name)
   end
 end

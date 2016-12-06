@@ -1,16 +1,15 @@
 # frozen_string_literal: true
-# Class for Suite permissions
-class SuitePolicy < TaggablePolicy
-  def show?
-    true
+class TaggablePolicy < ApplicationPolicy
+  def edit_tags?
+    user.admin?
   end
 
-  def update?
-    user.rep? || user.admin?
+  def add_tag?
+    edit_tags?
   end
 
-  def index?
-    true
+  def remove_tag?
+    edit_tags?
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation

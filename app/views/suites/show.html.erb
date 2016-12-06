@@ -1,7 +1,8 @@
 <h1 class="suite-number"><%= @suite.number %></h1>
-<% @suite.tags.each do |t| %>
-  <%= TagDisplayer.tag_with_remove(t, suite_remove_tag_path(@suite, t)) %>
-<% end %>
+<%= render partial: 'taggable/tag_list',
+  locals: { taggable: @suite, remove_path: :suite_remove_tag_path } %>
+<p>
 <%= link_to 'Add Tag', suite_edit_tag_path(@suite) %>
+</p>
 <%= link_to 'Delete', suite_path(@suite), method: :delete %>
 

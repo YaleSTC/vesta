@@ -47,7 +47,7 @@ class SuitesController < TaggableController
   end
 
   def suite_params
-    params.require(:suite).permit(:number, :building_id, :tag_ids)
+    params.require(:suite).permit(:number, :building_id, tag_ids: [])
   end
 
   def set_suite

@@ -1,0 +1,10 @@
+<div class='suite-tags'>
+  <% taggable.tags.each do |t| %>
+  <p>
+    <%= t.name %>
+    <%= link_to('X', send(remove_path, taggable, t), method: :delete,
+                id: "remove-#{css_label(t)}") %>
+  </p>
+  <% end %>
+</div>
+
