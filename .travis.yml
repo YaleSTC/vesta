@@ -15,3 +15,6 @@ notifications:
 script:
   - rake check_style
   - rake
+
+after_script:
+  - bundle exec codeclimate-test-reporter
