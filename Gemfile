@@ -56,6 +56,7 @@ group :test do
   gem "launchy"
   gem "shoulda-matchers"
   gem "simplecov", require: false
+  gem "codeclimate-test-reporter", "~> 1.0.0"
   gem "timecop"
   gem "webmock"
 end
