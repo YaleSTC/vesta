@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Controller for Rooms
 class RoomsController < ApplicationController
-  before_action :set_room, only: [:show, :edit, :update, :destroy]
+  prepend_before_action :set_room, only: %i(show edit update destroy)
 
   def show
   end

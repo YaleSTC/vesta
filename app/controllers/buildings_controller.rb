@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Controller for Buildings
 class BuildingsController < ApplicationController
-  before_action :set_building, only: %i(show edit update destroy)
+  prepend_before_action :set_building, only: %i(show edit update destroy)
 
   def show
   end
