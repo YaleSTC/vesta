@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Controller for Suites
 class SuitesController < ApplicationController
-  before_action :set_suite, only: %i(show edit update destroy)
+  prepend_before_action :set_suite, only: %i(show edit update destroy)
 
   def show
   end
