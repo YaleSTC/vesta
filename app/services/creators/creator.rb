@@ -7,10 +7,9 @@
 class Creator
   # Initialize a new Creator.
   #
-  # @param [Class] klass The model class to be created
-  # @param [ActionController::Parameters] params The params object
-  #   from the controller.
-  # @param [Symbol] name_method The model method that gives an identifying
+  # @param klass [Class] The model class to be created.
+  # @param params [#to_h] The params for object.
+  # @param name_method [Symbol] The model method that gives an identifying
   #   name of the object (e.g. `#number` for Suite).
   def initialize(klass:, params:, name_method:)
     @klass = klass

@@ -46,23 +46,23 @@ RSpec.describe Room, type: :model do
   describe 'counter cache' do
     it 'increments on room addition' do
       suite = FactoryGirl.build_stubbed(:suite)
-      allow(suite).to receive(:increment)
+      allow(suite).to receive(:increment!)
       FactoryGirl.create(:room, beds: 1, suite: suite)
-      expect(suite).to have_received(:increment).with(:size, 1)
+      expect(suite).to have_received(:increment!).with(:size, 1)
     end
     it 'decrements on room deletion' do
       suite = FactoryGirl.build_stubbed(:suite)
-      allow(suite).to receive(:decrement)
-      room = FactoryGirl.create(:room, beds: 1, suite: suite)
-      room.destroy!
-      expect(suite).to have_received(:decrement).with(:size, 1)
+      allow(suite).to receive(:increment!)
+      allow(suite).to receive(:decrement!)
+      FactoryGirl.create(:room, beds: 1, suite: suite).destroy!
+      expect(suite).to have_received(:decrement!).with(:size, 1)
     end
     it 'updates on changing the number of beds in a room' do
       suite = FactoryGirl.build_stubbed(:suite)
-      allow(suite).to receive(:increment)
+      allow(suite).to receive(:increment!)
       room = FactoryGirl.create(:room, beds: 1, suite: suite)
       room.update_attributes(beds: 2)
-      expect(suite).to have_received(:increment).with(:size, 1).twice
+      expect(suite).to have_received(:increment!).with(:size, 1).twice
     end
   end
 end

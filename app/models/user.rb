@@ -7,6 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :draw
+  belongs_to :group
   validates :email, uniqueness: true
   validates :role, presence: true
   validates :first_name, presence: true

@@ -44,10 +44,10 @@ class Room < ApplicationRecord
 
   def update_suite_size
     delta = beds - beds_was
-    suite.increment(:size, delta)
+    suite.increment!(:size, delta)
   end
 
   def decrement_suite_size
-    suite.decrement(:size, beds)
+    suite.decrement!(:size, beds)
   end
 end

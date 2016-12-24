@@ -10,4 +10,8 @@ class Draw < ApplicationRecord
   has_and_belongs_to_many :suites # rubocop:disable Rails/HasAndBelongsToMany
 
   validates :name, presence: true
+
+  def suite_sizes
+    suites.map(&:size).uniq
+  end
 end
