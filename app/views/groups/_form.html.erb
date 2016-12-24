@@ -1,0 +1,8 @@
+<%= simple_form_for [@draw, @group] do |f| %>
+  <%= f.select :size, collection: @draw.suite_sizes %>
+  <% if current_user.admin? %>
+    <%= f.association :leader, label_method: :full_name %>
+    <%= f.association :members, label_method: :full_name %>
+  <% end %>
+  <%= f.submit %>
+<% end %>

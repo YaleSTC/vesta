@@ -5,10 +5,9 @@
 class Updater
   # Initialize a new Updater.
   #
-  # @param [ApplicationRecord] object The object to be updated
-  # @param [ActionController::Parameters] params The params object
-  #   from the controller.
-  # @param [Symbol] name_method The model method that gives an identifying
+  # @param object [ApplicationRecord] The object to be updated
+  # @param params [#to_h] The params with the new attributes
+  # @param name_method [Symbol] The model method that gives an identifying
   #   name of the object (e.g. `#number` for Suite).
   def initialize(object:, params:, name_method:)
     @object = object
