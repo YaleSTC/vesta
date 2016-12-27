@@ -1,3 +1,16 @@
 <h1 class="draw-name"><%= @draw.name %></h1>
+<div class="intent-metrics">
+  <h2>Intent Metrics</h2>
+  <table>
+    <tbody>
+      <% @intent_metrics.each do |intent_value, count| %>
+        <tr>
+          <td class="metric-heading"><%= intent_value.humanize.capitalize %></td>
+          <td class="<%= intent_value %>-count"><%= count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 <%= link_to 'Delete', draw_path(@draw), method: :delete %>
 
