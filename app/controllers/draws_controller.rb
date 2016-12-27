@@ -4,6 +4,7 @@ class DrawsController < ApplicationController
   before_action :set_draw, only: [:show, :edit, :update, :destroy]
 
   def show
+    @intent_metrics = IntentMetricsQuery.call(@draw)
   end
 
   def new
