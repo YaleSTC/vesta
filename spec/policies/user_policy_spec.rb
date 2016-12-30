@@ -10,9 +10,12 @@ RSpec.describe UserPolicy do
     permissions :show?, :update?, :edit?, :edit_intent?, :update_intent? do
       it { is_expected.to permit(user, user) }
     end
-    permissions :show?, :create?, :destroy?, :update?, :index?,
-                :edit?, :edit_intent?, :update_intent? do
+    permissions :show?, :create?, :destroy?, :update?, :edit?,
+                :edit_intent?, :update_intent? do
       it { is_expected.not_to permit(user, other_user) }
+    end
+    permissions :index? do
+      it { is_expected.not_to permit(user, User) }
     end
   end
 
@@ -21,17 +24,23 @@ RSpec.describe UserPolicy do
     permissions :show?, :update?, :edit?, :edit_intent?, :update_intent? do
       it { is_expected.to permit(user, user) }
     end
-    permissions :show?, :create?, :destroy?, :update?, :index?,
-                :edit?, :edit_intent?, :update_intent? do
+    permissions :show?, :create?, :destroy?, :update?, :edit?,
+                :edit_intent?, :update_intent? do
       it { is_expected.not_to permit(user, other_user) }
+    end
+    permissions :index? do
+      it { is_expected.not_to permit(user, User) }
     end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :show?, :create?, :destroy?, :update?, :index?,
-                :edit?, :edit_intent?, :update_intent? do
+    permissions :show?, :create?, :destroy?, :update?, :edit?,
+                :edit_intent?, :update_intent? do
       it { is_expected.to permit(user, other_user) }
+    end
+    permissions :index? do
+      it { is_expected.to permit(user, User) }
     end
   end
 end

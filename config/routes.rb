@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
   devise_for :users
-  root to: 'application#index'
+  root to: 'application#home'
   resources :buildings
   resources :suites
   resources :rooms
