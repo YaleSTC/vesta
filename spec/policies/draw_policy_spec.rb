@@ -10,8 +10,11 @@ RSpec.describe DrawPolicy do
     permissions :show? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :create?, :destroy?, :update?, :index? do
+    permissions :create?, :destroy?, :update? do
       it { is_expected.not_to permit(user, draw) }
+    end
+    permissions :index? do
+      it { is_expected.not_to permit(user, Draw) }
     end
   end
 
@@ -20,15 +23,21 @@ RSpec.describe DrawPolicy do
     permissions :show?, :update? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :create?, :destroy?, :index? do
+    permissions :create?, :destroy? do
       it { is_expected.not_to permit(user, draw) }
+    end
+    permissions :index? do
+      it { is_expected.not_to permit(user, Draw) }
     end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :index?, :show?, :update?, :create?, :destroy? do
+    permissions :show?, :update?, :create?, :destroy? do
       it { is_expected.to permit(user, draw) }
+    end
+    permissions :index? do
+      it { is_expected.to permit(user, Draw) }
     end
   end
 end

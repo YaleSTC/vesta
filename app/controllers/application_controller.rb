@@ -4,11 +4,10 @@ class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
   before_action :authenticate_user!, unless: :devise_controller?
-  before_action :authorize!, except: :index, unless: :devise_controller?
-  after_action :verify_authorized, except: :index, unless: :devise_controller?
+  before_action :authorize!, except: :home, unless: :devise_controller?
+  after_action :verify_authorized, except: :home, unless: :devise_controller?
 
-  def index
-  end
+  def home; end
 
   private
 
