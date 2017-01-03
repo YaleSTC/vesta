@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161224170703) do
+ActiveRecord::Schema.define(version: 20170103034446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,11 +94,10 @@ ActiveRecord::Schema.define(version: 20161224170703) do
     t.integer  "role",                   default: 0,  null: false
     t.string   "first_name",                          null: false
     t.string   "last_name",                           null: false
-    t.string   "preferred_name"
-    t.string   "middle_name"
     t.integer  "draw_id"
     t.integer  "intent",                 default: 0,  null: false
     t.integer  "group_id"
+    t.integer  "gender",                 default: 0,  null: false
     t.index ["draw_id"], name: "index_users_on_draw_id", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["group_id"], name: "index_users_on_group_id", using: :btree

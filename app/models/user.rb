@@ -13,15 +13,17 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :intent, presence: true
+  validates :gender, presence: true
 
   enum role: %w(student admin rep)
   enum intent: %w(undeclared on_campus off_campus)
+  enum gender: %w(non-binary female male)
 
-  # Returns the user's preferred first name
+  # Returns the user's preferred name
   #
-  # @return [String] Preferred name if set, otherwise first name.
+  # @return [String] Preferred name
   def name
-    preferred_name || first_name
+    first_name
   end
 
   # Returns the user's preferred full name
@@ -29,16 +31,5 @@ class User < ApplicationRecord
   # @return [String] Preferred name if set, otherwise first name, plus last name
   def full_name
     "#{name} #{last_name}"
-  end
-
-  # Returns the user's full legal name
-  #
-  # @return [String] The first, middle (if present), and last name of the user.
-  def legal_name
-    if middle_name
-      "#{first_name} #{middle_name} #{last_name}"
-    else
-      "#{first_name} #{last_name}"
-    end
   end
 end
