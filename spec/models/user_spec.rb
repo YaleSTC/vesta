@@ -11,7 +11,8 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of(:intent) }
     it { is_expected.to validate_presence_of(:gender) }
     it { is_expected.to belong_to(:draw) }
-    it { is_expected.to belong_to(:group) }
+    it { is_expected.to have_one(:membership) }
+    it { is_expected.to have_one(:group).through(:membership) }
   end
   describe '#name' do
     it 'is the first name' do
