@@ -11,4 +11,12 @@ RSpec.feature 'Authentication' do
     log_in user
     expect(page).to have_content('Vesta')
   end
+  it 'redirects to the requested page' do
+    admin = FactoryGirl.create(:admin)
+    visit new_draw_path
+    fill_in 'user_email', with: admin.email
+    fill_in 'user_password', with: admin.password
+    click_on 'Log in'
+    expect(page).to have_content('New Draw')
+  end
 end
