@@ -52,14 +52,24 @@ ActiveRecord::Schema.define(version: 20170109220524) do
   end
 
   create_table "groups", force: :cascade do |t|
-    t.integer  "size",       default: 1, null: false
-    t.integer  "status",     default: 0, null: false
-    t.integer  "leader_id",              null: false
-    t.integer  "draw_id",                null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "size",              default: 1, null: false
+    t.integer  "status",            default: 0, null: false
+    t.integer  "leader_id",                     null: false
+    t.integer  "draw_id",                       null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "memberships_count", default: 0, null: false
     t.index ["draw_id"], name: "index_groups_on_draw_id", using: :btree
     t.index ["leader_id"], name: "index_groups_on_leader_id", using: :btree
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.integer  "group_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_memberships_on_group_id", using: :btree
+    t.index ["user_id"], name: "index_memberships_on_user_id", using: :btree
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -98,11 +108,9 @@ ActiveRecord::Schema.define(version: 20170109220524) do
     t.string   "last_name",                           null: false
     t.integer  "draw_id"
     t.integer  "intent",                 default: 0,  null: false
-    t.integer  "group_id"
     t.integer  "gender",                 default: 0,  null: false
     t.index ["draw_id"], name: "index_users_on_draw_id", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["group_id"], name: "index_users_on_group_id", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 

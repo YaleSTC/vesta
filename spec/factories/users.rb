@@ -7,6 +7,7 @@ FactoryGirl.define do
     last_name { 'Last' }
     gender { 'non-binary' }
     role { 'student' }
+    intent { 'on_campus' }
 
     factory :student_in_draw do
       after(:build) do |user|

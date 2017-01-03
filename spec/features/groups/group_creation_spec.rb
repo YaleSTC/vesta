@@ -23,10 +23,12 @@ RSpec.feature 'Housing Group Creation' do
     let!(:draw) do
       FactoryGirl.create(:draw_with_members, students_count: 3)
     end
-    it 'succeeds' do
+    it 'succeeds' do # rubocop:disable RSpec/ExampleLength
       log_in FactoryGirl.create(:admin)
       leader = draw.students.first
-      create_group(size: draw.suites.first.size, leader: leader,
+      suite = FactoryGirl.create(:suite_with_rooms, rooms_count: 2,
+                                                    draws: [draw])
+      create_group(size: suite.size, leader: leader,
                    members: [draw.students.last])
       expect(page).to have_css('.group-name', text: "#{leader.name}'s Group")
     end

@@ -27,7 +27,7 @@ RSpec.describe GroupCreator do
   # rubocop:disable RSpec/InstanceVariable
   def params_hash
     @leader ||= FactoryGirl.create(:student_in_draw)
-    { size: 2, leader_id: @leader.id }
+    { size: @leader.draw.suite_sizes.first, leader_id: @leader.id }
   end
   # rubocop:enable RSpec/InstanceVariable
 end
