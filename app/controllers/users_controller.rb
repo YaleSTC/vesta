@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+#
 # Users Controller class
 class UsersController < ApplicationController
   prepend_before_action :set_user, only: %i(show edit update edit_intent
@@ -38,7 +39,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :preferred_name, :middle_name,
-                                 :last_name, :role, :email, :intent)
+    params.require(:user).permit(:first_name, :last_name, :role, :email,
+                                 :intent, :gender)
   end
 end
