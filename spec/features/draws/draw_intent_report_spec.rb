@@ -7,12 +7,26 @@ RSpec.feature 'Draw intent report' do
   context 'as an admin' do
     before { log_in(FactoryGirl.create(:admin)) }
 
-    it 'displays tables with the appropriate users' do
+    it 'is accessible' do
+      visit draw_path(draw)
+      click_link('View intent report')
+
+      expect(page).to have_css('.report-title',
+                               text: "#{draw.name} Intent Report")
+    end
+
+    it 'displays tables with the appropriate users', :js do
       intent_users = create_intent_users(draw)
 
-      visit intent_report_draw_path(draw)
+      visit draw_intent_report_path(draw)
+      save_and_open_page
 
-      expect(page_has_correct_intent_report(page, intent_users))
+      # expect(page_has_correct_intent_report(page, intent_users))
+      intent_users.each do |status, student|
+        expect(page).to have_css("#student-#{student.id} .student-first", text: student.name)
+        expect(page).to have_css("#student-#{student.id} .student-last", text: student.last_name)
+        expect(page).to have_css("#student-#{student.id} .student-intent", text: intent)
+      end
     end
 
     def create_intent_users(draw)
@@ -23,13 +37,21 @@ RSpec.feature 'Draw intent report' do
 
     def page_has_correct_intent_report(page, intent_users)
       intent_users.all? do |status, user|
-        # TODO: figure out if we want to just have one sortable table
-        within(:css, ".#{status}-table") do
-          page.has_css?('.student-name', text: user.name)
-          # somehow chekc that it also includes the dropdown form to change
-          # intent
-        end
+        page.has_css?("tr\#student-#{user.id} .student-first", text: user.name) &&
+            page.has_css?("tr\#student-#{user.id} .student-last", text: user.last_name) &&
+            page.has_css?("tr\#student-#{user.id} .student-intent", text: status)
       end
+    end
+  end
+
+  context 'as a student' do
+    before { log_in(FactoryGirl.create(:student)) }
+
+    it 'does not have a link on the status page' do
+      visit draw_path(draw)
+
+      expect(page).not_to have_link('View intent report',
+                                    href: draw_intent_report_path(draw))
     end
   end
 end

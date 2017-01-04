@@ -11,6 +11,9 @@
       <% end %>
     </tbody>
   </table>
+  <% if policy(@draw).intent_report? %>
+    <%= link_to 'View intent report', draw_intent_report_path(@draw) %>
+  <% end %>
 </div>
 <%= link_to 'Delete', draw_path(@draw), method: :delete %>
 

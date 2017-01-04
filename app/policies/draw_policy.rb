@@ -9,6 +9,10 @@ class DrawPolicy < ApplicationPolicy
     user.rep? || user.admin?
   end
 
+  def intent_report?
+    user.admin?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

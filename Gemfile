@@ -23,6 +23,7 @@ gem "sprockets-es6"
 gem "suspenders"
 gem "title"
 gem "uglifier"
+gem "jbuilder", "~> 2.6.1"
 
 group :development do
   gem "listen"

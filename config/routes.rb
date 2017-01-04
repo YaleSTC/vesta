@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   resources :rooms
   resources :users
   resources :draws
-  get 'users/:id/intent', to: 'users#edit_intent'
-  put 'users/:id/intent', to: 'users#update_intent'
+  get 'users/:id/intent', to: 'users#edit_intent', as: 'user_edit_intent'
+  patch 'users/:id/intent', to: 'users#update_intent', as: 'user_update_intent'
+  get 'draws/:id/intent_report', to: 'draws#intent_report',
+                                 as: 'draw_intent_report'
 end

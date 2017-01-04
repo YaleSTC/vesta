@@ -1,0 +1,20 @@
+$(document).ready(function() {
+  $('#intent-table').DataTable( {
+    "ajax": {
+      "url": $('#intent-table').attr('data-src'),
+      "type": "GET"
+    },
+    "columns": [
+      { "data": "lastName", className: "student-last" },
+      { "data": "firstName", className: "student-first" },
+      { "data": "intent", className: "student-intent" },
+      { "data": "editStr", className: "student-report-btn" }
+    ],
+    "rowId": "rowId"
+  });
+});
+
+// TODO: Figure out proper inline editing (left for future work)
+// $(document).on('change', '.autosubmit', function() {
+//   $(this).parents('form:first').submit();
+// });

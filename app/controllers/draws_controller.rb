@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 # Controller for Draws
 class DrawsController < ApplicationController
-  before_action :set_draw, only: [:show, :edit, :update, :destroy]
+  before_action :set_draw, only: [:show, :edit, :update, :destroy,
+                                  :intent_report]
 
   def show
     @intent_metrics = IntentMetricsQuery.call(@draw)
@@ -29,6 +30,13 @@ class DrawsController < ApplicationController
   def destroy
     result = Destroyer.new(object: @draw, name_method: :name).destroy
     handle_action(**result)
+  end
+
+  def intent_report
+    respond_to do |format|
+      format.html { @report_src = draw_intent_report_path(@draw, format: :json) }
+      format.json { @students = @draw.students }
+    end
   end
 
   private
