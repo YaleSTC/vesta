@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+#
 # Controller for Draws
 class DrawsController < ApplicationController
-  before_action :set_draw, only: [:show, :edit, :update, :destroy]
+  prepend_before_action :set_draw, only: [:show, :edit, :update, :destroy,
+                                          :activate]
+  before_action :calculate_metrics, only: [:show, :activate]
 
-  def show
-    @intent_metrics = IntentMetricsQuery.call(@draw)
-  end
+  def show; end
 
   def new
     @draw = Draw.new
@@ -31,6 +32,11 @@ class DrawsController < ApplicationController
     handle_action(**result)
   end
 
+  def activate
+    result = DrawActivator.activate(draw: @draw)
+    handle_action(action: 'show', **result)
+  end
+
   private
 
   def authorize!
@@ -42,10 +48,15 @@ class DrawsController < ApplicationController
   end
 
   def draw_params
-    params.require(:draw).permit(:name, suite_ids: [], student_ids: [])
+    params.require(:draw).permit(:name, :intent_deadline, suite_ids: [],
+                                                          student_ids: [])
   end
 
   def set_draw
     @draw = Draw.find(params[:id])
+  end
+
+  def calculate_metrics
+    @intent_metrics = IntentMetricsQuery.call(@draw)
   end
 end

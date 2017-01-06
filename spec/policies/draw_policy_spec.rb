@@ -10,7 +10,7 @@ RSpec.describe DrawPolicy do
     permissions :show? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :create?, :destroy?, :update? do
+    permissions :create?, :destroy?, :update?, :activate? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
@@ -23,7 +23,7 @@ RSpec.describe DrawPolicy do
     permissions :show?, :update? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :create?, :destroy? do
+    permissions :create?, :destroy?, :activate? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
@@ -38,6 +38,18 @@ RSpec.describe DrawPolicy do
     end
     permissions :index? do
       it { is_expected.to permit(user, Draw) }
+    end
+
+    permissions :activate? do
+      context 'when draw is a draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
     end
   end
 end
