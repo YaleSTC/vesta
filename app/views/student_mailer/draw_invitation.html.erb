@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hi <%= @user.name %>,</p>
+    <p>The housing process for <%= @res_college.name %> is now open. Please log in to <a href="<%= @res_college.vesta_url %>">Vesta</a> to indicate whether you'll be living on- or off-campus by <%= @intent_deadline %>. If you'll be living on-campus you'll be able to view available housing and form or join a housing group.</p>
+    <p>Please e-mail <%= @res_college.admin_email %> if you have any questions.</p>
+    <p>Sincerely,<br /><%= @res_college.dean %></p>
+  </body>
+</html>

@@ -11,6 +11,12 @@
       <% end %>
     </tbody>
   </table>
+  <% if @draw.pre_lottery? && @draw.intent_deadline %>
+    <p><%= intent_deadline_str(@draw) %></p>
+  <% end %>
 </div>
+<% if policy(@draw).activate? %>
+  <%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch %>
+<% end %>
 <%= link_to 'Delete', draw_path(@draw), method: :delete %>
 
