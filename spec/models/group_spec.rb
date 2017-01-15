@@ -14,6 +14,7 @@ RSpec.describe Group, type: :model do
     it { is_expected.to belong_to(:draw) }
     it { is_expected.to have_many(:memberships) }
     it { is_expected.to have_many(:members).through(:memberships) }
+    it { is_expected.not_to allow_value(-1).for(:memberships_count) }
   end
 
   describe 'size validations' do
@@ -80,6 +81,15 @@ RSpec.describe Group, type: :model do
       group = FactoryGirl.build_stubbed(:group)
       allow(group).to receive(:leader).and_return(leader)
       expect(group.name).to include(leader.name)
+    end
+  end
+
+  describe '#requests' do
+    it 'returns an array of users who have requested to join' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      Membership.create(group: group, user: user, status: 'requested')
+      expect(group.requests).to eq([user])
     end
   end
 end

@@ -1,2 +1,11 @@
 <%= render 'group_details' %>
-<%= link_to 'Delete', draw_group_path(@draw, @group), method: :delete %>
+<% if policy(@group).accept_request? %>
+  <h2>Membership Requests</h2>
+  <% @group.requests.each do |u| %>
+    <%= link_to "Accept #{u.full_name}", draw_group_accept_request_path(@draw, @group, params: { 'user_id' => u.id }), method: :put %>
+  <% end %>
+<% end %>
+<% if policy(@group).request_to_join? %>
+  <%= link_to 'Request To Join', draw_group_request_path(@draw, @group), method: :post %>
+<% end %>
+<%= link_to('Delete', draw_group_path(@draw, @group), method: :delete) if policy(@group).destroy? %>

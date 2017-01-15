@@ -9,12 +9,17 @@
 #
 # @attr group [Group] The group of the membership.
 # @attr user [User] The user of the membership.
+# @attr status [Integer] Enum for membership status.
+#   (requested, invited, accepted)
 class Membership < ApplicationRecord
-  belongs_to :group, counter_cache: true
+  belongs_to :group
   belongs_to :user
+
+  enum status: %w(accepted invited requested)
 
   validates :group, presence: true
   validates :user, presence: true
+  validates :status, presence: true
   validate :matching_draw, if: ->(m) { m.user.present? && m.group.present? }
   validate :user_on_campus, if: ->(m) { m.user.present? }
   validate :group_is_open, if: ->(m) { m.group.present? }, on: :create
@@ -22,6 +27,15 @@ class Membership < ApplicationRecord
   before_destroy ->(m) { throw(:abort) if m.readonly? }
   before_update ->(m) { throw(:abort) if m.readonly? }
   before_update :freeze_group_and_user
+  before_update :freeze_accepted_status
+
+  # Group memberships_count counter cache callbacks
+  # MUST come before the status callbacks
+  after_save :update_counter_cache
+  after_create :increment_counter_cache
+  after_destroy :decrement_counter_cache
+
+  # Group status callbacks
   after_create :update_group_status
   after_destroy :update_group_status
 
@@ -40,6 +54,11 @@ class Membership < ApplicationRecord
     throw(:abort)
   end
 
+  def freeze_accepted_status
+    return unless status_changed? && status_was == 'accepted'
+    throw(:abort)
+  end
+
   def matching_draw
     return if user.draw == group.draw
     errors.add :user, 'must belong to same draw as group'
@@ -52,5 +71,18 @@ class Membership < ApplicationRecord
   def user_on_campus
     return if user.on_campus?
     errors.add :user, 'must be living on campus to join a group'
+  end
+
+  def update_counter_cache
+    return unless status_changed?
+    increment_counter_cache
+  end
+
+  def increment_counter_cache
+    group.increment!(:memberships_count) if accepted?
+  end
+
+  def decrement_counter_cache
+    group.decrement!(:memberships_count) if accepted?
   end
 end
