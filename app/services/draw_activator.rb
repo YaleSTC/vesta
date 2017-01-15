@@ -7,15 +7,15 @@ class DrawActivator
   # Class method to permit calling :activate on the class without instantiating
   # the service object directly
   #
-  # @attr draw [Draw] the draw in question
+  # @param draw [Draw] the draw in question
   def self.activate(draw:)
     new(draw: draw).activate
   end
 
   # Initialize a new DrawActivator
   #
-  # @attr draw [Draw] the draw in question
-  # @attr mailer [ActionMailer::Base] mailer class for sending invitation
+  # @param draw [Draw] the draw in question
+  # @param mailer [ActionMailer::Base] mailer class for sending invitation
   #   e-mails
   def initialize(draw:, mailer: StudentMailer)
     @draw = draw

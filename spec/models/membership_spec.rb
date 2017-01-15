@@ -7,6 +7,7 @@ RSpec.describe Membership, type: :model do
     it { is_expected.to belong_to(:group) }
     it { is_expected.to validate_presence_of(:user) }
     it { is_expected.to validate_presence_of(:group) }
+    it { is_expected.to validate_presence_of(:status) }
   end
 
   describe 'group draw and user draw must match' do
@@ -37,6 +38,15 @@ RSpec.describe Membership, type: :model do
     end
   end
 
+  describe 'cannot change accepted status' do
+    it do
+      group = FactoryGirl.create(:full_group)
+      membership = group.memberships.last
+      membership.status = 'requested'
+      expect(membership.save).to be_falsey
+    end
+  end
+
   context 'non-open group' do
     it 'cannot be created' do
       group = FactoryGirl.create(:group)
@@ -59,6 +69,45 @@ RSpec.describe Membership, type: :model do
       group = FactoryGirl.create(:full_group, size: 2)
       expect { group.memberships.last.destroy }.to \
         change { group.status }.from('full').to('open')
+    end
+  end
+
+  describe 'counter cache' do
+    it 'increments on creation of accepted membership' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      expect { group.members << user }.to \
+        change { group.memberships_count }.by(1)
+    end
+    # rubocop:disable RSpec/ExampleLength
+    it 'increments on change to accepted status' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      membership = Membership.create(group: group, user: user,
+                                     status: 'requested')
+      expect { membership.update(status: 'accepted') }.to \
+        change { group.memberships_count }.by(1)
+    end
+    # rubocop:enable RSpec/ExampleLength
+    it 'does nothing on creation of request' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      expect do
+        Membership.create(group: group, user: user, status: 'requested')
+      end.not_to change { group.memberships_count }
+    end
+    it 'decrements on destruction of accepted membership' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      membership = Membership.create(group: group, user: user)
+      expect { membership.destroy }.to change { group.memberships_count }.by(-1)
+    end
+    it 'does not decrement on destruction of request' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      membership = Membership.create(group: group, user: user,
+                                     status: 'requested')
+      expect { membership.destroy }.not_to change { group.memberships_count }
     end
   end
 

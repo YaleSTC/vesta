@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 # Controller for Groups
 class GroupsController < ApplicationController
-  prepend_before_action :set_group, only: %i(show edit update destroy)
+  prepend_before_action :set_group, only: %i(show edit update destroy
+                                             request_to_join accept_request)
   before_action :set_draw
   before_action :set_form_data, only: %i(new edit)
 
@@ -31,6 +32,19 @@ class GroupsController < ApplicationController
   def destroy
     result = Destroyer.new(object: @group, name_method: :name).destroy
     handle_action(**result)
+  end
+
+  def request_to_join
+    result = MembershipCreator.create!(group: @group, user: current_user,
+                                       status: 'requested')
+    handle_action(path: draw_group_path(@draw, @group), **result)
+  end
+
+  def accept_request
+    user = User.includes(:membership).find(params['user_id'])
+    result = MembershipUpdater.update(membership: user.membership,
+                                      params: { status: 'accepted' })
+    handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
   private

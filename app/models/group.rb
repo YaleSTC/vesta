@@ -19,6 +19,8 @@ class Group < ApplicationRecord
   validates :status, presence: true
   validates :size, presence: true
   validates :leader, presence: true, inclusion: { in: ->(g) { g.members } }
+  validates :memberships_count, presence: true,
+                                numericality: { greater_than_or_equal_to: 0 }
 
   validate :validate_suite_size_inclusion
   validate :validate_members_count, if: ->(g) { g.size.present? }
@@ -38,6 +40,13 @@ class Group < ApplicationRecord
     elsif memberships_count == size
       update(status: 'full')
     end
+  end
+
+  # Get the group's membership requests
+  #
+  # @return [Array<User>] the users who have requested to join the housing group
+  def requests
+    memberships.where(status: 'requested').map(&:user)
   end
 
   private

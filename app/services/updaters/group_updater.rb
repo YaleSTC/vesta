@@ -14,6 +14,6 @@ class GroupUpdater < Updater
 
   def success
     { object: [object.draw, object],
-      msg: { notice: "#{object.send(name_method)} updated." } }
+      msg: { success: "#{object.send(name_method)} updated." } }
   end
 end

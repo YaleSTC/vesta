@@ -10,7 +10,11 @@ Rails.application.routes.draw do
   put 'users/:id/intent', to: 'users#update_intent'
 
   resources :draws do
-    resources :groups
+    resources :groups do
+      post '/:id/request', to: 'groups#request_to_join', as: 'request'
+      put '/:id/accept_request', to: 'groups#accept_request',
+                                 as: 'accept_request'
+    end
   end
   patch 'draws/:id/activate', to: 'draws#activate', as: 'activate_draw'
   get 'draws/:id/intent_report', to: 'draws#intent_report',

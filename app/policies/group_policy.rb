@@ -25,6 +25,14 @@ class GroupPolicy < ApplicationPolicy
     edit?
   end
 
+  def request_to_join?
+    (user.draw == record.draw) && !user.group
+  end
+
+  def accept_request?
+    edit?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope
