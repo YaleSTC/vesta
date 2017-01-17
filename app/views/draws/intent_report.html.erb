@@ -1,0 +1,32 @@
+<h1 class="draw-name"><%= @draw.name %></h1>
+<div class="intent-report">
+  <h2>Intent Report</h2>
+  <div class="report_filter">
+    <%= simple_form_for @filter, url: draw_intent_report_path(@draw) do |f| %>
+      <%= f.input :intents, collection: User.intents.keys, as: :check_boxes,
+                            include_hidden: false, error: false %>
+      <%= f.submit 'Filter' %>
+    <% end %>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <td>Last Name</td>
+        <td>First Name</td>
+        <td>Intent</td>
+        <td></td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+        <tr class="<%= student.intent %>">
+          <td data-role="student-last_name"><%= student.last_name %></td>
+          <td data-role="student-first_name"><%= student.first_name %></td>
+          <td data-role="student-intent"><%= student.intent %></td>
+          <td><%= link_to 'Edit intent', edit_user_intent_path(student) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%= link_to 'Back to draw', draw_path(@draw) %>

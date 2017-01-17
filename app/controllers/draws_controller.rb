@@ -3,7 +3,8 @@
 # Controller for Draws
 class DrawsController < ApplicationController
   prepend_before_action :set_draw, only: [:show, :edit, :update, :destroy,
-                                          :activate]
+                                          :activate, :intent_report,
+                                          :filter_intent_report]
   before_action :calculate_metrics, only: [:show, :activate]
 
   def show; end
@@ -37,6 +38,17 @@ class DrawsController < ApplicationController
     handle_action(action: 'show', **result)
   end
 
+  def intent_report
+    @filter = IntentReportFilter.new
+    @students = @draw.students.order(:intent)
+  end
+
+  def filter_intent_report
+    @filter = IntentReportFilter.new(filter_params)
+    @students = @filter.filter(@draw.students)
+    render action: 'intent_report'
+  end
+
   private
 
   def authorize!
@@ -50,6 +62,10 @@ class DrawsController < ApplicationController
   def draw_params
     params.require(:draw).permit(:name, :intent_deadline, suite_ids: [],
                                                           student_ids: [])
+  end
+
+  def filter_params
+    params.fetch(:intent_report_filter, {}).permit(intents: [])
   end
 
   def set_draw
