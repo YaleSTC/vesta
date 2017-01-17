@@ -14,6 +14,9 @@
   <% if @draw.pre_lottery? && @draw.intent_deadline %>
     <p><%= intent_deadline_str(@draw) %></p>
   <% end %>
+  <% if policy(@draw).intent_report? %>
+    <%= link_to 'View intent report', draw_intent_report_path(@draw) %>
+  <% end %>
 </div>
 <% if policy(@draw).activate? %>
   <%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch %>
