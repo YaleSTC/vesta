@@ -42,15 +42,15 @@ class Membership < ApplicationRecord
 
   def matching_draw
     return if user.draw == group.draw
-    errors.add :user, 'Member draw and group draw must match'
+    errors.add :user, 'must belong to same draw as group'
   end
 
   def group_is_open
-    errors.add :group, 'Group must be open' unless group.open?
+    errors.add :group, 'must be open' unless group.open?
   end
 
   def user_on_campus
     return if user.on_campus?
-    errors.add :user, 'User must be living on campus to join a group'
+    errors.add :user, 'must be living on campus to join a group'
   end
 end

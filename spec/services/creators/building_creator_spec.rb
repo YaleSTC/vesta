@@ -12,7 +12,7 @@ RSpec.describe BuildingCreator do
     params = instance_spy('ActionController::Parameters', to_h: { name: nil })
     expect(described_class.new(params).create![:object]).to be_nil
   end
-  it 'returns a notice flash message' do
+  it 'returns a success flash message' do
     params = instance_spy('ActionController::Parameters',
                           to_h: { name: 'Silliman' })
     expect(described_class.new(params).create![:msg]).to have_key(:success)

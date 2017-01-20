@@ -1,0 +1,6 @@
+<%= f.input :size, collection: @suite_sizes %>
+<% if current_user.admin? %>
+  <%= f.association :leader, label_method: :full_name, collection: @students %>
+  <%= f.association :members, label_method: :full_name, collection: @students %>
+<% end %>
+<%= f.submit %>

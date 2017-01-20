@@ -7,7 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :draw
-  has_one :membership
+  has_one :membership, dependent: :destroy
   has_one :group, through: :membership
 
   validates :email, uniqueness: true

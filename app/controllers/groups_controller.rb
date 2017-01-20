@@ -3,18 +3,21 @@
 class GroupsController < ApplicationController
   prepend_before_action :set_group, only: %i(show edit update destroy)
   before_action :set_draw
+  before_action :set_form_data, only: %i(new edit)
 
   def show; end
 
-  def new
-    @group = Group.new(draw: @draw)
-  end
+  def new; end
 
   def create
     p = group_params.to_h
     p[:leader_id] = current_user.id unless current_user.admin?
     result = GroupCreator.new(p).create!
-    @group = result[:group] ? result[:group] : Group.new(draw: @draw)
+    if result[:group]
+      @group = result[:group]
+    else
+      set_form_data
+    end
     handle_action(path: new_draw_group_path(@draw), **result)
   end
 
@@ -50,5 +53,12 @@ class GroupsController < ApplicationController
 
   def set_draw
     @draw = Draw.find(params[:draw_id])
+  end
+
+  def set_form_data
+    @group ||= Group.new(draw: @draw)
+    @students = UngroupedStudentsQuery.new(@draw.students).call +
+                @group.members
+    @suite_sizes = @draw.suite_sizes
   end
 end
