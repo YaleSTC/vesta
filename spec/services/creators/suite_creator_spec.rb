@@ -13,7 +13,7 @@ RSpec.describe SuiteCreator do
     params = instance_spy('ActionController::Parameters', to_h: {})
     expect(described_class.new(params).create![:object]).to be_nil
   end
-  it 'returns a notice flash message' do
+  it 'returns a success flash message' do
     params_hash = { number: 'L01',
                     building: FactoryGirl.build_stubbed(:building) }
     params = instance_spy('ActionController::Parameters', to_h: params_hash)

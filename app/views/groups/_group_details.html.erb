@@ -1,0 +1,9 @@
+<h1 class="group-name"><%= @group.name %></h1>
+<h2 class="group-size">Size: <%= @group.size %></h2>
+<h2 class="group-status">Status: <%= @group.status %></h2>
+<h2 class="group-members">Members:</h2>
+<ul>
+  <% @group.members.each do |m| %>
+    <li><%= m.full_name %></li>
+  <% end %>
+</ul>

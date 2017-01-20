@@ -10,18 +10,17 @@
 class Group < ApplicationRecord
   belongs_to :leader, class_name: 'User'
   belongs_to :draw
-  has_many :memberships
+  has_many :memberships, dependent: :delete_all
   has_many :members, through: :memberships, source: :user
 
   enum status: %w(open full locked)
 
-  validates :draw, presence: true
+  # validates :draw, presence: true
   validates :status, presence: true
-  validates :size, presence: true,
-                   inclusion: { in: ->(g) { g.draw.suite_sizes },
-                                if: ->(g) { g.draw.present? } }
+  validates :size, presence: true
   validates :leader, presence: true, inclusion: { in: ->(g) { g.members } }
 
+  validate :validate_suite_size_inclusion
   validate :validate_members_count, if: ->(g) { g.size.present? }
   validate :validate_status, if: ->(g) { g.size.present? }
 
@@ -45,6 +44,19 @@ class Group < ApplicationRecord
 
   def add_leader_to_members
     members << leader unless members.include? leader
+  end
+
+  def validate_suite_size_inclusion
+    # TODO: if we start seeing this pattern (draw.present? branching logic) more
+    # often then we can extract special group functionality into a subclass that
+    # still talks to the same table in the db to keep things clean.
+    if draw.present?
+      return if draw.suite_sizes.include? size
+      errors.add :size, 'must be a suite size included in the draw'
+    else
+      return if SuiteSizesQuery.call.include? size
+      errors.add :size, 'must be a valid suite size'
+    end
   end
 
   def validate_members_count

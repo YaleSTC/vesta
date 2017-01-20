@@ -27,7 +27,7 @@ class Creator
     if obj.save
       success(obj)
     else
-      error
+      error(obj.errors.full_messages)
     end
   end
 
@@ -39,7 +39,10 @@ class Creator
     { object: obj, msg: { success: "#{obj.send(name_method)} created." } }
   end
 
-  def error
-    { object: nil, msg: { error: 'Please review the errors below.' } }
+  def error(errors)
+    {
+      object: nil,
+      msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
+    }
   end
 end

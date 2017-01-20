@@ -8,7 +8,7 @@ RSpec.describe GroupCreator do
       expect(described_class.new(params).create![:group]).to \
         be_instance_of(Group)
     end
-    it 'returns a notice flash message' do
+    it 'returns a success flash message' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
       expect(described_class.new(params).create![:msg]).to have_key(:success)
     end

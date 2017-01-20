@@ -12,17 +12,26 @@ RSpec.describe Group, type: :model do
     it { is_expected.to belong_to(:leader) }
     it { is_expected.to validate_presence_of(:leader) }
     it { is_expected.to belong_to(:draw) }
-    it { is_expected.to validate_presence_of(:draw) }
     it { is_expected.to have_many(:memberships) }
     it { is_expected.to have_many(:members).through(:memberships) }
   end
 
   describe 'size validations' do
-    it 'must be available in the draw' do
-      group = FactoryGirl.build(:group)
-      allow(group.draw).to receive(:suite_sizes).and_return([1])
-      group.size = 2
-      expect(group.valid?).to be_falsey
+    context 'for regular groups' do
+      it 'must be available in the draw' do
+        group = FactoryGirl.build(:group)
+        allow(group.draw).to receive(:suite_sizes).and_return([1])
+        group.size = 2
+        expect(group.valid?).to be_falsey
+      end
+    end
+    context 'for drawless groups' do
+      it 'must be an existing suite size' do
+        group = FactoryGirl.build(:drawless_group)
+        allow(SuiteSizesQuery).to receive(:call).and_return([1])
+        group.size = 2
+        expect(group).not_to be_valid
+      end
     end
     it 'must not have more members than the size' do
       group = FactoryGirl.create(:full_group, size: 2)
@@ -48,6 +57,14 @@ RSpec.describe Group, type: :model do
       group.status = 'open'
       expect(group.valid?).to be_falsey
     end
+  end
+
+  it 'destroys dependent memberships on destruction' do
+    group = FactoryGirl.create(:drawless_group)
+    membership_ids = group.memberships.map(&:id)
+    group.destroy
+    expect { Membership.find(membership_ids) }.to \
+      raise_error(ActiveRecord::RecordNotFound)
   end
 
   describe 'leader is included as a member' do

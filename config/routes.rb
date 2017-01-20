@@ -16,4 +16,6 @@ Rails.application.routes.draw do
   get 'draws/:id/intent_report', to: 'draws#intent_report',
                                  as: 'draw_intent_report'
   post 'draws/:id/intent_report', to: 'draws#filter_intent_report'
+
+  resources :groups, controller: 'drawless_groups'
 end

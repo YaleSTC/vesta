@@ -22,5 +22,10 @@ FactoryGirl.define do
         g.draw.suites << create(:suite_with_rooms, rooms_count: g.size)
       end
     end
+
+    factory :drawless_group do
+      association :leader, factory: :student, intent: 'on_campus'
+      after(:build) { |g| create(:suite_with_rooms, rooms_count: g.size) }
+    end
   end
 end

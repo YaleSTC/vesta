@@ -14,6 +14,18 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_one(:membership) }
     it { is_expected.to have_one(:group).through(:membership) }
   end
+
+  # rubocop:disable RSpec/ExampleLength
+  it 'destroys a dependent membership on destruction' do
+    user = FactoryGirl.create(:student, intent: 'on_campus')
+    FactoryGirl.create(:drawless_group, leader: user)
+    membership_id = user.membership.id
+    user.destroy
+    expect { Membership.find(membership_id) }.to \
+      raise_error(ActiveRecord::RecordNotFound)
+  end
+  # rubocop:enable RSpec/ExampleLength
+
   describe '#name' do
     it 'is the first name' do
       name = 'Sydney'
@@ -21,6 +33,7 @@ RSpec.describe User, type: :model do
       expect(user.name).to eq(name)
     end
   end
+
   describe '#full_name' do
     it 'is the name and last name' do
       full_name = 'Sydney Young'
