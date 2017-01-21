@@ -1,0 +1,9 @@
+<%= simple_form_for @user do |f| %>
+  <%= f.input :first_name %>
+  <%= f.input :last_name %>
+  <%= f.input :email %>
+  <%= f.input :intent, collection: User.intents.keys %>
+  <%= f.select :gender, collection: User.genders.keys %>
+  <%= f.select :role, collection: User.roles.keys if current_user.admin? %>
+  <%= f.submit %>
+<% end %>

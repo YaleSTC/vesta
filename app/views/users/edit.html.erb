@@ -1,6 +1,2 @@
-<h1> Editing <%= @user.name %> </h1>
-<%= simple_form_for @user do |f| %>
-  <%= f.select :gender, collection: User.genders.keys %>
-  <%= f.select :role, collection: User.roles.keys if current_user.admin? %>
-  <%= f.submit 'Save' %>
-<% end %>
+<h1> Editing <%= @user.full_name %> </h1>
+<%= render "form", user: @user %>
