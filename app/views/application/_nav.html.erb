@@ -1,0 +1,16 @@
+<div class="top-bar">
+  <div class="top-bar-title">
+    <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
+      <button class="menu-icon dark" type="button" data-toggle></button>
+    </span>
+    <strong>Vesta</strong>
+  </div>
+  <div id="responsive-menu">
+    <div class="top-bar-right">
+      <ul class="menu">
+        <li><%= link_to "Login", new_user_session_path %></li>
+        <li><%= link_to "Logout", destroy_user_session_path, method: :delete %></li>
+      </ul>
+    </div>
+  </div>
+</div>
