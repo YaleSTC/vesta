@@ -24,6 +24,9 @@ gem "suspenders"
 gem "title"
 gem "uglifier"
 
+# Front-End Styling
+gem 'foundation-rails', '~> 6.3.0.0'
+
 group :development do
   gem "listen"
   gem "spring"
@@ -67,6 +70,3 @@ group :staging, :production do
 end
 
 gem 'high_voltage'
-gem 'bourbon', '5.0.0.beta.6'
-gem 'neat', '~> 1.8.0'
-gem 'refills', group: [:development, :test]
