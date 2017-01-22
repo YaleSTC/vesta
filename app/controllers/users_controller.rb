@@ -9,7 +9,18 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new
+    if !@user
+      @user = User.new
+    else
+      create
+    end
+  end
+
+  def create
+    result = UserCreator.new(user_params).create!
+    print 'Im creating it!'
+    @user = result[:object] ? result[:object] : User.new
+    handle_action(action: 'new', **result)
   end
 
   def edit
