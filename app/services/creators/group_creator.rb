@@ -28,6 +28,6 @@ class GroupCreator < Creator
 
   def success(group)
     { object: [group.draw, group], group: group,
-      msg: { notice: "#{group.name} created." } }
+      msg: { success: "#{group.name} created." } }
   end
 end

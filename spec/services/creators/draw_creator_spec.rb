@@ -12,7 +12,7 @@ RSpec.describe DrawCreator do
     it 'returns a notice flash message' do
       params = instance_spy('ActionController::Parameters',
                             to_h: FactoryGirl.attributes_for(:draw))
-      expect(described_class.new(params).create![:msg]).to have_key(:notice)
+      expect(described_class.new(params).create![:msg]).to have_key(:success)
     end
   end
 

@@ -17,6 +17,6 @@ RSpec.describe RoomCreator do
     params_hash = { number: 'L01',
                     suite: FactoryGirl.build_stubbed(:suite) }
     params = instance_spy('ActionController::Parameters', to_h: params_hash)
-    expect(described_class.new(params).create![:msg]).to have_key(:notice)
+    expect(described_class.new(params).create![:msg]).to have_key(:success)
   end
 end

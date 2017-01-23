@@ -1,0 +1,16 @@
+$flashes: (
+  'notice': $primary-color,
+  'success': $success-color,
+  'alert': $warning-color,
+  'error': $alert-color
+);
+
+@each $flash-type, $color in $flashes {
+  .flashes .flash-#{$flash-type} {
+    @include callout($color);
+    .close-button {
+      position: static;
+      float: right;
+    }
+  }
+}
