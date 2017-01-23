@@ -15,8 +15,11 @@
     </header>
     <%= render "flashes" -%>
     <main class="row" role="main">
-      <div class="small-12 columns">
-        <%= yield %>
+      <div class="small-12 medium-3 medium-push-9 columns">
+        <%= yield :sidebar %>
+      </div>
+      <div class="small-medium-9 medium-pull-3 columns">
+        <%= yield :content %>
       </div>
     </main>
     <%= render "javascript" %>

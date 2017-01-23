@@ -36,7 +36,7 @@ class Creator
   attr_reader :klass, :params, :name_method
 
   def success(obj)
-    { object: obj, msg: { notice: "#{obj.send(name_method)} created." } }
+    { object: obj, msg: { success: "#{obj.send(name_method)} created." } }
   end
 
   def error

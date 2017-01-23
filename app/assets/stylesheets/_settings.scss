@@ -50,17 +50,20 @@ $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
-  primary: #1779ba,
-  secondary: #767676,
-  success: #3adb76,
-  warning: #ffae00,
-  alert: #cc4b37,
+  primary: #286DC0,
+  secondary: #786f67,
+  success: #00356B,
+  warning: #BD5319,
+  alert: #AF1109,
 );
-$light-gray: #e6e6e6;
-$medium-gray: #cacaca;
-$dark-gray: #8a8a8a;
-$black: #0a0a0a;
+$light-gray: #DDDDDD;
+$medium-gray: #786f67;
+$dark-gray: #4a4a4a;
+$black: #222222;
 $white: #fefefe;
+$off-white: #F9F9F9;
+$green: #5F712D;
+$blue-lt: #63AAFF;
 $body-background: $white;
 $body-font-color: $black;
 $body-font-family: 'Open Sans', sans-serif;
