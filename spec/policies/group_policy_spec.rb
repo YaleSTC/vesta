@@ -35,7 +35,8 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, group) }
       it { is_expected.to permit(user, other_group) }
     end
-    permissions :destroy?, :edit?, :update?, :accept_request? do
+    permissions :destroy?, :edit?, :update?, :accept_request?,
+                :invite_to_join?, :edit_invitations? do
       it { is_expected.to permit(user, group) }
       it { is_expected.not_to permit(user, other_group) }
     end
@@ -100,7 +101,8 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, group) }
       it { is_expected.to permit(user, other_group) }
     end
-    permissions :destroy?, :edit?, :update?, :accept_request? do
+    permissions :destroy?, :edit?, :update?, :accept_request?,
+                :invite_to_join?, :edit_invitations? do
       it { is_expected.to permit(user, group) }
       it { is_expected.not_to permit(user, other_group) }
     end
@@ -147,7 +149,8 @@ RSpec.describe GroupPolicy do
     permissions :index? do
       it { is_expected.to permit(user, [group]) }
     end
-    permissions :show?, :edit?, :update?, :destroy?, :accept_request? do
+    permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
+                :invite_to_join? do
       it { is_expected.to permit(user, group) }
     end
     permissions :request_to_join? do

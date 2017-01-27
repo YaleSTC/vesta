@@ -23,8 +23,7 @@ class ApplicationController < ActionController::Base
   #   (Creation / update failure, destruction success)
   # @param [String] path The path to redirect to when no object passed.
   def handle_action(object:, msg:, action: nil, path: nil, **_)
-    flash_type = msg.keys.first
-    flash[flash_type] = msg[flash_type]
+    msg.each { |flash_type, msg_str| flash[flash_type] = msg_str }
     redirect_to(object) && return if object
     complete_request(action: action, path: path)
   end

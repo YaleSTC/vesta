@@ -49,6 +49,13 @@ class Group < ApplicationRecord
     memberships.where(status: 'requested').map(&:user)
   end
 
+  # Get the group's membership invitations
+  #
+  # @return [Array<User>] the users who have been invited to join the group
+  def invitations
+    memberships.where(status: 'invited').map(&:user)
+  end
+
   private
 
   def add_leader_to_members

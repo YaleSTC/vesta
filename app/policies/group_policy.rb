@@ -33,6 +33,14 @@ class GroupPolicy < ApplicationPolicy
     edit?
   end
 
+  def invite_to_join?
+    edit?
+  end
+
+  def edit_invitations?
+    edit?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

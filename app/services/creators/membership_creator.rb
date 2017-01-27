@@ -24,4 +24,13 @@ class MembershipCreator < Creator
       msg: { success: "Membership in #{membership.group.name} created for "\
         "#{membership.user.name}." } }
   end
+
+  def error(errors)
+    {
+      object: nil,
+      msg: { error: "Please review the errors below:\n#{errors.join("\n")}" },
+      errors: errors,
+      params: params
+    }
+  end
 end

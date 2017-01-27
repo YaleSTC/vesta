@@ -8,4 +8,7 @@
 <% if policy(@group).request_to_join? %>
   <%= link_to 'Request To Join', draw_group_request_path(@draw, @group), method: :post %>
 <% end %>
+<% if policy(@group).invite_to_join? %>
+  <%= link_to 'Invite Members', draw_group_invite_path(@draw, @group) %>
+<% end %>
 <%= link_to('Delete', draw_group_path(@draw, @group), method: :delete) if policy(@group).destroy? %>

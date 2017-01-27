@@ -2,7 +2,8 @@
 # Controller for Groups
 class GroupsController < ApplicationController
   prepend_before_action :set_group, only: %i(show edit update destroy
-                                             request_to_join accept_request)
+                                             request_to_join accept_request
+                                             invite_to_join edit_invitations)
   before_action :set_draw
   before_action :set_form_data, only: %i(new edit)
 
@@ -47,6 +48,17 @@ class GroupsController < ApplicationController
     handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
+  def invite_to_join
+    batch_params = { user_ids: group_params['invitations'], group: @group,
+                     status: 'invited' }
+    results = MembershipBatchCreator.run(**batch_params)
+    handle_action(path: draw_group_path(@draw, @group), **results)
+  end
+
+  def edit_invitations
+    @students = UngroupedStudentsQuery.new(@draw.students).call
+  end
+
   private
 
   def authorize!
@@ -58,7 +70,8 @@ class GroupsController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(:size, :leader_id, member_ids: [])
+    params.require(:group).permit(:size, :leader_id, member_ids: [],
+                                                     invitations: [])
   end
 
   def set_group

@@ -14,6 +14,9 @@ Rails.application.routes.draw do
       post '/:id/request', to: 'groups#request_to_join', as: 'request'
       put '/:id/accept_request', to: 'groups#accept_request',
                                  as: 'accept_request'
+      get '/:id/invite_to_join', to: 'groups#edit_invitations', as: 'invite'
+      patch '/:id/invite_to_join', to: 'groups#invite_to_join',
+                                   as: 'send_invites'
     end
   end
   patch 'draws/:id/activate', to: 'draws#activate', as: 'activate_draw'
