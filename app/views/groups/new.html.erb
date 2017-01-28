@@ -1,3 +1,7 @@
 <h1> New Group </h1>
-<%= render "form", group: @group %>
+  <%= render "form", group: @group %>
 
+<% content_for :sidebar do %>
+  <h2>Insert Draw Inventory here</h2>
+  <%= FFaker::HipsterIpsum.paragraphs %>
+<% end %>

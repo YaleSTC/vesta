@@ -1,0 +1,9 @@
+.inline-checkbox {
+  display: inline-block;
+  width: 20%;
+  word-wrap: break-word;
+
+  @include breakpoint(medium) {
+    width: 100%;
+  }
+}

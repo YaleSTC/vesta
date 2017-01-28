@@ -19,8 +19,8 @@ RSpec.feature 'Special group editing' do
     group.members << remove
     add = FactoryGirl.create(:student_in_draw, intent: 'off_campus')
     visit edit_group_path(group)
-    select remove.full_name, from: 'group_remove_ids'
-    select add.full_name_with_intent, from: 'group_member_ids'
+    check remove.full_name
+    check add.full_name
     click_on 'Save'
     expect(page).to have_css('.group-member', text: add.full_name)
   end
@@ -29,7 +29,7 @@ RSpec.feature 'Special group editing' do
     group = FactoryGirl.create(:drawless_group, size: 1)
     add = FactoryGirl.create(:student_in_draw)
     visit edit_group_path(group)
-    select add.full_name_with_intent, from: 'group_member_ids'
+    check add.full_name
     click_on 'Save'
     expect(page).to have_css('.flash-error')
   end
