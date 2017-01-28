@@ -38,7 +38,7 @@ RSpec.feature 'Housing Group Creation' do
       visit new_draw_group_path(leader.draw)
       select(size, from: 'group_size')
       select(leader.full_name, from: 'group_leader_id')
-      members.each { |m| select(m.full_name, from: 'group_member_ids') }
+      members.each { |m| check(m.full_name) }
       click_on 'Create'
     end
   end

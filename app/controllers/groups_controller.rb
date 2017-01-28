@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # Controller for Groups
 class GroupsController < ApplicationController
+  layout 'application_with_sidebar'
   prepend_before_action :set_group, only: %i(show edit update destroy
                                              request_to_join accept_request
                                              invite_to_join edit_invitations
@@ -57,7 +58,7 @@ class GroupsController < ApplicationController
   end
 
   def edit_invitations
-    @students = UngroupedStudentsQuery.new(@draw.students).call
+    @students = UngroupedStudentsQuery.new(@draw.students.on_campus).call
   end
 
   def accept_invitation
@@ -94,7 +95,7 @@ class GroupsController < ApplicationController
 
   def set_form_data
     @group ||= Group.new(draw: @draw)
-    @students = UngroupedStudentsQuery.new(@draw.students).call
+    @students = UngroupedStudentsQuery.new(@draw.students.on_campus).call
     @leader_students = @group.members.empty? ? @students : @group.members
     @suite_sizes = @draw.suite_sizes
   end
