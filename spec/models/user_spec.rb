@@ -15,6 +15,29 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_one(:group).through(:membership) }
   end
 
+  describe 'CAS username' do
+    context 'when CAS is used' do
+      subject(:user) { FactoryGirl.build(:user, username: 'foo') }
+      # rubocop:disable RSpec/AnyInstance
+      before do
+        allow_any_instance_of(User).to receive(:cas_auth?).and_return(true)
+      end
+      # rubocop:enable RSpec/AnyInstance
+      it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
+      it { is_expected.to validate_presence_of(:username) }
+
+      it 'downcases before saving' do
+        user.update(username: 'FOO')
+        expect(user.username).to eq('foo')
+      end
+    end
+
+    context 'when CAS is not used' do
+      subject { FactoryGirl.build(:user) }
+      it { is_expected.not_to validate_presence_of(:username) }
+    end
+  end
+
   # rubocop:disable RSpec/ExampleLength
   it 'destroys a dependent membership on destruction' do
     user = FactoryGirl.create(:student, intent: 'on_campus')

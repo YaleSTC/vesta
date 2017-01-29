@@ -26,7 +26,11 @@ RSpec.configure do |config|
 
   # DatabaseCleaner set up
   config.use_transactional_fixtures = false
-  config.before(:suite) { DatabaseCleaner.clean_with(:deletion) }
+  config.before(:suite) do
+    # By default, do not use CAS in tests unless we specifically override ENV.
+    ENV.delete('CAS_BASE_URL')
+    DatabaseCleaner.clean_with(:deletion)
+  end
   config.before(:each) { DatabaseCleaner.strategy = :transaction }
   config.before(:each) { DatabaseCleaner.start }
   config.after(:each) { DatabaseCleaner.clean }
