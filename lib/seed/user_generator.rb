@@ -11,6 +11,7 @@ class UserGenerator
 
   def initialize(overrides: {})
     gen_params(overrides: overrides)
+    @params.delete(:password) if User.cas_auth?
   end
 
   def generate

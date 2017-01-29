@@ -85,6 +85,6 @@ RSpec.feature 'Draw intent report' do
 
   def page_has_intent_update_link(page, student)
     page.assert_selector(:link, 'Edit intent',
-                         href: edit_user_intent_path(student))
+                         href: edit_intent_user_path(student))
   end
 end

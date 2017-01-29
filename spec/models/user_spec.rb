@@ -18,11 +18,7 @@ RSpec.describe User, type: :model do
   describe 'CAS username' do
     context 'when CAS is used' do
       subject(:user) { FactoryGirl.build(:user, username: 'foo') }
-      # rubocop:disable RSpec/AnyInstance
-      before do
-        allow_any_instance_of(User).to receive(:cas_auth?).and_return(true)
-      end
-      # rubocop:enable RSpec/AnyInstance
+      before { allow(User).to receive(:cas_auth?).and_return(true) }
       it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
       it { is_expected.to validate_presence_of(:username) }
 
@@ -48,6 +44,17 @@ RSpec.describe User, type: :model do
       raise_error(ActiveRecord::RecordNotFound)
   end
   # rubocop:enable RSpec/ExampleLength
+
+  describe '.cas_auth?' do
+    it 'returns true if the CAS_BASE_URL env variable is set' do
+      allow(User).to receive(:env?).with('CAS_BASE_URL').and_return(true)
+      expect(User.cas_auth?).to be_truthy
+    end
+    it 'returns false if the CAS_BASE_URL env variable is not set' do
+      allow(User).to receive(:env?).with('CAS_BASE_URL').and_return(false)
+      expect(User.cas_auth?).to be_falsey
+    end
+  end
 
   describe '#name' do
     it 'is the first name' do

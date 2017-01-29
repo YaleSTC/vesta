@@ -5,11 +5,25 @@ class UsersController < ApplicationController
   prepend_before_action :set_user, only: %i(show edit update edit_intent
                                             update_intent)
 
-  def show
+  def show; end
+
+  def build
+    @user = User.new
   end
 
-  def edit
+  def new
+    result = UserBuilder.build(id_attr: build_user_params['username'])
+    @user = result[:user]
+    handle_action(**result)
   end
+
+  def create
+    result = UserCreator.new(user_params).create!
+    @user = result[:object] ? result[:object] : User.new
+    handle_action(action: 'new', **result)
+  end
+
+  def edit; end
 
   def update
     result = Updater.new(object: @user, name_method: :name,
@@ -17,12 +31,7 @@ class UsersController < ApplicationController
     handle_action(action: 'edit', **result)
   end
 
-  def edit_intent
-  end
-
-  def update_intent
-    update
-  end
+  def edit_intent; end
 
   private
 
@@ -38,8 +47,12 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def build_user_params
+    params.require(:user).permit(:username)
+  end
+
   def user_params
     params.require(:user).permit(:first_name, :last_name, :role, :email,
-                                 :intent, :gender)
+                                 :intent, :gender, :username)
   end
 end

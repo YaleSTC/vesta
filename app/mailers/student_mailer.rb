@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 #
-# Mailer class for user e-mails
+# Mailer class for student e-mails
 class StudentMailer < ApplicationMailer
   default from: 'no-reply@vesta.app'
 
   # Send initial invitation to students in a draw
   #
-  # @attr user [User] the user to send the invitation to
+  # @param user [User] the user to send the invitation to
   def draw_invitation(user)
     @user = user
     @intent_deadline = user.draw.intent_deadline

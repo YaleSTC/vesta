@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 # User model class for all user types.
 class User < ApplicationRecord
+  # Determine whether or not CAS authentication is being used, must be at the
+  # top of the class to be used in the Devise loading conditional below.
+  #
+  # @return [Boolean] true if the CAS_BASE_URL environment variable is set,
+  #   false otherwise
+  def self.cas_auth?
+    env? 'CAS_BASE_URL'
+  end
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  if env? 'CAS_BASE_URL'
+  if cas_auth?
     devise :cas_authenticatable, :trackable
   else
-    devise :database_authenticatable, :registerable,
-           :recoverable, :rememberable, :trackable, :validatable
+    devise :database_authenticatable, :recoverable, :rememberable, :trackable,
+           :validatable
   end
 
   belongs_to :draw
@@ -50,6 +59,6 @@ class User < ApplicationRecord
   end
 
   def cas_auth?
-    env? 'CAS_BASE_URL'
+    User.cas_auth?
   end
 end
