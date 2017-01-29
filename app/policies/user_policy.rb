@@ -21,6 +21,10 @@ class UserPolicy < ApplicationPolicy
     show?
   end
 
+  def build?
+    new?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

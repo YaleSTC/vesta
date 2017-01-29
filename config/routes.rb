@@ -5,9 +5,9 @@ Rails.application.routes.draw do
   resources :buildings
   resources :suites
   resources :rooms
+  get 'users/build', to: 'users#build', as: 'build_user'
   resources :users
-  get 'users/:id/intent', to: 'users#edit_intent', as: 'edit_user_intent'
-  put 'users/:id/intent', to: 'users#update_intent'
+  get 'users/:id/intent', to: 'users#edit_intent', as: 'edit_intent_user'
 
   resources :draws do
     resources :groups do

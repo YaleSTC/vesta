@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hi <%= @user.name %>,</p>
+    <p>Welcome to Vesta! A new account has been created on your behalf and you can log in at <%= @res_college.vesta_url %> <% if @password %>with the following auto-generated password: <%= @password %>; you'll be able to change it after you log in.<% else %>via CAS.<% end %></p>
+    <p>Please e-mail <%= @res_college.admin_email %> if you have any questions.</p>
+    <p>Sincerely, <%= @res_college.dean %></p>
+  </body>
+</html>

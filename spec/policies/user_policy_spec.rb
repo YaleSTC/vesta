@@ -14,7 +14,7 @@ RSpec.describe UserPolicy do
                 :edit_intent?, :update_intent? do
       it { is_expected.not_to permit(user, other_user) }
     end
-    permissions :index? do
+    permissions :index?, :build? do
       it { is_expected.not_to permit(user, User) }
     end
   end
@@ -28,7 +28,7 @@ RSpec.describe UserPolicy do
                 :edit_intent?, :update_intent? do
       it { is_expected.not_to permit(user, other_user) }
     end
-    permissions :index? do
+    permissions :index?, :build? do
       it { is_expected.not_to permit(user, User) }
     end
   end
@@ -39,7 +39,7 @@ RSpec.describe UserPolicy do
                 :edit_intent?, :update_intent? do
       it { is_expected.to permit(user, other_user) }
     end
-    permissions :index? do
+    permissions :index?, :build? do
       it { is_expected.to permit(user, User) }
     end
   end

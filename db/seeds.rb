@@ -3,7 +3,13 @@
 
 puts 'Generating seed data....'
 
-Generator.generate_admin(email: 'email@email.com', password: 'passw0rd')
+if User.cas_auth?
+  puts 'Please enter your CAS login: '
+  cas_login = $stdin.gets.chomp
+  Generator.generate_admin(username: cas_login)
+else
+  Generator.generate_admin(email: 'email@email.com', password: 'passw0rd')
+end
 Generator.generate(model: 'building', count: 2)
 Generator.generate(model: 'suite', count: 15)
 
