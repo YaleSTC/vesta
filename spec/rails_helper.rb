@@ -29,6 +29,8 @@ RSpec.configure do |config|
   config.before(:suite) do
     # By default, do not use CAS in tests unless we specifically override ENV.
     ENV.delete('CAS_BASE_URL')
+    # Remove all PROFILE_REQUESTER keys from ENV to avoid issuing requests
+    ENV.delete_if { |k, _v| !k.match(/PROFILE_REQUEST_/).nil? }
     DatabaseCleaner.clean_with(:deletion)
   end
   config.before(:each) { DatabaseCleaner.strategy = :transaction }
