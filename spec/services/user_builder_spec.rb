@@ -20,6 +20,11 @@ RSpec.describe UserBuilder do
         result = described_class.build(id_attr: 'foo')
         expect(result[:user].persisted?).to be_falsey
       end
+      it 'looks up profile data' do
+        querier = mock_profile_querier(first_name: 'John')
+        result = described_class.new(id_attr: 'foo', querier: querier).build
+        expect(result[:user][:first_name]).to eq('John')
+      end
       it 'returns a success flash' do
         result = described_class.build(id_attr: 'foo')
         expect(result[:msg]).to have_key(:success)
@@ -75,6 +80,12 @@ RSpec.describe UserBuilder do
     instance_spy('UserBuilder').tap do |user_builder|
       allow(UserBuilder).to receive(:new).with(params_hash)
         .and_return(user_builder)
+    end
+  end
+
+  def mock_profile_querier(**profile_data)
+    class_spy('IdrProfileQuerier').tap do |pq|
+      allow(pq).to receive(:query).and_return(profile_data)
     end
   end
 end

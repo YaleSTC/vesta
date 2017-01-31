@@ -12,8 +12,13 @@ class UserBuilder
   #
   # @param id_attr [String] the value for the ID attribute, either username
   # (CAS) or e-mail (non-CAS)
-  def initialize(id_attr:)
+  # @param querier [#query] a service object to retrieve user profile data from.
+  #   This must take the id_attr as an initializer parameter (assigned to :id),
+  #   and implement a method :query that returns a hash of user attributes and
+  #   values.
+  def initialize(id_attr:, querier: nil)
     @id_attr = id_attr
+    @querier = querier.try(:new, id: id_attr)
     @user = User.new
     @id_symbol = User.cas_auth? ? :username : :email
   end
@@ -27,13 +32,14 @@ class UserBuilder
   def build
     return error unless unique?
     assign_login
+    assign_profile_attrs
     success
   end
 
   private
 
   attr_accessor :user
-  attr_reader :id_attr, :id_symbol
+  attr_reader :id_attr, :id_symbol, :querier
 
   def result_hash
     { object: nil, user: user }
@@ -57,5 +63,9 @@ class UserBuilder
   def assign_login
     assign_method = "#{id_symbol}=".to_sym
     user.send(assign_method, id_attr)
+  end
+
+  def assign_profile_attrs
+    user.assign_attributes(querier.try(:query) || {})
   end
 end

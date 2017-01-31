@@ -1,5 +1,24 @@
 # frozen_string_literal: true
-# User model class for all user types.
+#
+# User model class for all user types. Optionally loads in sets of Devise
+# modules for authentication. Validates presence of required profile fields
+# (noted below).
+#
+# @attr email [String] the user's e-mail (required for database auth)
+# @attr encrypted_password [String] the encrypted password for database
+#   authentication (handled by Devise)
+# @attr username [String] the user's CAS login (required for CAS auth)
+# @attr role [Integer] an enum for the user's role, admin, [housing] rep, or
+#   student (required)
+# @attr first_name [String] the user's first name (required)
+# @attr last_name [String] the user's last name (required)
+# @attr intent [Integer] an enum for the user's housing intent, on_campus,
+#   off_campus, or undeclared (required)
+# @attr gender [Integer] an enum for the user's gender, male, female, or
+#   undeclared (required)
+# @attr class_year [Integer] the graduating class year of the student (optional)
+# @attr college [String] a string describing the residential college to which
+#   the user belongs (optional)
 class User < ApplicationRecord
   # Determine whether or not CAS authentication is being used, must be at the
   # top of the class to be used in the Devise loading conditional below.

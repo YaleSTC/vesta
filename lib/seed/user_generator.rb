@@ -30,6 +30,16 @@ class UserGenerator
                   gender: User.genders.keys.sample,
                   role: 'student',
                   intent: User.intents.keys.sample,
-                  password: 'passw0rd' }.merge(overrides)
+                  password: 'passw0rd',
+                  class_year: random_class_year,
+                  college: random_college_str }.merge(overrides)
+  end
+
+  def random_class_year
+    Time.zone.today.year + (1..3).to_a.sample
+  end
+
+  def random_college_str
+    ('A'..'Z').to_a.sample(2).join
   end
 end
