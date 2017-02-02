@@ -2,7 +2,8 @@
 #
 # Controller class for 'special' (admin-created outside of draw) housing groups.
 class DrawlessGroupsController < ApplicationController
-  prepend_before_action :set_group, only: %i(show edit update destroy)
+  prepend_before_action :set_group, only: %i(show edit update destroy
+                                             select_suite)
   before_action :set_form_data, only: %i(new edit)
 
   def show; end
@@ -29,6 +30,11 @@ class DrawlessGroupsController < ApplicationController
     handle_action(**result)
   end
 
+  def select_suite
+    result = SuiteSelector.select(group: @group, suite_id: params['suite'])
+    handle_action(action: 'show', **result)
+  end
+
   private
 
   def authorize!
@@ -36,7 +42,7 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def drawless_group_params
-    params.require(:group).permit(:size, :leader_id, member_ids: [])
+    params.require(:group).permit(:size, :leader_id, :suite, member_ids: [])
   end
 
   def set_group

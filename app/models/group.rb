@@ -10,6 +10,7 @@
 class Group < ApplicationRecord
   belongs_to :leader, class_name: 'User'
   belongs_to :draw
+  has_one :suite
   has_many :memberships, dependent: :delete_all
   has_many :members, through: :memberships, source: :user
 

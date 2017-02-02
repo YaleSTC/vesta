@@ -25,9 +25,9 @@ class UserBuilder
 
   # Build a user record based on the given input, ensuring that it is unique
   #
-  # @return [Hash{symbol=>User,Hash}] a results hash with a message to set in
-  #   the flash, nil as the :object value, the user record as the :user value,
-  #   and the :action to render. The :object is always set to nil so that
+  # @return [Hash{symbol=>User,Hash,String}] a results hash with a message to
+  #   set in the flash, nil as the :object value, the user record as the :user
+  #   value, and the :action to render. The :object is always set to nil so that
   #   handle_action properly renders the template set in :action.
   def build
     return error unless unique?

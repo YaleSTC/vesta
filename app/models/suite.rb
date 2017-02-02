@@ -12,6 +12,7 @@
 # @attr [Array<Room>] rooms has_many association for the Rooms within the Suite.
 class Suite < ApplicationRecord
   belongs_to :building
+  belongs_to :group
   has_many :rooms
   has_and_belongs_to_many :draws # rubocop:disable Rails/HasAndBelongsToMany
 
@@ -19,4 +20,6 @@ class Suite < ApplicationRecord
   validates :number, presence: true, uniqueness: { scope: :building }
   validates :size, presence: true,
                    numericality: { greater_than_or_equal_to: 0 }
+
+  scope :available, -> { where(group_id: nil).order(:number) }
 end

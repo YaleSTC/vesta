@@ -25,4 +25,6 @@ Rails.application.routes.draw do
   post 'draws/:id/intent_report', to: 'draws#filter_intent_report'
 
   resources :groups, controller: 'drawless_groups'
+  patch 'groups/:id/select_suite', to: 'drawless_groups#select_suite',
+                                   as: 'select_suite_group'
 end
