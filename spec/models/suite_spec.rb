@@ -5,6 +5,7 @@ RSpec.describe Suite, type: :model do
   describe 'basic validations' do
     it { is_expected.to validate_presence_of(:number) }
     it { is_expected.to belong_to(:building) }
+    it { is_expected.to belong_to(:group) }
     it { is_expected.to have_many(:rooms) }
     it { is_expected.to have_and_belong_to_many(:draws) }
 
@@ -20,6 +21,18 @@ RSpec.describe Suite, type: :model do
         FactoryGirl.create(:suite, **attrs)
         suite = FactoryGirl.build(:suite, **attrs)
         expect(suite.valid?).to be_falsey
+      end
+    end
+  end
+
+  context 'scopes' do
+    describe '.available' do
+      it 'returns all suites not assigned to groups ordered by number' do
+        suite1 = FactoryGirl.create(:suite, number: 'def')
+        suite2 = FactoryGirl.create(:suite, number: 'abc')
+        FactoryGirl.create(:suite, group_id: 1234)
+        expect(described_class.available.map(&:id)).to \
+          eq([suite2.id, suite1.id])
       end
     end
   end
