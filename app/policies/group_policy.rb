@@ -41,6 +41,10 @@ class GroupPolicy < ApplicationPolicy
     edit?
   end
 
+  def accept_invitation?
+    !user.group && record.invitations.include?(user)
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

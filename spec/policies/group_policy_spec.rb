@@ -10,22 +10,38 @@ RSpec.describe GroupPolicy do
     let(:other_group) { FactoryGirl.build_stubbed(:group) }
 
     permissions :create? do
-      context 'in draw, not in group' do
+      context 'in same draw, not in group' do
         before do
           allow(user).to receive(:draw).and_return(instance_spy('Draw'))
           allow(user).to receive(:group).and_return(nil)
         end
         it { is_expected.to permit(user, Group) }
       end
-      context 'in draw, in group' do
+      context 'in same draw, in group' do
         before do
           allow(user).to receive(:draw).and_return(instance_spy('Draw'))
           allow(user).to receive(:group).and_return(instance_spy('Group'))
         end
         it { is_expected.not_to permit(user, Group) }
       end
-      context 'not in draw' do
+      context 'not in same draw' do
         it { is_expected.not_to permit(user, Group) }
+      end
+    end
+    permissions :accept_invitation? do
+      context 'invited, not in group' do
+        before do
+          allow(other_group).to receive(:invitations).and_return([user])
+          allow(user).to receive(:group).and_return(nil)
+        end
+        it { is_expected.to permit(user, other_group) }
+      end
+      context 'in same draw, in group' do
+        before do
+          allow(user).to receive(:group).and_return(group)
+          allow(other_group).to receive(:invitations).and_return([user])
+        end
+        it { is_expected.not_to permit(user, other_group) }
       end
     end
     permissions :index? do
@@ -83,14 +99,14 @@ RSpec.describe GroupPolicy do
         end
         it { is_expected.to permit(user, Group) }
       end
-      context 'in draw, in group' do
+      context 'in same draw, in group' do
         before do
           allow(user).to receive(:draw).and_return(instance_spy('Draw'))
           allow(user).to receive(:group).and_return(instance_spy('Group'))
         end
         it { is_expected.not_to permit(user, Group) }
       end
-      context 'not in draw' do
+      context 'not in same draw' do
         it { is_expected.not_to permit(user, Group) }
       end
     end
@@ -132,6 +148,22 @@ RSpec.describe GroupPolicy do
           allow(user).to receive(:group).and_return(instance_spy('Group'))
         end
         it { is_expected.not_to permit(user, group) }
+      end
+    end
+    permissions :accept_invitation? do
+      context 'invited, not in group' do
+        before do
+          allow(other_group).to receive(:invitations).and_return([user])
+          allow(user).to receive(:group).and_return(nil)
+        end
+        it { is_expected.to permit(user, other_group) }
+      end
+      context 'in draw, in group' do
+        before do
+          allow(user).to receive(:group).and_return(group)
+          allow(other_group).to receive(:invitations).and_return([user])
+        end
+        it { is_expected.not_to permit(user, other_group) }
       end
     end
   end
