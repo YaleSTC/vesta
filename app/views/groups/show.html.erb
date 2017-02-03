@@ -11,4 +11,7 @@
 <% if policy(@group).invite_to_join? %>
   <%= link_to 'Invite Members', draw_group_invite_path(@draw, @group) %>
 <% end %>
+<% if policy(@group).accept_invitation? %>
+  <%= link_to 'Accept Invitation', draw_group_accept_invitation_path(@draw, @group), method: :put %>
+<% end %>
 <%= link_to('Delete', draw_group_path(@draw, @group), method: :delete) if policy(@group).destroy? %>

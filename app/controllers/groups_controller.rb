@@ -3,7 +3,8 @@
 class GroupsController < ApplicationController
   prepend_before_action :set_group, only: %i(show edit update destroy
                                              request_to_join accept_request
-                                             invite_to_join edit_invitations)
+                                             invite_to_join edit_invitations
+                                             accept_invitation)
   before_action :set_draw
   before_action :set_form_data, only: %i(new edit)
 
@@ -58,6 +59,13 @@ class GroupsController < ApplicationController
 
   def edit_invitations
     @students = UngroupedStudentsQuery.new(@draw.students).call
+  end
+
+  def accept_invitation
+    membership = current_user.memberships.where(group: @group).first
+    result = MembershipUpdater.update(membership: membership,
+                                      params: { status: 'accepted' })
+    handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
   private
