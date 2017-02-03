@@ -43,7 +43,8 @@ class GroupsController < ApplicationController
 
   def accept_request
     user = User.includes(:membership).find(params['user_id'])
-    result = MembershipUpdater.update(membership: user.membership,
+    membership = user.memberships.where(group: @group).first
+    result = MembershipUpdater.update(membership: membership,
                                       params: { status: 'accepted' })
     handle_action(path: draw_group_path(@draw, @group), **result)
   end

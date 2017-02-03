@@ -12,6 +12,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of(:gender) }
     it { is_expected.to belong_to(:draw) }
     it { is_expected.to have_one(:membership) }
+    it { is_expected.to have_many(:memberships) }
     it { is_expected.to have_one(:group).through(:membership) }
   end
 
@@ -70,6 +71,36 @@ RSpec.describe User, type: :model do
       user = FactoryGirl.build_stubbed(:user, first_name: 'Sydney',
                                               last_name: 'Young')
       expect(user.full_name).to eq(full_name)
+    end
+  end
+
+  describe '#group' do
+    it 'returns nil if no accepted membership' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, draw: group.draw)
+      Membership.create(user: user, group: group, status: 'requested')
+      expect(user.reload.group).to be_nil
+    end
+    it 'returns the group of the accepted membership' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, draw: group.draw)
+      Membership.create(user: user, group: group, status: 'accepted')
+      expect(user.reload.group).to eq(group)
+    end
+  end
+
+  describe '#membership' do
+    it 'returns nil if no accepted membership' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, draw: group.draw)
+      Membership.create(user: user, group: group, status: 'requested')
+      expect(user.reload.membership).to be_nil
+    end
+    it 'returns the accepted membership' do
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, draw: group.draw)
+      m = Membership.create(user: user, group: group, status: 'accepted')
+      expect(user.reload.membership).to eq(m)
     end
   end
 end

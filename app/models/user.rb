@@ -20,8 +20,9 @@ class User < ApplicationRecord
   end
 
   belongs_to :draw
-  has_one :membership, dependent: :destroy
+  has_one :membership, -> { where(status: 'accepted') }, dependent: :destroy
   has_one :group, through: :membership
+  has_many :memberships, dependent: :destroy
 
   validates :email, uniqueness: true
   validates :username, presence: true, if: :cas_auth?
