@@ -10,6 +10,27 @@ RSpec.describe Membership, type: :model do
     it { is_expected.to validate_presence_of(:status) }
   end
 
+  describe 'user uniqueness' do
+    it 'is scoped to group' do
+      user = FactoryGirl.create(:student_in_draw)
+      group = FactoryGirl.create(:group, leader: user, draw: user.draw)
+      membership = Membership.new(group: group, user: user)
+      expect(membership).not_to be_valid
+    end
+  end
+
+  describe 'user can only have one accepted membership' do
+    it do # rubocop:disable RSpec/ExampleLength
+      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
+      leader = draw.students.first
+      FactoryGirl.create(:group, leader: leader)
+      other_group = FactoryGirl.create(:open_group, leader: draw.students.last)
+      m = Membership.new(user_id: leader.id, status: 'accepted',
+                         group: other_group)
+      expect(m).not_to be_valid
+    end
+  end
+
   describe 'group draw and user draw must match' do
     it do
       user = FactoryGirl.create(:student_in_draw)

@@ -18,11 +18,12 @@ class Membership < ApplicationRecord
   enum status: %w(accepted invited requested)
 
   validates :group, presence: true
-  validates :user, presence: true
+  validates :user, presence: true, uniqueness: { scope: :group }
   validates :status, presence: true
   validate :matching_draw, if: ->(m) { m.user.present? && m.group.present? }
   validate :user_on_campus, if: ->(m) { m.user.present? }
   validate :group_is_open, if: ->(m) { m.group.present? }, on: :create
+  validate :user_not_in_group, if: ->(m) { m.user.present? }
 
   before_destroy ->(m) { throw(:abort) if m.readonly? }
   before_update ->(m) { throw(:abort) if m.readonly? }
@@ -44,6 +45,11 @@ class Membership < ApplicationRecord
   end
 
   private
+
+  def user_not_in_group
+    return unless user.group
+    errors.add :user, 'already has membership in another group'
+  end
 
   def update_group_status
     group.update_status
