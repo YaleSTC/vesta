@@ -4,6 +4,7 @@ class SuitesController < ApplicationController
   prepend_before_action :set_suite, only: %i(show edit update destroy)
 
   def show
+    @rooms = @suite.rooms
   end
 
   def new

@@ -1,3 +1,10 @@
 <h1 class="suite-number"><%= @suite.number %></h1>
-<%= link_to 'Delete', suite_path(@suite), method: :delete %>
+<h2>Rooms</h2>
+<ul>
+  <% @rooms.each do |room| %>
+    <li><%= link_to room.number, room_path(room) %> - <%= pluralize(room.beds,'bed') %></li>
+  <% end %>
+</ul>
+<p><%= link_to 'Add room', new_room_path %></p>
+<p><%= link_to 'Delete', suite_path(@suite), method: :delete %></p>
 

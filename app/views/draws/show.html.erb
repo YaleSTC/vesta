@@ -15,11 +15,14 @@
     <p><%= intent_deadline_str(@draw) %></p>
   <% end %>
   <% if policy(@draw).intent_report? %>
-    <%= link_to 'View intent report', draw_intent_report_path(@draw) %>
+    <p><%= link_to 'View intent report', draw_intent_report_path(@draw) %></p>
   <% end %>
+  <% if policy(@draw).activate? %>
+    <p><%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch %></p>
+  <% end %>
+  <% if policy(@draw).update? %>
+    <p><%= link_to 'Add group to draw', new_draw_group_path(@draw) %></p>
+  <% end %>
+  <p><%= link_to 'Delete', draw_path(@draw), method: :delete %></p>
 </div>
-<% if policy(@draw).activate? %>
-  <%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch %>
-<% end %>
-<%= link_to 'Delete', draw_path(@draw), method: :delete %>
 

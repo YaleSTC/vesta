@@ -1,2 +1,4 @@
 <h1 class="room-number"><%= @room.number %></h1>
-<%= link_to 'Delete', room_path(@room), method: :delete %>
+<p><%= pluralize(@room.beds, 'bed') %></p>
+<p><%= link_to 'Edit', edit_room_path(@room) %></p>
+<p><%= link_to 'Delete', room_path(@room), method: :delete %></p>

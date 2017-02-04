@@ -4,10 +4,15 @@ class BuildingsController < ApplicationController
   prepend_before_action :set_building, only: %i(show edit update destroy)
 
   def show
+    @suites = @building.suites
   end
 
   def new
     @building = Building.new
+  end
+
+  def index
+    @buildings = Building.all
   end
 
   def create
