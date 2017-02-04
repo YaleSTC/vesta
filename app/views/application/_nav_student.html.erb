@@ -1,0 +1,16 @@
+<ul class="dropdown menu" data-dropdown-menu>
+  <% if current_user.draw && !current_user.draw.draft? %>
+    <% if policy(current_user).edit_intent? %>
+      <li><%= link_to 'Update Housing Intent', edit_intent_user_path(current_user) %></li>
+    <% end %>
+    <li><%= link_to 'My Draw', draw_path(current_user.draw) %></li>
+    <% if current_user.group %>
+      <li><%= link_to 'My Group', draw_group_path(current_user.draw, current_user.group) %></li>
+    <% end %>
+  <% else %>
+    <% if current_user.group %>
+      <li><%= link_to 'My Group', group_path(current_user.group) %></li>
+    <% end %>
+  <% end %>
+  <!-- eventually add: select a suite / view my suite -->
+</ul>

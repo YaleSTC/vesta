@@ -1,0 +1,7 @@
+<h1>Draws</h1>
+<ul>
+  <% @draws.each do |draw| %>
+    <li><%= link_to draw.name, draw_path(draw) %></li>
+  <% end %>
+</ul>
+

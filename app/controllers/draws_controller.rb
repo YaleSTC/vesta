@@ -9,6 +9,10 @@ class DrawsController < ApplicationController
 
   def show; end
 
+  def index
+    @draws = Draw.all
+  end
+
   def new
     @draw = Draw.new
   end

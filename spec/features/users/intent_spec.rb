@@ -3,7 +3,8 @@ require 'rails_helper'
 
 RSpec.feature 'Housing Intent' do
   it 'can be indicated' do
-    student = FactoryGirl.create(:student)
+    student = FactoryGirl.create(:student_in_draw)
+    student.draw.update(status: 'pre_lottery')
     log_in student
     declare_off_campus student
     expect(page).to have_css('.user-intent', text: 'off_campus')

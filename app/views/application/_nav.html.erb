@@ -7,6 +7,15 @@
       <strong><%= link_to 'Vesta', root_path %></strong>
     </div>
     <div id="responsive-menu">
+      <div class="top-bar-left">
+        <% if current_user %>
+          <% if current_user.admin? %>
+            <%= render 'nav_admin' %>
+          <% else %>
+             <%= render 'nav_student' %>
+           <% end %>
+        <% end %>
+      </div>
       <div class="top-bar-right">
         <ul class="menu">
           <% if current_user %>

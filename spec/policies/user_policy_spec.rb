@@ -7,8 +7,26 @@ RSpec.describe UserPolicy do
 
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
-    permissions :show?, :update?, :edit?, :edit_intent?, :update_intent? do
+    permissions :show?, :update?, :edit? do
       it { is_expected.to permit(user, user) }
+    end
+    context 'draw in pre-lottery status' do
+      before do
+        allow(user).to receive(:draw)
+          .and_return(instance_spy('draw', pre_lottery?: true))
+      end
+      permissions :edit_intent?, :update_intent? do
+        it { is_expected.to permit(user, user) }
+      end
+    end
+    context 'draw not pre-lottery status' do
+      before do
+        allow(user).to receive(:draw)
+          .and_return(instance_spy('draw', pre_lottery?: false))
+      end
+      permissions :edit_intent?, :update_intent? do
+        it { is_expected.not_to permit(user, user) }
+      end
     end
     permissions :show?, :create?, :destroy?, :update?, :edit?,
                 :edit_intent?, :update_intent? do
@@ -21,8 +39,26 @@ RSpec.describe UserPolicy do
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :show?, :update?, :edit?, :edit_intent?, :update_intent? do
+    permissions :show?, :update?, :edit? do
       it { is_expected.to permit(user, user) }
+    end
+    context 'draw in pre-lottery status' do
+      before do
+        allow(user).to receive(:draw)
+          .and_return(instance_spy('draw', pre_lottery?: true))
+      end
+      permissions :edit_intent?, :update_intent? do
+        it { is_expected.to permit(user, user) }
+      end
+    end
+    context 'draw not pre-lottery status' do
+      before do
+        allow(user).to receive(:draw)
+          .and_return(instance_spy('draw', pre_lottery?: false))
+      end
+      permissions :edit_intent?, :update_intent? do
+        it { is_expected.not_to permit(user, user) }
+      end
     end
     permissions :show?, :create?, :destroy?, :update?, :edit?,
                 :edit_intent?, :update_intent? do

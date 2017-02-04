@@ -6,7 +6,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    show?
+    edit?
   end
 
   def edit?
@@ -14,11 +14,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def edit_intent?
-    show?
+    user.admin? || (user == record && user.draw.try(:pre_lottery?))
   end
 
   def update_intent?
-    show?
+    edit_intent?
   end
 
   def build?
