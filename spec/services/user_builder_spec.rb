@@ -76,6 +76,21 @@ RSpec.describe UserBuilder do
     end
   end
 
+  context '#exists?' do
+    context 'without CAS' do
+      it 'returns true if that identifying attribute is already taken' do
+        allow(User).to receive(:where).with(email: 'foo')
+          .and_return(instance_spy('ActiveRecord::Relation', count: 1))
+        expect(described_class.new(id_attr: 'foo').exists?).to be_truthy
+      end
+      it 'returns false if that identifying attribute is not already taken' do
+        allow(User).to receive(:where).with(email: 'foo')
+          .and_return(instance_spy('ActiveRecord::Relation', count: 0))
+        expect(described_class.new(id_attr: 'foo').exists?).to be_falsey
+      end
+    end
+  end
+
   def mock_user_builder(params_hash)
     instance_spy('UserBuilder').tap do |user_builder|
       allow(UserBuilder).to receive(:new).with(params_hash)

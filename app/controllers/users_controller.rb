@@ -12,7 +12,8 @@ class UsersController < ApplicationController
   end
 
   def new
-    result = UserBuilder.build(id_attr: build_user_params['username'])
+    result = UserBuilder.build(id_attr: build_user_params['username'],
+                               querier: querier)
     @user = result[:user]
     handle_action(**result)
   end
@@ -55,5 +56,12 @@ class UsersController < ApplicationController
     params.require(:user).permit(:first_name, :last_name, :role, :email,
                                  :intent, :gender, :username, :class_year,
                                  :college)
+  end
+
+  def querier
+    return nil unless env?('QUERIER')
+    # we can't use the `env` helper because Rails implements a deprecated env
+    # method in controllers
+    ENV['QUERIER'].constantize
   end
 end

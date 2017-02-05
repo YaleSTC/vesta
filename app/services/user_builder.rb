@@ -4,8 +4,8 @@
 # username, ultimately will request data from IDR.
 class UserBuilder
   # Allow for the calling of :build on the parent class
-  def self.build(id_attr:)
-    new(id_attr: id_attr).build
+  def self.build(**params)
+    new(**params).build
   end
 
   # Initialize a UserBuilder
@@ -25,15 +25,25 @@ class UserBuilder
 
   # Build a user record based on the given input, ensuring that it is unique
   #
-  # @return [Hash{symbol=>User,Hash,String}] a results hash with a message to
-  #   set in the flash, nil as the :object value, the user record as the :user
+  # @return [Hash{symbol=>User,Hash,Nil}] a results hash with a message to set
+  #   in the flash, nil as the :object value, the user record as the :user
   #   value, and the :action to render. The :object is always set to nil so that
   #   handle_action properly renders the template set in :action.
   def build
-    return error unless unique?
+    return error if exists?
     assign_login
     assign_profile_attrs
     success
+  end
+
+  # Returns whether the identifying attribute is already assigned to a different
+  # user
+  #
+  # @return [Boolean] whether or not a user with that identifying attribute
+  #   already exists
+  def exists?
+    @count ||= User.where(id_symbol => id_attr).count
+    @count.positive?
   end
 
   private
@@ -53,11 +63,6 @@ class UserBuilder
   def error
     result_hash.merge(action: 'build',
                       msg: { error: 'User already exists' })
-  end
-
-  def unique?
-    @count ||= User.where(id_symbol => id_attr).count
-    @count.zero?
   end
 
   def assign_login
