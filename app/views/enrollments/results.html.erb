@@ -1,0 +1,33 @@
+<h1>Enrollment Results</h1>
+<h2>The following users were successfully added</h2>
+<table>
+  <thead>
+    <tr>
+      <% if @enrollment.username? %>
+        <td>Username</td>
+      <% end %>
+      <td>Last Name</td>
+      <td>First Name</td>
+      <td>Email</td>
+      <td>Gender</td>
+      <td>Class Year</td>
+      <td>College</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @enrollment.successes.each do |student_hash| %>
+      <tr>
+        <% if @enrollment.username? %>
+          <td><%= student_hash[:user].username %></td>
+        <% end %>
+        <td><%= student_hash[:user].last_name %></td>
+        <td><%= student_hash[:user].first_name %></td>
+        <td><%= student_hash[:user].email %></td>
+        <td><%= student_hash[:user].gender %></td>
+        <td><%= student_hash[:user].class_year %></td>
+        <td><%= student_hash[:user].college %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

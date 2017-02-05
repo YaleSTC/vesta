@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-Rails.application.routes.draw do
+Rails.application.routes.draw do # rubocop:disable BlockLength
   devise_for :users
   root to: 'application#home'
   resources :buildings
@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'users/build', to: 'users#build', as: 'build_user'
   resources :users
   get 'users/:id/intent', to: 'users#edit_intent', as: 'edit_intent_user'
+  resources :enrollments, only: %i(new create)
 
   resources :draws do
     resources :groups do
