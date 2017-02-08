@@ -17,6 +17,11 @@ RSpec.describe GroupCreator do
       expect(described_class.new(params).create![:object].map(&:class)).to \
         eq([Draw, Group])
     end
+    it 'ignores the :remove_ids parameter' do
+      params = instance_spy('ActionController::Parameters',
+                            to_h: params_hash.merge('remove_ids' => ['1']))
+      expect(described_class.new(params).create![:object]).to be_truthy
+    end
   end
 
   it 'does not create when given invalid params' do

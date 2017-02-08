@@ -20,9 +20,10 @@ class DrawlessGroupsController < ApplicationController
   def edit; end
 
   def update
-    result = Updater.new(object: @group, name_method: :name,
-                         params: drawless_group_params).update
-    @group = result[:record]
+    result = DrawlessGroupUpdater.update(group: @group,
+                                         params: drawless_group_params)
+    @group = result[:group]
+    set_form_data unless result[:object]
     handle_action(action: 'edit', **result)
   end
 
@@ -43,7 +44,8 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def drawless_group_params
-    params.require(:group).permit(:size, :leader_id, :suite, member_ids: [])
+    params.require(:group).permit(:size, :leader_id, :suite, member_ids: [],
+                                                             remove_ids: [])
   end
 
   def set_group
@@ -52,7 +54,7 @@ class DrawlessGroupsController < ApplicationController
 
   def set_form_data
     @group ||= Group.new
-    @students = UngroupedStudentsQuery.call + @group.members
+    @students = UngroupedStudentsQuery.call
     @suite_sizes = SuiteSizesQuery.call
   end
 end

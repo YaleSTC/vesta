@@ -14,6 +14,15 @@ RSpec.describe DrawlessGroupCreator do
       expect(described_class.new(params).create![:object]).to \
         be_instance_of(Group)
     end
+    it 'assigns the :old_draw_id of the students to their original draws' do
+      params = instance_spy('ActionController::Parameters',
+                            to_h: params_hash_with_draw_students)
+      leader = described_class.new(params).create![:object].leader
+      # rubocop:disable RSpec/InstanceVariable
+      # Note the use of @leader to access the original object
+      expect(leader.old_draw_id).to eq(@leader.draw_id)
+      # rubocop:enable RSpec/InstanceVariable
+    end
     it 'automatically sets the intents of members if necessary' do
       params = instance_spy('ActionController::Parameters',
                             to_h: params_hash_with_undeclared_intent_student)
@@ -29,6 +38,11 @@ RSpec.describe DrawlessGroupCreator do
     it 'returns a success flash message' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
       expect(described_class.new(params).create![:msg]).to have_key(:success)
+    end
+    it 'ignores the :remove_ids parameter' do
+      params = instance_spy('ActionController::Parameters',
+                            to_h: params_hash.merge('remove_ids' => ['1']))
+      expect(described_class.new(params).create![:object]).to be_truthy
     end
   end
 

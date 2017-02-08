@@ -67,9 +67,47 @@ class User < ApplicationRecord
 
   # Returns the user's preferred full name
   #
-  # @return [String] Preferred name if set, otherwise first name, plus last name
+  # @return [String] First name plus last name
   def full_name
     "#{name} #{last_name}"
+  end
+
+  # Returns the user's full name with their intent in parentheses
+  #
+  # @return [String] Full name with user's intent in parentheses
+  def full_name_with_intent
+    "#{full_name} (#{pretty_intent})"
+  end
+
+  # Returns the user's intent not in snake case (replaces underscores with
+  # spaces)
+  #
+  # @return [String] the non-snake case intent
+  def pretty_intent
+    intent.tr('_', ' ')
+  end
+
+  # Back up a user's current draw into old_draw_id and removes them from current
+  # draw, also setting intent to undeclared. Does nothing if draw_id is nil.
+  #
+  # @return [User] the modified but unpersisted user object
+  def remove_draw
+    return self if draw_id.nil?
+    old_draw_id = draw_id
+    assign_attributes(draw_id: nil, old_draw_id: old_draw_id,
+                      intent: 'undeclared')
+    self
+  end
+
+  # Restores a user's draw from old_draw_id and clears old_draw_id, also setting
+  # intent to undeclared. Does nothing if old_draw_id is nil.
+  #
+  # @return [User] the modified but unpersisted user object
+  def restore_draw
+    return self if old_draw_id.nil?
+    draw_id = old_draw_id
+    assign_attributes(draw_id: draw_id, old_draw_id: nil, intent: 'undeclared')
+    self
   end
 
   private

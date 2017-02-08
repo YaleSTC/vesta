@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 #
 # Service object for 'special' (non-draw) housing groups
+# TODO: If we end up adding more shared behavior between GroupCreator and this
+# class, don't duplicate and either use inheritance or a module to keep things
+# DRY.
 class DrawlessGroupCreator < Creator
   # Initialize a new SpecialGroupCreator
   #
@@ -32,17 +35,22 @@ class DrawlessGroupCreator < Creator
   def process_params
     @params = params.to_h.transform_keys(&:to_sym)
     remove_blank_members if params[:member_ids]
+    remove_remove_ids_from_params if params[:remove_ids]
   end
 
-  # TODO: If we end up adding more shared behavior between GroupCreator and this
-  # class, don't duplicate and either use inheritance or a module to keep things
-  # DRY.
   def remove_blank_members
     @params[:member_ids] = params[:member_ids].reject(&:empty?)
   end
 
+  def remove_remove_ids_from_params
+    @params.delete(:remove_ids)
+  end
+
+  # Note that this occurs within the transaction
   def ensure_valid_members
-    User.where(id: all_member_ids).update_all(draw_id: nil, intent: 'on_campus')
+    User.where(id: all_member_ids).each do |user|
+      user.remove_draw.update!(intent: 'on_campus')
+    end
   end
 
   def all_member_ids
