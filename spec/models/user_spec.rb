@@ -74,6 +74,23 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#full_name_with_intent' do
+    it 'is the full name with the intent in parentheses' do
+      full_name_with_intent = 'Sydney Young (on campus)'
+      user = FactoryGirl.build_stubbed(:user, first_name: 'Sydney',
+                                              last_name: 'Young',
+                                              intent: 'on_campus')
+      expect(user.full_name_with_intent).to eq(full_name_with_intent)
+    end
+  end
+
+  describe '#pretty_intent' do
+    it 'is the intent not in snake case' do
+      user = FactoryGirl.build_stubbed(:user, intent: 'on_campus')
+      expect(user.pretty_intent).to eq('on campus')
+    end
+  end
+
   describe '#group' do
     it 'returns nil if no accepted membership' do
       group = FactoryGirl.create(:open_group)
@@ -101,6 +118,54 @@ RSpec.describe User, type: :model do
       user = FactoryGirl.create(:student, draw: group.draw)
       m = Membership.create(user: user, group: group, status: 'accepted')
       expect(user.reload.membership).to eq(m)
+    end
+  end
+
+  describe '#remove_draw' do
+    it 'backs up the current draw_id to old_draw_id' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
+      result = user.remove_draw
+      expect(result.old_draw_id).to eq(123)
+    end
+    it 'removes the draw_id' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
+      result = user.remove_draw
+      expect(result.draw_id).to be_nil
+    end
+    it 'changes the intent to undeclared' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234,
+                                              intent: 'on_campus')
+      result = user.remove_draw
+      expect(result.intent).to eq('undeclared')
+    end
+    it 'does not change old_draw_id if draw_id is nil' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: nil, old_draw_id: 1234)
+      result = user.remove_draw
+      expect(result).to eq(user)
+    end
+  end
+
+  describe '#restore_draw' do
+    it 'copies old_draw_id to draw_id' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
+      result = user.restore_draw
+      expect(result.draw_id).to eq(1234)
+    end
+    it 'sets old_draw_id to nil' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
+      result = user.restore_draw
+      expect(result.old_draw_id).to eq(nil)
+    end
+    it 'sets the intent to undeclared' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234,
+                                              intent: 'on_campus')
+      result = user.restore_draw
+      expect(result.intent).to eq('undeclared')
+    end
+    it 'does nothing if old_draw_id is nil' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: nil)
+      result = user.restore_draw
+      expect(result).to eq(user)
     end
   end
 end

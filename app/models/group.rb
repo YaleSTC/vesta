@@ -29,6 +29,8 @@ class Group < ApplicationRecord
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
 
+  attr_reader :remove_ids
+
   def name
     "#{leader.name}'s Group"
   end

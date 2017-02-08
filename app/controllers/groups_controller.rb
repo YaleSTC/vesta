@@ -79,6 +79,7 @@ class GroupsController < ApplicationController
 
   def group_params
     params.require(:group).permit(:size, :leader_id, member_ids: [],
+                                                     remove_ids: [],
                                                      invitations: [])
   end
 
