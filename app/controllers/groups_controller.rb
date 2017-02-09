@@ -26,6 +26,7 @@ class GroupsController < ApplicationController
   def update
     result = GroupUpdater.new(group: @group, params: group_params).update
     @group = result[:record]
+    set_form_data unless result[:object]
     handle_action(path: edit_draw_group_path(@draw, @group), **result)
   end
 
@@ -93,8 +94,8 @@ class GroupsController < ApplicationController
 
   def set_form_data
     @group ||= Group.new(draw: @draw)
-    @students = UngroupedStudentsQuery.new(@draw.students).call +
-                @group.members
+    @students = UngroupedStudentsQuery.new(@draw.students).call
+    @leader_students = @group.members.empty? ? @students : @group.members
     @suite_sizes = @draw.suite_sizes
   end
 end

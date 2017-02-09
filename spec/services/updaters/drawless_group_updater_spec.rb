@@ -51,6 +51,13 @@ RSpec.describe DrawlessGroupUpdater do
         described_class.update(group: group, params: p)
         expect(to_remove.reload.draw_id).to eq(1)
       end
+      it 'does not remove the leader if passed' do
+        group = FactoryGirl.create(:drawless_group, size: 2)
+        p = instance_spy('ActionController::Parameters',
+                         to_h: { 'remove_ids' => [group.leader_id.to_s] })
+        expect { described_class.update(group: group, params: p) }.not_to \
+          change(Membership, :count)
+      end
     end
     # rubocop:enable RSpec/ExampleLength
 
@@ -65,7 +72,7 @@ RSpec.describe DrawlessGroupUpdater do
         group = instance_spy('group', update!: true)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
         result = described_class.update(group: group, params: p)
-        expect(result[:group]).to eq(group)
+        expect(result[:record]).to eq(group)
       end
       it 'sets a success message' do
         group = instance_spy('group', update!: true)
@@ -80,7 +87,7 @@ RSpec.describe DrawlessGroupUpdater do
         allow(group).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
         result = described_class.update(group: group, params: p)
-        expect(result[:group]).to eq(group)
+        expect(result[:record]).to eq(group)
       end
       it 'sets an error message' do
         group = instance_spy('group')

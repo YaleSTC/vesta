@@ -14,7 +14,8 @@ RSpec.describe Group, type: :model do
     it { is_expected.to belong_to(:draw) }
     it { is_expected.to have_one(:suite) }
     it { is_expected.to have_many(:memberships) }
-    it { is_expected.to have_many(:members).through(:memberships) }
+    it { is_expected.to have_many(:full_memberships) }
+    it { is_expected.to have_many(:members).through(:full_memberships) }
     it { is_expected.not_to allow_value(-1).for(:memberships_count) }
   end
 
@@ -100,6 +101,28 @@ RSpec.describe Group, type: :model do
       user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
       Membership.create(group: group, user: user, status: 'invited')
       expect(group.invitations).to eq([user])
+    end
+  end
+
+  describe '#members' do
+    it 'returns only members with an accepted membership' do
+      group = FactoryGirl.create(:open_group)
+      create_potential_member(status: 'invited', group: group)
+      create_potential_member(status: 'requested', group: group)
+      expect(group.reload.members.map(&:id)).to eq([group.leader.id])
+    end
+
+    def create_potential_member(status:, group:)
+      u = FactoryGirl.create(:student, draw: group.draw, intent: 'on_campus')
+      Membership.create(user: u, group: group, status: status)
+      u
+    end
+  end
+
+  describe '#removable_members' do
+    it 'returns all accepted members except for the leader' do
+      group = FactoryGirl.create(:full_group, size: 2)
+      expect(group.removable_members.map(&:id)).not_to include(group.leader_id)
     end
   end
 end

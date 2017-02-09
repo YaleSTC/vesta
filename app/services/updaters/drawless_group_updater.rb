@@ -44,6 +44,7 @@ class DrawlessGroupUpdater < Updater
 
   def users(key)
     return nil unless params.key? key
+    return nil if key == :remove_ids && params[key] == group.leader_id.to_s
     User.find(params[key].reject(&:empty?))
   end
 
@@ -72,14 +73,14 @@ class DrawlessGroupUpdater < Updater
 
   def success
     {
-      object: group, group: group,
+      object: group, record: group,
       msg: { success: 'Group successfully updated!' }
     }
   end
 
   def error(error)
     {
-      object: nil, group: group,
+      object: nil, record: group,
       msg: { error: "Group update failed: #{error}" }
     }
   end
