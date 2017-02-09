@@ -17,6 +17,17 @@ RSpec.describe DrawPolicy do
     permissions :index? do
       it { is_expected.not_to permit(user, Draw) }
     end
+
+    permissions :group_actions? do
+      context 'non-pre-lottery draw' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'pre-lottery draw' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
   end
 
   context 'housing rep' do
@@ -31,12 +42,22 @@ RSpec.describe DrawPolicy do
     permissions :index? do
       it { is_expected.not_to permit(user, Draw) }
     end
+    permissions :group_actions? do
+      context 'non-pre-lottery draw' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'pre-lottery draw' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
     permissions :show?, :update?, :create?, :destroy?, :intent_report?,
-                :filter_intent_report? do
+                :filter_intent_report?, :group_actions? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :index? do

@@ -22,6 +22,10 @@ class DrawPolicy < ApplicationPolicy
     intent_report?
   end
 
+  def group_actions?
+    user.admin? || record.pre_lottery?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

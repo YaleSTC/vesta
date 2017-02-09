@@ -14,7 +14,7 @@ RSpec.feature 'Students Joining Groups' do
 
   context 'requesting to join a full group' do
     it 'fails' do
-      group = FactoryGirl.create(:group)
+      group = FactoryGirl.create(:full_group)
       log_in FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
       visit draw_group_path(group.draw, group)
       click_on 'Request To Join'

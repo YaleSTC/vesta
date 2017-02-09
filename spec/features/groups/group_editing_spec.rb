@@ -4,7 +4,10 @@ require 'rails_helper'
 RSpec.feature 'Group editing' do
   let(:group) { FactoryGirl.create(:group) }
 
-  before { log_in group.leader }
+  before do
+    group.draw.update(status: 'pre_lottery')
+    log_in group.leader
+  end
   it 'succeeds' do
     new_suite = FactoryGirl.create(:suite_with_rooms, rooms_count: 5,
                                                       draws: [group.draw])

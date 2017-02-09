@@ -14,6 +14,7 @@ FactoryGirl.define do
           g.members << create(:student, draw: g.draw)
         end
       end
+      after(:create) { |g| g.draw.update(status: 'pre_lottery') }
     end
 
     factory :open_group do
@@ -21,6 +22,7 @@ FactoryGirl.define do
       after(:build) do |g|
         g.draw.suites << create(:suite_with_rooms, rooms_count: g.size)
       end
+      after(:create) { |g| g.draw.update(status: 'pre_lottery') }
     end
 
     factory :drawless_group do
