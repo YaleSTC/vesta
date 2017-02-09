@@ -5,7 +5,7 @@ class GroupsController < ApplicationController
                                              request_to_join accept_request
                                              invite_to_join edit_invitations
                                              accept_invitation)
-  before_action :set_draw
+  prepend_before_action :set_draw
   before_action :set_form_data, only: %i(new edit)
 
   def show; end
@@ -74,6 +74,7 @@ class GroupsController < ApplicationController
     else
       authorize Group
     end
+    authorize @draw, :group_actions?
   end
 
   def group_params

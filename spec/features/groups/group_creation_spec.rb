@@ -6,6 +6,7 @@ RSpec.feature 'Housing Group Creation' do
     let!(:leader) { FactoryGirl.create(:student_in_draw) }
 
     it 'succeeds' do
+      leader.draw.update(status: 'pre_lottery')
       suite = leader.draw.suites.first
       create_group(size: suite.size, leader: leader)
       expect(page).to have_css('.group-name', text: "#{leader.name}'s Group")
