@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   end
 
   def new
+    redirect_to(build_user_path) && return unless params['user']
     result = UserBuilder.build(id_attr: build_user_params['username'],
                                querier: querier)
     @user = result[:user]
@@ -20,7 +21,7 @@ class UsersController < ApplicationController
 
   def create
     result = UserCreator.new(user_params).create!
-    @user = result[:object] ? result[:object] : User.new
+    @user = result[:user]
     handle_action(action: 'new', **result)
   end
 
@@ -29,6 +30,7 @@ class UsersController < ApplicationController
   def update
     result = Updater.new(object: @user, name_method: :name,
                          params: user_params).update
+    @user = result[:record]
     handle_action(action: 'edit', **result)
   end
 

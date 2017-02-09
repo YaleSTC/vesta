@@ -30,7 +30,8 @@ class UserBuilder
   #   value, and the :action to render. The :object is always set to nil so that
   #   handle_action properly renders the template set in :action.
   def build
-    return error if exists?
+    return invalid_error if id_attr.empty?
+    return duplicate_error if exists?
     assign_login
     assign_profile_attrs
     success
@@ -60,7 +61,12 @@ class UserBuilder
                       msg: { success: 'Initialized user successfully' })
   end
 
-  def error
+  def invalid_error
+    result_hash.merge(action: 'build',
+                      msg: { error: 'You must enter a username / e-mail' })
+  end
+
+  def duplicate_error
     result_hash.merge(action: 'build',
                       msg: { error: 'User already exists' })
   end

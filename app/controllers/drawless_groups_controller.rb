@@ -12,7 +12,7 @@ class DrawlessGroupsController < ApplicationController
 
   def create
     result = DrawlessGroupCreator.new(drawless_group_params).create!
-    @group = result[:group] ? result[:group] : Group.new
+    @group = result[:record]
     set_form_data unless result[:object]
     handle_action(path: new_group_path, **result)
   end
@@ -22,6 +22,7 @@ class DrawlessGroupsController < ApplicationController
   def update
     result = Updater.new(object: @group, name_method: :name,
                          params: drawless_group_params).update
+    @group = result[:record]
     handle_action(action: 'edit', **result)
   end
 

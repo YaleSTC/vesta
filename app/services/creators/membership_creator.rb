@@ -25,9 +25,10 @@ class MembershipCreator < Creator
         "#{membership.user.name}." } }
   end
 
-  def error(errors)
+  def error(membership)
+    errors = membership.errors.full_messages
     {
-      object: nil,
+      object: nil, membership: membership,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" },
       errors: errors,
       params: params

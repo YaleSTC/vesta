@@ -21,7 +21,7 @@ class Updater
   #   A results hash with a message to set in the flash and either `nil`
   #   or the updated object.
   def update
-    if object.update_attributes(**params)
+    if object.update(**params)
       success
     else
       error
@@ -33,10 +33,17 @@ class Updater
   attr_reader :object, :params, :name_method
 
   def success
-    { object: object, msg: { notice: "#{object.send(name_method)} updated." } }
+    {
+      object: object, record: object,
+      msg: { notice: "#{object.send(name_method)} updated." }
+    }
   end
 
   def error
-    { object: nil, msg: { error: 'Please review the errors below.' } }
+    errors = object.errors.full_messages
+    {
+      object: nil, record: object,
+      msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
+    }
   end
 end

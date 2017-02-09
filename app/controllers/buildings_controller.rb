@@ -12,7 +12,7 @@ class BuildingsController < ApplicationController
 
   def create
     result = BuildingCreator.new(building_params).create!
-    @building = result[:object] ? result[:object] : Building.new
+    @building = result[:record]
     handle_action(action: 'new', **result)
   end
 
@@ -22,6 +22,7 @@ class BuildingsController < ApplicationController
   def update
     result = Updater.new(object: @building, name_method: :name,
                          params: building_params).update
+    @building = result[:record]
     handle_action(action: 'edit', **result)
   end
 

@@ -16,11 +16,8 @@ class GroupsController < ApplicationController
     p = group_params.to_h
     p[:leader_id] = current_user.id unless current_user.admin?
     result = GroupCreator.new(p).create!
-    if result[:group]
-      @group = result[:group]
-    else
-      set_form_data
-    end
+    @group = result[:group]
+    set_form_data unless result[:object]
     handle_action(path: new_draw_group_path(@draw), **result)
   end
 
@@ -28,6 +25,7 @@ class GroupsController < ApplicationController
 
   def update
     result = GroupUpdater.new(group: @group, params: group_params).update
+    @group = result[:record]
     handle_action(path: edit_draw_group_path(@draw, @group), **result)
   end
 
