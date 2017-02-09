@@ -1,7 +1,9 @@
 <%= f.input :size, collection: @suite_sizes %>
 <% if current_user.admin? %>
-  <%= f.association :leader, label_method: :full_name_with_intent, collection: @students %>
-  <%= f.input :remove_ids, label: 'Users to remove', collection: @group.members, label_method: :full_name, as: :select, input_html: { multiple: true } %>
+  <%= f.association :leader, label_method: :full_name_with_intent, collection: @leader_students %>
+  <% unless @group.removable_members.empty? %>
+    <%= f.input :remove_ids, label: 'Users to remove', collection: @group.removable_members, label_method: :full_name, as: :select, input_html: { multiple: true } %>
+  <% end %>
   <%= f.association :members, label: 'Users to add', label_method: :full_name_with_intent, collection: @students %>
 <% end %>
 <%= f.submit %>

@@ -12,7 +12,9 @@ class Group < ApplicationRecord
   belongs_to :draw
   has_one :suite
   has_many :memberships, dependent: :delete_all
-  has_many :members, through: :memberships, source: :user
+  has_many :full_memberships, -> { where(status: 'accepted') },
+           class_name: 'Membership', inverse_of: :group
+  has_many :members, through: :full_memberships, source: :user
 
   enum status: %w(open full locked)
 
@@ -57,6 +59,14 @@ class Group < ApplicationRecord
   # @return [Array<User>] the users who have been invited to join the group
   def invitations
     memberships.where(status: 'invited').map(&:user)
+  end
+
+  # Get the group's members that can be removed
+  #
+  # @return[Array<User>] the members of the group with the exception of the
+  #   group leader
+  def removable_members
+    members.reject { |u| u.id == leader_id }
   end
 
   private

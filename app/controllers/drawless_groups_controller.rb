@@ -22,7 +22,7 @@ class DrawlessGroupsController < ApplicationController
   def update
     result = DrawlessGroupUpdater.update(group: @group,
                                          params: drawless_group_params)
-    @group = result[:group]
+    @group = result[:record]
     set_form_data unless result[:object]
     handle_action(action: 'edit', **result)
   end
@@ -55,6 +55,7 @@ class DrawlessGroupsController < ApplicationController
   def set_form_data
     @group ||= Group.new
     @students = UngroupedStudentsQuery.call
+    @leader_students = @group.members.empty? ? @students : @group.members
     @suite_sizes = SuiteSizesQuery.call
   end
 end
