@@ -23,6 +23,11 @@ RSpec.describe GroupCreator do
     params = instance_spy('ActionController::Parameters', to_h: {})
     expect(described_class.new(params).create![:object]).to be_nil
   end
+  it 'returns the group even if invalid' do
+    params = instance_spy('ActionController::Parameters', to_h: {})
+    expect(described_class.new(params).create![:record]).to \
+      be_instance_of(Group)
+  end
 
   # rubocop:disable RSpec/InstanceVariable
   def params_hash

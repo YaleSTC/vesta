@@ -20,6 +20,12 @@ RSpec.describe DrawlessGroupCreator do
       expect(described_class.new(params).create![:object]).to \
         be_instance_of(Group)
     end
+    it 'returns the group object' do
+      params = instance_spy('ActionController::Parameters',
+                            to_h: params_hash_with_undeclared_intent_student)
+      expect(described_class.new(params).create![:record]).to \
+        be_instance_of(Group)
+    end
     it 'returns a success flash message' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
       expect(described_class.new(params).create![:msg]).to have_key(:success)
@@ -30,7 +36,11 @@ RSpec.describe DrawlessGroupCreator do
     params = instance_spy('ActionController::Parameters', to_h: {})
     expect(described_class.new(params).create![:object]).to be_nil
   end
-
+  it 'returns the group object even if invalid' do
+    params = instance_spy('ActionController::Parameters', to_h: {})
+    expect(described_class.new(params).create![:record]).to \
+      be_instance_of(Group)
+  end
   it 'does not persist changes to members if save fails' do
     student = FactoryGirl.create(:student, intent: 'undeclared')
     params = instance_spy('ActionController::Parameters',

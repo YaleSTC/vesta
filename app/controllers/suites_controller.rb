@@ -12,7 +12,7 @@ class SuitesController < ApplicationController
 
   def create
     result = SuiteCreator.new(suite_params).create!
-    @suite = result[:object] ? result[:object] : Suite.new
+    @suite = result[:record]
     handle_action(action: 'new', **result)
   end
 
@@ -22,6 +22,7 @@ class SuitesController < ApplicationController
   def update
     result = Updater.new(object: @suite, name_method: :number,
                          params: suite_params).update
+    @suite = result[:record]
     handle_action(action: 'edit', **result)
   end
 

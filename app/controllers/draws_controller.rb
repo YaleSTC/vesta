@@ -15,7 +15,7 @@ class DrawsController < ApplicationController
 
   def create
     result = DrawCreator.new(draw_params).create!
-    @draw = result[:object] ? result[:object] : Draw.new
+    @draw = result[:record]
     handle_action(action: 'new', **result)
   end
 
@@ -25,6 +25,7 @@ class DrawsController < ApplicationController
   def update
     result = Updater.new(object: @draw, name_method: :name,
                          params: draw_params).update
+    @draw = result[:record]
     handle_action(action: 'edit', **result)
   end
 

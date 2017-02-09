@@ -27,7 +27,7 @@ class Creator
     if obj.save
       success(obj)
     else
-      error(obj.errors.full_messages)
+      error(obj)
     end
   end
 
@@ -36,12 +36,16 @@ class Creator
   attr_reader :klass, :params, :name_method
 
   def success(obj)
-    { object: obj, msg: { success: "#{obj.send(name_method)} created." } }
+    {
+      object: obj, record: obj,
+      msg: { success: "#{obj.send(name_method)} created." }
+    }
   end
 
-  def error(errors)
+  def error(obj)
+    errors = obj.errors.full_messages
     {
-      object: nil,
+      object: nil, record: obj,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
     }
   end

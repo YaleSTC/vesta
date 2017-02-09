@@ -24,7 +24,7 @@ class DrawlessGroupCreator < Creator
     end
     success(group)
   rescue ActiveRecord::RecordInvalid
-    error(group.errors.full_messages)
+    error(group)
   end
 
   private

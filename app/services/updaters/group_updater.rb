@@ -13,7 +13,7 @@ class GroupUpdater < Updater
   private
 
   def success
-    { object: [object.draw, object],
+    { object: [object.draw, object], record: object,
       msg: { success: "#{object.send(name_method)} updated." } }
   end
 end

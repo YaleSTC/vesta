@@ -13,11 +13,17 @@ RSpec.describe UserCreator do
 
   describe '#create!' do
     context 'success' do
-      it 'returns a valid user' do
+      it 'creates a user' do
         params = instance_spy('ActionController::Parameters',
                               to_h: valid_params)
         result = described_class.create!(params)
-        expect(result[:object]).to be_an_instance_of(User)
+        expect(result[:object]).to be_instance_of(User)
+      end
+      it 'returns the user object' do
+        params = instance_spy('ActionController::Parameters',
+                              to_h: valid_params)
+        result = described_class.create!(params)
+        expect(result[:user]).to be_instance_of(User)
       end
       it 'returns a success message' do
         params = instance_spy('ActionController::Parameters',
@@ -60,10 +66,15 @@ RSpec.describe UserCreator do
     end
 
     context 'failure' do
-      it 'returns the invalid user' do
+      it 'sets :object to nil' do
         params = instance_spy('ActionController::Parameters', to_h: {})
         result = described_class.create!(params)
         expect(result[:object]).to be_nil
+      end
+      it 'returns the invalid user' do
+        params = instance_spy('ActionController::Parameters', to_h: {})
+        result = described_class.create!(params)
+        expect(result[:user]).to be_instance_of(User)
       end
       it 'returns an error message' do
         params = instance_spy('ActionController::Parameters', to_h: {})

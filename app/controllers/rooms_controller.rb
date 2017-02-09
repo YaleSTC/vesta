@@ -12,7 +12,7 @@ class RoomsController < ApplicationController
 
   def create
     result = RoomCreator.new(room_params).create!
-    @room = result[:object] ? result[:object] : Room.new
+    @room = result[:record]
     handle_action(action: 'new', **result)
   end
 
@@ -22,6 +22,7 @@ class RoomsController < ApplicationController
   def update
     result = Updater.new(object: @room, name_method: :number,
                          params: room_params).update
+    @room = result[:record]
     handle_action(action: 'edit', **result)
   end
 
