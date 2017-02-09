@@ -6,31 +6,66 @@ RSpec.describe DrawlessGroupPolicy do
 
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
-    permissions :new? do
+    let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    permissions :new?, :create? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
+    end
+    permissions :edit?, :update?, :destroy?, :select_suite? do
+      it { is_expected.not_to permit(user, group) }
+    end
+    context 'student not in group' do
+      before { allow(group).to receive(:members).and_return([]) }
+      permissions :show? do
+        it { is_expected.not_to permit(user, group) }
+      end
+    end
+    context 'student in group' do
+      before { allow(group).to receive(:members).and_return([user]) }
+      permissions :show? do
+        it { is_expected.to permit(user, group) }
+      end
     end
   end
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :new? do
+    let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    permissions :new?, :create? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
+    end
+    permissions :edit?, :update?, :destroy?, :select_suite? do
+      it { is_expected.not_to permit(user, group) }
+    end
+    context 'student not in group' do
+      before { allow(group).to receive(:members).and_return([]) }
+      permissions :show? do
+        it { is_expected.not_to permit(user, group) }
+      end
+    end
+    context 'student in group' do
+      before { allow(group).to receive(:members).and_return([user]) }
+      permissions :show? do
+        it { is_expected.to permit(user, group) }
+      end
     end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    let(:group) { FactoryGirl.build_stubbed(:group) }
-    permissions :new? do
+    let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    permissions :new?, :create? do
       it { is_expected.to permit(user, DrawlessGroup) }
     end
-    context 'full group' do
+    permissions :show?, :edit?, :update?, :destroy? do
+      it { is_expected.to permit(user, group) }
+    end
+    context 'locked group' do
       before { allow(group).to receive(:locked?).and_return(true) }
       permissions :select_suite? do
         it { is_expected.to permit(user, group) }
       end
     end
-    context 'not full group' do
+    context 'not locked group' do
       before { allow(group).to receive(:locked?).and_return(false) }
       permissions :select_suite? do
         it { is_expected.not_to permit(user, group) }
