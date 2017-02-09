@@ -5,4 +5,8 @@ class DrawlessGroupPolicy < ApplicationPolicy
   def select_suite?
     user.admin? && record.locked?
   end
+
+  def show?
+    record.members.include?(user) || super
+  end
 end
