@@ -15,6 +15,11 @@ RSpec.describe SuiteSizesQuery do
     expect(described_class.call).to eq(expected)
   end
 
+  it 'sorts the resulting array' do
+    create_suites([3, 1, 2])
+    expect(described_class.call).to eq([1, 2, 3])
+  end
+
   def create_suites(sizes)
     sizes.each do |size|
       FactoryGirl.create(:suite_with_rooms, rooms_count: size)

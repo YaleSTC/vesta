@@ -19,6 +19,6 @@ class SuiteSizesQuery
   #
   # @return [Array<Integer>] the suite sizes in the relation
   def call
-    @relation.select(:size).distinct.collect(&:size)
+    @relation.select(:size).distinct.collect(&:size).sort
   end
 end
