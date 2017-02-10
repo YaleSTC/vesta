@@ -26,6 +26,7 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
   get 'draws/:id/intent_report', to: 'draws#intent_report',
                                  as: 'draw_intent_report'
   post 'draws/:id/intent_report', to: 'draws#filter_intent_report'
+  get 'draws/:id/suites', to: 'draws#suite_summary', as: 'draw_suite_summary'
 
   resources :groups, controller: 'drawless_groups'
   patch 'groups/:id/select_suite', to: 'drawless_groups#select_suite',

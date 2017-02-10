@@ -1,0 +1,12 @@
+.suites-list {
+  @include grid-row;
+
+  .suite-item {
+    @include grid-column(12);
+
+    @include breakpoint(medium) {
+      @include grid-column(3);
+      @include grid-column-end;
+    }
+  }
+}

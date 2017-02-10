@@ -52,6 +52,11 @@ class DrawsController < ApplicationController
     render action: 'intent_report'
   end
 
+  def suite_summary
+    @all_sizes = SuiteSizesQuery.new(Suite.available).call
+    @suites_by_size = SuitesBySizeQuery.new(@draw.suites.available).call
+  end
+
   private
 
   def authorize!
@@ -87,8 +92,8 @@ class DrawsController < ApplicationController
 
   def calculate_oversub_metrics # rubocop:disable AbcSize
     return unless policy(@draw).oversub_report?
-    @suite_sizes = SuiteSizesQuery.new(@draw.suites).call
-    @suite_counts = @draw.suites.group(:size).count
+    @suite_sizes = SuiteSizesQuery.new(@draw.suites.available).call
+    @suite_counts = @draw.suites.available.group(:size).count
     zeroed_group_hash = @suite_sizes.map { |s| [s, 0] }.to_h
     @group_counts = zeroed_group_hash.merge(@draw.groups.group(:size).count)
     @locked_counts = @draw.groups.where(status: 'locked').group(:size).count
