@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # Controller for Draws
-class DrawsController < ApplicationController
+class DrawsController < ApplicationController # rubocop:disable ClassLength
   prepend_before_action :set_draw, except: %i(index new create)
   before_action :calculate_metrics, only: [:show, :activate]
 
@@ -57,6 +57,22 @@ class DrawsController < ApplicationController
     @suites_by_size = SuitesBySizeQuery.new(@draw.suites.available).call
   end
 
+  def suites_edit
+    prepare_suites_edit_data
+  end
+
+  def suites_update
+    result = DrawSuitesUpdate.update(draw: @draw, params: suites_update_params)
+    @suites_update = result[:update_object]
+    if @suites_update
+      prepare_suites_edit_data
+      result[:action] = 'suites_edit'
+    else
+      result[:path] = draw_suite_summary_path(@draw)
+    end
+    handle_action(**result)
+  end
+
   private
 
   def authorize!
@@ -70,6 +86,12 @@ class DrawsController < ApplicationController
   def draw_params
     params.require(:draw).permit(:name, :intent_deadline, suite_ids: [],
                                                           student_ids: [])
+  end
+
+  def suites_update_params
+    params.require(:draw_suites_update).permit(:size, suite_ids: [],
+                                                      drawn_suite_ids: [],
+                                                      undrawn_suite_ids: [])
   end
 
   def filter_params
@@ -100,5 +122,15 @@ class DrawsController < ApplicationController
     @diff = @suite_sizes.map do |size|
       [size, @suite_counts[size] - @group_counts[size]]
     end.to_h
+  end
+
+  def prepare_suites_edit_data # rubocop:disable AbcSize
+    @suites_update ||= DrawSuitesUpdate.new(draw: @draw)
+    @size = params[:size] ? params[:size].to_i : @suites_update.size
+    base_suites = Suite.where(size: @size).available.order(:number)
+    @current_suites = @draw.suites.available.includes(:draws).where(size: @size)
+                           .order(:number)
+    @drawless_suites = DrawlessSuitesQuery.new(base_suites).call
+    @drawn_suites = SuitesInOtherDrawsQuery.new(base_suites).call(draw: @draw)
   end
 end

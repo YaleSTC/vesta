@@ -7,7 +7,8 @@ RSpec.describe Suite, type: :model do
     it { is_expected.to belong_to(:building) }
     it { is_expected.to belong_to(:group) }
     it { is_expected.to have_many(:rooms) }
-    it { is_expected.to have_and_belong_to_many(:draws) }
+    it { is_expected.to have_many(:draws_suites) }
+    it { is_expected.to have_many(:draws).through(:draws_suites) }
 
     describe 'number uniqueness' do
       it 'allows duplicates that belong to separate buildings' do
@@ -37,18 +38,6 @@ RSpec.describe Suite, type: :model do
     end
   end
 
-  describe '#size' do
-    it { is_expected.to validate_presence_of(:size) }
-    it { is_expected.not_to allow_value(-1).for(:size) }
-    it { is_expected.to allow_value(0).for(:size) }
-    it 'equals the number of beds in all rooms' do
-      size = 2
-      suite = FactoryGirl.create(:suite)
-      size.times { FactoryGirl.create(:room, beds: 1, suite: suite) }
-      expect(suite.size).to eq(size)
-    end
-  end
-
   describe '.size_str' do
     it 'raises an argument error if a non-integer is passed' do
       size = instance_spy('string')
@@ -69,6 +58,46 @@ RSpec.describe Suite, type: :model do
           expect(described_class.size_str(size)).to eq(expected_str)
         end
       end
+    end
+  end
+
+  describe '#size' do
+    it { is_expected.to validate_presence_of(:size) }
+    it { is_expected.not_to allow_value(-1).for(:size) }
+    it { is_expected.to allow_value(0).for(:size) }
+    it 'equals the number of beds in all rooms' do
+      size = 2
+      suite = FactoryGirl.create(:suite)
+      size.times { FactoryGirl.create(:room, beds: 1, suite: suite) }
+      expect(suite.size).to eq(size)
+    end
+  end
+
+  describe '#number_with_draws' do
+    it 'returns the number if the suite belongs to no draws' do
+      suite = FactoryGirl.build_stubbed(:suite)
+      allow(suite).to receive(:draws).and_return([])
+      expect(suite.number_with_draws).to eq(suite.number)
+    end
+    it 'returns the number if the suite only belongs to the passed draw' do
+      suite = FactoryGirl.create(:suite)
+      draw = FactoryGirl.create(:draw)
+      suite.draws << draw
+      expect(suite.number_with_draws(draw)).to eq(suite.number)
+    end
+    it 'returns the number with other draw names' do
+      suite = FactoryGirl.create(:suite)
+      draw = FactoryGirl.create(:draw)
+      suite.draws << draw
+      expected = "#{suite.number} (#{draw.name})"
+      expect(suite.number_with_draws).to eq(expected)
+    end
+    it 'excludes the passed draw' do
+      draw = FactoryGirl.create(:draw_with_members, suites_count: 1,
+                                                    students_count: 0)
+      draw2 = FactoryGirl.create(:draw)
+      expected = "#{draw.suites.first.number} (#{draw.name})"
+      expect(draw.suites.first.number_with_draws(draw2)).to eq(expected)
     end
   end
 end

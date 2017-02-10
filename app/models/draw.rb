@@ -11,7 +11,8 @@
 class Draw < ApplicationRecord
   has_many :groups
   has_many :students, class_name: 'User'
-  has_and_belongs_to_many :suites # rubocop:disable Rails/HasAndBelongsToMany
+  has_many :draws_suites, dependent: :destroy
+  has_many :suites, through: :draws_suites
 
   validates :name, presence: true
   validates :status, presence: true
