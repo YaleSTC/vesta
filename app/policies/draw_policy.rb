@@ -22,6 +22,14 @@ class DrawPolicy < ApplicationPolicy
     show?
   end
 
+  def suites_edit?
+    edit?
+  end
+
+  def suites_update?
+    suites_edit?
+  end
+
   def group_actions?
     user.admin? || record.pre_lottery?
   end

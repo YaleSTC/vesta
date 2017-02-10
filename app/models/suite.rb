@@ -17,7 +17,8 @@ class Suite < ApplicationRecord
   belongs_to :building
   belongs_to :group
   has_many :rooms
-  has_and_belongs_to_many :draws # rubocop:disable Rails/HasAndBelongsToMany
+  has_many :draws_suites, dependent: :destroy
+  has_many :draws, through: :draws_suites
 
   validates :building, presence: true
   validates :number, presence: true, uniqueness: { scope: :building }
@@ -34,5 +35,18 @@ class Suite < ApplicationRecord
     raise ArgumentError unless size.is_a?(Integer) && size.positive?
     return SIZE_STRS[size] if SIZE_STRS.key? size
     "#{size}-suite"
+  end
+
+  # Return the number of the suite with the names of any draws it belongs to.
+  # Optionally excludes a single draw passed in.
+  #
+  # @param [Draw] the draw to exclude
+  # @return [String] the suite number with draw names
+  def number_with_draws(draw = nil)
+    return number if draws.empty?
+    draws_to_display = draws.where.not(id: draw.try(:id))
+    return number if draws_to_display.empty?
+    draws_str = draws_to_display.map(&:name).join(', ')
+    "#{number} (#{draws_str})"
   end
 end
