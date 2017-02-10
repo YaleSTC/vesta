@@ -34,4 +34,6 @@
 <% if policy(@draw).update? %>
   <p><%= link_to 'Add group to draw', new_draw_group_path(@draw) %></p>
 <% end %>
-<p><%= link_to 'Delete', draw_path(@draw), method: :delete %></p>
+<% if policy(@draw).destroy? %>
+  <p><%= link_to 'Delete', draw_path(@draw), method: :delete %></p>
+<% end %>
