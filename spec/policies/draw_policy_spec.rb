@@ -8,7 +8,7 @@ RSpec.describe DrawPolicy do
 
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
-    permissions :show? do
+    permissions :show?, :suite_summary? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :new?, :create?, :destroy?, :edit?, :update?, :activate?,
@@ -65,7 +65,7 @@ RSpec.describe DrawPolicy do
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :show? do
+    permissions :show?, :suite_summary? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :create?, :edit?, :update?, :destroy?, :activate?,
@@ -123,7 +123,7 @@ RSpec.describe DrawPolicy do
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
     permissions :show?, :edit?, :update?, :destroy?, :intent_report?,
-                :filter_intent_report?, :group_actions? do
+                :filter_intent_report?, :group_actions?, :suite_summary? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :index?, :new?, :create? do

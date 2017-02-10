@@ -27,12 +27,12 @@ RSpec.describe Suite, type: :model do
 
   context 'scopes' do
     describe '.available' do
-      it 'returns all suites not assigned to groups ordered by number' do
+      it 'returns all suites not assigned to groups' do
         suite1 = FactoryGirl.create(:suite, number: 'def')
         suite2 = FactoryGirl.create(:suite, number: 'abc')
         FactoryGirl.create(:suite, group_id: 1234)
         expect(described_class.available.map(&:id)).to \
-          eq([suite2.id, suite1.id])
+          eq([suite1.id, suite2.id])
       end
     end
   end
@@ -62,8 +62,8 @@ RSpec.describe Suite, type: :model do
     end
     context 'valid inputs' do
       expected = { 1 => 'single', 2 => 'double', 3 => 'triple',
-                   4 => 'quadruple', 5 => 'quintuple', 6 => 'sextuple',
-                   7 => 'septuple', 8 => 'octuple', 9 => '9-suite' }
+                   4 => 'quad', 5 => 'quint', 6 => 'sextet',
+                   7 => 'septet', 8 => 'octet', 9 => '9-Pack' }
       expected.each do |size, expected_str|
         it "returns a valid result for #{size}" do
           expect(described_class.size_str(size)).to eq(expected_str)

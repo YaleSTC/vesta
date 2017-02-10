@@ -11,9 +11,9 @@
 #   Suite is located in.
 # @attr [Array<Room>] rooms has_many association for the Rooms within the Suite.
 class Suite < ApplicationRecord
-  SIZE_STRS = { 1 => 'single', 2 => 'double', 3 => 'triple', 4 => 'quadruple',
-                5 => 'quintuple', 6 => 'sextuple', 7 => 'septuple',
-                8 => 'octuple' }.freeze
+  SIZE_STRS = { 1 => 'single', 2 => 'double', 3 => 'triple', 4 => 'quad',
+                5 => 'quint', 6 => 'sextet', 7 => 'septet',
+                8 => 'octet' }.freeze
   belongs_to :building
   belongs_to :group
   has_many :rooms
@@ -24,7 +24,7 @@ class Suite < ApplicationRecord
   validates :size, presence: true,
                    numericality: { greater_than_or_equal_to: 0 }
 
-  scope :available, -> { where(group_id: nil).order(:number) }
+  scope :available, -> { where(group_id: nil) }
 
   # Return the equivalent string for a given suite size
   #
@@ -33,6 +33,6 @@ class Suite < ApplicationRecord
   def self.size_str(size)
     raise ArgumentError unless size.is_a?(Integer) && size.positive?
     return SIZE_STRS[size] if SIZE_STRS.key? size
-    "#{size}-suite"
+    "#{size}-Pack"
   end
 end
