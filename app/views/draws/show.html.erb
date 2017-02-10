@@ -1,28 +1,34 @@
 <h1 class="draw-name"><%= @draw.name %></h1>
-<div class="intent-metrics">
-  <h2>Intent Metrics</h2>
-  <table>
-    <tbody>
-      <% @intent_metrics.each do |intent_value, count| %>
-        <tr>
-          <td class="metric-heading"><%= intent_value.humanize.capitalize %></td>
-          <td class="<%= intent_value %>-count"><%= count %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <% if @draw.pre_lottery? && @draw.intent_deadline %>
-    <p><%= intent_deadline_str(@draw) %></p>
-  <% end %>
-  <% if policy(@draw).intent_report? %>
-    <p><%= link_to 'View intent report', draw_intent_report_path(@draw) %></p>
-  <% end %>
-  <% if policy(@draw).activate? %>
-    <p><%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch %></p>
-  <% end %>
-  <% if policy(@draw).update? %>
-    <p><%= link_to 'Add group to draw', new_draw_group_path(@draw) %></p>
-  <% end %>
-  <p><%= link_to 'Delete', draw_path(@draw), method: :delete %></p>
-</div>
-
+<% if policy(@draw).intent_summary? %>
+  <div class="intent-metrics">
+    <h2>Intent Metrics</h2>
+    <table>
+      <tbody>
+        <% @intent_metrics.each do |intent_value, count| %>
+          <tr>
+            <td class="metric-heading"><%= intent_value.humanize.capitalize %></td>
+            <td class="<%= intent_value %>-count"><%= count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @draw.pre_lottery? && @draw.intent_deadline %>
+      <p><%= intent_deadline_str(@draw) %></p>
+    <% end %>
+    <% if policy(@draw).intent_report? %>
+      <p><%= link_to 'View intent report', draw_intent_report_path(@draw) %></p>
+    <% end %>
+  </div>
+<% end %>
+<% if policy(@draw).oversub_report? %>
+  <div class="oversub-report">
+    <%= render 'oversub_report' %>
+  </div>
+<% end %>
+<% if policy(@draw).activate? %>
+  <p><%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch %></p>
+<% end %>
+<% if policy(@draw).update? %>
+  <p><%= link_to 'Add group to draw', new_draw_group_path(@draw) %></p>
+<% end %>
+<p><%= link_to 'Delete', draw_path(@draw), method: :delete %></p>

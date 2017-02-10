@@ -48,4 +48,27 @@ RSpec.describe Suite, type: :model do
       expect(suite.size).to eq(size)
     end
   end
+
+  describe '.size_str' do
+    it 'raises an argument error if a non-integer is passed' do
+      size = instance_spy('string')
+      allow(size).to receive(:is_a?).with(Integer).and_return(false)
+      expect { described_class.size_str(size) }.to raise_error(ArgumentError)
+    end
+    it 'raises an argument error if a non-positive number is passed' do
+      size = instance_spy('integer')
+      allow(size).to receive(:positive?).and_return(false)
+      expect { described_class.size_str(size) }.to raise_error(ArgumentError)
+    end
+    context 'valid inputs' do
+      expected = { 1 => 'single', 2 => 'double', 3 => 'triple',
+                   4 => 'quadruple', 5 => 'quintuple', 6 => 'sextuple',
+                   7 => 'septuple', 8 => 'octuple', 9 => '9-suite' }
+      expected.each do |size, expected_str|
+        it "returns a valid result for #{size}" do
+          expect(described_class.size_str(size)).to eq(expected_str)
+        end
+      end
+    end
+  end
 end
