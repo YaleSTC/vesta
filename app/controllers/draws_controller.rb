@@ -2,9 +2,7 @@
 #
 # Controller for Draws
 class DrawsController < ApplicationController
-  prepend_before_action :set_draw, only: [:show, :edit, :update, :destroy,
-                                          :activate, :intent_report,
-                                          :filter_intent_report]
+  prepend_before_action :set_draw, except: %i(index new create)
   before_action :calculate_metrics, only: [:show, :activate]
 
   def show; end
@@ -78,6 +76,24 @@ class DrawsController < ApplicationController
   end
 
   def calculate_metrics
+    calculate_intent_metrics
+    calculate_oversub_metrics
+  end
+
+  def calculate_intent_metrics
+    return unless policy(@draw).intent_summary?
     @intent_metrics = IntentMetricsQuery.call(@draw)
+  end
+
+  def calculate_oversub_metrics # rubocop:disable AbcSize
+    return unless policy(@draw).oversub_report?
+    @suite_sizes = SuiteSizesQuery.new(@draw.suites).call
+    @suite_counts = @draw.suites.group(:size).count
+    zeroed_group_hash = @suite_sizes.map { |s| [s, 0] }.to_h
+    @group_counts = zeroed_group_hash.merge(@draw.groups.group(:size).count)
+    @locked_counts = @draw.groups.where(status: 'locked').group(:size).count
+    @diff = @suite_sizes.map do |size|
+      [size, @suite_counts[size] - @group_counts[size]]
+    end.to_h
   end
 end

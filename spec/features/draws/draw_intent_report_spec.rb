@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw intent report' do
-  let(:draw) { FactoryGirl.create(:draw) }
+  let(:draw) { FactoryGirl.create(:draw, status: 'pre_lottery') }
 
   it 'displays a table with intent data' do
     student = create_student_data(draw: draw, intents: %w(on_campus))

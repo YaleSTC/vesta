@@ -6,16 +6,12 @@ class DrawPolicy < ApplicationPolicy
     true
   end
 
-  def update?
-    user.rep? || user.admin?
-  end
-
   def activate?
-    user.admin? && record.draft?
+    edit? && record.draft?
   end
 
   def intent_report?
-    user.admin?
+    edit?
   end
 
   def filter_intent_report?
@@ -24,6 +20,14 @@ class DrawPolicy < ApplicationPolicy
 
   def group_actions?
     user.admin? || record.pre_lottery?
+  end
+
+  def intent_summary?
+    !record.draft?
+  end
+
+  def oversub_report?
+    !record.draft? && !record.suites.empty?
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation

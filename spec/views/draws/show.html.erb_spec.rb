@@ -3,7 +3,7 @@ require 'rails_helper'
 
 # rubocop:disable RSpec/DescribeClass
 RSpec.describe 'draws/show.html.erb' do
-  let(:draw) { FactoryGirl.build(:draw, id: 1) }
+  let(:draw) { FactoryGirl.build(:draw, id: 1, status: 'pre_lottery') }
 
   context 'link to intent report' do
     it 'is displayed with the appropriate permissions' do
@@ -51,7 +51,10 @@ RSpec.describe 'draws/show.html.erb' do
   end
 
   def mock_user_and_policy(draw:, **stubs)
-    mock_policy = instance_spy('draw_policy', **stubs)
+    # Note that this hack-y stubbing is necessary to prevent issues while
+    # rendering the oversubscription report. In the future we should a) write
+    # specs for said report and b) stub things more elegantly.
+    mock_policy = instance_spy('draw_policy', oversub_report?: false, **stubs)
     without_partial_double_verification do
       allow(view).to receive(:policy).with(draw).and_return(mock_policy)
     end

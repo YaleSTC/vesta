@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable RSpec/NestedGroups
 require 'rails_helper'
 
 RSpec.describe DrawPolicy do
@@ -10,8 +11,8 @@ RSpec.describe DrawPolicy do
     permissions :show? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :create?, :destroy?, :update?, :activate?, :intent_report?,
-                :filter_intent_report? do
+    permissions :new?, :create?, :destroy?, :edit?, :update?, :activate?,
+                :intent_report?, :filter_intent_report? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
@@ -26,20 +27,52 @@ RSpec.describe DrawPolicy do
       context 'pre-lottery draw' do
         before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         it { is_expected.to permit(user, draw) }
+      end
+    end
+
+    permissions :intent_summary? do
+      context 'when draw is a draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
+    permissions :oversub_report? do
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        context 'when draw has suites' do
+          before do
+            allow(draw).to receive(:suites)
+              .and_return([instance_spy('suite')])
+          end
+          it { is_expected.to permit(user, draw) }
+        end
+        context 'when draw has no suites' do
+          before { allow(draw).to receive(:suites).and_return([]) }
+          it { is_expected.not_to permit(user, draw) }
+        end
+      end
+      context 'when draw is a draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
       end
     end
   end
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :show?, :update? do
+    permissions :show? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :create?, :destroy?, :activate?, :intent_report?,
-                :filter_intent_report? do
+    permissions :create?, :edit?, :update?, :destroy?, :activate?,
+                :intent_report?, :filter_intent_report? do
       it { is_expected.not_to permit(user, draw) }
     end
-    permissions :index? do
+    permissions :new?, :index? do
       it { is_expected.not_to permit(user, Draw) }
     end
     permissions :group_actions? do
@@ -52,15 +85,48 @@ RSpec.describe DrawPolicy do
         it { is_expected.to permit(user, draw) }
       end
     end
+
+    permissions :intent_summary? do
+      context 'when draw is a draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
+
+    permissions :oversub_report? do
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        context 'when draw has suites' do
+          before do
+            allow(draw).to receive(:suites)
+              .and_return([instance_spy('suite')])
+          end
+          it { is_expected.to permit(user, draw) }
+        end
+        context 'when draw has no suites' do
+          before { allow(draw).to receive(:suites).and_return([]) }
+          it { is_expected.not_to permit(user, draw) }
+        end
+      end
+      context 'when draw is a draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :show?, :update?, :create?, :destroy?, :intent_report?,
+    permissions :show?, :edit?, :update?, :destroy?, :intent_report?,
                 :filter_intent_report?, :group_actions? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :index? do
+    permissions :index?, :new?, :create? do
       it { is_expected.to permit(user, Draw) }
     end
 
@@ -72,6 +138,39 @@ RSpec.describe DrawPolicy do
 
       context 'when draw is not a draft' do
         before { allow(draw).to receive(:draft?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :intent_summary? do
+      context 'when draw is a draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
+
+    permissions :oversub_report? do
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        context 'when draw has suites' do
+          before do
+            allow(draw).to receive(:suites)
+              .and_return([instance_spy('suite')])
+          end
+          it { is_expected.to permit(user, draw) }
+        end
+        context 'when draw has no suites' do
+          before { allow(draw).to receive(:suites).and_return([]) }
+          it { is_expected.not_to permit(user, draw) }
+        end
+      end
+      context 'when draw is a draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
         it { is_expected.not_to permit(user, draw) }
       end
     end

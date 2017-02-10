@@ -2,6 +2,8 @@
 #
 # Helper module for Draws
 module DrawsHelper
+  delegate :size_str, to: Suite
+
   def intent_deadline_str(draw)
     diff = (draw.intent_deadline - Time.zone.today).to_i
     if diff.positive?
@@ -11,6 +13,13 @@ module DrawsHelper
     else
       'The intent deadline is today.'
     end
+  end
+
+  def diff_class(diff)
+    raise ArgumentError unless diff.is_a? Integer
+    return 'positive' if diff.positive?
+    return 'negative' if diff.negative?
+    'zero'
   end
 
   private

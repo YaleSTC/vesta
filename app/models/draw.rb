@@ -9,6 +9,7 @@
 #   TODO: lottery, post_lottery). Note the use of underscores in the status
 #   strings; this prevents some unpleasantness with the helper methods.
 class Draw < ApplicationRecord
+  has_many :groups
   has_many :students, class_name: 'User'
   has_and_belongs_to_many :suites # rubocop:disable Rails/HasAndBelongsToMany
 

@@ -21,4 +21,24 @@ RSpec.describe DrawsHelper, type: :helper do
         eq('The intent deadline is today.')
     end
   end
+
+  describe '#size_str' do
+    it 'delegates to Suite' do
+      allow(Suite).to receive(:size_str).with(1)
+      helper.size_str(1)
+      expect(Suite).to have_received(:size_str).with(1)
+    end
+  end
+
+  describe '#diff_class' do
+    it 'returns positive if diff is positive' do
+      expect(helper.diff_class(1)).to eq('positive')
+    end
+    it 'returns zero if diff is zero' do
+      expect(helper.diff_class(0)).to eq('zero')
+    end
+    it 'returns negative if diff is negative' do
+      expect(helper.diff_class(-1)).to eq('negative')
+    end
+  end
 end

@@ -1,0 +1,14 @@
+<h1 class="draw-name"><%= @draw.name %> Suites</h1>
+<% @all_sizes.each do |size| %>
+  <div class="suites-<%= size_str(size).pluralize %>">
+    <h2><%= size_str(size).pluralize.titleize %></h2>
+    <p><%= link_to 'Update', draw_suites_update_path(@draw, size), id: "update-suites-#{size}" %></p>
+    <% if @suites_by_size.has_key? size %>
+      <% @suites_by_size[size].each do |suite| %>
+        <div class="suite-item"><%= suite.number %></div>
+      <% end %>
+    <% end %>
+  </div>
+  <hr />
+<% end %>
+<%= link_to 'Return to draw', draw_path(@draw) %>
