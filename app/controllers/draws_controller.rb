@@ -52,6 +52,11 @@ class DrawsController < ApplicationController
     render action: 'intent_report'
   end
 
+  def suite_summary
+    @all_sizes = SuiteSizesQuery.call
+    @suites_by_size = SuitesBySizeQuery.new(@draw.suites).call
+  end
+
   private
 
   def authorize!

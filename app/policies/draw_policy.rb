@@ -18,6 +18,10 @@ class DrawPolicy < ApplicationPolicy
     intent_report?
   end
 
+  def suite_summary?
+    show?
+  end
+
   def group_actions?
     user.admin? || record.pre_lottery?
   end
