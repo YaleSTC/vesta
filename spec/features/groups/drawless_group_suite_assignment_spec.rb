@@ -6,7 +6,7 @@ RSpec.feature 'Drawless group suite assignment' do
   context 'as admin' do
     before { log_in(FactoryGirl.create(:admin)) }
     it 'can be performed' do # rubocop:disable RSpec/ExampleLength
-      group.update(status: 'locked')
+      GroupLocker.lock(group: group)
       visit group_path(group)
       suite = Suite.where(size: group.size).first
       select suite.number, from: 'group_suite'

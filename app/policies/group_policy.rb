@@ -45,6 +45,19 @@ class GroupPolicy < ApplicationPolicy
     !user.group && record.invitations.include?(user)
   end
 
+  def finalize?
+    edit? && record.full?
+  end
+
+  def finalize_membership?
+    (user.group == record && !record.locked_members.include?(user)) &&
+      record.finalizing?
+  end
+
+  def lock?
+    user.admin?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

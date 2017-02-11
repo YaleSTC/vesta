@@ -2,10 +2,7 @@
 # Controller for Groups
 class GroupsController < ApplicationController
   layout 'application_with_sidebar'
-  prepend_before_action :set_group, only: %i(show edit update destroy
-                                             request_to_join accept_request
-                                             invite_to_join edit_invitations
-                                             accept_invitation)
+  prepend_before_action :set_group, except: %i(new create)
   prepend_before_action :set_draw
   before_action :set_form_data, only: %i(new edit)
 
@@ -65,6 +62,23 @@ class GroupsController < ApplicationController
     membership = current_user.memberships.where(group: @group).first
     result = MembershipUpdater.update(membership: membership,
                                       params: { status: 'accepted' })
+    handle_action(path: draw_group_path(@draw, @group), **result)
+  end
+
+  def finalize
+    result = GroupFinalizer.finalize(group: @group)
+    handle_action(**result)
+  end
+
+  def finalize_membership
+    membership = current_user.memberships.where(group: @group).first
+    result = MembershipUpdater.update(membership: membership,
+                                      params: { locked: true })
+    handle_action(path: draw_group_path(@draw, @group), **result)
+  end
+
+  def lock
+    result = GroupLocker.lock(group: @group)
     handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
