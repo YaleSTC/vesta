@@ -70,11 +70,10 @@ RSpec.describe Membership, type: :model do
 
   context 'non-open group' do
     it 'cannot be created' do
-      group = FactoryGirl.create(:group)
+      group = FactoryGirl.create(:finalizing_group)
       user = FactoryGirl.create(:student, draw: group.draw)
-      allow(group).to receive(:open?).and_return(false)
       membership = FactoryGirl.build(:membership, user: user, group: group)
-      expect(membership.valid?).to be_falsey
+      expect(membership).not_to be_valid
     end
   end
 
@@ -90,6 +89,12 @@ RSpec.describe Membership, type: :model do
       group = FactoryGirl.create(:full_group, size: 2)
       expect { group.memberships.last.destroy }.to \
         change { group.status }.from('full').to('open')
+    end
+    it 'updates to locked when the last membership locks' do
+      group = FactoryGirl.create(:full_group, size: 1)
+      group.finalizing!
+      expect { group.memberships.first.update(locked: true) }.to \
+        change { group.locked? }.from(false).to(true)
     end
   end
 
@@ -132,12 +137,24 @@ RSpec.describe Membership, type: :model do
     end
   end
 
-  context 'locked group' do
+  context 'locked membership' do
     it 'cannot be destroyed' do
+      group = FactoryGirl.create(:finalizing_group)
+      membership = group.memberships.first
+      expect { membership.destroy }.not_to change { group.memberships_count }
+    end
+    it 'must be accepted' do
+      group = FactoryGirl.create(:finalizing_group)
+      user = FactoryGirl.create(:student, draw: group.draw)
+      membership = Membership.new(group: group, user: user, status: 'requested')
+      membership.locked = true
+      expect(membership).not_to be_valid
+    end
+    it 'must belong to a finalizing group' do
       group = FactoryGirl.create(:full_group)
-      group.update_attributes(status: 'locked')
-      expect { group.memberships.first.destroy }.not_to \
-        change { group.memberships_count }
+      membership = group.memberships.first
+      membership.locked = true
+      expect(membership).not_to be_valid
     end
   end
 
@@ -147,7 +164,7 @@ RSpec.describe Membership, type: :model do
       user = FactoryGirl.create(:student, draw: group.draw,
                                           intent: 'undeclared')
       membership = FactoryGirl.build(:membership, user: user, group: group)
-      expect(membership.valid?).to be_falsey
+      expect(membership).not_to be_valid
     end
   end
 end

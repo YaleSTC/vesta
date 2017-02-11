@@ -3,7 +3,8 @@
 # Model for Housing Groups
 #
 # @attr size [Integer] The room size that the Group wants.
-# @attr status [String] The state of the group (open, full, or locked)
+# @attr status [String] The state of the group (open, full, finalizing,
+#   or locked)
 # @attr leader [User] The student that represents the Group.
 # @attr members [Array<User>] The members of the group, excluding the leader.
 # @attr draw [Draw] The Draw that this Group is in.
@@ -16,7 +17,7 @@ class Group < ApplicationRecord
            class_name: 'Membership', inverse_of: :group
   has_many :members, through: :full_memberships, source: :user
 
-  enum status: %w(open full locked)
+  enum status: %w(open full finalizing locked)
 
   # validates :draw, presence: true
   validates :status, presence: true
@@ -41,11 +42,12 @@ class Group < ApplicationRecord
 
   # Updates the status to match the group size (open when fewer members than
   # the size, and full when they are the same)
-  def update_status
+  def update_status!
     if memberships_count < size
-      update(status: 'open')
+      update!(status: 'open')
     elsif memberships_count == size
-      update(status: 'full')
+      update!(status: 'full') if open?
+      update!(status: 'locked') if lockable?
     end
   end
 
@@ -69,6 +71,20 @@ class Group < ApplicationRecord
   #   group leader
   def removable_members
     members.reject { |u| u.id == leader_id }
+  end
+
+  # Get the group's locked/finalized members
+  #
+  # @return [Array<User>] the users who have locked their membership
+  def locked_members
+    memberships.where(locked: true).map(&:user)
+  end
+
+  # Check if all members have locked their memberships
+  #
+  # @return [Boolean] true if the group can be locked
+  def lockable?
+    (members - locked_members).empty? && memberships_count == size
   end
 
   private
@@ -100,8 +116,10 @@ class Group < ApplicationRecord
     case status
     when 'open'
       validate_open
+    when 'locked'
+      validate_locked
     else
-      validate_full_locked
+      validate_not_open
     end
   end
 
@@ -110,12 +128,18 @@ class Group < ApplicationRecord
     errors.add :status, 'can only be open when fewer members than size'
   end
 
-  def validate_full_locked
+  def validate_not_open
     return unless memberships_count != size
     errors.add :status, "can only be #{status} when members equal size"
   end
 
   def restore_member_draws
     members.each { |u| u.restore_draw.save }
+  end
+
+  def validate_locked
+    validate_not_open
+    return if lockable?
+    errors.add :status, 'can only be locked when all members have locked'
   end
 end

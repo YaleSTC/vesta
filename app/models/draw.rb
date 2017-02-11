@@ -34,6 +34,13 @@ class Draw < ApplicationRecord
     suite_sizes - locked_sizes
   end
 
+  # Query method get the suites without groups in the draw
+  #
+  # @return [ActiveRecord::Relation] the suites without assigned groups
+  def available_suites
+    suites.available
+  end
+
   # Query method to see if a draw has at least one student.
   #
   # @return [Boolean] whether or not the draw has at least one student

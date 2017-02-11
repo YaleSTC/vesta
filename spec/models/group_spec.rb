@@ -57,6 +57,12 @@ RSpec.describe Group, type: :model do
       group.status = 'locked'
       expect(group.valid?).to be_falsey
     end
+    it 'can only be locked if all memberships are locked' do
+      # finalizing locks the leader only, not any of the members
+      group = FactoryGirl.create(:finalizing_group, size: 2)
+      group.status = 'locked'
+      expect(group.valid?).to be_falsey
+    end
     it 'cannot be full when there are less members than the size' do
       group = FactoryGirl.build(:open_group)
       group.status = 'full'
@@ -146,6 +152,23 @@ RSpec.describe Group, type: :model do
       allow(group.leader).to receive(:restore_draw)
       group.destroy
       expect(group.leader).not_to have_received(:restore_draw)
+    end
+  end
+
+  describe '#locked_members' do
+    it 'returns memberships that are locked' do
+      group = FactoryGirl.create(:finalizing_group)
+      expect(group.locked_members).to eq([group.leader])
+    end
+  end
+
+  describe '#lockable?' do
+    it 'returns true when all members are locked, and group is full' do
+      group = FactoryGirl.create(:finalizing_group)
+      group.full_memberships.reject(&:locked).each do |m|
+        m.update(locked: true)
+      end
+      expect(group.reload).to be_lockable
     end
   end
 end

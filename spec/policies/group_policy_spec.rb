@@ -84,6 +84,45 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, group) }
       end
     end
+    permissions :finalize_membership? do
+      context 'in finalizing group, accepted membership' do
+        before do
+          allow(user).to receive(:group).and_return(other_group)
+          allow(other_group).to receive(:finalizing?).and_return(true)
+        end
+        it { is_expected.to permit(user, other_group) }
+      end
+      context 'in finalizing group, pending membership' do
+        before do
+          allow(user).to receive(:group).and_return(nil)
+          allow(other_group).to receive(:finalizing?).and_return(true)
+        end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'in full group, accepted membership' do
+        before do
+          allow(user).to receive(:group).and_return(other_group)
+          allow(other_group).to receive(:finalizing?).and_return(false)
+        end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'already locked membership' do
+        before do
+          allow(user).to receive(:group).and_return(other_group)
+          allow(other_group).to receive(:finalizing?).and_return(true)
+          allow(other_group).to receive(:locked_members).and_return([user])
+        end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+    end
+    permissions :finalize? do
+      before { allow(group).to receive(:full?).and_return(true) }
+      it { is_expected.to permit(user, group) }
+    end
+    permissions :lock? do
+      it { is_expected.not_to permit(user, other_group) }
+      it { is_expected.not_to permit(user, group) }
+    end
   end
 
   context 'housing rep' do
@@ -166,6 +205,45 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, other_group) }
       end
     end
+    permissions :finalize? do
+      before { allow(group).to receive(:full?).and_return(true) }
+      it { is_expected.to permit(user, group) }
+    end
+    permissions :finalize_membership? do
+      context 'in finalizing group, accepted membership' do
+        before do
+          allow(user).to receive(:group).and_return(other_group)
+          allow(other_group).to receive(:finalizing?).and_return(true)
+        end
+        it { is_expected.to permit(user, other_group) }
+      end
+      context 'in finalizing group, pending membership' do
+        before do
+          allow(user).to receive(:group).and_return(nil)
+          allow(other_group).to receive(:finalizing?).and_return(true)
+        end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'in full group, accepted membership' do
+        before do
+          allow(user).to receive(:group).and_return(other_group)
+          allow(other_group).to receive(:finalizing?).and_return(false)
+        end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'already locked membership' do
+        before do
+          allow(user).to receive(:group).and_return(other_group)
+          allow(other_group).to receive(:finalizing?).and_return(true)
+          allow(other_group).to receive(:locked_members).and_return([user])
+        end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+    end
+    permissions :lock? do
+      it { is_expected.not_to permit(user, other_group) }
+      it { is_expected.not_to permit(user, group) }
+    end
   end
 
   context 'admin' do
@@ -187,6 +265,16 @@ RSpec.describe GroupPolicy do
     end
     permissions :request_to_join? do
       it { is_expected.not_to permit(user, group) }
+    end
+    permissions :finalize? do
+      before { allow(group).to receive(:full?).and_return(true) }
+      it { is_expected.to permit(user, group) }
+    end
+    permissions :finalize_membership? do
+      it { is_expected.not_to permit(user, group) }
+    end
+    permissions :lock? do
+      it { is_expected.to permit(user, group) }
     end
   end
 end

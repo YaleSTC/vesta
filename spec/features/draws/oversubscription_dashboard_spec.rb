@@ -8,7 +8,7 @@ RSpec.feature 'Draw oversubscription dashboard' do
   end
   before do
     draw.students.each { |s| FactoryGirl.create(:group, leader: s, size: 1) }
-    draw.groups.first.update(status: 'locked')
+    GroupLocker.lock(group: draw.groups.first)
     log_in FactoryGirl.create(:admin)
   end
   it 'displays a table' do

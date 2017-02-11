@@ -15,6 +15,30 @@ FactoryGirl.define do
         end
       end
       after(:create) { |g| g.draw.update(status: 'pre_lottery') }
+
+      factory :finalizing_group do
+        after(:create) do |g|
+          g.draw.update(status: 'pre_lottery')
+          g.update(status: 'finalizing')
+          g.leader.membership.update(locked: true)
+        end
+      end
+
+      factory :locked_group do
+        after(:create) do |g|
+          g.draw.update(status: 'pre_lottery')
+          g.full_memberships.each { |m| m.update(locked: true) }
+          g.update(status: 'locked')
+        end
+      end
+
+      trait :with_suite do
+        after(:create) do |g|
+          # ideally this gets the last suite added to the draw which SHOULD
+          # be the one created in the above after(:build) callback
+          g.draw.suites.last.update(group: g)
+        end
+      end
     end
 
     factory :open_group do

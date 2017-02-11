@@ -20,6 +20,10 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
                                    as: 'send_invites'
       put '/:id/accept_invitation', to: 'groups#accept_invitation',
                                     as: 'accept_invitation'
+      put '/:id/finalize', to: 'groups#finalize', as: 'finalize'
+      put '/:id/finalize_membership', to: 'groups#finalize_membership',
+                                      as: 'finalize_membership'
+      put '/:id/lock', to: 'groups#lock', as: 'lock'
     end
   end
   patch 'draws/:id/activate', to: 'draws#activate', as: 'activate_draw'

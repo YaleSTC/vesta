@@ -23,7 +23,8 @@ class Membership < ApplicationRecord
   validate :matching_draw, if: ->(m) { m.user.present? && m.group.present? }
   validate :user_on_campus, if: ->(m) { m.user.present? }
   validate :group_is_open, if: ->(m) { m.group.present? }, on: :create
-  validate :user_not_in_group, if: ->(m) { m.user.present? }
+  validate :user_not_in_group, if: ->(m) { m.user.present? }, on: :create
+  validate :lockable?, if: ->(m) { m.group.present? }
 
   before_destroy ->(m) { throw(:abort) if m.readonly? }
   before_update ->(m) { throw(:abort) if m.readonly? }
@@ -37,11 +38,16 @@ class Membership < ApplicationRecord
   after_destroy :decrement_counter_cache
 
   # Group status callbacks
-  after_create :update_group_status
+  after_save :update_group_status
   after_destroy :update_group_status
 
   def readonly?
-    group.locked?
+    if locked_changed? && locked
+      # we need to allow the membership to be locked
+      false
+    else
+      locked
+    end
   end
 
   private
@@ -52,7 +58,7 @@ class Membership < ApplicationRecord
   end
 
   def update_group_status
-    group.update_status
+    group.update_status!
   end
 
   def freeze_group_and_user
@@ -77,6 +83,12 @@ class Membership < ApplicationRecord
   def user_on_campus
     return if user.on_campus?
     errors.add :user, 'must be living on campus to join a group'
+  end
+
+  def lockable?
+    return unless locked_changed?
+    errors.add :locked, 'must be an accepted membership' unless accepted?
+    errors.add :locked, 'must be a finalizing group' unless group.finalizing?
   end
 
   def update_counter_cache
