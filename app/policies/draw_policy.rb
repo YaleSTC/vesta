@@ -30,6 +30,14 @@ class DrawPolicy < ApplicationPolicy
     suites_edit?
   end
 
+  def student_summary?
+    edit?
+  end
+
+  def students_update?
+    edit?
+  end
+
   def group_actions?
     user.admin? || record.pre_lottery?
   end

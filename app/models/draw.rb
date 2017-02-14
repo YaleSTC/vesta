@@ -11,7 +11,7 @@
 class Draw < ApplicationRecord
   has_many :groups
   has_many :students, class_name: 'User'
-  has_many :draws_suites, dependent: :destroy
+  has_many :draws_suites, dependent: :delete_all
   has_many :suites, through: :draws_suites
 
   validates :name, presence: true

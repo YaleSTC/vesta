@@ -104,13 +104,14 @@ RSpec.describe DrawSuitesUpdate do
         expect(result[:msg]).to have_key(:error)
       end
 
-      def broken_suites
+      def broken_suites # rubocop:disable AbcSize
         klass = 'Suite::ActiveRecord_Associations_CollectionProxy'
         instance_spy(klass).tap do |s|
           allow(s).to receive(:destroy).and_raise(ActiveRecord::RecordInvalid)
           # this is necessary to get through the #find_suites_to_remove private
           # method, which will ideally be refactored eventually
           allow(s).to receive(:where).and_return([Suite.last])
+          allow(s).to receive(:available).and_return(s)
         end
       end
     end
