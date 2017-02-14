@@ -31,6 +31,8 @@ class Group < ApplicationRecord
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
 
+  after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
+
   attr_reader :remove_ids
 
   def name
@@ -111,5 +113,9 @@ class Group < ApplicationRecord
   def validate_full_locked
     return unless memberships_count != size
     errors.add :status, "can only be #{status} when members equal size"
+  end
+
+  def restore_member_draws
+    members.each { |u| u.restore_draw.save }
   end
 end

@@ -132,4 +132,20 @@ RSpec.describe Group, type: :model do
       expect(group.removable_members.map(&:id)).not_to include(group.leader_id)
     end
   end
+
+  describe '#destroy' do
+    it 'restores members to their original draws if drawless' do
+      group = FactoryGirl.create(:drawless_group)
+      allow(group.leader).to receive(:restore_draw)
+        .and_return(instance_spy('user', save: true))
+      group.destroy
+      expect(group.leader).to have_received(:restore_draw)
+    end
+    it 'does nothing if group belongs to a draw' do
+      group = FactoryGirl.create(:group)
+      allow(group.leader).to receive(:restore_draw)
+      group.destroy
+      expect(group.leader).not_to have_received(:restore_draw)
+    end
+  end
 end

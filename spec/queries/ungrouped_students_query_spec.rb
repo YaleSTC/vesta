@@ -13,7 +13,7 @@ RSpec.describe UngroupedStudentsQuery do
     students = %i(student rep).map { |r| FactoryGirl.create(:user, role: r) }
     _admin = FactoryGirl.create(:admin)
     result = described_class.call
-    expect(result).to eq(students)
+    expect(result.sort_by(&:id)).to eq(students)
   end
 
   it 'restricts the results to the passed query' do
