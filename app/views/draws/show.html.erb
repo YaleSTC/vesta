@@ -25,6 +25,9 @@
     <%= render 'oversub_report' %>
   </div>
 <% end %>
+<% if policy(@draw).student_summary? %>
+  <p><%= link_to 'View students', draw_student_summary_path(@draw) %></p>
+<% end %>
 <% if policy(@draw).suite_summary? %>
   <p><%= link_to 'View suites', draw_suite_summary_path(@draw) %></p>
 <% end %>

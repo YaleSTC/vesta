@@ -73,6 +73,23 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(**result)
   end
 
+  def student_summary
+    prepare_students_edit_data
+  end
+
+  def students_update
+    result = DrawStudentsUpdate.update(draw: @draw,
+                                       params: students_update_params)
+    @students_update = result[:update_object]
+    if @students_update
+      prepare_students_edit_data
+      result[:action] = 'student_summary'
+    else
+      result[:path] = draw_student_summary_path(@draw)
+    end
+    handle_action(**result)
+  end
+
   private
 
   def authorize!
@@ -92,6 +109,10 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     params.require(:draw_suites_update).permit(:size, suite_ids: [],
                                                       drawn_suite_ids: [],
                                                       undrawn_suite_ids: [])
+  end
+
+  def students_update_params
+    params.require(:draw_students_update).permit(:class_year)
   end
 
   def filter_params
@@ -132,5 +153,11 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                            .order(:number)
     @undrawn_suites = UndrawnSuitesQuery.new(base_suites).call
     @drawn_suites = DrawnSuitesForDrawQuery.new(base_suites).call(draw: @draw)
+  end
+
+  def prepare_students_edit_data
+    @students_update ||= DrawStudentsUpdate.new(draw: @draw)
+    @class_years = AvailableStudentClassYearsQuery.call
+    @students = @draw.students.order(:last_name)
   end
 end
