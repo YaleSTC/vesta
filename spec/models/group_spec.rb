@@ -42,6 +42,13 @@ RSpec.describe Group, type: :model do
       group.size = 1
       expect(group.valid?).to be_falsey
     end
+    it 'also validates during creation' do
+      leader, student = FactoryGirl.create_pair(:student)
+      group = described_class.new(size: 1, leader_id: leader.id,
+                                  member_ids: [student.id])
+      group.save
+      expect(group.persisted?).to be_falsey
+    end
   end
 
   describe 'status validations' do
