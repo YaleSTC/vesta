@@ -20,9 +20,11 @@ module Vesta
     services_paths = %w(creators updaters destroyers).map do |s|
       "/app/services/#{s}"
     end
+    forms_path = %w(/app/forms)
     lib_paths = %w(seed).map { |s| "/lib/#{s}" }
-    config.autoload_paths += (services_paths + lib_paths + %w(/lib/)).map do |s|
-      "#{config.root}#{s}"
-    end
+    config.autoload_paths +=
+      (services_paths + forms_path + lib_paths + %w(/lib/)).map do |s|
+        "#{config.root}#{s}"
+      end
   end
 end

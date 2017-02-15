@@ -1,3 +1,17 @@
+.student-assignment {
+  @include grid-row;
+
+  .bulk, .single {
+    @include grid-column(12);
+    padding-bottom: 1em;
+
+    @include breakpoint(medium) {
+      @include grid-column(6);
+      padding-bottom: 0;
+    }
+  }
+}
+
 .students-list {
   @include grid-row;
 
