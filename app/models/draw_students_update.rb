@@ -4,7 +4,7 @@
 class DrawStudentsUpdate
   include ActiveModel::Model
 
-  attr_reader :class_year
+  attr_reader :class_year, :to_add
 
   # permit :update to be called on the parent class
   def self.update(**params)
@@ -44,7 +44,9 @@ class DrawStudentsUpdate
 
   def process_params(params)
     @params = params.to_h.transform_keys(&:to_sym)
-    @params[:class_year] = nil if @params[:class_year].empty?
+    @params[:class_year] = nil if @params[:class_year].try(:empty?)
+    @params[:to_add] = nil if @params[:to_add].try(:empty?)
+    @to_add = @params[:to_add]
     @class_year = set_class_year
     @students_to_add = find_students_to_add
   end
@@ -55,8 +57,20 @@ class DrawStudentsUpdate
   end
 
   def find_students_to_add
+    students_to_add_by_class_year + students_to_add_by_username
+  end
+
+  def students_to_add_by_class_year
     return [] unless class_year
     UngroupedStudentsQuery.call.where(draw_id: nil, class_year: class_year)
+  end
+
+  def students_to_add_by_username
+    return [] unless to_add
+    user = UngroupedStudentsQuery.call.find_by(username: to_add)
+    return [] unless user
+    return [] unless (user.student? || user.rep?) && user.membership.nil?
+    [user.remove_draw]
   end
 
   def no_action_warning
@@ -73,7 +87,7 @@ class DrawStudentsUpdate
   def error(error)
     {
       object: nil, update_object: self,
-      msg: { error: "Students update failed: #{error}" }
+      msg: { error: "Student assignment failed: #{error}" }
     }
   end
 end
