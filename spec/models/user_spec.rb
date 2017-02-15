@@ -151,21 +151,26 @@ RSpec.describe User, type: :model do
       result = user.restore_draw
       expect(result.draw_id).to eq(1234)
     end
-    it 'sets old_draw_id to nil' do
+    it 'sets draw_id to nil if old_draw_id and draw_id are equal' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 123)
+      result = user.restore_draw
+      expect(result.draw_id).to be_nil
+    end
+    it 'sets old_draw_id to nil by default' do
       user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
       result = user.restore_draw
-      expect(result.old_draw_id).to eq(nil)
+      expect(result.old_draw_id).to be_nil
+    end
+    it 'optionally saves draw_id to old_draw_id' do
+      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
+      result = user.restore_draw(save_current: true)
+      expect(result.old_draw_id).to eq(123)
     end
     it 'sets the intent to undeclared' do
       user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: 1234,
                                               intent: 'on_campus')
       result = user.restore_draw
       expect(result.intent).to eq('undeclared')
-    end
-    it 'does nothing if old_draw_id is nil' do
-      user = FactoryGirl.build_stubbed(:user, draw_id: 123, old_draw_id: nil)
-      result = user.restore_draw
-      expect(result).to eq(user)
     end
   end
 end

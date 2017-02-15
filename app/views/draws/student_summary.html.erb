@@ -1,17 +1,25 @@
 <h1 class="draw-name"><%= @draw.name %> Students</h1>
 <div class="student-assignment">
   <h2>Student actions</h2>
-  <% if @class_years.empty? %>
-    <p>There are no students available to add to this draw.</p>
-  <% else %>
-    <div class="bulk">
+  <div class="bulk">
+    <% if @available_students_count.zero? %>
+      <p>There are no students available to add to this draw.</p>
+    <% else %>
       <h3>Add students by class year</h3>
       <%= simple_form_for @students_update, url: draw_students_update_path(@draw), method: :patch do |f| %>
-        <%= f.input :class_year, as: :select, collection: @class_years %>
+        <%= f.input :class_year, as: :select, collection: @class_years, required: true %>
         <%= f.submit 'Assign students' %>
       <% end %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
+  <div class="single">
+    <h3>Add student by username</h3>
+    <%= simple_form_for @student_assignment_form, url: draw_students_update_path(@draw), method: :patch do |f| %>
+      <%= f.input :username %>
+      <%= f.input :adding, label: 'Action', as: :radio_buttons, collection: [['Add', true], ['Remove', false]], required: true %>
+      <%= f.submit 'Update student' %>
+    <% end %>
+  </div>
 </div>
 <hr />
 <div class="students-list">

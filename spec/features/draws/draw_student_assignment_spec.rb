@@ -19,4 +19,32 @@ RSpec.feature 'Draw student assignment' do
       click_on 'Assign students'
     end
   end
+
+  describe 'single user adding' do
+    let!(:student) { FactoryGirl.create(:student, username: 'foo') }
+    it 'can be performed' do
+      visit draw_student_summary_path(draw)
+      fill_in 'draw_student_assignment_form_username', with: 'foo'
+      click_on 'Update student'
+      message = "#{student.full_name} successfully added"
+      expect(page).to have_css('.flash-success', text: message)
+    end
+  end
+
+  describe 'single user removing' do
+    let(:student) { FactoryGirl.create(:student, username: 'foo') }
+    before { draw.students << student }
+    it 'can be performed' do
+      visit draw_student_summary_path(draw)
+      remove_user(username: 'foo')
+      message = "#{student.full_name} successfully removed"
+      expect(page).to have_css('.flash-success', text: message)
+    end
+
+    def remove_user(username:)
+      fill_in 'draw_student_assignment_form_username', with: username
+      choose 'Remove'
+      click_on 'Update student'
+    end
+  end
 end

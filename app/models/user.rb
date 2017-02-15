@@ -99,14 +99,18 @@ class User < ApplicationRecord
     self
   end
 
-  # Restores a user's draw from old_draw_id and clears old_draw_id, also setting
-  # intent to undeclared. Does nothing if old_draw_id is nil.
+  # Restores a user's draw from old_draw_id and optionally saves the current
+  # draw_id to old_draw_id, also setting intent to undeclared. If the draw_id is
+  # equal to the old_draw_id, will set draw_id to nil.
   #
+  # @param save_current [Boolean] whether or not to assign the current draw_id
+  #   value to old_draw_id, defaults to false
   # @return [User] the modified but unpersisted user object
-  def restore_draw
-    return self if old_draw_id.nil?
-    draw_id = old_draw_id
-    assign_attributes(draw_id: draw_id, old_draw_id: nil, intent: 'undeclared')
+  def restore_draw(save_current: false)
+    to_save = save_current ? draw_id : nil
+    new_draw_id = old_draw_id != draw_id ? old_draw_id : nil
+    assign_attributes(draw_id: new_draw_id, old_draw_id: to_save,
+                      intent: 'undeclared')
     self
   end
 
