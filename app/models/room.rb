@@ -18,7 +18,7 @@ class Room < ApplicationRecord
                                    greater_than_or_equal_to: 0 }
 
   # Suite Size Counter Cache
-  after_save :update_suite_size, if: :beds_changed?
+  after_save :update_suite_size
   after_destroy :decrement_suite_size
 
   # Evaluates the room type.
@@ -43,8 +43,24 @@ class Room < ApplicationRecord
   end
 
   def update_suite_size
+    return unless beds_changed? || suite_id_changed?
+    update_suite_size_based_on_beds if beds_changed?
+    update_suite_size_based_on_assignment if suite_id_changed?
+  end
+
+  def update_suite_size_based_on_beds
     delta = beds - beds_was
     suite.increment!(:size, delta)
+  end
+
+  def update_suite_size_based_on_assignment
+    # prevent double increment on creation
+    return unless suite_id_was
+    # use find_by in case of deletion / nullify callback
+    old_suite = Suite.find_by(id: suite_id_was)
+    new_suite = Suite.find_by(id: suite_id)
+    old_suite&.decrement!(:size, beds_was)
+    new_suite&.increment!(:size, beds)
   end
 
   def decrement_suite_size

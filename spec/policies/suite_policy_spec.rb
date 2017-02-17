@@ -13,14 +13,15 @@ RSpec.describe SuitePolicy do
     permissions :index? do
       it { is_expected.to permit(user, Suite) }
     end
-    permissions :create?, :destroy?, :edit?, :update? do
+    permissions :create?, :destroy?, :edit?, :update?, :merge?,
+                :perform_merge? do
       it { is_expected.not_to permit(user, suite) }
     end
   end
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :show?, :edit?, :update? do
+    permissions :show?, :edit?, :update?, :merge?, :perform_merge? do
       it { is_expected.to permit(user, suite) }
     end
     permissions :index? do
@@ -33,7 +34,8 @@ RSpec.describe SuitePolicy do
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :show?, :edit?, :update?, :create?, :destroy? do
+    permissions :show?, :edit?, :update?, :create?, :destroy?, :merge?,
+                :perform_merge? do
       it { is_expected.to permit(user, suite) }
     end
     permissions :index? do

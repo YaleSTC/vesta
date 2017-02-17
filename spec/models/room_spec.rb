@@ -8,6 +8,7 @@ RSpec.describe Room, type: :model do
     it { is_expected.to validate_presence_of(:beds) }
     it { is_expected.not_to allow_value(-1).for(:beds) }
     it { is_expected.to belong_to(:suite) }
+    it { is_expected.to validate_presence_of(:suite) }
     describe 'number uniqueness' do
       it 'allows duplicates that belong to separate suites' do
         number = 'A'
@@ -63,6 +64,18 @@ RSpec.describe Room, type: :model do
       room = FactoryGirl.create(:room, beds: 1, suite: suite)
       room.update_attributes(beds: 2)
       expect(suite).to have_received(:increment!).with(:size, 1).twice
+    end
+    it 'updates the new suite when switching' do
+      old_suite, new_suite = FactoryGirl.create_pair(:suite)
+      room = FactoryGirl.create(:room, beds: 1, suite: old_suite)
+      expect { room.update(suite_id: new_suite.id) }.to \
+        change { old_suite.reload.size }.by(-1)
+    end
+    it 'updates the new suite when switching' do
+      old_suite, new_suite = FactoryGirl.create_pair(:suite)
+      room = FactoryGirl.create(:room, beds: 1, suite: old_suite)
+      expect { room.update(suite_id: new_suite.id) }.to \
+        change { new_suite.reload.size }.by(1)
     end
   end
 end

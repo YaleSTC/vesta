@@ -4,6 +4,8 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
   root to: 'application#home'
   resources :buildings
   resources :suites
+  get 'suites/:id/merge', to: 'suites#merge', as: 'merge_suite'
+  post 'suites/:id/merge', to: 'suites#perform_merge', as: 'perform_merge_suite'
   resources :rooms
   get 'users/build', to: 'users#build', as: 'build_user'
   resources :users

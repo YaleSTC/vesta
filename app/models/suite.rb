@@ -16,7 +16,7 @@ class Suite < ApplicationRecord
                 8 => 'octet' }.freeze
   belongs_to :building
   belongs_to :group
-  has_many :rooms
+  has_many :rooms, dependent: :nullify
   has_many :draws_suites, dependent: :delete_all
   has_many :draws, through: :draws_suites
 
@@ -48,5 +48,12 @@ class Suite < ApplicationRecord
     return number if draws_to_display.empty?
     draws_str = draws_to_display.map(&:name).join(', ')
     "#{number} (#{draws_str})"
+  end
+
+  # Return whether or not a suite is available
+  #
+  # @return [Boolean] whether or not the suite is available
+  def available?
+    group_id.nil?
   end
 end
