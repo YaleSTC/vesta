@@ -100,4 +100,15 @@ RSpec.describe Suite, type: :model do
       expect(draw.suites.first.number_with_draws(draw2)).to eq(expected)
     end
   end
+
+  describe '#available?' do
+    it 'returns true if the suite has no group assigned' do
+      suite = FactoryGirl.build(:suite, group_id: nil)
+      expect(suite).to be_available
+    end
+    it 'returns false if the suite has a group assigned' do
+      suite = FactoryGirl.build(:suite, group_id: 123)
+      expect(suite).not_to be_available
+    end
+  end
 end

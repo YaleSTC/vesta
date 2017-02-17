@@ -1,0 +1,12 @@
+<h1>Merge suite <%= @suite.number %> and <%= @other_suite.number %></h1>
+<%= simple_form_for @merger_form, url: perform_merge_suite_path(@suite), method: :post do |f| %>
+  <%= f.input :number %>
+  <%= f.input :other_suite_number, as: :hidden  %>
+  <p>The new suite will contain the following rooms:</p>
+  <ul>
+    <% @all_rooms.each do |room| %>
+      <li><%= room.number %> - <%= pluralize(room.beds, 'bed') %></li>
+    <% end %>
+  </ul>
+  <%= f.submit 'Merge' %>
+<% end %>

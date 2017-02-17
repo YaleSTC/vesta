@@ -13,6 +13,14 @@ class SuitePolicy < ApplicationPolicy
     true
   end
 
+  def merge?
+    perform_merge?
+  end
+
+  def perform_merge?
+    edit?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

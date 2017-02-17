@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 # Controller for Suites
 class SuitesController < ApplicationController
-  prepend_before_action :set_suite, only: %i(show edit update destroy)
+  prepend_before_action :set_suite, except: %i(new create index)
 
   def show
     @rooms = @suite.rooms
+    @merger_form = SuiteMergerForm.new(suite: @suite)
   end
 
   def new
@@ -32,6 +33,24 @@ class SuitesController < ApplicationController
     handle_action(**result)
   end
 
+  def merge
+    @merger_form = SuiteMergerForm.new(suite: @suite,
+                                       params: suite_merger_params)
+    unless @merger_form.valid?
+      flash[:error] = 'Invalid suite number'
+      redirect_to(suite_path(@suite)) && return
+    end
+    @other_suite = @merger_form.other_suite
+    @all_rooms = @suite.rooms + @merger_form.other_suite.rooms
+  end
+
+  def perform_merge
+    result = SuiteMergerForm.submit(suite: @suite, params: suite_merger_params)
+    @merger_form = result[:form_object] if result[:form_object]
+    @all_rooms = find_merger_rooms if @merger_form
+    handle_action(action: 'merge', **result)
+  end
+
   private
 
   def authorize!
@@ -46,7 +65,16 @@ class SuitesController < ApplicationController
     params.require(:suite).permit(:number, :building_id)
   end
 
+  def suite_merger_params
+    params.require(:suite_merger_form).permit(:number, :other_suite_number)
+  end
+
   def set_suite
-    @suite = Suite.find(params[:id])
+    @suite = Suite.includes(:rooms).find(params[:id])
+  end
+
+  def find_merger_rooms
+    id_array = [@suite.id, @merger_form.other_suite.id]
+    Room.includes(:suite).where(suites: { id: id_array })
   end
 end
