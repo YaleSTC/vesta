@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 # Controller for Suites
 class SuitesController < ApplicationController
-  prepend_before_action :set_suite, only: %i(show edit update destroy)
+  prepend_before_action :set_suite, only: %i(show edit update destroy activate
+                                             deactivate)
 
   def show
     @rooms = @suite.rooms
@@ -30,6 +31,28 @@ class SuitesController < ApplicationController
   def destroy
     result = Destroyer.new(object: @suite, name_method: :number).destroy
     handle_action(**result)
+  end
+
+  def deactivate
+    if @suite.deactivate.save
+      flash[:success] = 'Suite successfully deactivated'
+      redirect_to(@suite)
+    else
+      errors = @suite.errors.full_messages.join(', ')
+      flash[:error] = "Suite could not be deactivated: #{errors}"
+      render 'show'
+    end
+  end
+
+  def activate
+    if @suite.activate.save
+      flash[:success] = 'Suite successfully activated'
+      redirect_to(@suite)
+    else
+      errors = @suite.errors.full_messages.join(', ')
+      flash[:error] = "Suite could not be activated: #{errors}"
+      render 'show'
+    end
   end
 
   private

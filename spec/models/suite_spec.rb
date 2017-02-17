@@ -27,6 +27,15 @@ RSpec.describe Suite, type: :model do
   end
 
   context 'scopes' do
+    describe '.active' do
+      it 'returns all suites that are active' do
+        suite = FactoryGirl.create(:suite, active: true)
+        FactoryGirl.create(:suite, active: false)
+        expect(described_class.available.map(&:id)).to \
+          eq([suite.id])
+      end
+    end
+
     describe '.available' do
       it 'returns all suites not assigned to groups ordered by number' do
         suite1 = FactoryGirl.create(:suite, number: 'def')
@@ -34,6 +43,13 @@ RSpec.describe Suite, type: :model do
         FactoryGirl.create(:suite, group_id: 1234)
         expect(described_class.available.map(&:id)).to \
           eq([suite2.id, suite1.id])
+      end
+      it 'returns only active suites' do
+        suite = FactoryGirl.create(:suite, number: 'def', active: true)
+        FactoryGirl.create(:suite, number: 'abc', active: false)
+        FactoryGirl.create(:suite, group_id: 1234)
+        expect(described_class.available.map(&:id)).to \
+          eq([suite.id])
       end
     end
   end
@@ -98,6 +114,20 @@ RSpec.describe Suite, type: :model do
       draw2 = FactoryGirl.create(:draw)
       expected = "#{draw.suites.first.number} (#{draw.name})"
       expect(draw.suites.first.number_with_draws(draw2)).to eq(expected)
+    end
+  end
+
+  describe '#deactivate' do
+    it 'returns an inactive suite' do
+      suite = FactoryGirl.build_stubbed(:suite, active: true)
+      expect(suite.deactivate).not_to be_active
+    end
+  end
+
+  describe '#activate' do
+    it 'returns an active suite' do
+      suite = FactoryGirl.build_stubbed(:suite, active: false)
+      expect(suite.activate).to be_active
     end
   end
 end

@@ -53,8 +53,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def suite_summary
-    @all_sizes = SuiteSizesQuery.call
-    @suites_by_size = SuitesBySizeQuery.new(@draw.suites).call
+    @all_sizes = SuiteSizesQuery.new(Suite.active).call
+    @suites_by_size = SuitesBySizeQuery.new(@draw.suites.active).call
   end
 
   def suites_edit
@@ -165,8 +165,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def calculate_oversub_metrics # rubocop:disable AbcSize
     return unless policy(@draw).oversub_report?
-    @suite_sizes = SuiteSizesQuery.new(@draw.suites).call
-    @suite_counts = @draw.suites.group(:size).count
+    @suite_sizes = SuiteSizesQuery.new(@draw.suites.active).call
+    @suite_counts = @draw.suites.active.group(:size).count
     zeroed_group_hash = @suite_sizes.map { |s| [s, 0] }.to_h
     @group_counts = zeroed_group_hash.merge(@draw.groups.group(:size).count)
     @locked_counts = @draw.groups.where(status: 'locked').group(:size).count
@@ -179,7 +179,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     @suites_update ||= DrawSuitesUpdate.new(draw: @draw)
     @size = params[:size] ? params[:size].to_i : @suites_update.size
     base_suites = Suite.where(size: @size).available.order(:number)
-    @current_suites = @draw.suites.includes(:draws).where(size: @size)
+    @current_suites = @draw.suites.active.includes(:draws).where(size: @size)
                            .order(:number)
     @undrawn_suites = UndrawnSuitesQuery.new(base_suites).call
     @drawn_suites = DrawnSuitesForDrawQuery.new(base_suites).call(draw: @draw)

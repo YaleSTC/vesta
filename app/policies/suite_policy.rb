@@ -5,12 +5,24 @@ class SuitePolicy < ApplicationPolicy
     true
   end
 
-  def update?
+  def edit?
     user.rep? || user.admin?
+  end
+
+  def update?
+    edit?
   end
 
   def index?
     true
+  end
+
+  def deactivate?
+    edit?
+  end
+
+  def activate?
+    edit?
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation

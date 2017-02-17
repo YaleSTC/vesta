@@ -6,5 +6,6 @@
   <% end %>
 </ul>
 <p><%= link_to 'Add room', new_room_path %></p>
+<p><%= activation_link(@suite) %></p>
 <p><%= link_to 'Delete', suite_path(@suite), method: :delete %></p>
 

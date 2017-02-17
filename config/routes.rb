@@ -4,6 +4,9 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
   root to: 'application#home'
   resources :buildings
   resources :suites
+  patch '/suites/:id/deactivate', to: 'suites#deactivate',
+                                  as: 'deactivate_suite'
+  patch '/suites/:id/activate', to: 'suites#activate', as: 'activate_suite'
   resources :rooms
   get 'users/build', to: 'users#build', as: 'build_user'
   resources :users
