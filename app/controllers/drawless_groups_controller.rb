@@ -56,6 +56,6 @@ class DrawlessGroupsController < ApplicationController
     @group ||= Group.new
     @students = UngroupedStudentsQuery.call
     @leader_students = @group.members.empty? ? @students : @group.members
-    @suite_sizes = SuiteSizesQuery.call
+    @suite_sizes = SuiteSizesQuery.new(Suite.active).call
   end
 end

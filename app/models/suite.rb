@@ -3,13 +3,14 @@
 # Model to represent the middle level of facility information
 # A suite is composed of mulitple rooms, which can be bedrooms or common rooms
 #
-# @attr [String] number The identifier of the Suite. Must be unique
-#   for Suites in the same Building.
-# @attr [Integer] size Counter cache of the total number of beds
-#   within the Suite's Rooms. Must be >= 0.
-# @attr [Building] building belongs_to association for the Building the
-#   Suite is located in.
-# @attr [Array<Room>] rooms has_many association for the Rooms within the Suite.
+# @attr number [String] The identifier of the Suite. Must be unique for Suites
+#   in the same Building.
+# @attr size [Integer] Counter cache of the total number of beds within the
+#   Suite's Rooms. Must be >= 0.
+# @attr building [Building] belongs_to association for the Building the Suite is
+#   located in.
+# @attr rooms [Array<Room>] has_many association for the Rooms within the Suite.
+# @attr active [Boolean] whether or not the suite is active
 class Suite < ApplicationRecord
   SIZE_STRS = { 1 => 'single', 2 => 'double', 3 => 'triple', 4 => 'quadruple',
                 5 => 'quintuple', 6 => 'sextuple', 7 => 'septuple',
@@ -25,7 +26,8 @@ class Suite < ApplicationRecord
   validates :size, presence: true,
                    numericality: { greater_than_or_equal_to: 0 }
 
-  scope :available, -> { where(group_id: nil).order(:number) }
+  scope :active, -> { where(active: true) }
+  scope :available, -> { where(group_id: nil).order(:number).active }
 
   # Return the equivalent string for a given suite size
   #
@@ -48,5 +50,21 @@ class Suite < ApplicationRecord
     return number if draws_to_display.empty?
     draws_str = draws_to_display.map(&:name).join(', ')
     "#{number} (#{draws_str})"
+  end
+
+  # Deactivate a suite (unpersisted).
+  #
+  # @return [Suite] the potentially deactivated suite
+  def deactivate
+    assign_attributes(active: false)
+    self
+  end
+
+  # Activate a suite (unpersisted).
+  #
+  # @return [Suite] the potentially activated suite
+  def activate
+    assign_attributes(active: true)
+    self
   end
 end

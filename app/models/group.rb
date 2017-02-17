@@ -75,7 +75,7 @@ class Group < ApplicationRecord
     members << leader unless members.include? leader
   end
 
-  def validate_suite_size_inclusion
+  def validate_suite_size_inclusion # rubocop:disable AbcSize
     # TODO: if we start seeing this pattern (draw.present? branching logic) more
     # often then we can extract special group functionality into a subclass that
     # still talks to the same table in the db to keep things clean.
@@ -83,7 +83,7 @@ class Group < ApplicationRecord
       return if draw.suite_sizes.include? size
       errors.add :size, 'must be a suite size included in the draw'
     else
-      return if SuiteSizesQuery.call.include? size
+      return if SuiteSizesQuery.new(Suite.active).call.include? size
       errors.add :size, 'must be a valid suite size'
     end
   end
