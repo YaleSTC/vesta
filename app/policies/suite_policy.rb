@@ -21,6 +21,18 @@ class SuitePolicy < ApplicationPolicy
     edit?
   end
 
+  def build_split?
+    split?
+  end
+
+  def split?
+    perform_split?
+  end
+
+  def perform_split?
+    edit? && record.rooms.size >= 2
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

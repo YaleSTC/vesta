@@ -6,6 +6,8 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
   resources :suites
   get 'suites/:id/merge', to: 'suites#merge', as: 'merge_suite'
   post 'suites/:id/merge', to: 'suites#perform_merge', as: 'perform_merge_suite'
+  get 'suites/:id/split', to: 'suites#split', as: 'split_suite'
+  post 'suites/:id/split', to: 'suites#perform_split', as: 'perform_split_suite'
   resources :rooms
   get 'users/build', to: 'users#build', as: 'build_user'
   resources :users
