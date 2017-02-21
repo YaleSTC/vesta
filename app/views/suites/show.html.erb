@@ -16,5 +16,8 @@
     <% end %>
   </div>
 <% end %>
+<% if policy(@suite).split? %>
+  <p><%= link_to 'Split suite', split_suite_path(@suite) %></p>
+<% end %>
 <p><%= link_to 'Delete', suite_path(@suite), method: :delete %></p>
 

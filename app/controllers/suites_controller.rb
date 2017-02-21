@@ -51,6 +51,16 @@ class SuitesController < ApplicationController
     handle_action(action: 'merge', **result)
   end
 
+  def split
+    @split_form = SuiteSplitForm.new(suite: @suite)
+  end
+
+  def perform_split
+    result = SuiteSplitForm.submit(suite: @suite, params: suite_split_params)
+    @split_form = result[:form_object] if result[:form_object]
+    handle_action(path: building_path(@suite.building), **result)
+  end
+
   private
 
   def authorize!
@@ -67,6 +77,11 @@ class SuitesController < ApplicationController
 
   def suite_merger_params
     params.require(:suite_merger_form).permit(:number, :other_suite_number)
+  end
+
+  def suite_split_params
+    valid_params = @suite.rooms.map { |r| "room_#{r.id}_suite".to_sym }
+    params.require(:suite_split_form).permit(*valid_params)
   end
 
   def set_suite

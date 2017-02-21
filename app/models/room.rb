@@ -12,7 +12,7 @@ class Room < ApplicationRecord
 
   validates :suite, presence: true
   validates :number, presence: true, allow_blank: false,
-                     uniqueness: { scope: :suite }
+                     uniqueness: { case_senstive: false }
   validates :beds, presence: true,
                    numericality: { only_integer: true,
                                    greater_than_or_equal_to: 0 }

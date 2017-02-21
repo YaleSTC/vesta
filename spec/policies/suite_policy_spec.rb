@@ -14,7 +14,7 @@ RSpec.describe SuitePolicy do
       it { is_expected.to permit(user, Suite) }
     end
     permissions :create?, :destroy?, :edit?, :update?, :merge?,
-                :perform_merge? do
+                :perform_merge?, :build_split?, :split?, :perform_split? do
       it { is_expected.not_to permit(user, suite) }
     end
   end
@@ -30,6 +30,22 @@ RSpec.describe SuitePolicy do
     permissions :create?, :destroy? do
       it { is_expected.not_to permit(user, suite) }
     end
+
+    permissions :build_split?, :split?, :perform_split? do
+      context 'suite has fewer than two rooms' do
+        before do
+          allow(suite).to receive(:rooms).and_return([instance_spy('Room')])
+        end
+        it { is_expected.not_to permit(user, suite) }
+      end
+      context 'suite has at least two rooms' do
+        before do
+          allow(suite).to receive(:rooms)
+            .and_return([instance_spy('Room'), instance_spy('Room')])
+        end
+        it { is_expected.to permit(user, suite) }
+      end
+    end
   end
 
   context 'admin' do
@@ -40,6 +56,22 @@ RSpec.describe SuitePolicy do
     end
     permissions :index? do
       it { is_expected.to permit(user, Suite) }
+    end
+
+    permissions :build_split?, :split?, :perform_split? do
+      context 'suite has fewer than two rooms' do
+        before do
+          allow(suite).to receive(:rooms).and_return([instance_spy('Room')])
+        end
+        it { is_expected.not_to permit(user, suite) }
+      end
+      context 'suite has at least two rooms' do
+        before do
+          allow(suite).to receive(:rooms)
+            .and_return([instance_spy('Room'), instance_spy('Room')])
+        end
+        it { is_expected.to permit(user, suite) }
+      end
     end
   end
 end
