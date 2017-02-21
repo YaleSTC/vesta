@@ -3,5 +3,9 @@
   <%= f.input :intent_deadline %>
   <%= f.association :students, label_method: :name %>
   <%= f.association :suites, label_method: :number %>
+  <% unless @draw.suites.empty? %>
+    <%= f.input :locked_sizes, as: :check_boxes, collection: @draw.suite_sizes,
+      label_method: ->(s) { "#{size_str(s)}s".capitalize }, include_hidden: false %>
+  <% end %>
   <%= f.submit %>
 <% end %>
