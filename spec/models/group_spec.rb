@@ -23,7 +23,7 @@ RSpec.describe Group, type: :model do
     context 'for regular groups' do
       it 'must be available in the draw' do
         group = FactoryGirl.build(:group)
-        allow(group.draw).to receive(:suite_sizes).and_return([1])
+        allow(group.draw).to receive(:open_suite_sizes).and_return([1])
         group.size = 2
         expect(group.valid?).to be_falsey
       end

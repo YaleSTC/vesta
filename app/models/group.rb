@@ -82,7 +82,7 @@ class Group < ApplicationRecord
     # often then we can extract special group functionality into a subclass that
     # still talks to the same table in the db to keep things clean.
     if draw.present?
-      return if draw.suite_sizes.include? size
+      return if draw.open_suite_sizes.include? size
       errors.add :size, 'must be a suite size included in the draw'
     else
       return if SuiteSizesQuery.call.include? size

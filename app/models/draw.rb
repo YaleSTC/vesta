@@ -20,7 +20,11 @@ class Draw < ApplicationRecord
   enum status: %w(draft pre_lottery)
 
   def suite_sizes
-    suites.map(&:size).uniq
+    SuiteSizesQuery.new(suites).call
+  end
+
+  def open_suite_sizes
+    suite_sizes - locked_sizes
   end
 
   # Query method to see if a draw has at least one student.

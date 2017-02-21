@@ -13,10 +13,11 @@ RSpec.describe Draw, type: :model do
 
   describe '#suite_sizes' do
     it 'returns an array of all the suite sizes in the draw' do
-      suites = Array.new(3) { |size| instance_spy('Suite', size: size + 1) }
       draw = FactoryGirl.build_stubbed(:draw)
-      allow(draw).to receive(:suites).and_return(suites)
-      expect(draw.suite_sizes).to match_array([1, 2, 3])
+      instance_spy('SuiteSizesQuery', call: [1, 2]).tap do |q|
+        allow(SuiteSizesQuery).to receive(:new).with(draw.suites).and_return(q)
+      end
+      expect(draw.suite_sizes).to match_array([1, 2])
     end
   end
 
@@ -57,6 +58,15 @@ RSpec.describe Draw, type: :model do
       allow(draw).to receive(:bed_count).and_return(1)
       allow(draw).to receive(:student_count).and_return(2)
       expect(draw.enough_beds?).to be_falsey
+    end
+  end
+
+  describe '#open_suite_sizes' do
+    it 'returns suite sizes in the draw minus locked sizes' do
+      draw = FactoryGirl.build_stubbed(:draw, locked_sizes: [1])
+      all_sizes = [1, 2]
+      allow(draw).to receive(:suite_sizes).and_return(all_sizes)
+      expect(draw.open_suite_sizes).to eq([2])
     end
   end
 end
