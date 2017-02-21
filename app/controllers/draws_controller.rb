@@ -128,7 +128,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def draw_params
     params.require(:draw).permit(:name, :intent_deadline, suite_ids: [],
-                                                          student_ids: [])
+                                                          student_ids: [],
+                                                          locked_sizes: [])
   end
 
   def suites_update_params
