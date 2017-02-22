@@ -48,7 +48,10 @@ class Draw < ApplicationRecord
     @student_count ||= students.count
   end
 
+  # Calculate the number of beds that exist across all available suites
+  #
+  # @return [Integer] the number of beds in all available suites
   def bed_count
-    @bed_count ||= suites.sum(:size)
+    @bed_count ||= suites.available.sum(:size)
   end
 end
