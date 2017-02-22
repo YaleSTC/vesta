@@ -11,12 +11,12 @@
   </thead>
   <tbody>
     <% @suite_sizes.each do |size| %>
-      <tr>
+      <tr class="<%= diff_class(@diff[size])%>">
         <td data-role="suite-size"><%= size %></td>
         <td data-role="suite-count"><%= @suite_counts[size] %></td>
         <td data-role="group-count"><%= @group_counts[size] %></td>
         <td data-role="locked-count"><%= @locked_counts[size] %></td>
-        <td data-role="oversubscription" class="<%= diff_class(@diff[size]) %>"><%= @diff[size] %></td>
+        <td data-role="oversubscription"><%= @diff[size] %></td>
       </tr>
     <% end %>
   </tbody>
