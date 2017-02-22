@@ -1,2 +1,8 @@
 @import "draws_suite_summary";
 @import "draws_student_summary";
+
+.oversub-report {
+  .positive { background-color: lighten($success-color, 72%); }
+  .negative { background-color: lighten($alert-color, 53%); }
+  .zero { background-color: lighten($warning-color, 53%); }
+}
