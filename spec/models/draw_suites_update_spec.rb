@@ -82,24 +82,23 @@ RSpec.describe DrawSuitesUpdate do
     end
 
     context 'error' do
-      it 'sets :object to nil' do
-        draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
+      let(:draw) { FactoryGirl.create(:draw_with_members, suites_count: 1) }
+      let(:params) { mock_params(suite_ids: []) }
+      before do
+        # necessary to prevent spy error due to available not being implemented
+        draw.suites.available
         allow(draw).to receive(:suites).and_return(broken_suites)
-        params = mock_params(suite_ids: [])
+      end
+
+      it 'sets :object to nil' do
         result = described_class.update(draw: draw, params: params)
         expect(result[:object]).to be_nil
       end
       it 'sets :update_object to the update object' do
-        draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
-        allow(draw).to receive(:suites).and_return(broken_suites)
-        params = mock_params(suite_ids: [])
         update_object = described_class.new(draw: draw, params: params)
         expect(update_object.update[:update_object]).to eq(update_object)
       end
       it 'sets an error message' do
-        draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
-        allow(draw).to receive(:suites).and_return(broken_suites)
-        params = mock_params(suite_ids: [])
         result = described_class.update(draw: draw, params: params)
         expect(result[:msg]).to have_key(:error)
       end
