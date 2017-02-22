@@ -69,4 +69,12 @@ RSpec.describe Draw, type: :model do
       expect(draw.open_suite_sizes).to eq([2])
     end
   end
+
+  describe '#bed_count' do
+    it 'returns the number of beds across all available suites' do
+      draw = FactoryGirl.create(:draw_with_members, suites_count: 2)
+      draw.suites.last.update(group_id: 123)
+      expect(draw.send(:bed_count)).to eq(draw.suites.first.size)
+    end
+  end
 end
