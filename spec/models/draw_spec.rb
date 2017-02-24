@@ -12,10 +12,11 @@ RSpec.describe Draw, type: :model do
   end
 
   describe '#suite_sizes' do
-    it 'returns an array of all the suite sizes in the draw' do
-      draw = FactoryGirl.build_stubbed(:draw)
+    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+    it 'returns an array of all the available suite sizes in the draw' do
       instance_spy('SuiteSizesQuery', call: [1, 2]).tap do |q|
-        allow(SuiteSizesQuery).to receive(:new).with(draw.suites).and_return(q)
+        allow(SuiteSizesQuery).to receive(:new).with(draw.suites.available)
+          .and_return(q)
       end
       expect(draw.suite_sizes).to match_array([1, 2])
     end
