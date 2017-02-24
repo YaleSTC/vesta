@@ -19,10 +19,17 @@ class Draw < ApplicationRecord
 
   enum status: %w(draft pre_lottery)
 
+  # Finds all available suite sizes within a draw
+  #
+  # @return [Array<Integer>] the available suite sizes
   def suite_sizes
-    SuiteSizesQuery.new(suites).call
+    SuiteSizesQuery.new(suites.available).call
   end
 
+  # Finds all suite sizes for which new groups can be created by removing
+  # locked_sizes from available sizes
+  #
+  # @return [Array<Integer>] the suite sizes for which new groups can be created
   def open_suite_sizes
     suite_sizes - locked_sizes
   end
