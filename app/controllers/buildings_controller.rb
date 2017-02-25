@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 # Controller for Buildings
 class BuildingsController < ApplicationController
-  prepend_before_action :set_building, only: %i(show edit update destroy)
+  prepend_before_action :set_building, except: %i(new create index)
 
   def show
+    @suite_importer = SuiteImportForm.new(building: @building)
     @suites = @building.suites
   end
 
