@@ -3,6 +3,7 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
   devise_for :users
   root to: 'application#home'
   resources :buildings
+  post 'suite_import/import', to: 'suite_imports#import', as: 'suite_import'
   resources :suites
   get 'suites/:id/merge', to: 'suites#merge', as: 'merge_suite'
   post 'suites/:id/merge', to: 'suites#perform_merge', as: 'perform_merge_suite'

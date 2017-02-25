@@ -9,6 +9,10 @@ class BuildingPolicy < ApplicationPolicy
     user.rep? || user.admin?
   end
 
+  def edit?
+    update?
+  end
+
   def index?
     user.rep? || user.admin?
   end

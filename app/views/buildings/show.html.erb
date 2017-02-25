@@ -5,5 +5,17 @@
     <li><%= link_to suite.number, suite_path(suite) %> - <%= pluralize(suite.size,'bed') %></li>
   <% end %>
 </ul>
+<h2>Import Suites</h2>
+<p>Add many suites at once by uploading a CSV file with the building information.
+The CSV must have the format "Number, Singles, Doubles" where Number is the 
+identifier of the suite, Singles is the number of single bedrooms in the suite,
+and Doubles is the number of double bedrooms in the suite.</p>
+<p>
+<%= simple_form_for @suite_importer, url: suite_import_path do |f| %>
+  <%= f.hidden_field :building_id, value: @building.id %>
+  <%= f.input :file, label: 'Upload a CSV', as: :file %>
+  <%= f.submit 'Import' %>
+<% end %>
+</p>
 <p><%= link_to 'Add suite', new_suite_path %></p>
 <p><%= link_to 'Delete', building_path(@building), method: :delete %></p>
