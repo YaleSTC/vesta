@@ -17,6 +17,7 @@ module Features
   # Capybara Config
   include Capybara::DSL
   Capybara.asset_host = 'http://0.0.0.0:3000'
+  Capybara.javascript_driver = :webkit
 end
 
 RSpec.configure do |config|
@@ -34,6 +35,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:deletion)
   end
   config.before(:each) { DatabaseCleaner.strategy = :transaction }
+  config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
   config.before(:each) { DatabaseCleaner.start }
   config.after(:each) { DatabaseCleaner.clean }
 end

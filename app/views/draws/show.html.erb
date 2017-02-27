@@ -31,6 +31,9 @@
 <% if policy(@draw).suite_summary? %>
   <p><%= link_to 'View suites', draw_suite_summary_path(@draw) %></p>
 <% end %>
+<% if policy(@draw).lottery? %>
+  <p><%= link_to 'Assign lottery numbers', draw_lottery_path(@draw) %></p>
+<% end %>
 <% if policy(@draw).activate? %>
   <p><%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch %></p>
 <% end %>

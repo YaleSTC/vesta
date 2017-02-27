@@ -62,6 +62,10 @@ class GroupPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def assign_lottery?
+    record.locked? && (user.admin? || user.rep?)
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

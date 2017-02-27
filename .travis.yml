@@ -16,7 +16,8 @@ notifications:
 
 script:
   - bundle exec rake check_style
-  - bundle exec rake
+  - xvfb-run -a bundle exec rake
+
 
 after_script:
   - bundle exec codeclimate-test-reporter

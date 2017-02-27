@@ -1,0 +1,6 @@
+<td class="group-name"><%= group.leader.full_name %></td>
+<td>
+  <%= simple_form_for group, url: assign_lottery_draw_group_path(group.draw, group), method: :patch, remote: :true do |f| %>
+    <%= f.input :lottery_number, input_html: { class: 'lottery_field autosubmitme' } %>
+  <% end %>
+</td>

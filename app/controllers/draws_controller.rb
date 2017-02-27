@@ -116,6 +116,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     result
   end
 
+  def lottery; end
+
   private
 
   def authorize!
@@ -151,7 +153,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def set_draw
-    @draw = Draw.find(params[:id])
+    @draw = Draw.includes(:suites).find(params[:id])
   end
 
   def calculate_metrics

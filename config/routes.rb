@@ -16,6 +16,9 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
 
   resources :draws do
     resources :groups do
+      member do
+        patch 'assign_lottery'
+      end
       post '/:id/request', to: 'groups#request_to_join', as: 'request'
       put '/:id/accept_request', to: 'groups#accept_request',
                                  as: 'accept_request'
@@ -41,6 +44,7 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
                             as: 'draw_student_summary'
   patch 'draws/:id/students', to: 'draws#students_update',
                               as: 'draw_students_update'
+  get 'draws/:id/lottery', to: 'draws#lottery', as: 'draw_lottery'
 
   resources :groups, controller: 'drawless_groups' do
     member do
