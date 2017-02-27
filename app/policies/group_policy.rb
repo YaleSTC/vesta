@@ -17,6 +17,10 @@ class GroupPolicy < ApplicationPolicy
     record.leader == user || user.admin?
   end
 
+  def advanced_edit?
+    user.admin?
+  end
+
   def destroy?
     edit?
   end

@@ -7,3 +7,6 @@
     <li class="group-member"><%= m.full_name %></li>
   <% end %>
 </ul>
+<% unless @group.transfers.zero? %>
+  <h2 class="transfers">Transfers: <%= @group.transfers %></h2>
+<% end %>

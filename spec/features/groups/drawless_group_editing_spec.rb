@@ -35,6 +35,14 @@ RSpec.feature 'Special group editing' do
   end
   # rubocop:enable RSpec/ExampleLength
 
+  it 'can modify the number of transfer students' do
+    group = FactoryGirl.create(:drawless_group, size: 2)
+    visit edit_group_path(group)
+    fill_in 'group_transfers', with: '1'
+    click_on 'Save'
+    expect(page).to have_css('.transfers', text: 'Transfers: 1')
+  end
+
   def update_group_size(new_size)
     select new_size, from: 'group_size'
     click_on 'Save'

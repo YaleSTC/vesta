@@ -44,8 +44,8 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def drawless_group_params
-    params.require(:group).permit(:size, :leader_id, :suite, member_ids: [],
-                                                             remove_ids: [])
+    params.require(:group).permit(:size, :leader_id, :suite, :transfers,
+                                  member_ids: [], remove_ids: [])
   end
 
   def set_group

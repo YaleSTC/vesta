@@ -1,9 +1,10 @@
 <div class="form-inputs">
   <%= f.input :size, collection: @suite_sizes %>
-  <% if current_user.admin? %>
+  <% if policy(@group).advanced_edit? %>
     <%= f.association :leader, label_method: :full_name, collection: @leader_students %>
     <%= f.input :remove_ids, label: 'Users to remove', collection: @group.removable_members, label_method: :full_name, as: :check_boxes unless @group.removable_members.empty? %>
     <%= f.input :member_ids, label: 'Users to add', label_method: :full_name, as: :check_boxes, collection: @students %>
+    <%= f.input :transfers, label: '# transfer students' %>
   <% end %>
 </div>
 

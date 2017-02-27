@@ -17,6 +17,8 @@ RSpec.describe Group, type: :model do
     it { is_expected.to have_many(:full_memberships) }
     it { is_expected.to have_many(:members).through(:full_memberships) }
     it { is_expected.not_to allow_value(-1).for(:memberships_count) }
+    it { is_expected.to validate_presence_of(:transfers) }
+    it { is_expected.not_to allow_value(-1).for(:transfers) }
   end
 
   describe 'size validations' do
@@ -49,6 +51,10 @@ RSpec.describe Group, type: :model do
       group.save
       expect(group.persisted?).to be_falsey
     end
+    it 'takes transfers into account' do
+      group = FactoryGirl.create(:open_group, size: 2, transfers: 1)
+      expect(group).to be_full
+    end
   end
 
   describe 'status validations' do
@@ -67,6 +73,11 @@ RSpec.describe Group, type: :model do
       group = FactoryGirl.build(:open_group)
       group.status = 'full'
       expect(group.valid?).to be_falsey
+    end
+    it 'takes transfers into account' do
+      group = FactoryGirl.create(:open_group, size: 2, transfers: 1)
+      group.status = 'open'
+      expect(group).not_to be_valid
     end
     it 'cannot be open when members match the size' do
       group = FactoryGirl.create(:full_group, size: 2)
