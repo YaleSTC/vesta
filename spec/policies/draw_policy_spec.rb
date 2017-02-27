@@ -120,6 +120,17 @@ RSpec.describe DrawPolicy do
         it { is_expected.not_to permit(user, draw) }
       end
     end
+
+    permissions :lottery? do
+      context 'draw is not in lottery phase' do
+        before { allow(draw).to receive(:lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw is in lottery phase' do
+        before { allow(draw).to receive(:lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
   end
 
   context 'admin' do
@@ -176,6 +187,17 @@ RSpec.describe DrawPolicy do
       context 'when draw is a draft' do
         before { allow(draw).to receive(:draft?).and_return(true) }
         it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :lottery? do
+      context 'draw is not in lottery phase' do
+        before { allow(draw).to receive(:lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw is in lottery phase' do
+        before { allow(draw).to receive(:lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
       end
     end
   end

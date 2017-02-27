@@ -17,3 +17,7 @@
 //= require_tree .
 
 $(function(){ $(document).foundation(); });
+
+$(document).on('change', '.autosubmitme', function() {
+  $(this).parents('form').submit();
+});

@@ -19,6 +19,7 @@ RSpec.describe Group, type: :model do
     it { is_expected.not_to allow_value(-1).for(:memberships_count) }
     it { is_expected.to validate_presence_of(:transfers) }
     it { is_expected.not_to allow_value(-1).for(:transfers) }
+    it { is_expected.to validate_numericality_of(:lottery_number) }
   end
 
   describe 'size validations' do

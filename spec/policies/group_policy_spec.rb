@@ -119,7 +119,7 @@ RSpec.describe GroupPolicy do
       before { allow(group).to receive(:full?).and_return(true) }
       it { is_expected.to permit(user, group) }
     end
-    permissions :lock?, :advanced_edit? do
+    permissions :lock?, :advanced_edit?, :assign_lottery? do
       it { is_expected.not_to permit(user, other_group) }
       it { is_expected.not_to permit(user, group) }
     end
@@ -240,6 +240,16 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, other_group) }
       end
     end
+    permissions :assign_lottery? do
+      context 'group is locked' do
+        before { allow(group).to receive(:locked?).and_return(true) }
+        it { is_expected.to permit(user, group) }
+      end
+      context 'group is not locked' do
+        before { allow(group).to receive(:locked?).and_return(false) }
+        it { is_expected.not_to permit(user, group) }
+      end
+    end
     permissions :lock?, :advanced_edit? do
       it { is_expected.not_to permit(user, other_group) }
       it { is_expected.not_to permit(user, group) }
@@ -262,6 +272,16 @@ RSpec.describe GroupPolicy do
     permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
                 :invite_to_join?, :lock?, :advanced_edit? do
       it { is_expected.to permit(user, group) }
+    end
+    permissions :assign_lottery? do
+      context 'group is locked' do
+        before { allow(group).to receive(:locked?).and_return(true) }
+        it { is_expected.to permit(user, group) }
+      end
+      context 'group is not locked' do
+        before { allow(group).to receive(:locked?).and_return(false) }
+        it { is_expected.not_to permit(user, group) }
+      end
     end
     permissions :request_to_join?, :finalize_membership? do
       it { is_expected.not_to permit(user, group) }

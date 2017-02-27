@@ -1,0 +1,5 @@
+$('#lottery-form-<%= @group.id %>').html('<%= escape_javascript(render partial: 'draws/lottery_form', locals: { group: @group }) %>');
+<% if @color_class %>
+  $('#lottery-form-<%= @group.id %>').removeClass();
+  $('#lottery-form-<%= @group.id %>').addClass('<%= @color_class %> lottery-form');
+<% end %>

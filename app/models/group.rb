@@ -11,6 +11,7 @@
 # @attr memberships_count [Integer] the number of accepted memberships (counter
 #   cache)
 # @attr transfers [Integer] the number of transfer students in the group
+# @attr lottery_number [Integer] the lottery number assigned to the group
 class Group < ApplicationRecord
   belongs_to :leader, class_name: 'User'
   belongs_to :draw
@@ -30,6 +31,7 @@ class Group < ApplicationRecord
   validates :transfers, presence: true,
                         numericality: { greater_than_or_equal_to: 0,
                                         only_integer: true }
+  validates :lottery_number, numericality: { allow_nil: true }
 
   validate :validate_suite_size_inclusion
   validate :validate_members_count, if: ->(g) { g.size.present? }
@@ -85,7 +87,7 @@ class Group < ApplicationRecord
   #
   # @return [Array<User>] the users who have locked their membership
   def locked_members
-    memberships.where(locked: true).map(&:user)
+    full_memberships.where(locked: true).map(&:user)
   end
 
   # Check if all members have locked their memberships
