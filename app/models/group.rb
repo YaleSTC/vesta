@@ -8,6 +8,9 @@
 # @attr leader [User] The student that represents the Group.
 # @attr members [Array<User>] The members of the group, excluding the leader.
 # @attr draw [Draw] The Draw that this Group is in.
+# @attr memberships_count [Integer] the number of accepted memberships (counter
+#   cache)
+# @attr transfers [Integer] the number of transfer students in the group
 class Group < ApplicationRecord
   belongs_to :leader, class_name: 'User'
   belongs_to :draw
@@ -23,8 +26,10 @@ class Group < ApplicationRecord
   validates :status, presence: true
   validates :size, presence: true
   validates :leader, presence: true, inclusion: { in: ->(g) { g.members } }
-  validates :memberships_count, presence: true,
-                                numericality: { greater_than_or_equal_to: 0 }
+  validates :memberships_count, numericality: { greater_than_or_equal_to: 0 }
+  validates :transfers, presence: true,
+                        numericality: { greater_than_or_equal_to: 0,
+                                        only_integer: true }
 
   validate :validate_suite_size_inclusion
   validate :validate_members_count, if: ->(g) { g.size.present? }
@@ -36,6 +41,9 @@ class Group < ApplicationRecord
 
   attr_reader :remove_ids
 
+  # Generate the group name
+  #
+  # @return [String] the group's name
   def name
     "#{leader.name}'s Group"
   end
@@ -43,9 +51,9 @@ class Group < ApplicationRecord
   # Updates the status to match the group size (open when fewer members than
   # the size, and full when they are the same)
   def update_status!
-    if memberships_count < size
+    if members_count < size
       update!(status: 'open')
-    elsif memberships_count == size
+    elsif members_count == size
       update!(status: 'full') if open?
       update!(status: 'locked') if lockable?
     end
@@ -84,10 +92,18 @@ class Group < ApplicationRecord
   #
   # @return [Boolean] true if the group can be locked
   def lockable?
-    (members - locked_members).empty? && memberships_count == size
+    (members - locked_members).empty? && members_count == size
   end
 
   private
+
+  # override default attribute getter to include transfers
+  def members_count
+    return 0 unless memberships_count || transfers
+    return memberships_count unless transfers
+    return transfers unless memberships_count
+    memberships_count + transfers
+  end
 
   def add_leader_to_members
     members << leader unless members.include? leader
@@ -107,7 +123,7 @@ class Group < ApplicationRecord
   end
 
   def validate_members_count
-    return unless memberships_count > size
+    return unless members_count > size
     errors.add :members, "can't be greater than the size (#{size})"
   end
 
@@ -124,12 +140,12 @@ class Group < ApplicationRecord
   end
 
   def validate_open
-    return unless memberships_count >= size
+    return unless members_count >= size
     errors.add :status, 'can only be open when fewer members than size'
   end
 
   def validate_not_open
-    return unless memberships_count != size
+    return unless members_count != size
     errors.add :status, "can only be #{status} when members equal size"
   end
 
