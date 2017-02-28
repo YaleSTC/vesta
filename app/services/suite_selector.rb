@@ -40,6 +40,8 @@ class SuiteSelector
   def valid?
     if group_already_has_suite
       errors << 'Group already has a suite assigned.'
+    elsif suite_id_missing
+      errors << 'You must pass a suite id.'
     elsif suite_does_not_exist
       errors << 'Suite does not exist.'
     elsif suite_already_assigned
@@ -52,12 +54,18 @@ class SuiteSelector
     group.suite.present?
   end
 
+  def suite_id_missing
+    suite_id.nil?
+  end
+
   def suite_does_not_exist
-    @suite ||= Suite.find_by(suite_id)
+    return unless suite_id.present?
+    @suite ||= Suite.find_by(id: suite_id.to_i)
     suite.nil?
   end
 
   def suite_already_assigned
+    return unless suite
     suite.group_id.present?
   end
 

@@ -7,4 +7,9 @@ module DrawlessGroupsHelper
     return available unless group.suite
     available.insert(0, group.suite)
   end
+
+  def suite_str(group)
+    return "Suite: #{group.suite.number}" if group.suite.present?
+    'Assign suite'
+  end
 end
