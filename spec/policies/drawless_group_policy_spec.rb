@@ -10,7 +10,7 @@ RSpec.describe DrawlessGroupPolicy do
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
     end
-    permissions :edit?, :update?, :destroy?, :select_suite? do
+    permissions :edit?, :update?, :destroy?, :select_suite?, :lock? do
       it { is_expected.not_to permit(user, group) }
     end
     context 'student not in group' do
@@ -33,7 +33,7 @@ RSpec.describe DrawlessGroupPolicy do
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
     end
-    permissions :edit?, :update?, :destroy?, :select_suite? do
+    permissions :edit?, :update?, :destroy?, :select_suite?, :lock? do
       it { is_expected.not_to permit(user, group) }
     end
     context 'student not in group' do
@@ -58,6 +58,18 @@ RSpec.describe DrawlessGroupPolicy do
     end
     permissions :show?, :edit?, :update?, :destroy? do
       it { is_expected.to permit(user, group) }
+    end
+    context 'full group' do
+      before { allow(group).to receive(:full?).and_return(true) }
+      permissions :lock? do
+        it { is_expected.to permit(user, group) }
+      end
+    end
+    context 'not full group' do
+      before { allow(group).to receive(:full?).and_return(false) }
+      permissions :lock? do
+        it { is_expected.not_to permit(user, group) }
+      end
     end
     context 'locked group' do
       before { allow(group).to receive(:locked?).and_return(true) }

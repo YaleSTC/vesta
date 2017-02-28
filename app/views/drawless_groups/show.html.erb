@@ -1,9 +1,19 @@
 <%= render partial: 'groups/group_details' %>
 <% if policy(DrawlessGroup.new(@group)).select_suite? %>
-  <h2>Assign Suite</h2>
-  <%= simple_form_for @group, url: select_suite_group_path(@group), method: :patch do |f| %>
-    <%= f.input :suite, collection: suite_collection(@group), label_method: :number, selected: @group.suite.try(:id) %>
-    <%= f.submit 'Assign suite' %>
+  <h2><%= suite_str(@group) %></h2>
+  <% if @group.suite %>
+    <%= simple_form_for @group, url: select_suite_group_path(@group), method: :patch do |f| %>
+      <%= f.input :suite, as: :hidden, input_html: { value: '' } %>
+      <%= f.submit 'Remove suite' %>
+    <% end %>
+  <% else %>
+    <%= simple_form_for @group, url: select_suite_group_path(@group), method: :patch do |f| %>
+      <%= f.input :suite, collection: suite_collection(@group), label_method: :number, selected: @group.suite.try(:id) %>
+      <%= f.submit 'Assign suite' %>
+    <% end %>
   <% end %>
+<% end %>
+<% if policy(@group).lock? %>
+  <%= link_to 'Lock Group', lock_group_path(@group), method: :put %>
 <% end %>
 <%= link_to 'Delete', group_path(@group), method: :delete %>

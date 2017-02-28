@@ -40,7 +40,11 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
   patch 'draws/:id/students', to: 'draws#students_update',
                               as: 'draw_students_update'
 
-  resources :groups, controller: 'drawless_groups'
+  resources :groups, controller: 'drawless_groups' do
+    member do
+      put 'lock'
+    end
+  end
   patch 'groups/:id/select_suite', to: 'drawless_groups#select_suite',
                                    as: 'select_suite_group'
 end
