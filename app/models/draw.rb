@@ -10,12 +10,14 @@
 #   strings; this prevents some unpleasantness with the helper methods.
 class Draw < ApplicationRecord
   has_many :groups
-  has_many :students, class_name: 'User'
+  has_many :students, class_name: 'User', dependent: :nullify
   has_many :draws_suites, dependent: :delete_all
   has_many :suites, through: :draws_suites
 
   validates :name, presence: true
   validates :status, presence: true
+
+  after_destroy :remove_old_draw_ids
 
   enum status: %w(draft pre_lottery)
 
@@ -67,5 +69,9 @@ class Draw < ApplicationRecord
   # @return [Integer] the number of beds in all available suites
   def bed_count
     @bed_count ||= suites.available.sum(:size)
+  end
+
+  def remove_old_draw_ids
+    User.where(old_draw_id: id).update_all(old_draw_id: nil)
   end
 end

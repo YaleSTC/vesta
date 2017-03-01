@@ -11,6 +11,21 @@ RSpec.describe Draw, type: :model do
     it { is_expected.to validate_presence_of(:status) }
   end
 
+  describe 'callbacks' do
+    it 'nullifies the draw_id field on users in the draw after destroy' do
+      draw = FactoryGirl.create(:draw_with_members)
+      students = draw.students
+      draw.destroy
+      expect(students.map(&:reload).map(&:draw_id).all?(&:nil?)).to be_truthy
+    end
+    it 'clears old_draw_id when necessary' do
+      draw = FactoryGirl.create(:draw)
+      student = FactoryGirl.create(:student, old_draw_id: draw.id)
+      draw.destroy
+      expect(student.reload.old_draw_id).to be_nil
+    end
+  end
+
   describe '#suite_sizes' do
     let(:draw) { FactoryGirl.build_stubbed(:draw) }
     it 'returns an array of all the available suite sizes in the draw' do
