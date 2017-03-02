@@ -11,8 +11,12 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
   post 'suites/:id/split', to: 'suites#perform_split', as: 'perform_split_suite'
   resources :rooms
   get 'users/build', to: 'users#build', as: 'build_user'
-  resources :users
-  get 'users/:id/intent', to: 'users#edit_intent', as: 'edit_intent_user'
+  resources :users do
+    member do
+      get 'intent', to: 'users#edit_intent', as: 'edit_intent'
+      patch 'intent', to: 'users#update_intent', as: 'update_intent'
+    end
+  end
   resources :enrollments, only: %i(new create)
 
   resources :draws do

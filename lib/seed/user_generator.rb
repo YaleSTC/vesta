@@ -27,7 +27,6 @@ class UserGenerator
     @params ||= { first_name: FFaker::Name.first_name,
                   last_name: FFaker::Name.last_name,
                   email: FFaker::Internet.email,
-                  gender: User.genders.keys.sample,
                   role: 'student',
                   intent: User.intents.keys.sample,
                   password: 'passw0rd',

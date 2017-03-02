@@ -1,5 +1,5 @@
 <h1> Declare Housing Intent </h1>
-<%= simple_form_for @user do |f| %>
+<%= simple_form_for @user, url: update_intent_user_path(@user) do |f| %>
   <%= f.input :intent, collection: User.intents.keys %>
   <%= f.submit 'Submit Intent' %>
 <% end %>

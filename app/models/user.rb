@@ -14,8 +14,6 @@
 # @attr last_name [String] the user's last name (required)
 # @attr intent [Integer] an enum for the user's housing intent, on_campus,
 #   off_campus, or undeclared (required)
-# @attr gender [Integer] an enum for the user's gender, male, female, or
-#   undeclared (required)
 # @attr class_year [Integer] the graduating class year of the student (optional)
 # @attr college [String] a string describing the residential college to which
 #   the user belongs (optional)
@@ -50,11 +48,9 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :intent, presence: true
-  validates :gender, presence: true
 
   enum role: %w(student admin rep)
   enum intent: %w(undeclared on_campus off_campus)
-  enum gender: %w(non-binary female male)
 
   before_save :downcase_username, if: :cas_auth?
 

@@ -37,7 +37,7 @@ class IDRProfileQuerier
 
   CONFIG_PARAM_HEADER = 'PROFILE_REQUEST_'
   PROFILE_FIELDS =
-    %i(first_name last_name email gender class_year college).freeze
+    %i(first_name last_name email class_year college).freeze
   REQUIRED_CONFIG_PARAMS =
     (%w(URL QUERY_PARAM) + PROFILE_FIELDS.map { |f| f.to_s.upcase }).freeze
 
@@ -91,17 +91,10 @@ class IDRProfileQuerier
     PROFILE_FIELDS.each do |field|
       attr_hash.store(field, extract_data(xml, field))
     end
-    map_gender_to_enum_vals
   end
 
   def extract_data(xml, field_key)
     tag = env(config_var(field_key.to_s.upcase))
     xml.at_xpath("//#{tag}").try(:content)
-  end
-
-  def map_gender_to_enum_vals
-    gender_map = { 'F' => 'female', 'M' => 'male', 'N' => 'undeclared',
-                   'NULL' => 'undeclared' }
-    attr_hash[:gender] = gender_map[attr_hash[:gender]]
   end
 end

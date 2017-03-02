@@ -2,12 +2,12 @@
 require 'rails_helper'
 
 RSpec.feature 'User Editing' do
-  let(:user) { FactoryGirl.create(:student, gender: 'non-binary') }
-  before { log_in user }
-  it 'can update gender' do
+  let(:user) { FactoryGirl.create(:student) }
+  before { log_in FactoryGirl.create(:admin) }
+  it 'can update role' do
     visit edit_user_path(user)
-    select('male', from: 'user_gender')
+    select('rep', from: 'user_role')
     click_on 'Save'
-    expect(page).to have_css('.user-gender', text: 'male')
+    expect(page).to have_css('.user-role', text: 'rep')
   end
 end
