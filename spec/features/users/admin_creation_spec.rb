@@ -6,8 +6,7 @@ RSpec.feature 'Admin creation' do
   it 'can be performed by other admins' do
     visit build_user_path
     submit_username('foo@example.com')
-    submit_profile_data(first_name: 'John', last_name: 'Smith', role: 'admin',
-                        gender: 'male')
+    submit_profile_data(first_name: 'John', last_name: 'Smith', role: 'admin')
     expect(page).to have_content('User John Smith created.')
   end
 
@@ -16,10 +15,9 @@ RSpec.feature 'Admin creation' do
     click_on 'Continue'
   end
 
-  def submit_profile_data(first_name:, last_name:, role:, gender:)
+  def submit_profile_data(first_name:, last_name:, role:)
     fill_in 'user_first_name', with: first_name
     fill_in 'user_last_name', with: last_name
-    select gender, from: 'user_gender'
     select role, from: 'user_role'
     click_on 'Create'
   end

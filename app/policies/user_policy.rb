@@ -10,7 +10,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def edit?
-    show?
+    user.admin?
   end
 
   def edit_intent?

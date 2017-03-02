@@ -98,7 +98,7 @@ RSpec.describe UserCreator do
 
   def valid_params
     {
-      first_name: 'John', last_name: 'Smith', gender: 'male', role: 'admin',
+      first_name: 'John', last_name: 'Smith', role: 'admin',
       email: 'john@smith.com', username: 'foo'
     }
   end

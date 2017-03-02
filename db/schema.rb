@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170227054544) do
+ActiveRecord::Schema.define(version: 20170302225344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,7 +115,6 @@ ActiveRecord::Schema.define(version: 20170227054544) do
     t.string   "last_name",                           null: false
     t.integer  "draw_id"
     t.integer  "intent",                 default: 0,  null: false
-    t.integer  "gender",                 default: 0,  null: false
     t.string   "username"
     t.integer  "class_year"
     t.string   "college"

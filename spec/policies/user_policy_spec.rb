@@ -7,8 +7,11 @@ RSpec.describe UserPolicy do
 
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
-    permissions :show?, :update?, :edit? do
+    permissions :show? do
       it { is_expected.to permit(user, user) }
+    end
+    permissions :edit?, :update? do
+      it { is_expected.not_to permit(user, user) }
     end
     context 'draw in pre-lottery status' do
       before do
@@ -39,8 +42,11 @@ RSpec.describe UserPolicy do
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :show?, :update?, :edit? do
+    permissions :show? do
       it { is_expected.to permit(user, user) }
+    end
+    permissions :edit?, :update? do
+      it { is_expected.not_to permit(user, user) }
     end
     context 'draw in pre-lottery status' do
       before do

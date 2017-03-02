@@ -5,7 +5,6 @@ FactoryGirl.define do
     password { 'passw0rd' }
     sequence(:first_name) { |n| "First_#{n}" }
     last_name { 'Last' }
-    gender { 'non-binary' }
     role { 'student' }
     intent { 'on_campus' }
 

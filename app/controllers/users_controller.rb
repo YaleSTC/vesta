@@ -36,6 +36,10 @@ class UsersController < ApplicationController
 
   def edit_intent; end
 
+  def update_intent
+    update
+  end
+
   private
 
   def authorize!
