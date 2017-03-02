@@ -42,7 +42,7 @@ RSpec.describe DrawPolicy do
         it { is_expected.to permit(user, draw) }
       end
     end
-    permissions :oversub_report? do
+    permissions :oversub_report?, :group_report? do
       context 'when draw is not a draft' do
         before { allow(draw).to receive(:draft?).and_return(false) }
         context 'when draw has suites' do
@@ -100,7 +100,7 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :oversub_report? do
+    permissions :oversub_report?, :group_report? do
       context 'when draw is not a draft' do
         before { allow(draw).to receive(:draft?).and_return(false) }
         context 'when draw has suites' do
@@ -169,7 +169,7 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :oversub_report? do
+    permissions :oversub_report?, :group_report? do
       context 'when draw is not a draft' do
         before { allow(draw).to receive(:draft?).and_return(false) }
         context 'when draw has suites' do

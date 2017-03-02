@@ -48,6 +48,7 @@ RSpec.describe 'draws/show.html.erb' do
   def mock_assigns(draw:)
     assign(:draw, draw)
     assign(:intent_metrics, {})
+    assign(:groups_by_size, {})
   end
 
   def mock_user_and_policy(draw:, **stubs)

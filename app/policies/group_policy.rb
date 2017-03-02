@@ -14,7 +14,8 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def edit?
-    record.leader == user || user.admin?
+    (record.leader == user && group_can_be_edited_by_leader?(record)) ||
+      user.admin?
   end
 
   def advanced_edit?
@@ -70,5 +71,11 @@ class GroupPolicy < ApplicationPolicy
     def resolve
       scope
     end
+  end
+
+  private
+
+  def group_can_be_edited_by_leader?(group)
+    !group.finalizing? && !group.locked?
   end
 end

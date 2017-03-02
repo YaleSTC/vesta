@@ -1,4 +1,4 @@
-<h2>Draw Summary</h2>
+<h3>Draw Summary</h3>
 <table>
   <thead>
     <tr>
@@ -12,7 +12,7 @@
   <tbody>
     <% @suite_sizes.each do |size| %>
       <tr class="<%= diff_class(@diff[size])%>">
-        <td data-role="suite-size"><%= size %></td>
+        <td data-role="suite-size"><%= size_str(size).capitalize.pluralize %></td>
         <td data-role="suite-count"><%= @suite_counts[size] %></td>
         <td data-role="group-count"><%= @group_counts[size] %></td>
         <td data-role="locked-count"><%= @locked_counts[size] %></td>

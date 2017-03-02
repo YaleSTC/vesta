@@ -153,11 +153,12 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def set_draw
-    @draw = Draw.includes(:suites).find(params[:id])
+    @draw = Draw.includes(:groups, :suites).find(params[:id])
   end
 
   def calculate_metrics
     calculate_intent_metrics
+    calculate_group_metrics
     calculate_oversub_metrics
   end
 
@@ -166,13 +167,22 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     @intent_metrics = IntentMetricsQuery.call(@draw)
   end
 
+  def calculate_group_metrics
+    @suite_sizes = SuiteSizesQuery.new(@draw.suites.available).call
+    empty_groups_hash = @suite_sizes.map { |s| [s, []] }.to_h
+    @groups = @draw.groups.includes(:leader)
+    @groups_by_size =
+      empty_groups_hash.merge(@groups.sort_by { |g| Group.statuses[g.status] }
+                                     .group_by(&:size))
+  end
+
   def calculate_oversub_metrics # rubocop:disable AbcSize
     return unless policy(@draw).oversub_report?
-    @suite_sizes = SuiteSizesQuery.new(@draw.suites.available).call
     @suite_counts = @draw.suites.available.group(:size).count
     zeroed_group_hash = @suite_sizes.map { |s| [s, 0] }.to_h
-    @group_counts = zeroed_group_hash.merge(@draw.groups.group(:size).count)
-    @locked_counts = @draw.groups.where(status: 'locked').group(:size).count
+    @group_counts = zeroed_group_hash.merge(@groups.group(:size).count)
+    @locked_counts = zeroed_group_hash.merge(@groups.where(status: 'locked')
+                                                    .group(:size).count)
     @diff = @suite_sizes.map do |size|
       [size, @suite_counts[size] - @group_counts[size]]
     end.to_h

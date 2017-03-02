@@ -7,3 +7,17 @@
   .negative { background-color: lighten($alert-color, 53%); }
   .zero { background-color: lighten($warning-color, 53%); }
 }
+
+.group-report {
+  td[data-role="group-leader"] {
+    width: 40%;
+  }
+  td[data-role="group-status"] {
+    width: 20%;
+  }
+  td[data-role="group-actions"] {
+    width: 40%;
+    text-align: center;
+    a.button { margin: 0 }
+  }
+}

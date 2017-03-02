@@ -1,7 +1,7 @@
 <h1 class="draw-name"><%= @draw.name %></h1>
 <% if policy(@draw).intent_summary? %>
   <div class="intent-metrics">
-    <h2>Intent Metrics</h2>
+    <h3>Intent Metrics</h3>
     <table>
       <tbody>
         <% @intent_metrics.each do |intent_value, count| %>
@@ -23,6 +23,11 @@
 <% if policy(@draw).oversub_report? %>
   <div class="oversub-report">
     <%= render 'oversub_report' %>
+  </div>
+<% end %>
+<% if policy(@draw).group_report? %>
+  <div class="group-report">
+    <%= render 'group_report' %>
   </div>
 <% end %>
 <% if policy(@draw).student_summary? %>
