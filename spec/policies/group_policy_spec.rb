@@ -53,8 +53,30 @@ RSpec.describe GroupPolicy do
     end
     permissions :destroy?, :edit?, :update?, :accept_request?,
                 :invite_to_join?, :edit_invitations? do
-      it { is_expected.to permit(user, group) }
-      it { is_expected.not_to permit(user, other_group) }
+      context 'not finalizing or locked' do
+        before do
+          allow(group).to receive(:finalizing?).and_return(false)
+          allow(group).to receive(:locked?).and_return(false)
+        end
+        it { is_expected.to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'finalizing' do
+        before do
+          allow(group).to receive(:finalizing?).and_return(true)
+          allow(group).to receive(:locked?).and_return(false)
+        end
+        it { is_expected.not_to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'locked' do
+        before do
+          allow(group).to receive(:finalizing?).and_return(false)
+          allow(group).to receive(:locked?).and_return(true)
+        end
+        it { is_expected.not_to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
     end
     permissions :request_to_join? do
       context 'in same draw as record, not in group' do
@@ -158,8 +180,30 @@ RSpec.describe GroupPolicy do
     end
     permissions :destroy?, :edit?, :update?, :accept_request?,
                 :invite_to_join?, :edit_invitations? do
-      it { is_expected.to permit(user, group) }
-      it { is_expected.not_to permit(user, other_group) }
+      context 'not finalizing or locked' do
+        before do
+          allow(group).to receive(:finalizing?).and_return(false)
+          allow(group).to receive(:locked?).and_return(false)
+        end
+        it { is_expected.to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'finalizing' do
+        before do
+          allow(group).to receive(:finalizing?).and_return(true)
+          allow(group).to receive(:locked?).and_return(false)
+        end
+        it { is_expected.not_to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'locked' do
+        before do
+          allow(group).to receive(:finalizing?).and_return(false)
+          allow(group).to receive(:locked?).and_return(true)
+        end
+        it { is_expected.not_to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
     end
     permissions :request_to_join? do
       context 'in same draw as record, not in group' do
