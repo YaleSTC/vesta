@@ -1,26 +1,63 @@
 <%= render 'group_details' %>
-<% if policy(@group).accept_request? %>
-  <h2>Membership Requests</h2>
-  <% @group.requests.each do |u| %>
-    <%= link_to "Accept #{u.full_name}", draw_group_accept_request_path(@draw, @group, params: { 'user_id' => u.id }), method: :put %>
+<% if policy(@group).view_pending_members? %>
+  <% unless @group.requests.empty? %>
+    <h3 class="group-requests">Requests:</h3>
+    <ul>
+      <% @group.requests.each do |r| %>
+        <li class="group-request">
+          <%= r.full_name %>
+          <% if policy(@group).accept_request? %>
+            (<%= link_to 'accept', draw_group_accept_request_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %>)
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+  <% unless @group.invitations.empty? %>
+    <h3 class="group-invitations">Invitations:</h3>
+    <ul>
+      <% @group.invitations.each do |i| %>
+        <li class="group-invitation"><%= i.full_name %></li>
+      <% end %>
+    </ul>
   <% end %>
 <% end %>
-<% if policy(@group).request_to_join? %>
-  <%= link_to 'Request To Join', draw_group_request_path(@draw, @group), method: :post %>
+<div style="border-top: 1px solid #DDDDDD;">
+  <br />
+  <%= link_to 'Edit', edit_draw_group_path(@draw, @group), class: 'button secondary' if policy(@group).edit? %>
+  <%= link_to 'Request To Join', draw_group_request_path(@draw, @group), method: :post, class: 'button secondary' if policy(@group).request_to_join? %>
+  <%= link_to 'Invite Members', draw_group_invite_path(@draw, @group), class: 'button secondary' if policy(@group).invite_to_join? %>
+  <%= link_to 'Accept Invitation', draw_group_accept_invitation_path(@draw, @group), method: :put, class: 'button' if policy(@group).accept_invitation? %>
+  <%= link_to 'Lock Group', draw_group_lock_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
+  <%= link_to 'Finalize Group', draw_group_finalize_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize? %>
+  <%= link_to 'Finalize Membership', draw_group_finalize_membership_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize_membership? %>
+  <%= link_to('Disband', draw_group_path(@draw, @group), method: :delete, class: 'button alert') if policy(@group).destroy? %>
+</div>
+<%= link_to 'Return to draw', draw_path(@draw) %>
+
+<% content_for :sidebar do %>
+  <h3><%= @same_size_groups_count %> <%= 'group'.pluralize(@same_size_groups_count) %> of size <%= @group.size %></h3>
+  <h3><%= @compatible_suites.count %> available <%= size_str(@group.size).capitalize.pluralize(@compatible_suites.count) %></h3>
+  <% unless @compatible_suites.count.zero? %>
+    <table>
+      <thead>
+        <tr>
+          <td>Suite #</td>
+          <td>S</td>
+          <td>D</td>
+          <td>C</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @compatible_suites.each do |suite| %>
+          <tr>
+            <td><%= link_to suite.number, suite_path(suite) %></td>
+            <td><%= suite.singles.count %></td>
+            <td><%= suite.doubles.count %></td>
+            <td><%= suite.common_rooms.count %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 <% end %>
-<% if policy(@group).invite_to_join? %>
-  <%= link_to 'Invite Members', draw_group_invite_path(@draw, @group) %>
-<% end %>
-<% if policy(@group).accept_invitation? %>
-  <%= link_to 'Accept Invitation', draw_group_accept_invitation_path(@draw, @group), method: :put %>
-<% end %>
-<% if policy(@group).lock? %>
-  <%= link_to 'Lock Group', draw_group_lock_path(@draw, @group), method: :put %>
-<% end %>
-<% if policy(@group).finalize? %>
-  <%= link_to 'Finalize Group', draw_group_finalize_path(@draw, @group), method: :put %>
-<% end %>
-<% if policy(@group).finalize_membership? %>
-  <%= link_to 'Finalize Membership', draw_group_finalize_membership_path(@draw, @group), method: :put %>
-<% end %>
-<%= link_to('Delete', draw_group_path(@draw, @group), method: :delete) if policy(@group).destroy? %>

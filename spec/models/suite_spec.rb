@@ -111,4 +111,32 @@ RSpec.describe Suite, type: :model do
       expect(suite).not_to be_available
     end
   end
+
+  describe 'room helpers' do
+    let(:suite) { FactoryGirl.create(:suite) }
+    let(:single) { FactoryGirl.create(:single) }
+    let(:double) { FactoryGirl.create(:double) }
+    let(:common) { FactoryGirl.create(:room, beds: 0) }
+    before do
+      suite.rooms << single
+      suite.rooms << double
+      suite.rooms << common
+    end
+
+    describe '#singles' do
+      it 'returns all of the single rooms belonging to the suite' do
+        expect(suite.singles).to eq([single])
+      end
+    end
+    describe '#doubles' do
+      it 'returns all of the double rooms belonging to the suite' do
+        expect(suite.doubles).to eq([double])
+      end
+    end
+    describe '#common_rooms' do
+      it 'returns all of the common rooms belonging to the suite' do
+        expect(suite.common_rooms).to eq([common])
+      end
+    end
+  end
 end

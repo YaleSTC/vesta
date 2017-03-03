@@ -1,12 +1,12 @@
-<h1 class="group-name"><%= @group.name %></h1>
-<h2 class="group-size">Size: <%= @group.size %></h2>
-<h2 class="group-status">Status: <%= @group.status %></h2>
-<h2 class="group-members">Members:</h2>
+<h2 class="group-name"><%= @group.name %></h2>
+<h3 class="group-size">Size: <%= @group.size %></h3>
+<h3 class="group-status">Status: <%= @group.status %></h3>
+<h3 class="group-members">Members:</h3>
 <ul>
   <% @group.members.each do |m| %>
-    <li class="group-member"><%= m.full_name %></li>
+    <li class="group-member"><%= member_str(m, @group) %></li>
   <% end %>
 </ul>
 <% unless @group.transfers.zero? %>
-  <h2 class="transfers">Transfers: <%= @group.transfers %></h2>
+  <h3 class="transfers">Transfers: <%= @group.transfers %></h3>
 <% end %>

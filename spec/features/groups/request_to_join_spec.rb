@@ -29,7 +29,7 @@ RSpec.feature 'Students Joining Groups' do
       Membership.create(group: group, user: user, status: 'requested')
       log_in group.leader
       visit draw_group_path(group.draw, group)
-      click_on "Accept #{user.full_name}"
+      click_on 'accept'
       expect(page).to have_content("#{user.full_name} joined group")
     end
   end
