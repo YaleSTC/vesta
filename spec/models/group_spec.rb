@@ -104,10 +104,17 @@ RSpec.describe Group, type: :model do
 
   describe '#name' do
     it "includes the leader's name" do
-      leader = instance_spy('User', name: 'Name')
+      leader = instance_spy('User', full_name: 'First Last')
       group = FactoryGirl.build_stubbed(:group)
       allow(group).to receive(:leader).and_return(leader)
-      expect(group.name).to include(leader.name)
+      expect(group.name).to include(leader.full_name)
+    end
+
+    it "includes the leader's class year" do
+      leader = instance_spy('User', full_name: 'First Last', class_year: 2017)
+      group = FactoryGirl.build_stubbed(:group)
+      allow(group).to receive(:leader).and_return(leader)
+      expect(group.name).to include(leader.class_year.to_s)
     end
   end
 
