@@ -1,8 +1,26 @@
 <h1 class="suite-number"><%= @suite.number %></h1>
-<h2>Rooms</h2>
+<ul>
+  <li>Status:
+    <% if @suite.available? %>
+      Available
+    <% else %>
+      Unavailable (Assigned to <%= link_to @group.name, group_path(@group) %>)
+    <% end %>
+  </li>
+  <li>Size: <%= size_str(@suite.size).capitalize %></li>
+  <li>Building: <%= link_to @building.name, building_path(@building) %></li>
+  <li>Draws:
+    <% if @draws.empty? %>
+      None
+    <% else %>
+      <%= @draws.map { |draw| link_to draw.name, draw_path(draw)}.join(', ').html_safe %>
+    <% end %>
+  </li>
+</ul>
+<h3>Rooms</h3>
 <ul>
   <% @rooms.each do |room| %>
-    <li><%= link_to room.number, room_path(room) %> - <%= pluralize(room.beds, 'bed') %></li>
+    <li><%= link_to room.number, room_path(room) %> (<%= room.type.capitalize %>)</li>
   <% end %>
 </ul>
 <p><%= link_to 'Add room', new_room_path %></p>
@@ -20,4 +38,3 @@
   <p><%= link_to 'Split suite', split_suite_path(@suite) %></p>
 <% end %>
 <p><%= link_to 'Delete', suite_path(@suite), method: :delete %></p>
-

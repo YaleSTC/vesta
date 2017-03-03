@@ -13,7 +13,7 @@
 class Suite < ApplicationRecord
   SIZE_STRS = { 1 => 'single', 2 => 'double', 3 => 'triple', 4 => 'quad',
                 5 => 'quint', 6 => 'sextet', 7 => 'septet',
-                8 => 'octet' }.freeze
+                8 => 'octet', 0 => 'empty' }.freeze
   belongs_to :building
   belongs_to :group
   has_many :rooms, dependent: :nullify
@@ -32,7 +32,7 @@ class Suite < ApplicationRecord
   # @param size [Integer] the suite size
   # @return [String] the equivalnet string
   def self.size_str(size)
-    raise ArgumentError unless size.is_a?(Integer) && size.positive?
+    raise ArgumentError unless size.is_a?(Integer) && size >= 0
     return SIZE_STRS[size] if SIZE_STRS.key? size
     "#{size}-Pack"
   end
