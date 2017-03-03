@@ -1,0 +1,6 @@
+<h1>Special Groups</h1>
+<div class="group-report">
+  <%= render 'draws/group_report', sizes: @sizes, groups: @groups_by_size,
+    actions_partial: 'drawless_groups/actions'  %>
+</div>
+<%= link_to 'New Special Group', new_group_path, class: 'button secondary' %>

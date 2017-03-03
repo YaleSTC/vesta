@@ -5,7 +5,18 @@ class DrawlessGroupsController < ApplicationController
   prepend_before_action :set_group, except: %i(new create index)
   before_action :set_form_data, only: %i(new edit)
 
-  def show; end
+  def show
+    @compatible_suites = Suite.available.where(size: @group.size)
+    @compatible_suites_no_draw = @compatible_suites.where(draw_id: [])
+    @compatible_suites_in_draw = @compatible_suites - @compatible_suites_no_draw
+
+    render layout: 'application_with_sidebar'
+  end
+
+  def index
+    @groups_by_size = Group.where(draw_id: nil).order(:size).group_by(&:size)
+    @sizes = @groups_by_size.keys
+  end
 
   def new; end
 
