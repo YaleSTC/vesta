@@ -31,21 +31,26 @@
     <%= render 'group_report', sizes: @suite_sizes, groups: @groups_by_size, actions_partial: 'groups/actions' %>
   </div>
 <% end %>
-<% if policy(@draw).student_summary? %>
-  <p><%= link_to 'View students', draw_student_summary_path(@draw) %></p>
-<% end %>
-<% if policy(@draw).suite_summary? %>
-  <p><%= link_to 'View suites', draw_suite_summary_path(@draw) %></p>
-<% end %>
-<% if policy(@draw).lottery? %>
-  <p><%= link_to 'Assign lottery numbers', draw_lottery_path(@draw) %></p>
-<% end %>
-<% if policy(@draw).activate? %>
-  <p><%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch %></p>
-<% end %>
-<% if policy(@draw).update? %>
-  <p><%= link_to 'Add group to draw', new_draw_group_path(@draw) %></p>
-<% end %>
-<% if policy(@draw).destroy? %>
-  <p><%= link_to 'Delete', draw_path(@draw), method: :delete %></p>
-<% end %>
+<div>
+  <% if policy(@draw).student_summary? %>
+    <%= link_to 'View students', draw_student_summary_path(@draw), class: 'button secondary' %>
+  <% end %>
+  <% if policy(@draw).suite_summary? %>
+    <%= link_to 'View suites', draw_suite_summary_path(@draw), class: 'button secondary' %>
+  <% end %>
+  <% if policy(@draw).activate? %>
+    <%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch, class: 'button' %>
+  <% end %>
+  <% if policy(@draw).start_lottery? %>
+    <%= link_to 'Proceed to lottery', start_lottery_draw_path(@draw), method: :patch, class: 'button' %>
+  <% end %>
+  <% if policy(@draw).lottery? %>
+    <%= link_to 'Assign lottery numbers', draw_lottery_path(@draw), class: 'button secondary' %>
+  <% end %>
+  <% if policy(@draw).update? %>
+    <%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %>
+  <% end %>
+  <% if policy(@draw).destroy? %>
+    <%= link_to 'Delete', draw_path(@draw), method: :delete, class: 'button alert' %>
+  <% end %>
+</div>

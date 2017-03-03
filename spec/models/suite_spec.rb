@@ -139,4 +139,36 @@ RSpec.describe Suite, type: :model do
       end
     end
   end
+
+  describe '#selectable?' do
+    it "returns true if the suite isn't selectable in another draw" do
+      suite = FactoryGirl.build_stubbed(:suite)
+      allow(suite).to receive(:draws)
+        .and_return(mock_draws(%i(pre_lottery? draft?)))
+      expect(suite).to be_selectable
+    end
+
+    it "returns false if one of the suite's draws is in the lottery phase" do
+      suite = FactoryGirl.build_stubbed(:suite)
+      allow(suite).to receive(:draws)
+        .and_return(mock_draws(%i(pre_lottery? draft? lottery?)))
+      expect(suite).not_to be_selectable
+    end
+
+    it 'returns false if a draw is in the suite_selection phase' do
+      suite = FactoryGirl.build_stubbed(:suite)
+      allow(suite).to receive(:draws)
+        .and_return(mock_draws(%i(pre_lottery? draft? suite_selection?)))
+      expect(suite).not_to be_selectable
+    end
+
+    def mock_draws(statuses)
+      default_statuses = { draft?: false, pre_lottery?: false, lottery?: false,
+                           suite_selection?: false }
+      statuses.map do |s|
+        status_hash = default_statuses.merge(s => true)
+        instance_spy('draw', **status_hash)
+      end
+    end
+  end
 end

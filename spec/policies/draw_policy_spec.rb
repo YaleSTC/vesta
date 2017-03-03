@@ -157,6 +157,18 @@ RSpec.describe DrawPolicy do
       end
     end
 
+    permissions :start_lottery? do
+      context 'when draw is pre_lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
     permissions :intent_summary? do
       context 'when draw is a draft' do
         before { allow(draw).to receive(:draft?).and_return(true) }
