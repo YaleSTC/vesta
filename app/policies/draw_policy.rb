@@ -54,6 +54,10 @@ class DrawPolicy < ApplicationPolicy
     oversub_report?
   end
 
+  def start_lottery?
+    edit? && record.pre_lottery?
+  end
+
   def lottery?
     record.lottery? && (user.admin? || user.rep?)
   end

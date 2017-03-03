@@ -61,6 +61,20 @@ RSpec.describe Draw, type: :model do
     end
   end
 
+  describe '#groups?' do
+    it 'returns true if the group_count is greater than zero' do
+      draw = FactoryGirl.build_stubbed(:draw)
+      allow(draw).to receive(:group_count).and_return(1)
+      expect(draw.groups?).to be_truthy
+    end
+
+    it 'returns false if the group_count is zero' do
+      draw = FactoryGirl.build_stubbed(:draw)
+      allow(draw).to receive(:group_count).and_return(0)
+      expect(draw.groups?).to be_falsey
+    end
+  end
+
   describe '#enough_beds?' do
     it 'returns true if bed_count >= student_count' do
       draw = FactoryGirl.build_stubbed(:draw)
@@ -101,5 +115,37 @@ RSpec.describe Draw, type: :model do
       draw = FactoryGirl.create(:draw, suites: [available, taken])
       expect(draw.available_suites).to eq([available])
     end
+  end
+
+  describe '#ungrouped_students' do
+    it 'returns true if there are students in the draw not in a group' do
+      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
+      FactoryGirl.create(:group, leader: draw.students.first)
+      expect(draw.ungrouped_students?).to be_truthy
+    end
+    it 'returns false if there are no students in the draw not in a group' do
+      draw = FactoryGirl.create(:draw_with_members, students_count: 1)
+      FactoryGirl.create(:group, leader: draw.students.first)
+      expect(draw.ungrouped_students?).to be_falsey
+    end
+  end
+
+  describe '#all_groups_locked?' do
+    it 'returns true if all groups in the draw are locked' do
+      draw = FactoryGirl.create(:draw_with_members, students_count: 1)
+      FactoryGirl.create(:locked_group, leader: draw.students.first)
+      expect(draw.all_groups_locked?).to be_truthy
+    end
+    it 'returns false if not all groups in the draw are locked' do
+      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
+      FactoryGirl.create(:locked_group, leader: draw.students.first)
+      FactoryGirl.create(:full_group, leader: draw.students.second)
+      expect(draw.all_groups_locked?).to be_falsey
+    end
+  end
+
+  describe '#no_contested_suites?' do
+    xit 'returns true if there are no suites contested in other draws'
+    xit 'returns false if there are any suites contested in other draws'
   end
 end

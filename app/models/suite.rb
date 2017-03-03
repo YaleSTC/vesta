@@ -80,4 +80,12 @@ class Suite < ApplicationRecord
   def common_rooms
     rooms.where(beds: 0)
   end
+
+  # Return whether or not a suite can be selected in a new draw (e.g. it is not
+  # currently in any draw that is in the lottery or suite_selection phase)
+  #
+  # @return [Boolean] whether or not the suite is selectable
+  def selectable?
+    draws.all? { |draw| !(draw.lottery? || draw.suite_selection?) }
+  end
 end

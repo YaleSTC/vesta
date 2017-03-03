@@ -20,6 +20,9 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
   resources :enrollments, only: %i(new create)
 
   resources :draws do
+    member do
+      patch 'start_lottery'
+    end
     resources :groups do
       member do
         patch 'assign_lottery'
