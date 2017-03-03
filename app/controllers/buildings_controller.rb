@@ -5,7 +5,7 @@ class BuildingsController < ApplicationController
 
   def show
     @suite_importer = SuiteImportForm.new(building: @building)
-    @suites = @building.suites
+    @suites = @building.suites.order(:size).group_by(&:size)
   end
 
   def new
@@ -14,6 +14,7 @@ class BuildingsController < ApplicationController
 
   def index
     @buildings = Building.all
+    @suites_by_size = @buildings.map { |b| [b.id, b.suites_by_size] }.to_h
   end
 
   def create

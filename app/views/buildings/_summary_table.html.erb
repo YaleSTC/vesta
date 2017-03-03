@@ -1,0 +1,26 @@
+<h3><%= building.name %></h3>
+<table class="building-summary">
+  <thead>
+    <tr>
+      <td>Suite Size</td>
+      <td># Suites</td>
+      <td># Suites Assigned</td>
+      <td># Suites in Draws</td>
+      <td># Suites not in a Draw</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @suites_by_size[building.id].each do |size, suites| %>
+      <tr>
+        <td data-role="suite-size"><%= size_str(size).capitalize.pluralize %></td>
+        <td data-role="suite-count"><%= suites.count %></td>
+        <td data-role="assigned-count"><%= suites.reject { |s| s.group_id.nil? }.count %></td>
+        <td data-role="draws-count"><%= suites.reject { |s| s.draws.present? }.count %></td>
+        <td data-role="not-draw-count"><%= suites.reject { |s| s.draws.empty? }.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= link_to 'View', building_path(building), class: 'button secondary' %>
+<%= link_to 'Edit', edit_building_path(building), class: 'button secondary' if policy(building).edit? %>
+<%= link_to 'Delete', building_path(building), method: :delete, class: 'button alert' if policy(building).destroy? %>

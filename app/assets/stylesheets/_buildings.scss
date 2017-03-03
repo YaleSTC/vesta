@@ -1,0 +1,8 @@
+.suites-list table {
+  td[data-role="suite-number"] { width: 8%; }
+  td[data-role="suite-singles"] { width: 10%; }
+  td[data-role="suite-doubles"] { width: 10%; }
+  td[data-role="suite-common"] { width: 10%; }
+  td[data-role="suite-draws"] { width: 37%; }
+  td[data-role="suite-actions"] { width: 25%; }
+}

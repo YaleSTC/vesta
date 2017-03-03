@@ -1,10 +1,47 @@
 <h1 class="building-name"><%= @building.name %></h1>
 <h2>Suites</h2>
-<ul>
-  <% @suites.each do |suite| %>
-    <li><%= link_to suite.number, suite_path(suite) %> - <%= pluralize(suite.size,'bed') %></li>
-  <% end %>
-</ul>
+<% @suites.keys.each do |size| %>
+  <div class="suites-list suites-<%= size_str(size).pluralize %>">
+    <h3><%= size_str(size).pluralize.titleize %></h3>
+    <table>
+      <thead>
+        <tr>
+          <td>#</td>
+          <td># Singles</td>
+          <td># Doubles</td>
+          <td># Common</td>
+          <td>Draws</td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @suites[size].each do |suite| %>
+          <tr id="suite-<%= suite.id %>">
+            <td data-role="suite-number"><%= link_to suite.number, suite_path(suite) %></td>
+            <td data-role="suite-singles"><%= suite.singles.count %></td>
+            <td data-role="suite-doubles"><%= suite.doubles.count %></td>
+            <td data-role="suite-common"><%= suite.common_rooms.count %></td>
+            <td data-role="suite-draws">
+              <%= suite.draws.map { |draw| link_to draw.name, draw_path(draw)}.join(', ').html_safe %>
+            </td>
+            <td data-role="suite-actions">
+              <%= link_to 'View', suite_path(suite), class: 'button' %>
+              <% if policy(suite).edit? %>
+                <%= link_to 'Edit', edit_suite_path(suite), class: 'button' %>
+              <% end %>
+              <% if policy(suite).destroy? %>
+                <%= link_to 'Delete', suite_path(suite), method: :delete, class: 'button alert' %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+<hr />
+<p><%= link_to 'New Suite', new_suite_path, class: 'button secondary' %></p>
+
 <h2>Import Suites</h2>
 <p>Add many suites at once by uploading a CSV file with the building information.
 The CSV must have the format "Number, Singles, Doubles" where Number is the 
@@ -17,5 +54,4 @@ and Doubles is the number of double bedrooms in the suite.</p>
   <%= f.submit 'Import' %>
 <% end %>
 </p>
-<p><%= link_to 'Add suite', new_suite_path %></p>
 <p><%= link_to 'Delete', building_path(@building), method: :delete %></p>

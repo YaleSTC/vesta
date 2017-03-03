@@ -9,4 +9,8 @@ class Building < ApplicationRecord
   has_many :suites
 
   validates :name, presence: true, allow_blank: false, uniqueness: true
+
+  def suites_by_size
+    suites.order(:size).group_by(&:size)
+  end
 end
