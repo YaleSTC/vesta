@@ -25,6 +25,9 @@ gem "suspenders"
 gem "title"
 gem "uglifier"
 
+# for UserGenerator
+gem 'ffaker', '~> 2.4.0'
+
 # Front-End Styling
 gem 'foundation-rails', '~> 6.3.0.0'
 
@@ -47,7 +50,6 @@ group :development, :test do
   gem "rspec-rails", "~> 3.6.0.beta2"
   gem "rubocop", "~> 0.44.1", require: false
   gem "rubocop-rspec", "~> 1.7.0", require: false
-  gem 'ffaker', '~> 2.4.0'
   # gem 'ruby-progressbar', '~> 1.8.0'
 end
 
