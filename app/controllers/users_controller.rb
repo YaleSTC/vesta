@@ -5,6 +5,10 @@ class UsersController < ApplicationController
   prepend_before_action :set_user, only: %i(show edit update edit_intent
                                             update_intent)
 
+  def index
+    @users = User.all.group_by(&:role)
+  end
+
   def show; end
 
   def build

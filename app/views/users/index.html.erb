@@ -1,0 +1,41 @@
+<h1>Users</h1>
+<h3>Admins</h3>
+<% if @users.has_key? 'admin' %>
+  <ul style="columns: 3; list-style-type: none;">
+    <% @users['admin'].each do |u| %>
+      <li>
+        <%= u.full_name %> - <%= link_to 'Edit Role', edit_user_path(u) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+    No admins!
+<% end %>
+
+<h3>Housing Committee</h3>
+<% if @users.has_key? 'rep' %>
+  <ul style="columns: 3; list-style-type: none;">
+    <% @users['rep'].each do |u| %>
+      <li>
+        <%= u.full_name %> - <%= link_to 'Edit Role', edit_user_path(u) %>
+        - <%= link_to 'Set Intent', edit_intent_user_path(u) %>
+    </li>
+  <% end %>
+  </ul>
+<% else %>
+    No housing committee members!
+<% end %>
+
+<h3>Students</h3>
+<% if @users.has_key? 'student' %>
+  <ul style="columns: 3; list-style-type: none;">
+    <% @users['student'].each do |u| %>
+      <li>
+        <%= u.full_name %> - <%= link_to 'Edit Role', edit_user_path(u) %>
+        - <%= link_to 'Set Intent', edit_intent_user_path(u) %>
+    </li>
+  <% end %>
+  </ul>
+<% else %>
+    No regular students!
+<% end %>
