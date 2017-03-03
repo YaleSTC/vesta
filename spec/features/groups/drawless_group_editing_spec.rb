@@ -33,6 +33,18 @@ RSpec.feature 'Special group editing' do
     click_on 'Save'
     expect(page).to have_css('.flash-error')
   end
+
+  it 'removes a user from a locked group' do
+    group = FactoryGirl.create(:drawless_group, size: 2)
+    remove = FactoryGirl.create(:student, intent: 'on_campus')
+    group.members << remove
+    GroupLocker.lock(group: group)
+    visit edit_group_path(group)
+    check remove.full_name
+    click_on 'Save'
+    expect(page).not_to have_css('.group-member', text: remove.full_name)
+  end
+
   # rubocop:enable RSpec/ExampleLength
 
   it 'can modify the number of transfer students' do
