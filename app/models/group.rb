@@ -38,8 +38,8 @@ class Group < ApplicationRecord
   validate :validate_status, if: ->(g) { g.size.present? }
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
-
   after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
+  after_save :update_status!, if: ->(g) { g.transfers_changed? }
 
   attr_reader :remove_ids
 
