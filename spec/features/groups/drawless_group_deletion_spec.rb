@@ -8,7 +8,7 @@ RSpec.feature 'Special group deletion' do
   it 'succeeds' do
     msg = "Group #{group.name} deleted."
     visit group_path(group)
-    click_on 'Delete'
+    click_on 'Disband'
     expect(page).to have_content(msg)
   end
 end

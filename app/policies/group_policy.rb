@@ -67,6 +67,10 @@ class GroupPolicy < ApplicationPolicy
     record.locked? && (user.admin? || user.rep?)
   end
 
+  def view_pending_members?
+    edit? || user.rep?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

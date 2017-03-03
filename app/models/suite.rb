@@ -56,4 +56,28 @@ class Suite < ApplicationRecord
   def available?
     group_id.nil?
   end
+
+  # Return all single-bed rooms in the suite
+  #
+  # @return [Room::ActiveRecord_AssociationRelation] relation for all of the
+  #   rooms with 1 bed
+  def singles
+    rooms.where(beds: 1)
+  end
+
+  # Return all double-bed rooms in the suite
+  #
+  # @return [Room::ActiveRecord_AssociationRelation] relation for all of the
+  #   rooms with 2 bed
+  def doubles
+    rooms.where(beds: 2)
+  end
+
+  # Return all common rooms in the suite
+  #
+  # @return [Room::ActiveRecord_AssociationRelation] relation for all of the
+  #   common rooms
+  def common_rooms
+    rooms.where(beds: 0)
+  end
 end

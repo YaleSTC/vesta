@@ -6,7 +6,10 @@ class GroupsController < ApplicationController
   prepend_before_action :set_draw
   before_action :set_form_data, only: %i(new edit)
 
-  def show; end
+  def show
+    @same_size_groups_count = @draw.groups.where(size: @group.size).count
+    @compatible_suites = @draw.suites.available.where(size: @group.size)
+  end
 
   def new; end
 
