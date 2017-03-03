@@ -270,8 +270,18 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, [group]) }
     end
     permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
-                :invite_to_join?, :lock?, :advanced_edit? do
+                :invite_to_join?, :advanced_edit? do
       it { is_expected.to permit(user, group) }
+    end
+    permissions :lock? do
+      context 'full group' do
+        before { allow(group).to receive(:full?).and_return(true) }
+        it { is_expected.to permit(user, group) }
+      end
+      context 'not full group' do
+        before { allow(group).to receive(:full?).and_return(false) }
+        it { is_expected.not_to permit(user, group) }
+      end
     end
     permissions :assign_lottery? do
       context 'group is locked' do

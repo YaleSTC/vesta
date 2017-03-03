@@ -59,7 +59,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def lock?
-    user.admin?
+    user.admin? && record.full?
   end
 
   def assign_lottery?
