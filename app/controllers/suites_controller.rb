@@ -5,6 +5,9 @@ class SuitesController < ApplicationController
 
   def show
     @rooms = @suite.rooms
+    @draws = @suite.draws
+    @building = @suite.building
+    @group = @suite.group
     @merger_form = SuiteMergerForm.new(suite: @suite)
   end
 
