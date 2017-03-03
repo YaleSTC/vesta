@@ -33,4 +33,16 @@ RSpec.feature 'Students Joining Groups' do
       expect(page).to have_content("#{user.full_name} joined group")
     end
   end
+
+  context 'rejecting requests' do
+    it 'succeeds' do # rubocop:disable RSpec/ExampleLength
+      group = FactoryGirl.create(:open_group)
+      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      Membership.create(group: group, user: user, status: 'requested')
+      log_in group.leader
+      visit draw_group_path(group.draw, group)
+      click_on 'reject'
+      expect(page).to have_content("#{user.full_name}'s Membership deleted")
+    end
+  end
 end

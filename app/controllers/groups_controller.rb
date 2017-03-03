@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/ClassLength
 # Controller for Groups
 class GroupsController < ApplicationController
   layout 'application_with_sidebar'
@@ -65,6 +66,13 @@ class GroupsController < ApplicationController
     membership = current_user.memberships.where(group: @group).first
     result = MembershipUpdater.update(membership: membership,
                                       params: { status: 'accepted' })
+    handle_action(path: draw_group_path(@draw, @group), **result)
+  end
+
+  def reject_pending
+    user = User.includes(:membership).find(params['user_id'])
+    membership = user.memberships.find_by(group: @group)
+    result = MembershipDestroyer.destroy(membership: membership)
     handle_action(path: draw_group_path(@draw, @group), **result)
   end
 

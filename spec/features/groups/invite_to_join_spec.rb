@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Students Joining Groups' do
-  context 'requesting to join open group' do
+  context 'inviting to join open group' do
     it 'succeeds' do
       group = FactoryGirl.create(:open_group, size: 2)
       user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
@@ -16,6 +16,18 @@ RSpec.feature 'Students Joining Groups' do
       click_on 'Invite Members'
       select user.full_name, from: 'group_invitations'
       click_on 'Send Invitations'
+    end
+  end
+
+  context 'rescinding invitation' do
+    it 'succeeds' do # rubocop:disable RSpec/ExampleLength
+      group = FactoryGirl.create(:open_group, size: 2)
+      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      Membership.create(user: user, group: group, status: 'invited')
+      log_in group.leader
+      visit draw_group_path(group.draw, group)
+      click_on 'rescind'
+      expect(page).to have_content("#{user.full_name}'s Membership deleted")
     end
   end
 end

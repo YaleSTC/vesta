@@ -7,7 +7,10 @@
         <li class="group-request">
           <%= r.full_name %>
           <% if policy(@group).accept_request? %>
-            (<%= link_to 'accept', draw_group_accept_request_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %>)
+            (<%= link_to 'accept', draw_group_accept_request_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %><%= policy(@group).reject_pending? ? ' / ' : ')' %>
+          <% end %>
+          <% if policy(@group).reject_pending? %>
+            <%= '(' unless policy(@group).accept_request? %><%= link_to 'reject', draw_group_reject_pending_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %>)
           <% end %>
         </li>
       <% end %>
@@ -17,7 +20,12 @@
     <h3 class="group-invitations">Invitations:</h3>
     <ul>
       <% @group.invitations.each do |i| %>
-        <li class="group-invitation"><%= i.full_name %></li>
+        <li class="group-invitation">
+          <%= i.full_name %>
+          <% if policy(@group).reject_pending? %>
+            (<%= link_to 'rescind', draw_group_reject_pending_path(@draw, @group, params: { 'user_id' => i.id }), method: :put %>)
+          <% end %>
+        </li>
       <% end %>
     </ul>
   <% end %>
