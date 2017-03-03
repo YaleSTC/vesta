@@ -148,4 +148,8 @@ RSpec.describe Draw, type: :model do
     xit 'returns true if there are no suites contested in other draws'
     xit 'returns false if there are any suites contested in other draws'
   end
+
+  describe '#student_count' do
+    xit 'returns the nuber of students in the draw'
+  end
 end

@@ -1,0 +1,10 @@
+<h3>Total Number of Beds in All Suites: <%= @draw.bed_count %> </h3>
+<h3>Total Number of Students: <%= @draw.student_count %></h3>
+<h3>Available Suites</h3>
+<ul style="list-style-type: none;">
+  <% @suite_sizes.each do |size| %>
+    <li>
+      <%= "#{size_str(size).pluralize.capitalize} - #{@suite_counts[size]}" %>
+    </li>
+  <% end %>
+</ul>

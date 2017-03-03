@@ -1,4 +1,20 @@
 <h1 class="draw-name"><%= @draw.name %></h1>
+<% if @draw.draft? %>
+<div class="suite-report">
+    <%= render 'suite_report' %>
+</div>
+<% end %>
+<% if policy(@draw).oversub_report? %>
+  <div class="oversub-report">
+    <%= render 'oversub_report' %>
+  </div>
+<% end %>
+<% if policy(@draw).group_report? %>
+  <div class="group-report">
+    <h3>Group Report</h3>
+    <%= render 'group_report', sizes: @suite_sizes, groups: @groups_by_size, actions_partial: 'groups/actions' %>
+  </div>
+<% end %>
 <% if policy(@draw).intent_summary? %>
   <div class="intent-metrics">
     <h3>Intent Metrics</h3>
@@ -18,17 +34,6 @@
     <% if policy(@draw).intent_report? %>
       <p><%= link_to 'View intent report', draw_intent_report_path(@draw) %></p>
     <% end %>
-  </div>
-<% end %>
-<% if policy(@draw).oversub_report? %>
-  <div class="oversub-report">
-    <%= render 'oversub_report' %>
-  </div>
-<% end %>
-<% if policy(@draw).group_report? %>
-  <div class="group-report">
-    <h3>Group Report</h3>
-    <%= render 'group_report', sizes: @suite_sizes, groups: @groups_by_size, actions_partial: 'groups/actions' %>
   </div>
 <% end %>
 <div>
