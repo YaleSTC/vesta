@@ -106,7 +106,7 @@ class GroupsController < ApplicationController
   end
 
   def set_group
-    @group = Group.find(params[:id])
+    @group = Group.includes(:memberships).find(params[:id])
   end
 
   def set_draw
