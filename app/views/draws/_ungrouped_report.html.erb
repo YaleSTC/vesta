@@ -1,0 +1,21 @@
+<h3>Students without Groups</h3>
+<% if @ungrouped_students.all? { |_s, students| students.empty? } %>
+  <p>All students are either off-campus or in groups</p>
+<% else %>
+  <% if @ungrouped_students.key?('on_campus') %>
+    <h4>On Campus</h4>
+    <ul style="columns: 5; list-style-type: none;">
+      <% @ungrouped_students['on_campus'].each do |student| %>
+        <li><%= student.full_name %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <% if @ungrouped_students.key?('undeclared') %>
+    <h4>Undeclared Intent</h4>
+    <ul style="columns: 5; list-style-type: none;">
+      <% @ungrouped_students['undeclared'].each do |student| %>
+        <li><%= student.full_name %></li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

@@ -166,6 +166,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     calculate_intent_metrics
     calculate_group_metrics
     calculate_oversub_metrics
+    calculate_ungrouped_students_metrics
   end
 
   def calculate_suite_metrics
@@ -195,6 +196,12 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     @diff = @suite_sizes.map do |size|
       [size, @suite_counts[size] - @group_counts[size]]
     end.to_h
+  end
+
+  def calculate_ungrouped_students_metrics
+    @ungrouped_students = UngroupedStudentsQuery.new(@draw.students).call
+                                                .group_by(&:intent)
+    @ungrouped_students.delete('off_campus')
   end
 
   def prepare_suites_edit_data # rubocop:disable AbcSize

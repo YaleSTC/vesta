@@ -15,6 +15,9 @@
     <%= render 'group_report', sizes: @suite_sizes, groups: @groups_by_size, actions_partial: 'groups/actions' %>
   </div>
 <% end %>
+<div class="ungrouped-report">
+  <%= render 'ungrouped_report' %>
+</div>
 <% if policy(@draw).intent_summary? %>
   <div class="intent-metrics">
     <h3>Intent Metrics</h3>
