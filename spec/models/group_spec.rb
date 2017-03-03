@@ -95,6 +95,12 @@ RSpec.describe Group, type: :model do
       raise_error(ActiveRecord::RecordNotFound)
   end
 
+  it 'updates status when changing transfer students' do
+    group = FactoryGirl.create(:open_group, size: 2)
+    group.update(transfers: 1)
+    expect(group.reload).to be_full
+  end
+
   describe 'leader is included as a member' do
     it do
       group = FactoryGirl.create(:group)
