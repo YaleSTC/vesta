@@ -9,7 +9,8 @@ RSpec.feature 'Housing Group Creation' do
       leader.draw.update(status: 'pre_lottery')
       suite = leader.draw.suites.first
       create_group(size: suite.size, leader: leader)
-      expect(page).to have_css('.group-name', text: "#{leader.name}'s Group")
+      expect(page).to have_css('.group-name',
+                               text: "#{leader.full_name}'s Group")
     end
 
     def create_group(size:, leader:)
@@ -31,7 +32,8 @@ RSpec.feature 'Housing Group Creation' do
                                                     draws: [draw])
       create_group(size: suite.size, leader: leader,
                    members: [draw.students.last])
-      expect(page).to have_css('.group-name', text: "#{leader.name}'s Group")
+      expect(page).to have_css('.group-name',
+                               text: "#{leader.full_name}'s Group")
     end
 
     def create_group(size:, leader:, members:)

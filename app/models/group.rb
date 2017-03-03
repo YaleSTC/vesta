@@ -47,7 +47,8 @@ class Group < ApplicationRecord
   #
   # @return [String] the group's name
   def name
-    "#{leader.name}'s Group"
+    year_str = leader.class_year.present? ? " (#{leader.class_year})" : ''
+    "#{leader.full_name}'s Group" + year_str
   end
 
   # Updates the status to match the group size (open when fewer members than
