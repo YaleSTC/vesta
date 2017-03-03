@@ -5,8 +5,11 @@ class DrawlessGroupUpdater < GroupUpdater
   private
 
   # Note that this occurs within the transaction
-  def remove_users
-    Membership.where(user_id: pending_users[:remove].map(&:id)).destroy_all
+  def remove_users # rubocop:disable Metrics/AbcSize
+    ids = pending_users[:remove].map(&:id)
+    group.memberships.where(user_id: ids).delete_all
+    group.decrement!(:memberships_count, ids.size)
+    group.update_status!
     pending_users[:remove].each { |user| user.restore_draw.save! }
   end
 

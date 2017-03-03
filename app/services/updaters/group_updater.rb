@@ -61,6 +61,7 @@ class GroupUpdater
   def remove_users
     ids = pending_users[:remove].map(&:id)
     group.memberships.where(user_id: ids).delete_all
+    group.decrement!(:memberships_count, ids.size)
     group.update_status!
   end
 
