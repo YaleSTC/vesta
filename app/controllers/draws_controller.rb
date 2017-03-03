@@ -162,9 +162,15 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def calculate_metrics
+    calculate_suite_metrics
     calculate_intent_metrics
     calculate_group_metrics
     calculate_oversub_metrics
+  end
+
+  def calculate_suite_metrics
+    @suite_sizes = SuiteSizesQuery.new(@draw.suites.available).call
+    @suite_counts = @draw.suites.available.group(:size).count
   end
 
   def calculate_intent_metrics
@@ -173,7 +179,6 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def calculate_group_metrics
-    @suite_sizes = SuiteSizesQuery.new(@draw.suites.available).call
     empty_groups_hash = @suite_sizes.map { |s| [s, []] }.to_h
     @groups = @draw.groups.includes(:leader)
     @groups_by_size =
@@ -183,7 +188,6 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def calculate_oversub_metrics # rubocop:disable AbcSize
     return unless policy(@draw).oversub_report?
-    @suite_counts = @draw.suites.available.group(:size).count
     zeroed_group_hash = @suite_sizes.map { |s| [s, 0] }.to_h
     @group_counts = zeroed_group_hash.merge(@groups.group(:size).count)
     @locked_counts = zeroed_group_hash.merge(@groups.where(status: 'locked')

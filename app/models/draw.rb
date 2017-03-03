@@ -86,21 +86,21 @@ class Draw < ApplicationRecord
     suites.includes(:draws).available.all?(&:selectable?)
   end
 
-  private
-
   def student_count
     @student_count ||= students.count
   end
 
-  def group_count
-    @group_count ||= groups.count
-  end
-
-  # Calculate the number of beds that exist across all available suites
+  # calculate the number of beds that exist across all available suites
   #
-  # @return [Integer] the number of beds in all available suites
+  # @return [integer] the number of beds in all available suites
   def bed_count
     @bed_count ||= suites.available.sum(:size)
+  end
+
+  private
+
+  def group_count
+    @group_count ||= groups.count
   end
 
   def remove_old_draw_ids
