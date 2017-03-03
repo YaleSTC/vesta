@@ -1,0 +1,20 @@
+<table>
+  <thead>
+    <tr>
+      <td>Suite #</td>
+      <td>S</td>
+      <td>D</td>
+      <td>C</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% suites.each do |suite| %>
+      <tr>
+        <td><%= link_to suite.number, suite_path(suite) %></td>
+        <td><%= suite.singles.count %></td>
+        <td><%= suite.doubles.count %></td>
+        <td><%= suite.common_rooms.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

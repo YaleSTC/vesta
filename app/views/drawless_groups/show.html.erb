@@ -13,8 +13,28 @@
     <% end %>
   <% end %>
 <% end %>
-<p>
+<div style="border-top: 1px solid #DDDDDD;">
+  <br />
   <%= link_to 'Edit', edit_group_path(@group), class: 'button secondary' if policy(@group).edit? %>
-  <%= link_to 'Lock Group', lock_group_path(@group), method: :put, class: 'button alert' if policy(@group).lock? %>
+  <% if policy(@group).lock? %>
+    <%= link_to 'Lock Group', lock_group_path(@group), method: :put, class: 'button alert' if policy(@group).lock? %>
+  <% end %>
   <%= link_to('Disband', group_path(@group), method: :delete, class: 'button alert') if policy(@group).destroy? %>
-</p>
+</div>
+
+<%= link_to 'View all special groups', groups_path %>
+
+<% content_for :sidebar do %>
+  <h3>
+    <%= @compatible_suites.count %> available
+    <%= size_str(@group.size).capitalize.pluralize(@compatible_suites.count) %>
+  </h3>
+  <% unless @compatible_suites_no_draw.count.zero? %>
+    <h4>Not in Any Draw</h4>
+    <%= render 'groups/suites_table', suites: @compatible_suites_no_draw %>
+  <% end %>
+  <% unless @compatible_suites_in_draw.count.zero? %>
+    <h4>In Draw(s)</h4>
+    <%= render 'groups/suites_table', suites: @compatible_suites_in_draw %>
+  <% end %>
+<% end %>

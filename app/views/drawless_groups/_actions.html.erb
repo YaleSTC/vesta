@@ -1,0 +1,7 @@
+<%= link_to 'View', group_path(group), class: 'button' %>
+<% if policy(group).edit? %>
+  <%= link_to 'Edit', edit_group_path(group), class: 'button' %>
+<% end %>
+<% if policy(group).destroy? %>
+  <%= link_to 'Disband', group_path(group), method: :delete, class: 'button alert' %>
+<% end %>

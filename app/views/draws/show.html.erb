@@ -27,7 +27,8 @@
 <% end %>
 <% if policy(@draw).group_report? %>
   <div class="group-report">
-    <%= render 'group_report' %>
+    <h3>Group Report</h3>
+    <%= render 'group_report', sizes: @suite_sizes, groups: @groups_by_size, actions_partial: 'groups/actions' %>
   </div>
 <% end %>
 <% if policy(@draw).student_summary? %>

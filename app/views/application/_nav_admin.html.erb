@@ -6,7 +6,13 @@
       <li><%= link_to 'New Draw', new_draw_path %></li>
     </ul>
   </li>
-  <li><a href="#">Students</a></li>
+  <li>
+    <a href="#">Special Groups</a>
+    <ul class="menu vertical">
+      <li><%= link_to 'All Special Groups', groups_path %></li>
+      <li><%= link_to 'Create Special Group', new_group_path %></li>
+    </ul>
+  </li>
   <li>
     <a href="#">Inventory</a>
     <ul class="menu vertical">
