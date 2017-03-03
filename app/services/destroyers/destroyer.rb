@@ -2,6 +2,11 @@
 #
 # Base class for destroyer service objects. Provides default messages.
 class Destroyer
+  # Call #destroy on a new instance
+  def self.destroy(**params)
+    new(**params).destroy
+  end
+
   # Initialize a new Destroyer.
   #
   # @param [ApplicationRecord] object The model object to be destroyed

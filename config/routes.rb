@@ -32,6 +32,8 @@ Rails.application.routes.draw do # rubocop:disable BlockLength
                                    as: 'send_invites'
       put '/:id/accept_invitation', to: 'groups#accept_invitation',
                                     as: 'accept_invitation'
+      put '/:id/reject_pending', to: 'groups#reject_pending',
+                                 as: 'reject_pending'
       put '/:id/finalize', to: 'groups#finalize', as: 'finalize'
       put '/:id/finalize_membership', to: 'groups#finalize_membership',
                                       as: 'finalize_membership'

@@ -46,6 +46,10 @@ class GroupPolicy < ApplicationPolicy
     edit?
   end
 
+  def reject_pending?
+    edit?
+  end
+
   def accept_invitation?
     !user.group && record.invitations.include?(user)
   end
