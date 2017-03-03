@@ -4,10 +4,8 @@ require 'rails_helper'
 RSpec.feature 'Draw Creation' do
   before { log_in FactoryGirl.create(:admin) }
   it 'succeeds' do
-    student = FactoryGirl.create(:student, first_name: 'Sydney')
-    suite = FactoryGirl.create(:suite)
     name = 'Sophomore Draw'
-    create_draw(name: name, students: [student], suites: [suite])
+    create_draw(name: name)
     expect(page).to have_css('.draw-name', text: name)
   end
   it 'redirects to /new on failure' do
@@ -16,15 +14,9 @@ RSpec.feature 'Draw Creation' do
     expect(page).to have_content('New Draw')
   end
 
-  def create_draw(name:, students:, suites:)
+  def create_draw(name:)
     visit 'draws/new'
     fill_in 'draw_name', with: name
-    select_draw_members(students: students, suites: suites)
     click_on 'Create'
-  end
-
-  def select_draw_members(students:, suites:)
-    students.each { |s| select s.name, from: 'draw_student_ids' }
-    suites.each { |s| select s.number, from: 'draw_suite_ids' }
   end
 end
