@@ -34,4 +34,17 @@ module ApplicationHelper
     return edit_college_path(college) if college.id
     new_college_path
   end
+
+  # Returns the full title on a per-page basis.
+  #
+  # @param page_title [String] the specific page title
+  # @return [String] the overall page title
+  def full_title(page_title = '')
+    base_title = 'Vesta'
+    if page_title.empty?
+      base_title
+    else
+      page_title + ' | ' + base_title
+    end
+  end
 end

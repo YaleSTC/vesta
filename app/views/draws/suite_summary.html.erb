@@ -1,4 +1,5 @@
-<h1 class="draw-name"><%= @draw.name %> Suites</h1>
+<% provide(:title, "#{@draw.name} - Suites") %>
+<h1 class="draw-name"><%= @draw.name %> - Suites</h1>
 <%= render 'suites/summary', sizes: @all_sizes, suites: @suites_by_size %>
 <hr />
 <% if policy(@draw).suites_edit? %>

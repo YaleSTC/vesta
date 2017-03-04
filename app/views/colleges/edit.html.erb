@@ -1,3 +1,4 @@
-<h1>Edit <%= @college.name %> Settings</h1>
+<% provide(:title, 'Edit Settings') %>
+<h1>Edit Settings</h1>
 <%= render "form", college: @college %>
 <%= link_to 'Cancel', college_path(@college) %>

@@ -1,3 +1,4 @@
+<% provide(:title, "Edit Suite #{@suite.number}") %>
 <h1>Edit Suite <%= @suite.number %></h1>
 <%= render "form", suite: @suite %>
 <%= link_to 'Cancel', suite_path(@suite) %>

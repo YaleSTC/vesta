@@ -1,3 +1,4 @@
+<% provide(:title, "#{@group.name} - Assign Rooms") %>
 <h1><%= @group.name %> - Assign Rooms</h1>
 <%= simple_form_for @room_assignment, url: confirm_group_room_assignment_path(@group), method: :get do |f| %>
   <%= render 'form_fields', group: @group, f: f %>

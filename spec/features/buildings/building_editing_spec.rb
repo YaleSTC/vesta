@@ -15,7 +15,7 @@ RSpec.feature 'Building editing' do
   it 'redirects to /edit on failure' do
     visit edit_building_path(building)
     update_building_name('')
-    expect(page).to have_content('Edit Building')
+    expect(page).to have_content("can't be blank")
   end
 
   def update_building_name(new_name)

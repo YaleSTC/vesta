@@ -1,4 +1,5 @@
-<h1><%= @draw.name %> - Suite selection</h1>
+<% provide(:title, "#{@draw.name} - Suite Selection") %>
+<h1><%= @draw.name %> - Suite Selection</h1>
 <p>Please select suites for each of the following groups, which have been assigned the lottery number <%= @groups.first.lottery_number %>. If there are insufficient suites available for the given size you may disband the groups of that size before proceeding.</p>
 <%= simple_form_for @suite_selector, url: assign_suites_draw_path(@draw), method: :patch do |f| %>
   <% @groups.each do |group| %>

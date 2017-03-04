@@ -1,4 +1,5 @@
-<h1 class="draw-name">Entering Lottery Phase for <%= @draw.name %></h1>
+<% provide(:title, "#{@draw.name} - Entering Lottery Phase") %>
+<h1 class="draw-name"><%= @draw.name %> - Entering Lottery Phase</h1>
 <% if policy(@draw).oversub_report? %>
   <div class="oversub-report">
     <%= render 'oversub_report', draw: @draw, path: lottery_confirmation_draw_path(@draw) %>

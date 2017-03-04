@@ -20,7 +20,7 @@ RSpec.feature 'Draw oversubscription handling' do
   it 'is used as a confirmation for lottery assignment' do
     visit draw_path(draw)
     click_on 'Handle oversubscription'
-    expect(page).to have_content('Oversubscription handling')
+    expect(page).to have_content('Handle Oversubscription')
   end
 
   it 'allows admins to disband groups' do

@@ -1,3 +1,4 @@
+<% provide(:title, "#{@draw.name} - Edit Suites") %>
 <h1 class="draw-name"><%= @draw.name %> - Edit Suites</h1>
 <%= simple_form_for @suites_update, url: suites_update_draw_path(@draw), method: :patch do |f| %>
   <% @suite_sizes.each do |size| %>
@@ -6,9 +7,9 @@
       <%= render 'suite_edit_fields', f: f, size: size, current_suites: @current_suites[size],
                                       drawless_suites: @drawless_suites[size],
                                       drawn_suites: @drawn_suites[size], draw: @draw %>
-  </div>
-  <hr />
-<% end %>
-<%= f.submit 'Update' %>
+    </div>
+    <hr />
+  <% end %>
+  <%= f.submit 'Update' %>
 <% end %>
 <%= link_to 'Cancel', suite_summary_draw_path(@draw) %>

@@ -1,4 +1,5 @@
-<h1>Export E-mails</h1>
+<% provide(:title, 'Export Emails') %>
+<h1>Export Emails</h1>
 <%= simple_form_for @email_export, url: email_export_path do |f| %>
   <%= f.input :draw_id, as: :select, collection: @draws, label_method: :name, hint: 'You will receive e-mails for all groups (including special groups) if no draw is selected.' %>
   <%= f.input :size, as: :select, collection: @sizes, hint: 'You will receive e-mails for all group sizes if no size is selected.' %>

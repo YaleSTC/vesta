@@ -1,5 +1,6 @@
-<h1>Split suite</h1>
-<%= simple_form_for @split_form, url: split_suite_path(@suite), mathod: :post do |f| %>
+<% provide(:title, "Split Suite #{@suite.number}") %>
+<h1>Split Suite <%= @suite.number%></h1>
+<%= simple_form_for @split_form, url: split_suite_path(@suite), method: :post do |f| %>
   <% @suite.rooms.each do |room| %>
     <%= f.input "room_#{room.id}_suite".to_sym,
       label: "#{room.number} (#{room.type}) new suite" %>
