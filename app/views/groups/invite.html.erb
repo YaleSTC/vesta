@@ -1,3 +1,5 @@
+<% provide(:title, "#{@group.name} - Edit Invitations") %>
+<h1><%= @group.name %> - Edit Invitations</h1>
 <%= simple_form_for [@draw, @group], url: send_invites_draw_group_path(@draw, @group) do |f| %>
   <%= f.input :invitations, label: 'Students to invite', as: :check_boxes, label_method: :full_name, collection: @students %>
   <%= f.button :submit, 'Send Invitations' %>

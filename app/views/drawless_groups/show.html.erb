@@ -1,3 +1,4 @@
+<% provide(:title, @group.name) %>
 <%= render 'groups/group_details', group: @group %>
 <% if policy(DrawlessGroup.new(@group)).select_suite? %>
   <h3><%= suite_str(@group) %></h3>

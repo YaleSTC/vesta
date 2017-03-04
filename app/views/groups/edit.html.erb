@@ -1,3 +1,4 @@
+<% provide(:title, "Edit #{@group.name}") %>
 <h1>Edit <%= @group.name %></h1>
 <%= render "form", group: @group %>
 <%= link_to 'Cancel', draw_group_path(@draw, @group) %>

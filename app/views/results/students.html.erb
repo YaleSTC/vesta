@@ -1,4 +1,5 @@
-<h1>Results by student</h1>
+<% provide(:title, 'Results by Student') %>
+<h1>Results by Student</h1>
 <% if @students.empty? %>
   <p>No results yet - students must have rooms assigned before we can display results.</p>
 <% else %>

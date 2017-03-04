@@ -35,4 +35,13 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.settings_path(college)).to match(/new/)
     end
   end
+
+  describe '#full_title' do
+    it 'returns "Vesta" by default' do
+      expect(helper.full_title).to eq('Vesta')
+    end
+    it 'returns a customized page title if passed a string' do
+      expect(helper.full_title('foo')).to eq('foo | Vesta')
+    end
+  end
 end

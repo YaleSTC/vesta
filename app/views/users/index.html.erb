@@ -1,4 +1,5 @@
-<h1 id="top">Users</h1>
+<% provide(:title, 'All Users') %>
+<h1 id="top">All Users</h1>
 <p><a href="#admins">Admins</a> / <a href="#reps">Housing Committee</a> / <a href="#students">Students</a></p>
 <h3 id="admins">Admins</h3>
 <% if @users.has_key? 'admin' %>

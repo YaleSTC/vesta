@@ -1,3 +1,4 @@
+<% provide(:title, @group.name) %>
 <%= render 'group_details', group: @group %>
 <% if policy(@group).view_pending_members? %>
   <% unless @group.requests.empty? %>

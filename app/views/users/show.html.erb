@@ -1,4 +1,5 @@
-<h2 class="user-name">User <%= @user.full_name %></h2>
+<% provide(:title, @user.full_name) %>
+<h1 class="user-name"><%= @user.full_name %></h1>
 <% if policy(@user).draw_info? %>
   <h3>Draw: <%= @user.draw.name %></h3>
   <h3 class="user-intent">Housing Intent: <%= @user.intent %></h3>
