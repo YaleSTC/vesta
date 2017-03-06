@@ -7,10 +7,10 @@
         <li class="group-request">
           <%= r.full_name %>
           <% if policy(@group).accept_request? %>
-            (<%= link_to 'accept', draw_group_accept_request_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %><%= policy(@group).reject_pending? ? ' / ' : ')' %>
+            (<%= link_to 'accept', accept_request_draw_group_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %><%= policy(@group).reject_pending? ? ' / ' : ')' %>
           <% end %>
           <% if policy(@group).reject_pending? %>
-            <%= '(' unless policy(@group).accept_request? %><%= link_to 'reject', draw_group_reject_pending_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %>)
+            <%= '(' unless policy(@group).accept_request? %><%= link_to 'reject', reject_pending_draw_group_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %>)
           <% end %>
         </li>
       <% end %>
@@ -23,7 +23,7 @@
         <li class="group-invitation">
           <%= i.full_name %>
           <% if policy(@group).reject_pending? %>
-            (<%= link_to 'rescind', draw_group_reject_pending_path(@draw, @group, params: { 'user_id' => i.id }), method: :put %>)
+            (<%= link_to 'rescind', reject_pending_draw_group_path(@draw, @group, params: { 'user_id' => i.id }), method: :put %>)
           <% end %>
         </li>
       <% end %>
@@ -33,12 +33,12 @@
 <div style="border-top: 1px solid #DDDDDD;">
   <br />
   <%= link_to 'Edit', edit_draw_group_path(@draw, @group), class: 'button secondary' if policy(@group).edit? %>
-  <%= link_to 'Request To Join', draw_group_request_path(@draw, @group), method: :post, class: 'button secondary' if policy(@group).request_to_join? %>
-  <%= link_to 'Invite Members', draw_group_invite_path(@draw, @group), class: 'button secondary' if policy(@group).invite_to_join? %>
-  <%= link_to 'Accept Invitation', draw_group_accept_invitation_path(@draw, @group), method: :put, class: 'button' if policy(@group).accept_invitation? %>
-  <%= link_to 'Lock Group', draw_group_lock_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
-  <%= link_to 'Finalize Group', draw_group_finalize_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize? %>
-  <%= link_to 'Finalize Membership', draw_group_finalize_membership_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize_membership? %>
+  <%= link_to 'Request To Join', request_draw_group_path(@draw, @group), method: :post, class: 'button secondary' if policy(@group).request_to_join? %>
+  <%= link_to 'Invite Members', invite_draw_group_path(@draw, @group), class: 'button secondary' if policy(@group).invite? %>
+  <%= link_to 'Accept Invitation', accept_invitation_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).accept_invitation? %>
+  <%= link_to 'Lock Group', lock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
+  <%= link_to 'Finalize Group', finalize_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize? %>
+  <%= link_to 'Finalize Membership', finalize_membership_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize_membership? %>
   <%= link_to('Disband', draw_group_path(@draw, @group), method: :delete, class: 'button alert') if policy(@group).destroy? %>
 </div>
 <%= link_to 'Return to draw', draw_path(@draw) %>

@@ -1,4 +1,4 @@
-<%= simple_form_for [@draw, @group], url: draw_group_send_invites_path(@draw, @group) do |f| %>
+<%= simple_form_for [@draw, @group], url: send_invites_draw_group_path(@draw, @group) do |f| %>
   <%= f.input :invitations, label_method: :full_name, collection: @students, input_html: { multiple: true } %>
   <%= f.button :submit, 'Send Invitations' %>
 <% end %>

@@ -1,7 +1,7 @@
 <h1 class="draw-name"><%= @draw.name %> Suites</h1>
 <% @all_sizes.each do |size| %>
   <div class="suites-list suites-<%= size_str(size).pluralize %>">
-    <h2><%= size_str(size).pluralize.titleize %> <%= link_to 'Edit', draw_suites_edit_path(@draw, size), id: "edit-suites-#{size}", clasS: 'draw-edit-suites' if policy(@draw).suites_edit? %></h2>
+    <h2><%= size_str(size).pluralize.titleize %> <%= link_to 'Edit', suites_edit_draw_path(@draw, size), id: "edit-suites-#{size}", clasS: 'draw-edit-suites' if policy(@draw).suites_edit? %></h2>
     <% if @suites_by_size.has_key? size %>
       <% @suites_by_size[size].each do |suite| %>
         <div class="suite-item"><%= link_to suite.number, suite_path(suite) %></div>

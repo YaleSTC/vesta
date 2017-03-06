@@ -35,16 +35,16 @@
       <p><%= intent_deadline_str(@draw) %></p>
     <% end %>
     <% if policy(@draw).intent_report? %>
-      <p><%= link_to 'View intent report', draw_intent_report_path(@draw) %></p>
+      <p><%= link_to 'View intent report', intent_report_draw_path(@draw) %></p>
     <% end %>
   </div>
 <% end %>
 <div>
   <% if policy(@draw).student_summary? %>
-    <%= link_to 'View students', draw_student_summary_path(@draw), class: 'button secondary' %>
+    <%= link_to 'View students', student_summary_draw_path(@draw), class: 'button secondary' %>
   <% end %>
   <% if policy(@draw).suite_summary? %>
-    <%= link_to 'View suites', draw_suite_summary_path(@draw), class: 'button secondary' %>
+    <%= link_to 'View suites', suite_summary_draw_path(@draw), class: 'button secondary' %>
   <% end %>
   <% if policy(@draw).activate? %>
     <%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch, class: 'button' %>
@@ -53,7 +53,7 @@
     <%= link_to 'Proceed to lottery', start_lottery_draw_path(@draw), method: :patch, class: 'button' %>
   <% end %>
   <% if policy(@draw).lottery? %>
-    <%= link_to 'Assign lottery numbers', draw_lottery_path(@draw), class: 'button secondary' %>
+    <%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button secondary' %>
   <% end %>
   <% if policy(@draw).update? %>
     <%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %>

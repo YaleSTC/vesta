@@ -68,7 +68,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
       prepare_suites_edit_data
       result[:action] = 'suites_edit'
     else
-      result[:path] = draw_suite_summary_path(@draw)
+      result[:path] = suite_summary_draw_path(@draw)
     end
     handle_action(**result)
   end
@@ -98,7 +98,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
       prepare_students_edit_data
       result[:action] = 'student_summary'
     else
-      result[:path] = draw_student_summary_path(@draw)
+      result[:path] = student_summary_draw_path(@draw)
     end
     result
   end
@@ -111,7 +111,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
       prepare_students_edit_data
       result[:action] = 'student_summary'
     else
-      result[:path] = draw_student_summary_path(@draw)
+      result[:path] = student_summary_draw_path(@draw)
     end
     result
   end

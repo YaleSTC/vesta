@@ -52,7 +52,7 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, other_group) }
     end
     permissions :destroy?, :edit?, :update?, :accept_request?, :change_leader?,
-                :invite_to_join?, :edit_invitations?, :view_pending_members?,
+                :send_invites?, :invite?, :view_pending_members?,
                 :reject_pending? do
       context 'not finalizing or locked' do
         before do
@@ -180,7 +180,7 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, other_group) }
     end
     permissions :destroy?, :edit?, :update?, :accept_request?, :change_leader?,
-                :invite_to_join?, :edit_invitations?, :reject_pending? do
+                :send_invites?, :invite?, :reject_pending? do
       context 'not finalizing or locked' do
         before do
           allow(group).to receive(:finalizing?).and_return(false)
@@ -315,7 +315,7 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, [group]) }
     end
     permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
-                :invite_to_join?, :advanced_edit?, :view_pending_members?,
+                :send_invites?, :advanced_edit?, :view_pending_members?,
                 :reject_pending?, :change_leader? do
       it { is_expected.to permit(user, group) }
     end

@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.feature 'Admin creation' do
   before { log_in FactoryGirl.create(:admin) }
   it 'can be performed by other admins' do
-    visit build_user_path
+    visit build_users_path
     submit_username('foo@example.com')
     submit_profile_data(first_name: 'John', last_name: 'Smith', role: 'admin')
     expect(page).to have_content('User John Smith created.')
