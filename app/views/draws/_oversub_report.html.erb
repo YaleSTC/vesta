@@ -1,4 +1,5 @@
 <h3>Draw Summary</h3>
+<%= link_to 'Handle oversubscription', oversub_draw_path(draw), class: 'button' if draw.oversubscribed? && policy(draw).oversubscription? %>
 <table>
   <thead>
     <tr>

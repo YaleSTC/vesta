@@ -99,38 +99,24 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(**result)
   end
 
-  def process_bulk_assignment
-    result = DrawStudentsUpdate.update(draw: @draw,
-                                       params: students_update_params)
-    @students_update = result[:update_object]
-    if @students_update
-      prepare_students_edit_data
-      result[:action] = 'student_summary'
-    else
-      result[:path] = student_summary_draw_path(@draw)
-    end
-    result
-  end
-
-  def process_student_assignment
-    result = DrawStudentAssignmentForm.submit(draw: @draw,
-                                              params: student_assignment_params)
-    @student_assignment_form = result[:update_object]
-    if @student_assignment_form
-      prepare_students_edit_data
-      result[:action] = 'student_summary'
-    else
-      result[:path] = student_summary_draw_path(@draw)
-    end
-    result
-  end
-
   def start_lottery
-    result = DrawLotteryStarter.start(draw: @draw)
+    @lottery_starter = DrawLotteryStarter.new(draw: @draw)
+    result = @lottery_starter.start
     handle_action(action: 'show', **result)
   end
 
   def lottery; end
+
+  def oversubscription
+    calculate_suite_metrics
+    calculate_group_metrics
+    calculate_oversub_metrics
+  end
+
+  def toggle_size_lock
+    result = DrawSizeLockToggler.toggle(draw: @draw, size: params[:size])
+    handle_action(path: params[:redirect_path], **result)
+  end
 
   def start_selection
     result = DrawSelectionStarter.start(draw: @draw)
@@ -194,7 +180,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def calculate_group_metrics
-    empty_groups_hash = @suite_sizes.map { |s| [s, []] }.to_h
+    @draw_sizes = DrawSizesQuery.call(draw: @draw)
+    empty_groups_hash = @draw_sizes.map { |s| [s, []] }.to_h
     @groups = @draw.groups.includes(:leader)
     @groups_by_size =
       empty_groups_hash.merge(@groups.sort_by { |g| Group.statuses[g.status] }
@@ -235,5 +222,31 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     @students = @draw.students.order(:last_name)
     @available_students_count = UngroupedStudentsQuery.call.where(draw_id: nil)
                                                       .count
+  end
+
+  def process_bulk_assignment
+    result = DrawStudentsUpdate.update(draw: @draw,
+                                       params: students_update_params)
+    @students_update = result[:update_object]
+    if @students_update
+      prepare_students_edit_data
+      result[:action] = 'student_summary'
+    else
+      result[:path] = student_summary_draw_path(@draw)
+    end
+    result
+  end
+
+  def process_student_assignment
+    result = DrawStudentAssignmentForm.submit(draw: @draw,
+                                              params: student_assignment_params)
+    @student_assignment_form = result[:update_object]
+    if @student_assignment_form
+      prepare_students_edit_data
+      result[:action] = 'student_summary'
+    else
+      result[:path] = student_summary_draw_path(@draw)
+    end
+    result
   end
 end

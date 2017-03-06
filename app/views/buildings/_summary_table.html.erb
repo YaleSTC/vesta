@@ -12,7 +12,7 @@
   <tbody>
     <% @suites_by_size[building.id].each do |size, suites| %>
       <tr>
-        <td data-role="suite-size"><%= size_str(size).capitalize.pluralize %></td>
+        <td data-role="suite-size"><%= headerize_size(size) %></td>
         <td data-role="suite-count"><%= suites.count %></td>
         <td data-role="assigned-count"><%= suites.reject { |s| s.group_id.nil? }.count %></td>
         <td data-role="draws-count"><%= suites.reject { |s| s.draws.empty? }.count %></td>

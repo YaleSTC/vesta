@@ -15,6 +15,17 @@ FactoryGirl.define do
         create_list(:student, e.students_count, draw: draw)
       end
 
+      factory :oversubscribed_draw do
+        after(:create) do |draw, e|
+          e.groups_count.times do
+            l = FactoryGirl.create(:student, draw: draw, intent: 'on_campus')
+            FactoryGirl.create(:locked_group, size: 1, leader: l)
+          end
+          draw.suites.delete_all
+          draw.update(status: 'pre_lottery')
+        end
+      end
+
       factory :draw_in_lottery do
         after(:create) do |draw, e|
           suites = create_list(:suite_with_rooms, e.groups_count, draws: [draw])

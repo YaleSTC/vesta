@@ -17,4 +17,11 @@ RSpec.describe ApplicationHelper, type: :helper do
         match(expected)
     end
   end
+
+  describe '#headerize_size' do
+    it 'returns a capitalized, pluralized version of the suite string' do
+      allow(helper).to receive(:size_str).with(1).and_return('single')
+      expect(helper.headerize_size(1)).to eq('Singles')
+    end
+  end
 end

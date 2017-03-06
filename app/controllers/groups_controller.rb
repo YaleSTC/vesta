@@ -34,7 +34,7 @@ class GroupsController < ApplicationController
 
   def destroy
     result = Destroyer.new(object: @group, name_method: :name).destroy
-    handle_action(**result)
+    handle_action(**result, path: params[:redirect_path])
   end
 
   def request_to_join
@@ -135,6 +135,6 @@ class GroupsController < ApplicationController
     @group ||= Group.new(draw: @draw)
     @students = UngroupedStudentsQuery.new(@draw.students.on_campus).call
     @leader_students = @group.members.empty? ? @students : @group.members
-    @suite_sizes = @draw.suite_sizes
+    @suite_sizes = @draw.open_suite_sizes
   end
 end

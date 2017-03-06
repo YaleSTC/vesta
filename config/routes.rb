@@ -40,6 +40,9 @@ Rails.application.routes.draw do
       get 'students', to: 'draws#student_summary', as: 'student_summary'
       patch 'students', to: 'draws#students_update', as: 'students_update'
       patch 'start_lottery'
+      get 'oversubscription', to: 'draws#oversubscription', as: 'oversub'
+      patch 'size_lock/:size', to: 'draws#toggle_size_lock',
+                               as: 'toggle_size_lock'
       get 'lottery'
       patch 'start_selection'
     end

@@ -20,4 +20,12 @@
     text-align: center;
     a.button { margin: 0 }
   }
+
+  .group-size-header {
+    padding: 0.2em;
+    &.negative {
+      background-color: $alert-color;
+      color: white;
+    }
+  }
 }

@@ -2,8 +2,6 @@
 #
 # Helper methods for the Users views
 module UsersHelper
-  delegate :size_str, to: Suite
-
   # Generate a form field for a profile attribute. Should be disabled if the
   # attribute is defined on the passed user object, and should include a hidden
   # field if disabled.

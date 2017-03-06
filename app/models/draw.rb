@@ -8,6 +8,7 @@
 # @attr status [String] The status / phase of the draw (draft, pre_lottery,
 #   lottery, suite_selection). Note the use of underscores in the status
 #   strings; this prevents some unpleasantness with the helper methods.
+# @attr locked_sizes [Array<Integer>] the group sizes that are restricted.
 class Draw < ApplicationRecord
   has_many :groups
   has_many :students, class_name: 'User', dependent: :nullify
@@ -65,12 +66,13 @@ class Draw < ApplicationRecord
     group_count.positive?
   end
 
-  # Query method to see if a draw has any students not in group
+  # Query method to see if all on-campus students in the draw are in groups
   #
-  # @return [Boolean] whether or not there are any ungrouped students
-  def ungrouped_students?
-    students.where(intent: %w(on_campus undeclared)).includes(:group)
-            .select { |s| s.group.nil? }.count.positive?
+  # @return [Boolean] whether or not all on-campus students are in groups
+  def all_students_grouped?
+    @grouped_query ||= UngroupedStudentsQuery.new(
+      students.where(intent: %w(undeclared on_campus))
+    ).call.count.zero?
   end
 
   # Query method to see if there are no undeclared students in the draw
@@ -120,6 +122,24 @@ class Draw < ApplicationRecord
   # assigned
   def lottery_complete?
     groups.all? { |g| g.lottery_number.present? }
+  end
+
+  # Query method to check whether or not a draw is oversubscribed by checking
+  # all groups. Memoized to avoid querying multiple times per request.
+  #
+  # @return [Boolean] whether or not the draw is oversubscribed
+  def oversubscribed?
+    @oversubscribed ||= GroupSizesQuery.new(groups).call.any? do |size|
+      groups.where(size: size).count > suites.where(size: size).count
+    end
+  end
+
+  # Query method to check whether or not a given group size is locked
+  #
+  # @param [Integer] the group size to check
+  # @return [Boolean] whether or not the group size is locked
+  def size_locked?(size)
+    locked_sizes.include? size
   end
 
   # Return the next groups to select suites by lottery number. Returns an empty
