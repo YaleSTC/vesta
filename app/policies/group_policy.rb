@@ -75,6 +75,10 @@ class GroupPolicy < ApplicationPolicy
     edit? || user.rep?
   end
 
+  def change_leader?
+    edit?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope
