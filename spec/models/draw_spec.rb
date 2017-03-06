@@ -9,6 +9,13 @@ RSpec.describe Draw, type: :model do
     it { is_expected.to have_many(:draws_suites) }
     it { is_expected.to have_many(:suites).through(:draws_suites) }
     it { is_expected.to validate_presence_of(:status) }
+
+    it 'cannot lock intent if undeclared students' do
+      draw = FactoryGirl.create(:draw, status: 'pre_lottery')
+      draw.students << FactoryGirl.create(:student, intent: 'undeclared')
+      draw.intent_locked = true
+      expect(draw).not_to be_valid
+    end
   end
 
   describe 'callbacks' do

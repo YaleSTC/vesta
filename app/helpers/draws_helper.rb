@@ -41,6 +41,24 @@ module DrawsHelper
     link_to 'Proceed to lottery', start_lottery_draw_path(draw), **options
   end
 
+  # Determines the label for the intent lock toggle button
+  #
+  # @return [String] The button label
+  def lock_intent_btn_label(draw)
+    draw.intent_locked ? 'Unlock Intents' : 'Lock Intents'
+  end
+
+  # Determines the tooltip for the intent lock toggle button
+  #
+  # @return [String] The button tooltip
+  def lock_intent_btn_tooltip(draw)
+    if draw.intent_locked
+      'Allow students to update their housing intent'
+    else
+      'Prevent students from changing their housing intent'
+    end
+  end
+
   private
 
   def day_str(n)

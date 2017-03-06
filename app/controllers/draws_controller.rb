@@ -134,9 +134,9 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def draw_params
-    params.require(:draw).permit(:name, :intent_deadline, suite_ids: [],
-                                                          student_ids: [],
-                                                          locked_sizes: [])
+    params.require(:draw).permit(:name, :intent_deadline, :intent_locked,
+                                 suite_ids: [], student_ids: [],
+                                 locked_sizes: [])
   end
 
   def suites_update_params
@@ -163,7 +163,6 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def calculate_metrics
     calculate_suite_metrics
-    calculate_intent_metrics
     calculate_group_metrics
     calculate_oversub_metrics
     calculate_ungrouped_students_metrics
@@ -172,11 +171,6 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def calculate_suite_metrics
     @suite_sizes = SuiteSizesQuery.new(@draw.suites.available).call
     @suite_counts = @draw.suites.available.group(:size).count
-  end
-
-  def calculate_intent_metrics
-    return unless policy(@draw).intent_summary?
-    @intent_metrics = IntentMetricsQuery.call(@draw)
   end
 
   def calculate_group_metrics

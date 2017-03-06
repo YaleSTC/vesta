@@ -38,11 +38,12 @@ ActiveRecord::Schema.define(version: 20170311014302) do
 
   create_table "draws", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.integer  "status",          default: 0,  null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "status",          default: 0,     null: false
     t.date     "intent_deadline"
-    t.integer  "locked_sizes",    default: [], null: false, array: true
+    t.integer  "locked_sizes",    default: [],    null: false, array: true
+    t.boolean  "intent_locked",   default: false, null: false
   end
 
   create_table "draws_suites", id: false, force: :cascade do |t|

@@ -33,16 +33,8 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :intent_summary? do
-      context 'when draw is a draft' do
-        before { allow(draw).to receive(:draft?).and_return(true) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-
-      context 'when draw is not a draft' do
-        before { allow(draw).to receive(:draft?).and_return(false) }
-        it { is_expected.to permit(user, draw) }
-      end
+    permissions :intent_actions? do
+      it { is_expected.not_to permit(user, draw) }
     end
     permissions :oversub_report?, :group_report? do
       context 'when draw is not a draft' do
@@ -92,16 +84,8 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :intent_summary? do
-      context 'when draw is a draft' do
-        before { allow(draw).to receive(:draft?).and_return(true) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-
-      context 'when draw is not a draft' do
-        before { allow(draw).to receive(:draft?).and_return(false) }
-        it { is_expected.to permit(user, draw) }
-      end
+    permissions :intent_actions? do
+      before { allow(draw).to receive(:draft?).and_return(false) }
     end
 
     permissions :oversub_report?, :group_report? do
@@ -196,16 +180,8 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :intent_summary? do
-      context 'when draw is a draft' do
-        before { allow(draw).to receive(:draft?).and_return(true) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-
-      context 'when draw is not a draft' do
-        before { allow(draw).to receive(:draft?).and_return(false) }
-        it { is_expected.to permit(user, draw) }
-      end
+    permissions :intent_actions? do
+      it { is_expected.to permit(user, draw) }
     end
 
     permissions :oversub_report?, :group_report? do

@@ -9,6 +9,8 @@
 #   lottery, suite_selection). Note the use of underscores in the status
 #   strings; this prevents some unpleasantness with the helper methods.
 # @attr locked_sizes [Array<Integer>] the group sizes that are restricted.
+# @attr intent_locked [Boolean] True when students in the draw can no longer
+#   update their housing intent.
 class Draw < ApplicationRecord
   has_many :groups
   has_many :students, class_name: 'User', dependent: :nullify
@@ -17,6 +19,9 @@ class Draw < ApplicationRecord
 
   validates :name, presence: true
   validates :status, presence: true
+
+  validate :cannot_lock_intent_if_undeclared,
+           if: ->() { intent_locked_changed? }
 
   after_destroy :remove_old_draw_ids
 
@@ -158,5 +163,10 @@ class Draw < ApplicationRecord
 
   def remove_old_draw_ids
     User.where(old_draw_id: id).update_all(old_draw_id: nil)
+  end
+
+  def cannot_lock_intent_if_undeclared
+    return if all_intents_declared?
+    errors.add :intent_locked, 'Cannot lock intent with undeclared students'
   end
 end

@@ -35,7 +35,7 @@ class DrawLotteryStarter
   #   message to set in the flash and either `nil` or the modified object.
   def start
     return error unless valid?
-    return success if draw.update(status: 'lottery')
+    return success if draw.update(status: 'lottery', intent_locked: true)
     errors.add(:base, 'Draw update failed')
     error
   end
