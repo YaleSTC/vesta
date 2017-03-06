@@ -14,7 +14,8 @@ RSpec.describe DrawPolicy do
     permissions :new?, :create?, :destroy?, :edit?, :update?, :activate?,
                 :intent_report?, :filter_intent_report?, :suites_edit?,
                 :suites_update?, :student_summary?, :students_update?,
-                :start_lottery?, :start_selection?, :bulk_on_campus? do
+                :oversubscription?, :toggle_size_lock?, :start_lottery?,
+                :start_selection?, :bulk_on_campus? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
@@ -73,7 +74,8 @@ RSpec.describe DrawPolicy do
     permissions :create?, :edit?, :update?, :destroy?, :activate?,
                 :intent_report?, :filter_intent_report?, :suites_edit?,
                 :suites_update?, :student_summary?, :students_update?,
-                :start_lottery?, :start_selection?, :bulk_on_campus? do
+                :oversubscription?, :toggle_size_lock?, :start_lottery?,
+                :start_selection?, :bulk_on_campus? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :index? do
@@ -140,7 +142,7 @@ RSpec.describe DrawPolicy do
     permissions :show?, :edit?, :update?, :destroy?, :intent_report?,
                 :filter_intent_report?, :group_actions?, :suite_summary?,
                 :suites_edit?, :suites_update?, :student_summary?,
-                :students_update? do
+                :students_update?, :toggle_size_lock? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :index?, :new?, :create? do
@@ -159,7 +161,7 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :start_lottery? do
+    permissions :start_lottery?, :oversubscription? do
       context 'when draw is pre_lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         it { is_expected.to permit(user, draw) }

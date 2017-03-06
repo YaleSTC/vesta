@@ -62,6 +62,14 @@ class DrawPolicy < ApplicationPolicy
     edit? && record.pre_lottery?
   end
 
+  def oversubscription?
+    start_lottery?
+  end
+
+  def toggle_size_lock?
+    edit?
+  end
+
   def lottery?
     record.lottery? && (user.admin? || user.rep?)
   end

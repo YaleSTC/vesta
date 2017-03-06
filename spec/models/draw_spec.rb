@@ -117,28 +117,40 @@ RSpec.describe Draw, type: :model do
     end
   end
 
-  describe '#ungrouped_students' do
-    it 'returns true if there are students in the draw not in a group' do
+  describe '#all_students_grouped?' do
+    it 'returns false if there are students in the draw not in a group' do
       draw = FactoryGirl.create(:draw_with_members, students_count: 2)
       FactoryGirl.create(:group, leader: draw.students.first)
-      expect(draw.ungrouped_students?).to be_truthy
+      expect(draw.all_students_grouped?).to be_falsey
     end
-    it 'checks for undeclared students' do
+    it 'checks undeclared students' do
       draw = FactoryGirl.create(:draw_with_members, students_count: 2)
       FactoryGirl.create(:group, leader: draw.students.first)
       draw.students.last.update(intent: 'undeclared')
-      expect(draw.ungrouped_students?).to be_truthy
+      expect(draw.all_students_grouped?).to be_falsey
     end
     it 'ignores off_campus students' do
       draw = FactoryGirl.create(:draw_with_members, students_count: 2)
       FactoryGirl.create(:group, leader: draw.students.first)
       draw.students.last.update(intent: 'off_campus')
-      expect(draw.ungrouped_students?).to be_falsey
+      expect(draw.all_students_grouped?).to be_truthy
     end
-    it 'returns false if there are no students in the draw not in a group' do
+    it 'returns true if there are no students in the draw not in a group' do
       draw = FactoryGirl.create(:draw_with_members, students_count: 1)
       FactoryGirl.create(:group, leader: draw.students.first)
-      expect(draw.ungrouped_students?).to be_falsey
+      expect(draw.all_students_grouped?).to be_truthy
+    end
+  end
+
+  describe '#all_intents_declared?' do
+    let(:draw) { FactoryGirl.create(:draw_with_members) }
+    it 'returns false if there are any undeclared students in the draw' do
+      draw.students.first.update(intent: 'undeclared')
+      expect(draw.all_intents_declared?).to be_falsey
+    end
+    it 'returns true if there are no undeclared students in the draw' do
+      draw.students.first.update(intent: 'on_campus')
+      expect(draw.all_intents_declared?).to be_truthy
     end
   end
 
@@ -195,6 +207,31 @@ RSpec.describe Draw, type: :model do
     it 'returns false if the draw is in the lottery phase' do
       draw.status = 'suite_selection'
       expect(draw).not_to be_before_lottery
+    end
+  end
+
+  describe '#oversubscribed?' do
+    it 'returns true if the draw is oversubscribed' do
+      draw = FactoryGirl.create(:oversubscribed_draw)
+      expect(draw).to be_oversubscribed
+    end
+
+    it 'returns false if the draw is not oversubscribed' do
+      draw = FactoryGirl.create(:draw_with_members, status: 'pre_lottery')
+      FactoryGirl.create(:locked_group, leader: draw.students.first)
+      expect(draw).not_to be_oversubscribed
+    end
+  end
+
+  describe '#size_locked?' do
+    it 'returns true if the suite size is locked' do
+      draw = FactoryGirl.build_stubbed(:draw, locked_sizes: [1])
+      expect(draw.size_locked?(1)).to be_truthy
+    end
+
+    it 'returns false if the suite size is unlocked' do
+      draw = FactoryGirl.build_stubbed(:draw, locked_sizes: [])
+      expect(draw.size_locked?(1)).to be_falsey
     end
   end
 

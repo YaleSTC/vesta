@@ -41,4 +41,32 @@ RSpec.describe DrawsHelper, type: :helper do
       expect(helper.diff_class(-1)).to eq('negative')
     end
   end
+
+  describe '#toggle_size_lock_btn' do
+    let(:draw) { instance_spy('draw') }
+    it 'returns a lock button if the draw size is unlocked' do
+      allow(draw).to receive(:size_locked?).and_return(false)
+      btn = helper.toggle_size_lock_btn(draw: draw, size: 1, path: '')
+      expect(btn).to include('Lock Singles')
+    end
+    it 'returns an unlock button if the draw size is locked' do
+      allow(draw).to receive(:size_locked?).and_return(true)
+      btn = helper.toggle_size_lock_btn(draw: draw, size: 1, path: '')
+      expect(btn).to include('Unlock Singles')
+    end
+  end
+
+  describe '#proceed_from_pre_lottery_btn' do
+    let(:draw) { instance_spy('draw') }
+    it 'returns a red button for oversubscription' do
+      allow(draw).to receive(:oversubscribed?).and_return(true)
+      expect(helper.proceed_from_pre_lottery_btn(draw)).to \
+        match(/class=\"button alert\".+Proceed to lottery/)
+    end
+    it 'returns a blue button for not oversubscription' do
+      allow(draw).to receive(:oversubscribed?).and_return(false)
+      expect(helper.proceed_from_pre_lottery_btn(draw)).to \
+        match(/class=\"button\".+Proceed to lottery/)
+    end
+  end
 end

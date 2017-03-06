@@ -2,24 +2,31 @@
   <p>There are no groups yet.</p>
 <% else %>
   <% sizes.each do |size| %>
-    <h4><%= size_str(size).capitalize.pluralize %></h4>
-    <table>
-      <thead>
-        <tr>
-          <td>Group Leader</td>
-          <td>Status</td>
-          <td></td>
-        </tr>
-      </thead>
-      <tbody>
-        <% groups[size].each do |group| %>
-          <tr id="group-<%= group.id %>">
-            <td data-role="group-leader"><%= group.leader.full_name %></td>
-            <td data-role="group-status"><%= group.status.capitalize %></td>
-            <td data-role="group-actions"><%= render actions_partial, group: group %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <div class="groups-<%= size %>">
+      <h4><span class="group-size-header <%= diff_class(diff[size]) %>"><%= headerize_size(size) %> <%= " - #{pluralize(suite_counts[size], 'suite')}, #{pluralize(group_counts[size], 'group')}" %><%= ' (locked)' if @draw.size_locked?(size) %></span></h4>
+      <%= toggle_size_lock_btn(draw: @draw, size: size, path: path) if policy(@draw).toggle_size_lock? %>
+      <% if groups[size].empty? %>
+        <p>No groups of size <%= size %></p>
+      <% else %>
+        <table>
+          <thead>
+            <tr>
+              <td>Group Leader</td>
+              <td>Status</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            <% groups[size].each do |group| %>
+              <tr id="group-<%= group.id %>">
+                <td data-role="group-leader"><%= group.leader.full_name %></td>
+                <td data-role="group-status"><%= group.status.capitalize %></td>
+                <td data-role="group-actions"><%= render actions_partial, group: group, path: path %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+    </div>
   <% end %>
+<% end %>
 <% end %>

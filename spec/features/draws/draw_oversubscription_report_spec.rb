@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Draw oversubscription dashboard' do
+RSpec.feature 'Draw oversubscription report' do
   let(:draw) do
     FactoryGirl.create(:draw_with_members, students_count: 2, suites_count: 1,
                                            status: 'pre_lottery')

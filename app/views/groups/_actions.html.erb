@@ -3,5 +3,5 @@
   <%= link_to 'Edit', edit_draw_group_path(@draw, group), class: 'button' %>
 <% end %>
 <% if policy(group).destroy? %>
-  <%= link_to 'Disband', draw_group_path(@draw, group), method: :delete, class: 'button alert' %>
+  <%= link_to 'Disband', draw_group_path(@draw, group, redirect_path: path), method: :delete, class: 'button alert' %>
 <% end %>

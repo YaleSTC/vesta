@@ -8,13 +8,13 @@ class DrawLotteryStarter
 
   attr_reader :draw
 
-  # validates :draw, presence: :true
-  validate :draw_in_pre_lottery_phase
-  validate :at_least_one_group
-  validate :no_ungrouped_students
-  validate :enough_beds
-  validate :no_contested_suites
-  validate :all_groups_locked
+  validate :draw_in_pre_lottery_phase, if: ->() { draw.present? }
+  validate :at_least_one_group, if: ->() { draw.present? }
+  validate :all_students_grouped, if: ->() { draw.present? }
+  validate :all_intents_declared, if: ->() { draw.present? }
+  validate :enough_beds, if: ->() { draw.present? }
+  validate :no_contested_suites, if: ->() { draw.present? }
+  validate :all_groups_locked, if: ->() { draw.present? }
 
   # Class method to permit calling :start on the class without instantiating the
   # service object directly
@@ -45,34 +45,39 @@ class DrawLotteryStarter
   attr_writer :draw
 
   def draw_in_pre_lottery_phase
-    return if draw.nil? || draw.pre_lottery?
+    return if draw.pre_lottery?
     errors.add(:draw, 'must be in the pre-lottery phase')
   end
 
   def at_least_one_group
-    return if draw.nil? || draw.groups?
+    return if draw.groups?
     errors.add(:draw, 'must have at least one group')
   end
 
-  def no_ungrouped_students
-    return unless draw.present? && draw.ungrouped_students?
+  def all_students_grouped
+    return if draw.all_students_grouped?
     errors.add(:draw, 'cannot have any students not in groups')
   end
 
+  def all_intents_declared
+    return if draw.all_intents_declared?
+    errors.add(:draw, 'cannot have any students who did not declare intent')
+  end
+
   def enough_beds
-    return if draw.nil? || draw.enough_beds?
+    return if draw.enough_beds?
     errors.add(:draw, 'must have at least one bed per student in all suites')
   end
 
   def no_contested_suites
-    return if draw.nil? || draw.no_contested_suites?
+    return if draw.no_contested_suites?
     errors.add(:draw,
                'cannot contain any suites in other draws that are in the '\
                'lottery or suite selection phase')
   end
 
   def all_groups_locked
-    return if draw.nil? || draw.all_groups_locked?
+    return if draw.all_groups_locked?
     errors.add(:draw, 'cannot have any unlocked groups')
   end
 

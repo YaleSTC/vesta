@@ -4,7 +4,7 @@
 <ul style="list-style-type: none;">
   <% @suite_sizes.each do |size| %>
     <li>
-      <%= "#{size_str(size).pluralize.capitalize} - #{@suite_counts[size]}" %>
+      <%= "#{headerize_size(size)} - #{@suite_counts[size]}" %>
     </li>
   <% end %>
 </ul>

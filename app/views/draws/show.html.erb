@@ -1,23 +1,30 @@
 <h1 class="draw-name"><%= @draw.name %></h1>
 <% if @draw.draft? %>
-<div class="suite-report">
+  <div class="suite-report">
     <%= render 'suite_report' %>
-</div>
+  </div>
+  <hr />
 <% end %>
 <% if policy(@draw).oversub_report? %>
   <div class="oversub-report">
-    <%= render 'oversub_report' %>
+    <%= render 'oversub_report', draw: @draw %>
   </div>
+  <hr />
 <% end %>
 <% if policy(@draw).group_report? %>
   <div class="group-report">
     <h3>Group Report</h3>
-    <%= render 'group_report', sizes: @suite_sizes, groups: @groups_by_size, actions_partial: 'groups/actions' %>
+    <%= render 'group_report', sizes: @draw_sizes, groups: @groups_by_size, 
+                               diff: @diff, group_counts: @group_counts,
+                               suite_counts: @suite_counts, actions_partial: 'groups/actions',
+                               path: draw_path(@draw) %>
   </div>
+  <hr />
 <% end %>
 <div class="ungrouped-report">
   <%= render 'ungrouped_report' %>
 </div>
+<hr />
 <% if policy(@draw).intent_summary? %>
   <div class="intent-metrics">
     <h3>Intent Metrics</h3>
@@ -38,6 +45,7 @@
       <p><%= link_to 'View intent report', intent_report_draw_path(@draw) %></p>
     <% end %>
   </div>
+  <hr />
 <% end %>
 <div>
   <% if policy(@draw).student_summary? %>
@@ -54,7 +62,7 @@
     <%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch, class: 'button' %>
   <% end %>
   <% if policy(@draw).start_lottery? %>
-    <%= link_to 'Proceed to lottery', start_lottery_draw_path(@draw), method: :patch, class: 'button' %>
+    <%= proceed_from_pre_lottery_btn(@draw) %>
   <% end %>
   <% if policy(@draw).start_selection? %>
     <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, class: 'button' %>

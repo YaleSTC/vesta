@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 # General view helper module
 module ApplicationHelper
-  include ActionView::Helpers::OutputSafetyHelper
+  delegate :size_str, to: Suite
+
   # Builds a Foundation tooltip around some content (
   #
   # @param text [String] the tooltip text
@@ -14,5 +15,13 @@ module ApplicationHelper
       data: { tooltip: true, 'disable-hover' => false }, title: text,
       aria: { haspopup: true }, class: "has-tip #{class_override}"
     }.merge(**overrides)
+  end
+
+  # Return a pluralized and capitalized named version of a suite / group size
+  #
+  # @param size [Integer] the suite / group size
+  # @return [String] the appropriate name
+  def headerize_size(size)
+    size_str(size).pluralize.capitalize
   end
 end

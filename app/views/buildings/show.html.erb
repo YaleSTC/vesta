@@ -2,7 +2,7 @@
 <h2>Suites</h2>
 <% @suites.keys.each do |size| %>
   <div class="suites-list suites-<%= size_str(size).pluralize %>">
-    <h3><%= size_str(size).pluralize.titleize %></h3>
+    <h3><%= headerize_size(size) %></h3>
     <table>
       <thead>
         <tr>

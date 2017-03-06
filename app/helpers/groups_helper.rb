@@ -2,8 +2,6 @@
 #
 # Helper methods for the Groups views
 module GroupsHelper
-  delegate :size_str, to: Suite
-
   # Generate the user listing for a group member; includes membership lock
   # status
   #
