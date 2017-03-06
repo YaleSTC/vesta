@@ -17,7 +17,7 @@ RSpec.feature 'Draw intent report' do
     student, other =
       create_student_data(draw: draw, intents: %w(on_campus off_campus))
     log_in(FactoryGirl.create(:admin))
-    visit draw_intent_report_path(draw)
+    visit intent_report_draw_path(draw)
     filter_by_intent('on_campus')
     expect(page_has_filtered_report(page, student, other)).to be_truthy
   end
@@ -26,7 +26,7 @@ RSpec.feature 'Draw intent report' do
     student, other =
       create_student_data(draw: draw, intents: %w(on_campus off_campus))
     log_in(FactoryGirl.create(:admin))
-    visit draw_intent_report_path(draw)
+    visit intent_report_draw_path(draw)
     click_on 'Filter'
     expect(page_has_unfiltered_report(page, student, other)).to be_truthy
   end

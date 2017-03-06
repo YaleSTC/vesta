@@ -2,7 +2,7 @@
 <div class="intent-report">
   <h2>Intent Report</h2>
   <div class="report_filter">
-    <%= simple_form_for @filter, url: draw_intent_report_path(@draw) do |f| %>
+    <%= simple_form_for @filter, url: intent_report_draw_path(@draw) do |f| %>
       <%= f.input :intents, collection: User.intents.keys, as: :check_boxes,
                             include_hidden: false, error: false %>
       <%= f.submit 'Filter' %>

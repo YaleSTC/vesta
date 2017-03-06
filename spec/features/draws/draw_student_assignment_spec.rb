@@ -23,7 +23,7 @@ RSpec.feature 'Draw student assignment' do
   describe 'single user adding' do
     let!(:student) { FactoryGirl.create(:student, username: 'foo') }
     it 'can be performed' do
-      visit draw_student_summary_path(draw)
+      visit student_summary_draw_path(draw)
       fill_in 'draw_student_assignment_form_username', with: 'foo'
       click_on 'Process'
       message = "#{student.full_name} successfully added"
@@ -35,7 +35,7 @@ RSpec.feature 'Draw student assignment' do
     let(:student) { FactoryGirl.create(:student, username: 'foo') }
     before { draw.students << student }
     it 'can be performed' do
-      visit draw_student_summary_path(draw)
+      visit student_summary_draw_path(draw)
       remove_user(username: 'foo')
       message = "#{student.full_name} successfully removed"
       expect(page).to have_css('.flash-success', text: message)

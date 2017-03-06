@@ -51,14 +51,14 @@ class GroupsController < ApplicationController
     handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
-  def invite_to_join
+  def send_invites
     batch_params = { user_ids: group_params['invitations'], group: @group,
                      status: 'invited' }
     results = MembershipBatchCreator.run(**batch_params)
     handle_action(path: draw_group_path(@draw, @group), **results)
   end
 
-  def edit_invitations
+  def invite
     @students = UngroupedStudentsQuery.new(@draw.students.on_campus).call
   end
 

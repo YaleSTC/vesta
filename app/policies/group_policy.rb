@@ -38,11 +38,11 @@ class GroupPolicy < ApplicationPolicy
     edit?
   end
 
-  def invite_to_join?
+  def send_invites?
     edit?
   end
 
-  def edit_invitations?
+  def invite?
     edit?
   end
 
