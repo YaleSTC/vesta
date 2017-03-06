@@ -54,7 +54,8 @@ class GroupUpdater
   end
 
   def delete_leader_id_if_empty
-    params.delete(:leader_id) if params[:leader_id]
+    params[:leader_id] = '' unless params[:leader_id]
+    params.delete(:leader_id) if params[:leader_id].empty?
   end
 
   # Note that this occurs within the transaction
