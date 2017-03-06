@@ -25,24 +25,26 @@
   <%= render 'ungrouped_report' %>
 </div>
 <hr />
-<% if policy(@draw).intent_summary? %>
-  <div class="intent-metrics">
-    <h3>Intent Metrics</h3>
-    <table>
-      <tbody>
-        <% @intent_metrics.each do |intent_value, count| %>
-          <tr>
-            <td class="metric-heading"><%= intent_value.humanize.capitalize %></td>
-            <td class="<%= intent_value %>-count"><%= count %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <% if @draw.pre_lottery? && @draw.intent_deadline %>
-      <p><%= intent_deadline_str(@draw) %></p>
-    <% end %>
+<% if policy(@draw).intent_actions? %>
+  <div class="intent-actions">
+    <h3>Intent Actions</h3>
     <% if policy(@draw).intent_report? %>
       <p><%= link_to 'View intent report', intent_report_draw_path(@draw) %></p>
+    <% end %>
+    <% if policy(@draw).lock_intent? %>
+      <%= simple_form_for @draw do |f| %>
+        <%= f.input :intent_locked, as: 'hidden',
+          input_html: { value: !@draw.intent_locked } %>
+        <%= f.submit lock_intent_btn_label(@draw),
+                     **with_tooltip(text: lock_intent_btn_tooltip(@draw)) %>
+      <% end %>
+    <% end %>
+    <% if policy(@draw).bulk_on_campus? %>
+      <%= link_to 'Make all students on campus', bulk_on_campus_draw_path(@draw),
+                  method: :patch,
+                  **with_tooltip(text: 'Sets all students who have not declared'\
+                                 ' their housing intent to living on campus',
+                                 class_override: 'button') %>
     <% end %>
   </div>
   <hr />
@@ -50,10 +52,6 @@
 <div>
   <% if policy(@draw).student_summary? %>
     <%= link_to 'View students', student_summary_draw_path(@draw), class: 'button secondary' %>
-  <% end %>
-  <% if policy(@draw).bulk_on_campus? %>
-    <%= link_to 'Make all students on campus', bulk_on_campus_draw_path(@draw), method: :patch,
-                **with_tooltip(text: 'Sets all students who have not declared their housing intent to on campus', class_override: 'button') %>
   <% end %>
   <% if policy(@draw).suite_summary? %>
     <%= link_to 'View suites', suite_summary_draw_path(@draw), class: 'button secondary' %>

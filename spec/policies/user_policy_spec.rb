@@ -15,8 +15,10 @@ RSpec.describe UserPolicy do
     end
     context 'draw in pre-lottery status' do
       before do
-        allow(user).to receive(:draw)
-          .and_return(instance_spy('draw', pre_lottery?: true))
+        draw = instance_spy('draw')
+        allow(draw).to receive(:draft?).and_return(false)
+        allow(draw).to receive(:intent_locked).and_return(false)
+        allow(user).to receive(:draw).and_return(draw)
       end
       permissions :edit_intent?, :update_intent? do
         it { is_expected.to permit(user, user) }
@@ -24,8 +26,21 @@ RSpec.describe UserPolicy do
     end
     context 'draw not pre-lottery status' do
       before do
-        allow(user).to receive(:draw)
-          .and_return(instance_spy('draw', pre_lottery?: false))
+        draw = instance_spy('draw')
+        allow(draw).to receive(:draft?).and_return(true)
+        allow(draw).to receive(:intent_locked).and_return(false)
+        allow(user).to receive(:draw).and_return(draw)
+      end
+      permissions :edit_intent?, :update_intent? do
+        it { is_expected.not_to permit(user, user) }
+      end
+    end
+    context 'draw intent locked' do
+      before do
+        draw = instance_spy('draw')
+        allow(draw).to receive(:draft?).and_return(false)
+        allow(draw).to receive(:intent_locked).and_return(true)
+        allow(user).to receive(:draw).and_return(draw)
       end
       permissions :edit_intent?, :update_intent? do
         it { is_expected.not_to permit(user, user) }
@@ -67,8 +82,10 @@ RSpec.describe UserPolicy do
     end
     context 'draw in pre-lottery status' do
       before do
-        allow(user).to receive(:draw)
-          .and_return(instance_spy('draw', pre_lottery?: true))
+        draw = instance_spy('draw')
+        allow(draw).to receive(:draft?).and_return(false)
+        allow(draw).to receive(:intent_locked).and_return(false)
+        allow(user).to receive(:draw).and_return(draw)
       end
       permissions :edit_intent?, :update_intent? do
         it { is_expected.to permit(user, user) }
@@ -76,8 +93,21 @@ RSpec.describe UserPolicy do
     end
     context 'draw not pre-lottery status' do
       before do
-        allow(user).to receive(:draw)
-          .and_return(instance_spy('draw', pre_lottery?: false))
+        draw = instance_spy('draw')
+        allow(draw).to receive(:draft?).and_return(true)
+        allow(draw).to receive(:intent_locked).and_return(false)
+        allow(user).to receive(:draw).and_return(draw)
+      end
+      permissions :edit_intent?, :update_intent? do
+        it { is_expected.not_to permit(user, user) }
+      end
+    end
+    context 'draw intent locked' do
+      before do
+        draw = instance_spy('draw')
+        allow(draw).to receive(:draft?).and_return(false)
+        allow(draw).to receive(:intent_locked).and_return(true)
+        allow(user).to receive(:draw).and_return(draw)
       end
       permissions :edit_intent?, :update_intent? do
         it { is_expected.not_to permit(user, user) }

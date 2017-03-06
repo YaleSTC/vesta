@@ -69,4 +69,26 @@ RSpec.describe DrawsHelper, type: :helper do
         match(/class=\"button\".+Proceed to lottery/)
     end
   end
+
+  describe '#lock_intent_btn_tooltip' do
+    it 'returns "Prevent ..." when intent_locked false' do
+      draw = instance_spy('Draw', intent_locked: false)
+      expect(helper.lock_intent_btn_tooltip(draw)).to include('Prevent')
+    end
+    it 'returns "Allow ..." when intent_locked true' do
+      draw = instance_spy('Draw', intent_locked: true)
+      expect(helper.lock_intent_btn_tooltip(draw)).to include('Allow')
+    end
+  end
+
+  describe '#lock_intent_btn_label' do
+    it 'returns "Lock Intents" when intent_locked false' do
+      draw = instance_spy('Draw', intent_locked: false)
+      expect(helper.lock_intent_btn_label(draw)).to include('Lock Intents')
+    end
+    it 'returns "Unlock intents" when intent_locked true' do
+      draw = instance_spy('Draw', intent_locked: true)
+      expect(helper.lock_intent_btn_label(draw)).to include('Unlock Intents')
+    end
+  end
 end

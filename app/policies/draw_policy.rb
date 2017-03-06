@@ -42,12 +42,16 @@ class DrawPolicy < ApplicationPolicy
     user.admin? || record.pre_lottery?
   end
 
-  def intent_summary?
-    !record.draft?
+  def intent_actions?
+    !user.student?
   end
 
   def bulk_on_campus?
     edit? && record.before_lottery? && !record.all_intents_declared?
+  end
+
+  def lock_intent?
+    edit? && record.all_intents_declared?
   end
 
   def oversub_report?

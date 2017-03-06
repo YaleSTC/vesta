@@ -14,7 +14,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def edit_intent?
-    user.admin? || (user == record && user.draw.try(:pre_lottery?))
+    user.admin? || (user == record && draw_intent_state)
   end
 
   def update_intent?
@@ -33,5 +33,12 @@ class UserPolicy < ApplicationPolicy
     def resolve
       scope
     end
+  end
+
+  private
+
+  def draw_intent_state
+    return false unless user.draw
+    !user.draw.intent_locked && !user.draw.draft?
   end
 end
