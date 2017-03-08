@@ -6,8 +6,8 @@
 # @attr students [Array<User>] The students in the draw.
 # @attr suites [Array<Suite>] The suites in the draw.
 # @attr status [String] The status / phase of the draw (draft, pre_lottery,
-#   lottery, post_lottery). Note the use of underscores in the status strings;
-#   this prevents some unpleasantness with the helper methods.
+#   lottery, suite_selection). Note the use of underscores in the status
+#   strings; this prevents some unpleasantness with the helper methods.
 class Draw < ApplicationRecord
   has_many :groups
   has_many :students, class_name: 'User', dependent: :nullify
@@ -69,7 +69,8 @@ class Draw < ApplicationRecord
   #
   # @return [Boolean] whether or not there are any ungrouped students
   def ungrouped_students?
-    students.includes(:group).select { |s| s.group.nil? }.count.positive?
+    students.where(intent: %w(on_campus undeclared)).includes(:group)
+            .select { |s| s.group.nil? }.count.positive?
   end
 
   # Query method to see if all the groups in the draw are locked
@@ -95,6 +96,15 @@ class Draw < ApplicationRecord
   # @return [integer] the number of beds in all available suites
   def bed_count
     @bed_count ||= suites.available.sum(:size)
+  end
+
+  # Query method to return whether or not all groups have lottery numbers
+  # assigned
+  #
+  # @return [Boolean] whether or not all groups have lottery numbers
+  # assigned
+  def lottery_complete?
+    groups.all? { |g| g.lottery_number.present? }
   end
 
   private

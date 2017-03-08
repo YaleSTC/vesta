@@ -52,6 +52,9 @@
   <% if policy(@draw).start_lottery? %>
     <%= link_to 'Proceed to lottery', start_lottery_draw_path(@draw), method: :patch, class: 'button' %>
   <% end %>
+  <% if policy(@draw).start_selection? %>
+    <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, class: 'button' %>
+  <% end %>
   <% if policy(@draw).lottery? %>
     <%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button secondary' %>
   <% end %>
