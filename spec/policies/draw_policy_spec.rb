@@ -13,7 +13,8 @@ RSpec.describe DrawPolicy do
     end
     permissions :new?, :create?, :destroy?, :edit?, :update?, :activate?,
                 :intent_report?, :filter_intent_report?, :suites_edit?,
-                :suites_update?, :student_summary?, :students_update? do
+                :suites_update?, :student_summary?, :students_update?,
+                :start_lottery?, :start_selection? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
@@ -71,7 +72,8 @@ RSpec.describe DrawPolicy do
     end
     permissions :create?, :edit?, :update?, :destroy?, :activate?,
                 :intent_report?, :filter_intent_report?, :suites_edit?,
-                :suites_update?, :student_summary?, :students_update? do
+                :suites_update?, :student_summary?, :students_update?,
+                :start_lottery?, :start_selection? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :index? do
@@ -165,6 +167,29 @@ RSpec.describe DrawPolicy do
 
       context 'when draw is not a draft' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :start_selection? do
+      context 'when draw is in lottery and all numbers assigned' do
+        before do
+          allow(draw).to receive(:lottery?).and_return(true)
+          allow(draw).to receive(:lottery_complete?).and_return(true)
+        end
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'when draw is in lottery but not all numbers assigned' do
+        before do
+          allow(draw).to receive(:lottery?).and_return(true)
+          allow(draw).to receive(:lottery_complete?).and_return(false)
+        end
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'when draw is not in lottery' do
+        before do
+          allow(draw).to receive(:lottery?).and_return(false)
+        end
         it { is_expected.not_to permit(user, draw) }
       end
     end

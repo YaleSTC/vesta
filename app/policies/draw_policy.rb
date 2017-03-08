@@ -62,6 +62,10 @@ class DrawPolicy < ApplicationPolicy
     record.lottery? && (user.admin? || user.rep?)
   end
 
+  def start_selection?
+    edit? && record.lottery? && record.lottery_complete?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

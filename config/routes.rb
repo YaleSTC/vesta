@@ -31,7 +31,6 @@ Rails.application.routes.draw do
   resources :draws do
     member do
       patch 'activate'
-      patch 'start_lottery'
       get 'intent_report'
       post 'intent_report', to: 'draws#filter_intent_report'
       get 'suites', to: 'draws#suite_summary', as: 'suite_summary'
@@ -39,7 +38,9 @@ Rails.application.routes.draw do
       patch 'suites', to: 'draws#suites_update', as: 'suites_update'
       get 'students', to: 'draws#student_summary', as: 'student_summary'
       patch 'students', to: 'draws#students_update', as: 'students_update'
+      patch 'start_lottery'
       get 'lottery'
+      patch 'start_selection'
     end
 
     resources :groups do

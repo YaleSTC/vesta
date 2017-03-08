@@ -123,6 +123,18 @@ RSpec.describe Draw, type: :model do
       FactoryGirl.create(:group, leader: draw.students.first)
       expect(draw.ungrouped_students?).to be_truthy
     end
+    it 'checks for undeclared students' do
+      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
+      FactoryGirl.create(:group, leader: draw.students.first)
+      draw.students.last.update(intent: 'undeclared')
+      expect(draw.ungrouped_students?).to be_truthy
+    end
+    it 'ignores off_campus students' do
+      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
+      FactoryGirl.create(:group, leader: draw.students.first)
+      draw.students.last.update(intent: 'off_campus')
+      expect(draw.ungrouped_students?).to be_falsey
+    end
     it 'returns false if there are no students in the draw not in a group' do
       draw = FactoryGirl.create(:draw_with_members, students_count: 1)
       FactoryGirl.create(:group, leader: draw.students.first)
@@ -151,5 +163,16 @@ RSpec.describe Draw, type: :model do
 
   describe '#student_count' do
     xit 'returns the nuber of students in the draw'
+  end
+
+  describe '#lottery_complete?' do
+    let(:draw) { FactoryGirl.create(:draw_in_lottery) }
+    it 'returns true if all groups have lottery numbers assigned' do
+      draw.groups.each { |g| g.update(lottery_number: 1) }
+      expect(draw.lottery_complete?).to be_truthy
+    end
+    it 'returns false if some groups do have lottery numbers assigned' do
+      expect(draw.lottery_complete?).to be_falsey
+    end
   end
 end
