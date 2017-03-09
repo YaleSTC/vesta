@@ -142,6 +142,18 @@ RSpec.describe Draw, type: :model do
     end
   end
 
+  describe '#all_intents_declared?' do
+    let(:draw) { FactoryGirl.create(:draw_with_members) }
+    it 'returns false if there are any undeclared students in the draw' do
+      draw.students.first.update(intent: 'undeclared')
+      expect(draw.all_intents_declared?).to be_falsey
+    end
+    it 'returns true if there are no undeclared students in the draw' do
+      draw.students.first.update(intent: 'on_campus')
+      expect(draw.all_intents_declared?).to be_truthy
+    end
+  end
+
   describe '#all_groups_locked?' do
     it 'returns true if all groups in the draw are locked' do
       draw = FactoryGirl.create(:draw_with_members, students_count: 1)
@@ -163,6 +175,27 @@ RSpec.describe Draw, type: :model do
 
   describe '#student_count' do
     xit 'returns the nuber of students in the draw'
+  end
+
+  describe '#before_lottery?' do
+    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+
+    it 'returns true if draw is a draft' do
+      draw.status = 'draft'
+      expect(draw).to be_before_lottery
+    end
+    it 'returns true if draw is in the pre_lottery phase' do
+      draw.status = 'pre_lottery'
+      expect(draw).to be_before_lottery
+    end
+    it 'returns false if the draw is in the lottery phase' do
+      draw.status = 'lottery'
+      expect(draw).not_to be_before_lottery
+    end
+    it 'returns false if the draw is in the lottery phase' do
+      draw.status = 'suite_selection'
+      expect(draw).not_to be_before_lottery
+    end
   end
 
   describe '#lottery_complete?' do

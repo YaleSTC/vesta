@@ -43,6 +43,10 @@
   <% if policy(@draw).student_summary? %>
     <%= link_to 'View students', student_summary_draw_path(@draw), class: 'button secondary' %>
   <% end %>
+  <% if policy(@draw).bulk_on_campus? %>
+    <%= link_to 'Make all students on campus', bulk_on_campus_draw_path(@draw), method: :patch,
+                **with_tooltip(text: 'Sets all students who have not declared their housing intent to on campus', class_override: 'button') %>
+  <% end %>
   <% if policy(@draw).suite_summary? %>
     <%= link_to 'View suites', suite_summary_draw_path(@draw), class: 'button secondary' %>
   <% end %>

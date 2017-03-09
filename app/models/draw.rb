@@ -73,6 +73,14 @@ class Draw < ApplicationRecord
             .select { |s| s.group.nil? }.count.positive?
   end
 
+  # Query method to see if there are no undeclared students in the draw
+  #
+  # @return [Boolean] whether or not the draw has no undeclared students
+  def all_intents_declared?
+    @undeclared_count ||= students.undeclared.count
+    @undeclared_count.zero?
+  end
+
   # Query method to see if all the groups in the draw are locked
   #
   # @return [Boolean] whether or not all the groups are locked
@@ -96,6 +104,13 @@ class Draw < ApplicationRecord
   # @return [integer] the number of beds in all available suites
   def bed_count
     @bed_count ||= suites.available.sum(:size)
+  end
+
+  # Query method to check whether or not a draw is not yet in the lottery phase
+  #
+  # @return [Boolean] whether or not the draw is not yet in the lottery phase
+  def before_lottery?
+    %w(draft pre_lottery).include? status
   end
 
   # Query method to return whether or not all groups have lottery numbers
