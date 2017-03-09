@@ -2,11 +2,8 @@
   display: inline-block;
   width: 20%;
   word-wrap: break-word;
-}
 
-/* Mobile responsiveness breakpoint */
-@media only screen and (max-width: 720px) {
-  .inline-checkbox {
+  @include breakpoint(medium) {
     width: 100%;
   }
 }
