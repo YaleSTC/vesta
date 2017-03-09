@@ -175,4 +175,13 @@ RSpec.describe Draw, type: :model do
       expect(draw.lottery_complete?).to be_falsey
     end
   end
+
+  describe '#next_groups' do
+    it 'calls NextGroupQuery' do
+      draw = build_stubbed(:draw)
+      allow(NextGroupsQuery).to receive(:call).with(draw: draw)
+      draw.next_groups
+      expect(NextGroupsQuery).to have_received(:call).with(draw: draw)
+    end
+  end
 end

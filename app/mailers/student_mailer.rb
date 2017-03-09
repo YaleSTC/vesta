@@ -15,4 +15,15 @@ class StudentMailer < ApplicationMailer
                                   admin_email: 'admin@vesta.app')
     mail(to: @user.email, subject: 'The housing process has begun')
   end
+
+  # Send invitation to a group leader to select a suite
+  #
+  # @param user [User] the group leader to send the invitation to
+  def selection_invite(user)
+    @user = user
+    @res_college = OpenStruct.new(name: 'College', dean: 'Dean Vesta',
+                                  vesta_url: 'https://vesta.app/',
+                                  admin_email: 'admin@vesta.app')
+    mail(to: @user.email, subject: 'Time to select a suite!')
+  end
 end
