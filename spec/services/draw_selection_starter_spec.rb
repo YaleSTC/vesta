@@ -48,6 +48,13 @@ RSpec.describe DrawSelectionStarter do
       expect(result[:object]).to eq(draw)
     end
 
+    it 'sends invitations to the first group(s) to select' do
+      draw = valid_mock_draw_with_group
+      mailer = instance_spy('student_mailer')
+      described_class.start(draw: draw, mailer: mailer)
+      expect(mailer).to have_received(:selection_invite).once
+    end
+
     it 'sets the object key to nil in the hash on failure' do
       draw = instance_spy('draw', validity_stubs(valid: false))
       result = described_class.start(draw: draw)
@@ -64,5 +71,10 @@ RSpec.describe DrawSelectionStarter do
 
   def validity_stubs(valid:, **attrs)
     { lottery?: valid, lottery_complete?: valid }.merge(attrs)
+  end
+
+  def valid_mock_draw_with_group
+    group = instance_spy('group', leader: instance_spy('user'))
+    instance_spy('draw', validity_stubs(valid: true, next_groups: [group]))
   end
 end

@@ -107,6 +107,14 @@ class Draw < ApplicationRecord
     groups.all? { |g| g.lottery_number.present? }
   end
 
+  # Return the next groups to select suites by lottery number. Returns an empty
+  # array if no groups without suites and with lottery numbers exist.
+  #
+  # @return [Array<Group>] the next available groups using NextGroupsQuery
+  def next_groups
+    NextGroupsQuery.call(draw: self)
+  end
+
   private
 
   def group_count
