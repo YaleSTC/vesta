@@ -14,7 +14,7 @@ RSpec.describe DrawPolicy do
     permissions :new?, :create?, :destroy?, :edit?, :update?, :activate?,
                 :intent_report?, :filter_intent_report?, :suites_edit?,
                 :suites_update?, :student_summary?, :students_update?,
-                :start_lottery?, :start_selection? do
+                :start_lottery?, :start_selection?, :bulk_on_campus? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
@@ -73,7 +73,7 @@ RSpec.describe DrawPolicy do
     permissions :create?, :edit?, :update?, :destroy?, :activate?,
                 :intent_report?, :filter_intent_report?, :suites_edit?,
                 :suites_update?, :student_summary?, :students_update?,
-                :start_lottery?, :start_selection? do
+                :start_lottery?, :start_selection?, :bulk_on_campus? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :index? do
@@ -235,6 +235,27 @@ RSpec.describe DrawPolicy do
       context 'draw is in lottery phase' do
         before { allow(draw).to receive(:lottery?).and_return(true) }
         it { is_expected.to permit(user, draw) }
+      end
+    end
+
+    permissions :bulk_on_campus? do
+      context 'draw is before lottery and has undeclared students' do
+        before do
+          allow(draw).to receive(:before_lottery?).and_return(true)
+          allow(draw).to receive(:all_intents_declared?).and_return(false)
+        end
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'draw is before lottery but has no undeclared students' do
+        before do
+          allow(draw).to receive(:before_lottery?).and_return(true)
+          allow(draw).to receive(:all_intents_declared?).and_return(true)
+        end
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw is after lottery' do
+        before { allow(draw).to receive(:before_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
       end
     end
   end

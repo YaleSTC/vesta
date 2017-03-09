@@ -46,6 +46,10 @@ class DrawPolicy < ApplicationPolicy
     !record.draft?
   end
 
+  def bulk_on_campus?
+    edit? && record.before_lottery? && !record.all_intents_declared?
+  end
+
   def oversub_report?
     !record.draft? && !record.suites.empty?
   end

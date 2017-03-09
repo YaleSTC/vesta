@@ -53,6 +53,14 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     render action: 'intent_report'
   end
 
+  def bulk_on_campus
+    result = BulkOnCampusUpdater.update(draw: @draw)
+    # note that BulkOnCampusUpdater.update always returns a success hash with
+    # :object set to @draw, so we don't need to handle a fallback case via
+    # handle_action
+    handle_action(**result)
+  end
+
   def suite_summary
     @all_sizes = SuiteSizesQuery.new(Suite.available).call
     @suites_by_size = SuitesBySizeQuery.new(@draw.suites.available).call
