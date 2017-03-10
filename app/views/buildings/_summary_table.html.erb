@@ -15,8 +15,8 @@
         <td data-role="suite-size"><%= size_str(size).capitalize.pluralize %></td>
         <td data-role="suite-count"><%= suites.count %></td>
         <td data-role="assigned-count"><%= suites.reject { |s| s.group_id.nil? }.count %></td>
-        <td data-role="draws-count"><%= suites.reject { |s| s.draws.present? }.count %></td>
-        <td data-role="not-draw-count"><%= suites.reject { |s| s.draws.empty? }.count %></td>
+        <td data-role="draws-count"><%= suites.reject { |s| s.draws.empty? }.count %></td>
+        <td data-role="not-draw-count"><%= suites.reject { |s| s.draws.present? }.count %></td>
       </tr>
     <% end %>
   </tbody>
