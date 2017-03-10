@@ -16,6 +16,16 @@ RSpec.describe UngroupedStudentsQuery do
     expect(result.sort_by(&:id)).to eq(students)
   end
 
+  it 'ignores invitations' do
+    invited = create_invited_student
+    expect(described_class.call).to eq([invited])
+  end
+
+  it 'ignores requests' do
+    requested = create_requested_student
+    expect(described_class.call).to eq([requested])
+  end
+
   it 'restricts the results to the passed query' do
     student1, student2 = FactoryGirl.create_pair(:student)
     result = described_class.new(User.where.not(id: student1.id)).call
@@ -28,6 +38,21 @@ RSpec.describe UngroupedStudentsQuery do
     draw.suites << suite
     FactoryGirl.create(:student, draw: draw).tap do |s|
       FactoryGirl.create(:group, draw: draw, size: suite.size, leader: s)
+    end
+  end
+
+  def create_invited_student
+    create_student_with_unaccepted_membership('invited')
+  end
+
+  def create_requested_student
+    create_student_with_unaccepted_membership('requested')
+  end
+
+  def create_student_with_unaccepted_membership(status)
+    group = FactoryGirl.create(:drawless_group, size: 2)
+    FactoryGirl.create(:student).tap do |s|
+      Membership.create!(user_id: s.id, group_id: group.id, status: status)
     end
   end
 end
