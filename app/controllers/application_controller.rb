@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
   before_action :authorize!, except: :home, unless: :devise_controller?
   after_action :verify_authorized, except: :home, unless: :devise_controller?
 
+  rescue_from Pundit::NotAuthorizedError do |exception|
+    Honeybadger.notify(exception)
+    flash[:error] = "Sorry, you don't have permission to do that."
+    redirect_to request.referer.present? ? request.referer : root_path
+  end
+
   def home; end
 
   private
