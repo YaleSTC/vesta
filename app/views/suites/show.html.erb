@@ -13,7 +13,7 @@
     <% if @draws.empty? %>
       None
     <% else %>
-      <%= @draws.map { |draw| link_to draw.name, draw_path(draw)}.join(', ').html_safe %>
+      <%= render partial: 'draw_link', collection: @draws, spacer_template: 'shared/comma' %>
     <% end %>
   </li>
 </ul>
