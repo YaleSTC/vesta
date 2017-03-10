@@ -1,2 +1,7 @@
 ---
 api_key: <%= ENV["HONEYBADGER_API"] %>
+production:
+  request:
+    filter_keys:
+      - user
+      - enrollment
