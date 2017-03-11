@@ -2,14 +2,6 @@
 #
 # Helper module for Suites
 module SuitesHelper
-  # Sets the value for the hidden field on the medical suite "form"
-  #
-  # @param suite [Suite] the suite in question
-  # @return [Integer] a value inverse of the current medical status
-  def medical_val(suite)
-    suite.medical ? 0 : 1
-  end
-
   # Returns the button string for the medical suite "form"
   #
   # @param suite [Suite] the suite in question
