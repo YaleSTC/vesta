@@ -2,17 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe SuitesHelper, type: :helper do
-  describe '#medical_val' do
-    it 'returns 1 if not currently a medical suite' do
-      suite = instance_spy('suite', medical: false)
-      expect(helper.medical_val(suite)).to eq(1)
-    end
-    it 'returns 0 if currently a medical suite' do
-      suite = instance_spy('suite', medical: true)
-      expect(helper.medical_val(suite)).to eq(0)
-    end
-  end
-
   describe '#medical_btn_str' do
     it 'returns "Make medical suite" if not a medical suite' do
       suite = instance_spy('suite', medical: false)

@@ -2,11 +2,11 @@
 # Class for Suite permissions
 class SuitePolicy < ApplicationPolicy
   def show?
-    true
+    !record.medical || user.try(:group).try(:suite) == record || user.admin?
   end
 
   def update?
-    user.rep? || user.admin?
+    user.admin?
   end
 
   def index?
@@ -18,7 +18,7 @@ class SuitePolicy < ApplicationPolicy
   end
 
   def perform_merge?
-    edit?
+    edit? || user.rep?
   end
 
   def build_split?
@@ -30,7 +30,7 @@ class SuitePolicy < ApplicationPolicy
   end
 
   def perform_split?
-    edit? && record.rooms.size >= 2
+    (edit? || user.rep?) && record.rooms.size >= 2
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation

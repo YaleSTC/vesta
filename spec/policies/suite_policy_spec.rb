@@ -8,7 +8,14 @@ RSpec.describe SuitePolicy do
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
     permissions :show? do
-      it { is_expected.to permit(user, suite) }
+      context 'non-medical suite' do
+        before { allow(suite).to receive(:medical).and_return(false) }
+        it { is_expected.to permit(user, suite) }
+      end
+      context 'medical suite' do
+        before { allow(suite).to receive(:medical).and_return(true) }
+        it { is_expected.not_to permit(user, suite) }
+      end
     end
     permissions :index? do
       it { is_expected.to permit(user, Suite) }
@@ -21,7 +28,17 @@ RSpec.describe SuitePolicy do
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :show?, :edit?, :update?, :merge?, :perform_merge? do
+    permissions :show? do
+      context 'non-medical suite' do
+        before { allow(suite).to receive(:medical).and_return(false) }
+        it { is_expected.to permit(user, suite) }
+      end
+      context 'medical suite' do
+        before { allow(suite).to receive(:medical).and_return(true) }
+        it { is_expected.not_to permit(user, suite) }
+      end
+    end
+    permissions :merge?, :perform_merge? do
       it { is_expected.to permit(user, suite) }
     end
     permissions :index? do
