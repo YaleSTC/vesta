@@ -21,6 +21,9 @@ class UsersController < ApplicationController
                                querier: querier)
     @user = result[:user]
     handle_action(**result)
+  rescue Rack::Timeout::RequestTimeoutException => exception
+    Honeybadger.notify(exception)
+    handle_idr_timeout
   end
 
   def create
@@ -73,5 +76,11 @@ class UsersController < ApplicationController
     # we can't use the `env` helper because Rails implements a deprecated env
     # method in controllers
     ENV['QUERIER'].constantize
+  end
+
+  def handle_idr_timeout
+    flash[:error] = 'There was a problem with that request, please try again.'
+    @user = User.new
+    render action: 'build'
   end
 end

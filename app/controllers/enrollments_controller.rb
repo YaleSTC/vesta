@@ -9,6 +9,9 @@ class EnrollmentsController < ApplicationController
     result = Enrollment.enroll(enrollment_params)
     @enrollment = result[:enrollment]
     handle_action(**result)
+  rescue Rack::Timeout::RequestTimeoutException => exception
+    Honeybadger.notify(exception)
+    handle_idr_timeout
   end
 
   private
@@ -27,5 +30,11 @@ class EnrollmentsController < ApplicationController
     # we can't use the `env` helper because Rails implements a deprecated env
     # method in controllers
     ENV['QUERIER'].constantize
+  end
+
+  def handle_idr_timeout
+    flash[:error] = 'There was a problem with that request, please try again.'
+    @enrollment = Enrollment.new
+    render action: 'new'
   end
 end
