@@ -75,7 +75,7 @@ class SuitesController < ApplicationController
   end
 
   def suite_params
-    params.require(:suite).permit(:number, :building_id)
+    params.require(:suite).permit(:number, :building_id, :medical)
   end
 
   def suite_merger_params

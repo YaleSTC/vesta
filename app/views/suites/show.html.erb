@@ -1,4 +1,7 @@
 <h1 class="suite-number"><%= @suite.number %></h1>
+  <% if policy(@suite).edit? %>
+    <span class="label secondary suite-medical" style="margin-bottom: 1em;"><%= medical_str(@suite.medical).capitalize %></span>
+  <% end %>
 <ul>
   <li>Status:
     <% if @suite.available? %>
@@ -37,4 +40,10 @@
 <% if policy(@suite).split? %>
   <p><%= link_to 'Split suite', split_suite_path(@suite) %></p>
 <% end %>
-<p><%= link_to 'Delete', suite_path(@suite), method: :delete %></p>
+
+<% if policy(@suite).edit? %>
+  <div>
+    <%= render 'medical_form', suite: @suite %>
+    <%= link_to 'Delete', suite_path(@suite), method: :delete, class: 'button alert' %>
+  </div>
+ <% end %>
