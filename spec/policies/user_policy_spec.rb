@@ -38,6 +38,23 @@ RSpec.describe UserPolicy do
     permissions :index?, :build? do
       it { is_expected.not_to permit(user, User) }
     end
+    permissions :draw_info? do
+      context 'other user is admin' do
+        before { allow(other_user).to receive(:admin?).and_return(true) }
+        it { is_expected.not_to permit(user, other_user) }
+      end
+      context 'other user is not in draw' do
+        before { allow(other_user).to receive(:draw_id).and_return(nil) }
+        it { is_expected.not_to permit(user, other_user) }
+      end
+      context 'non-admin in draw' do
+        before do
+          allow(other_user).to receive(:admin?).and_return(false)
+          allow(other_user).to receive(:draw_id).and_return(1)
+        end
+        it { is_expected.to permit(user, other_user) }
+      end
+    end
   end
 
   context 'housing rep' do
@@ -73,6 +90,23 @@ RSpec.describe UserPolicy do
     permissions :index?, :build? do
       it { is_expected.not_to permit(user, User) }
     end
+    permissions :draw_info? do
+      context 'other user is admin' do
+        before { allow(other_user).to receive(:admin?).and_return(true) }
+        it { is_expected.not_to permit(user, other_user) }
+      end
+      context 'other user is not in draw' do
+        before { allow(other_user).to receive(:draw_id).and_return(nil) }
+        it { is_expected.not_to permit(user, other_user) }
+      end
+      context 'non-admin in draw' do
+        before do
+          allow(other_user).to receive(:admin?).and_return(false)
+          allow(other_user).to receive(:draw_id).and_return(1)
+        end
+        it { is_expected.to permit(user, other_user) }
+      end
+    end
   end
 
   context 'admin' do
@@ -83,6 +117,23 @@ RSpec.describe UserPolicy do
     end
     permissions :index?, :build? do
       it { is_expected.to permit(user, User) }
+    end
+    permissions :draw_info? do
+      context 'other user is admin' do
+        before { allow(other_user).to receive(:admin?).and_return(true) }
+        it { is_expected.not_to permit(user, other_user) }
+      end
+      context 'other user is not in draw' do
+        before { allow(other_user).to receive(:draw_id).and_return(nil) }
+        it { is_expected.not_to permit(user, other_user) }
+      end
+      context 'non-admin in draw' do
+        before do
+          allow(other_user).to receive(:admin?).and_return(false)
+          allow(other_user).to receive(:draw_id).and_return(1)
+        end
+        it { is_expected.to permit(user, other_user) }
+      end
     end
   end
 end

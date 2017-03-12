@@ -25,6 +25,10 @@ class UserPolicy < ApplicationPolicy
     new?
   end
 
+  def draw_info?
+    !record.admin? && record.draw_id.present?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope
