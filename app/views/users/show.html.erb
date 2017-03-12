@@ -1,4 +1,4 @@
-<h1> User <%= @user.full_name %> </h1>
-<h2 class="user-role"> <%= @user.role %> </h2>
-<h2 class="user-intent"> <%= @user.intent %> </h2>
+<h1><%= @user.full_name %> </h1>
+<h2 class="user-role">Role: <%= @user.role %> </h2>
+<h2 class="user-intent">Intent: <%= @user.intent.gsub("_", " ") %> </h2>
 
