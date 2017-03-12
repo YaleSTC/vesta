@@ -1,4 +1,11 @@
-<h1> User <%= @user.full_name %> </h1>
-<h2 class="user-role"> <%= @user.role %> </h2>
-<h2 class="user-intent"> <%= @user.intent %> </h2>
+<h2 class="user-name">User <%= @user.full_name %></h2>
+<h3 class="user-role"><%= @user.role %></h3>
+<% if policy(@user).draw_info? %>
+  <h3><%= @user.draw.name %></h3>
+  <h3 class="user-intent"><%= @user.intent %></h3>
+<% end %>
+<% if policy(@user).edit? %>
+  <h3 class="user-email"><%= @user.email %></h3>
+  <p><%= link_to 'Edit', edit_user_path(@user), class: 'button secondary' %></p>
+<% end %>
 
