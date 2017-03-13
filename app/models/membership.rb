@@ -35,11 +35,11 @@ class Membership < ApplicationRecord
   # MUST come before the status callbacks
   after_save :update_counter_cache
   after_create :increment_counter_cache
-  after_destroy :decrement_counter_cache
+  after_destroy :decrement_counter_cache, if: ->(m) { m.group.present? }
 
   # Group status callbacks
   after_save :update_group_status
-  after_destroy :update_group_status
+  after_destroy :update_group_status, if: ->(m) { m.group.present? }
 
   def readonly?
     if locked_changed? && locked
@@ -53,7 +53,7 @@ class Membership < ApplicationRecord
   private
 
   def user_not_in_group
-    return unless user.group
+    return unless user.group && user.group != group
     errors.add :user, 'already has membership in another group'
   end
 

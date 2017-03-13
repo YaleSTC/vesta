@@ -12,8 +12,8 @@
 #   cache)
 # @attr transfers [Integer] the number of transfer students in the group
 # @attr lottery_number [Integer] the lottery number assigned to the group
-class Group < ApplicationRecord
-  belongs_to :leader, class_name: 'User'
+class Group < ApplicationRecord # rubocop:disable ClassLength
+  belongs_to :leader, inverse_of: :led_group, class_name: 'User'
   belongs_to :draw
   has_one :suite
   has_many :memberships, dependent: :delete_all
@@ -52,14 +52,11 @@ class Group < ApplicationRecord
   end
 
   # Updates the status to match the group size (open when fewer members than
-  # the size, and full when they are the same)
+  # the size, and full when they are the same). Uses `update_columns` to avoid a
+  # SystemStackError under certain circumstances (skips callbacks).
   def update_status!
-    if members_count < size
-      update!(status: 'open')
-    elsif members_count == size
-      update!(status: 'full') if open?
-      update!(status: 'locked') if lockable?
-    end
+    assign_new_status
+    update_columns(status: status) if status && valid?
   end
 
   # Get the group's membership requests
@@ -160,5 +157,14 @@ class Group < ApplicationRecord
     validate_not_open
     return if lockable?
     errors.add :status, 'can only be locked when all members have locked'
+  end
+
+  def assign_new_status
+    if members_count < size
+      self.status = 'open'
+    elsif members_count == size
+      self.status = 'full' if open?
+      self.status = 'locked' if lockable?
+    end
   end
 end
