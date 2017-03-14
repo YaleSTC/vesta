@@ -99,6 +99,14 @@ class GroupPolicy < ApplicationPolicy
     user.admin? && rooms_assigned?(record)
   end
 
+  def select_suite?
+    user.admin? || (user.leader_of?(record) && record.draw.next_group?(record))
+  end
+
+  def assign_suite?
+    select_suite?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

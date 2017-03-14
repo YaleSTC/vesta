@@ -10,8 +10,15 @@
     <% if policy(current_user.group).assign_rooms? %>
       <li><%= link_to 'Assign Rooms', new_group_room_assignment_path(current_user.group) %></li>
     <% end %>
+    <% if policy(current_user.group).select_suite? %>
+      <li><%= link_to 'Select Suite', select_suite_draw_group_path(current_user.draw, current_user.group) %></li>
+    <% end %>
   <% elsif policy(Group).new? %>
     <li><%= link_to 'Create Housing Group', new_draw_group_path(current_user.draw) %></li>
+  <% else %>
+    <% if current_user.group %>
+      <li><%= link_to 'My Group', group_path(current_user.group) %></li>
+    <% end %>
   <% end %>
   <!-- eventually add: select a suite / view my suite -->
 </ul>

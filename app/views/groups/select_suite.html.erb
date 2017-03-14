@@ -1,0 +1,5 @@
+<h1>Select a Suite</h1>
+<%= simple_form_for [@draw, @group], url: assign_suite_draw_group_path(@draw, @group) do |f| %>
+  <%= f.input :suite, collection: @suites, as: :radio_buttons, label_method: :number %>
+  <%= f.submit "Submit Selection", **with_tooltip(text: 'This is final and commits your group to living on campus.') %>
+<% end %>

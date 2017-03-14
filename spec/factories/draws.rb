@@ -36,6 +36,18 @@ FactoryGirl.define do
           draw.update(status: 'lottery')
         end
       end
+
+      factory :draw_in_selection do
+        after(:create) do |draw, e|
+          suites = create_list(:suite_with_rooms, e.groups_count, draws: [draw])
+          suites.each_with_index do |suite, i|
+            l = FactoryGirl.create(:student, draw: draw, intent: 'on_campus')
+            FactoryGirl.create(:locked_group, size: suite.size, leader: l,
+                                              lottery_number: i)
+          end
+          draw.update(status: 'suite_selection')
+        end
+      end
     end
   end
 end
