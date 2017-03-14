@@ -7,7 +7,16 @@ class MembershipDestroyer < Destroyer
   # @param [ApplicationRecord] object The model object to be destroyed
   def initialize(membership:)
     @object = membership
-    @name = "#{membership.user.full_name}'s Membership"
-    @klass = membership.class
+    @name = "#{membership.user.full_name}'s membership"
+  end
+
+  private
+
+  def success
+    { object: nil, msg: { notice: "#{name} deleted." } }
+  end
+
+  def error
+    { object: nil, msg: { error: "#{name} couldn't be deleted." } }
   end
 end

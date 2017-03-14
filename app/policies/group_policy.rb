@@ -54,6 +54,10 @@ class GroupPolicy < ApplicationPolicy
     !user.group && record.invitations.include?(user)
   end
 
+  def leave?
+    !record.locked? && record.members.include?(user) && record.leader != user
+  end
+
   def finalize?
     edit? && record.full?
   end
