@@ -4,7 +4,8 @@
 class DrawsController < ApplicationController # rubocop:disable ClassLength
   prepend_before_action :set_draw, except: %i(index new create)
   before_action :calculate_metrics, only: %i(show activate start_lottery
-                                             start_selection)
+                                             start_selection
+                                             lottery_confirmation)
 
   def show; end
 
@@ -99,10 +100,12 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(**result)
   end
 
+  def lottery_confirmation; end
+
   def start_lottery
     @lottery_starter = DrawLotteryStarter.new(draw: @draw)
     result = @lottery_starter.start
-    handle_action(action: 'show', **result)
+    handle_action(action: 'lottery_confirmation', **result)
   end
 
   def lottery; end

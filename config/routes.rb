@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       patch 'suites', to: 'draws#suites_update', as: 'suites_update'
       get 'students', to: 'draws#student_summary', as: 'student_summary'
       patch 'students', to: 'draws#students_update', as: 'students_update'
+      get 'lottery_confirmation'
       patch 'start_lottery'
       get 'oversubscription', to: 'draws#oversubscription', as: 'oversub'
       patch 'size_lock/:size', to: 'draws#toggle_size_lock',
