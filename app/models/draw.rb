@@ -155,6 +155,15 @@ class Draw < ApplicationRecord
     NextGroupsQuery.call(draw: self)
   end
 
+  # Email the leaders of the next groups to select suites.
+  #
+  # @param [Mailer] The mailer to use
+  def notify_next_groups(mailer = StudentMailer)
+    next_groups.each do |group|
+      mailer.selection_invite(group.leader).deliver_later
+    end
+  end
+
   private
 
   def group_count

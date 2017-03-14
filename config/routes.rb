@@ -60,6 +60,8 @@ Rails.application.routes.draw do
         put 'finalize_membership'
         put 'lock'
         delete 'leave'
+        get 'select_suite'
+        patch 'assign_suite'
       end
     end
   end

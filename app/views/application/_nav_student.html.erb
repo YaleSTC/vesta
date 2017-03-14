@@ -6,6 +6,9 @@
     <li><%= link_to 'My Draw', draw_path(current_user.draw) %></li>
     <% if current_user.group %>
       <li><%= link_to 'My Group', draw_group_path(current_user.draw, current_user.group) %></li>
+      <% if policy(current_user.group).select_suite? %>
+        <li><%= link_to 'Select Suite', select_suite_draw_group_path(current_user.draw, current_user.group) %></li>
+      <% end %>
     <% end %>
   <% else %>
     <% if current_user.group %>

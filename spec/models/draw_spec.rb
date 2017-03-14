@@ -255,10 +255,23 @@ RSpec.describe Draw, type: :model do
 
   describe '#next_groups' do
     it 'calls NextGroupQuery' do
-      draw = build_stubbed(:draw)
+      draw = FactoryGirl.build_stubbed(:draw)
       allow(NextGroupsQuery).to receive(:call).with(draw: draw)
       draw.next_groups
       expect(NextGroupsQuery).to have_received(:call).with(draw: draw)
     end
+  end
+
+  describe '#notify_next_groups' do
+    # rubocop:disable RSpec/ExampleLength
+    it 'sends a selection invite to the leaders of the next groups' do
+      draw = FactoryGirl.build_stubbed(:draw)
+      group = instance_spy('Group', leader: instance_spy('User'))
+      allow(draw).to receive(:next_groups).and_return([group])
+      mailer = instance_spy('StudentMailer')
+      draw.notify_next_groups(mailer)
+      expect(mailer).to have_received(:selection_invite).with(group.leader)
+    end
+    # rubocop:enable RSpec/ExampleLength
   end
 end
