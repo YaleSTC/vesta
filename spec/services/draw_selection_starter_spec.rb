@@ -50,9 +50,8 @@ RSpec.describe DrawSelectionStarter do
 
     it 'sends invitations to the first group(s) to select' do
       draw = valid_mock_draw_with_group
-      mailer = instance_spy('student_mailer')
-      described_class.start(draw: draw, mailer: mailer)
-      expect(mailer).to have_received(:selection_invite).once
+      described_class.start(draw: draw, mailer: UserMailer)
+      expect(draw).to have_received(:notify_next_groups).once
     end
 
     it 'sets the object key to nil in the hash on failure' do

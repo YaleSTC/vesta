@@ -5,6 +5,8 @@ class GroupsController < ApplicationController
   layout 'application_with_sidebar'
   prepend_before_action :set_group, except: %i(new create)
   prepend_before_action :set_draw
+  before_action :authorize_draw!, except: %i(select_suite assign_suite show
+                                             assign_lottery)
   before_action :set_form_data, only: %i(new edit)
 
   def show
@@ -113,6 +115,16 @@ class GroupsController < ApplicationController
     handle_action(action: 'show', **result)
   end
 
+  def select_suite
+    @suites = @draw.suites.available.where(size: @group.size)
+  end
+
+  def assign_suite
+    suite_id = group_params['suite']
+    result = GroupSuiteSelector.select(group: @group, suite_id: suite_id)
+    handle_action(action: 'select_suite', **result)
+  end
+
   private
 
   def authorize!
@@ -121,14 +133,17 @@ class GroupsController < ApplicationController
     else
       authorize Group
     end
+  end
+
+  def authorize_draw!
     authorize @draw, :group_actions?
   end
 
   def group_params
     p = params.require(:group).permit(:size, :leader_id, :transfers,
-                                      :lottery_number, member_ids: [],
-                                                       remove_ids: [],
-                                                       invitations: [])
+                                      :lottery_number, :suite,
+                                      member_ids: [], remove_ids: [],
+                                      invitations: [])
     return p if @group
     p.reject! { |k, _v| k == 'transfers' }
   end

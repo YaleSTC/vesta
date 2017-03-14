@@ -64,6 +64,8 @@ Rails.application.routes.draw do
         put 'unlock'
         delete 'leave'
         patch 'make_drawless'
+        get 'select_suite'
+        patch 'assign_suite'
       end
     end
   end

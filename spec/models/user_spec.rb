@@ -177,4 +177,17 @@ RSpec.describe User, type: :model do
       expect(result.intent).to eq('undeclared')
     end
   end
+
+  describe '#leader_of?' do
+    it 'returns true when user leader of group' do
+      user = FactoryGirl.build_stubbed(:user)
+      group = instance_spy('Group', leader: user)
+      expect(user.leader_of?(group)).to be_truthy
+    end
+    it 'returns false when user not leader of group' do
+      user = FactoryGirl.build_stubbed(:user)
+      group = instance_spy('Group')
+      expect(user.leader_of?(group)).to be_falsey
+    end
+  end
 end

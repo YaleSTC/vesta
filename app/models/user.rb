@@ -88,6 +88,13 @@ class User < ApplicationRecord
     intent.tr('_', ' ')
   end
 
+  # Returns true if the user is the leader of the given group
+  #
+  # @return [Boolean]
+  def leader_of?(group)
+    self == group.leader
+  end
+
   # Back up a user's current draw into old_draw_id and removes them from current
   # draw, also setting intent to undeclared. Does nothing if draw_id is nil.
   #

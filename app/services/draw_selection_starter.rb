@@ -57,9 +57,7 @@ class DrawSelectionStarter
   end
 
   def notify_first_groups
-    draw.next_groups.each do |group|
-      mailer.selection_invite(group.leader, college).deliver_later
-    end
+    draw.notify_next_groups(mailer)
   end
 
   def success

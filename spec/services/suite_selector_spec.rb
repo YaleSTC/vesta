@@ -47,7 +47,7 @@ RSpec.describe SuiteSelector do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123, present: false)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:msg].keys).to include(:error)
+        expect(result[:msg].keys).to match([:error])
       end
     end
     context' success' do
@@ -67,7 +67,7 @@ RSpec.describe SuiteSelector do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:msg].keys).to include(:success)
+        expect(result[:msg].keys).to match([:success])
       end
     end
   end
