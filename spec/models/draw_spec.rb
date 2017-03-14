@@ -44,6 +44,17 @@ RSpec.describe Draw, type: :model do
     end
   end
 
+  describe '#group_sizes' do
+    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+    it 'returns an array of group sizes in the draw' do
+      instance_spy('group_sizes_query', call: [1, 2]).tap do |q|
+        allow(GroupSizesQuery).to receive(:new).with(draw.suites.available)
+          .and_return(q)
+      end
+      expect(draw.group_sizes).to match_array([1, 2])
+    end
+  end
+
   # this is testing a private method, feel free to remove it if it ever fails
   describe '#student_count' do
     it 'returns the number of students in the draw' do
@@ -146,18 +157,6 @@ RSpec.describe Draw, type: :model do
       draw = FactoryGirl.create(:draw_with_members, students_count: 1)
       FactoryGirl.create(:group, leader: draw.students.first)
       expect(draw.all_students_grouped?).to be_truthy
-    end
-  end
-
-  describe '#all_intents_declared?' do
-    let(:draw) { FactoryGirl.create(:draw_with_members) }
-    it 'returns false if there are any undeclared students in the draw' do
-      draw.students.first.update(intent: 'undeclared')
-      expect(draw.all_intents_declared?).to be_falsey
-    end
-    it 'returns true if there are no undeclared students in the draw' do
-      draw.students.first.update(intent: 'on_campus')
-      expect(draw.all_intents_declared?).to be_truthy
     end
   end
 

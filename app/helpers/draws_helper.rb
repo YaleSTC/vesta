@@ -14,7 +14,7 @@ module DrawsHelper
   end
 
   def diff_class(diff)
-    raise ArgumentError unless diff.is_a? Integer
+    return '' unless diff.is_a? Integer
     return 'positive' if diff.positive?
     return 'negative' if diff.negative?
     'zero'
