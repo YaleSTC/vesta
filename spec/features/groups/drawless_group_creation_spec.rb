@@ -13,6 +13,11 @@ RSpec.feature 'Special housing group creation' do
       expect(page).to have_css('.group-name',
                                text: "#{leader.full_name}'s Group")
     end
+
+    it "doesn't include the transfers field" do
+      visit new_group_path
+      expect(page).not_to have_css('label', text: /\# transfer students/)
+    end
   end
 
   def create_group(size:, leader:, members: [])

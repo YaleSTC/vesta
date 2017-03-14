@@ -110,10 +110,12 @@ class GroupsController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(:size, :leader_id, :transfers,
-                                  :lottery_number, member_ids: [],
-                                                   remove_ids: [],
-                                                   invitations: [])
+    p = params.require(:group).permit(:size, :leader_id, :transfers,
+                                      :lottery_number, member_ids: [],
+                                                       remove_ids: [],
+                                                       invitations: [])
+    return p if @group
+    p.reject! { |k, _v| k == 'transfers' }
   end
 
   def set_group
