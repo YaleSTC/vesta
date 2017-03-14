@@ -66,6 +66,10 @@ class DrawPolicy < ApplicationPolicy
     edit? && record.pre_lottery?
   end
 
+  def lottery_confirmation?
+    start_lottery?
+  end
+
   def oversubscription?
     start_lottery?
   end

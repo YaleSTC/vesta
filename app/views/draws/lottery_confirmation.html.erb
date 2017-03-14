@@ -1,0 +1,23 @@
+<h1 class="draw-name">Entering Lottery Phase for <%= @draw.name %></h1>
+<% if policy(@draw).oversub_report? %>
+  <div class="oversub-report">
+    <%= render 'oversub_report', draw: @draw %>
+  </div>
+  <hr />
+<% end %>
+<div class="ungrouped-report">
+  <%= render 'ungrouped_report' %>
+</div>
+<hr />
+<% if @draw.oversubscribed? %>
+  <h3>Warning!</h3>
+  <p> There are still oversubscribed suite sizes. If you choose to proceed to
+  lottery, the groups that do not get their suite size will be disbanded
+  and those students must be housed through a subsequent draw. </p>
+  <hr />
+<% end %>
+<div>
+  <%= link_to 'Back', draw_path(@draw), class: 'button secondary' %>
+  <%= link_to 'Proceed to Lottery', start_lottery_draw_path(@draw),
+      method: :patch, class: start_lottery_btn_class(@draw) %>
+</div>

@@ -26,19 +26,12 @@ module DrawsHelper
     unlock_size_btn(draw, size, path)
   end
 
-  # Return the link/button to proceed from the pre-lottery phase. Takes draw
-  # oversubscription status into account and modifies text and class as
-  # necessary.
+  # Return the appropriate class for starting a lottery based on the draw's
+  # oversubscription status
   #
-  # @param draw [Draw] the draw
-  # @return [String] the link
-  def proceed_from_pre_lottery_btn(draw)
-    options = if draw.oversubscribed?
-                { class: 'button alert', method: :patch }
-              else
-                { class: 'button', method: :patch }
-              end
-    link_to 'Proceed to lottery', start_lottery_draw_path(draw), **options
+  # @return [String] the class
+  def start_lottery_btn_class(draw)
+    draw.oversubscribed? ? 'button alert' : 'button'
   end
 
   # Determines the label for the intent lock toggle button

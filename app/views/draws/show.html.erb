@@ -60,7 +60,8 @@
     <%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch, class: 'button' %>
   <% end %>
   <% if policy(@draw).start_lottery? %>
-    <%= proceed_from_pre_lottery_btn(@draw) %>
+    <%= link_to 'Proceed to Lottery', lottery_confirmation_draw_path(@draw),
+                class: start_lottery_btn_class(@draw) %>
   <% end %>
   <% if policy(@draw).start_selection? %>
     <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, class: 'button' %>

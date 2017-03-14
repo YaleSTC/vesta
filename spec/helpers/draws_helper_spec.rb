@@ -56,17 +56,15 @@ RSpec.describe DrawsHelper, type: :helper do
     end
   end
 
-  describe '#proceed_from_pre_lottery_btn' do
+  describe '#start_lottery_btn_class' do
     let(:draw) { instance_spy('draw') }
     it 'returns a red button for oversubscription' do
       allow(draw).to receive(:oversubscribed?).and_return(true)
-      expect(helper.proceed_from_pre_lottery_btn(draw)).to \
-        match(/class=\"button alert\".+Proceed to lottery/)
+      expect(helper.start_lottery_btn_class(draw)).to eq('button alert')
     end
     it 'returns a blue button for not oversubscription' do
       allow(draw).to receive(:oversubscribed?).and_return(false)
-      expect(helper.proceed_from_pre_lottery_btn(draw)).to \
-        match(/class=\"button\".+Proceed to lottery/)
+      expect(helper.start_lottery_btn_class(draw)).to eq('button')
     end
   end
 
