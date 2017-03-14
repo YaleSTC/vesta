@@ -14,9 +14,10 @@
 <% if policy(@draw).group_report? %>
   <div class="group-report">
     <h3>Group Report</h3>
-    <%= render 'group_report', sizes: @draw_sizes, groups: @groups_by_size, 
+    <%= render 'group_report', sizes: @sizes, groups: @groups_by_size, 
                                diff: @diff, group_counts: @group_counts,
-                               suite_counts: @suite_counts, actions_partial: 'groups/actions',
+                               suite_counts: @suite_counts,
+                               actions_partial: 'groups/actions',
                                path: draw_path(@draw) %>
   </div>
   <hr />

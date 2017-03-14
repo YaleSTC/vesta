@@ -15,6 +15,7 @@ class DrawLotteryStarter
   validate :enough_beds, if: ->() { draw.present? }
   validate :no_contested_suites, if: ->() { draw.present? }
   validate :all_groups_locked, if: ->() { draw.present? }
+  validate :suite_sizes_available, if: ->() { draw.present? }
 
   # Class method to permit calling :start on the class without instantiating the
   # service object directly
@@ -79,6 +80,14 @@ class DrawLotteryStarter
   def all_groups_locked
     return if draw.all_groups_locked?
     errors.add(:draw, 'cannot have any unlocked groups')
+  end
+
+  def suite_sizes_available
+    diff = draw.group_sizes - draw.suite_sizes
+    return if diff.empty?
+    draw.groups.where(size: diff).destroy_all
+    errors.add(:draw, 'all groups must be the size of an available suite. The'\
+                      ' affected groups have been disbanded and must regroup.')
   end
 
   def success

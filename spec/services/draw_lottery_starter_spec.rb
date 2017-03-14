@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe DrawLotteryStarter do
   # we may want to extract this into a shared example if we use this pattern
@@ -60,6 +60,25 @@ RSpec.describe DrawLotteryStarter do
       expect(result[:msg][:error]).to \
         include('any suites in other draws that are in the lottery')
     end
+
+    it 'checks to make sure that all sizes are still available' do
+      draw = instance_spy('draw', present?: true, suite_sizes: [1],
+                                  group_sizes: [1, 2])
+      result = described_class.start(draw: draw)
+      expect(result[:msg][:error]).to \
+        include('all groups must be the size of an available suite')
+    end
+
+    # rubocop:disable RSpec/ExampleLength
+    it 'disbands groups with an unavailable size' do
+      groups = instance_spy('ActiveRecord::Relation')
+      draw = instance_spy('draw', present?: true, suite_sizes: [1],
+                                  group_sizes: [1, 2], groups: groups)
+      allow(groups).to receive(:where).with(size: [2]).and_return(groups)
+      described_class.start(draw: draw)
+      expect(groups).to have_received(:destroy_all)
+    end
+    # rubocop:enable RSpec/ExampleLength
 
     it 'checks to make sure that all groups are locked' do
       draw = instance_spy('draw', all_groups_locked?: false, present?: true)

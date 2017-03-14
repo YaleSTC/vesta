@@ -34,6 +34,13 @@ class Draw < ApplicationRecord
     SuiteSizesQuery.new(suites.available).call
   end
 
+  # Finds the sizes that groups exist for within the draw
+  #
+  # @return [Array<Integer>] the available group sizes
+  def group_sizes
+    @group_sizes ||= GroupSizesQuery.new(groups).call
+  end
+
   # Finds all suite sizes for which new groups can be created by removing
   # locked_sizes from available sizes
   #
@@ -134,7 +141,7 @@ class Draw < ApplicationRecord
   #
   # @return [Boolean] whether or not the draw is oversubscribed
   def oversubscribed?
-    @oversubscribed ||= GroupSizesQuery.new(groups).call.any? do |size|
+    @oversubscribed ||= group_sizes.any? do |size|
       groups.where(size: size).count > suites.where(size: size).count
     end
   end

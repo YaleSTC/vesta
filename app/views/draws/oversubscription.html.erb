@@ -1,6 +1,6 @@
 <h1><%= @draw.name %> - Oversubscription handling</h1>
 <div class="group-report">
-    <%= render 'group_report', sizes: @draw_sizes, groups: @groups_by_size, 
+    <%= render 'group_report', sizes: @sizes, groups: @groups_by_size, 
                                diff: @diff, group_counts: @group_counts,
                                suite_counts: @suite_counts, actions_partial: 'groups/actions',
                                path: oversub_draw_path(@draw) %>
