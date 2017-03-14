@@ -44,6 +44,31 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, other_group) }
       end
     end
+    permissions :leave? do
+      context 'in group, not leader' do
+        before do
+          allow(other_group).to receive(:members).and_return([user])
+          allow(other_group).to receive(:leader)
+            .and_return(instance_spy('user'))
+        end
+        it { is_expected.to permit(user, other_group) }
+      end
+      context 'in locked_group, not leader' do
+        before do
+          allow(other_group).to receive(:members).and_return([user])
+          allow(other_group).to receive(:locked?).and_return(true)
+        end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'in group, leader' do
+        before { allow(group).to receive(:members).and_return([user]) }
+        it { is_expected.not_to permit(user, group) }
+      end
+      context 'not in group' do
+        before { allow(other_group).to receive(:members).and_return([]) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+    end
     permissions :index? do
       it { is_expected.to permit(user, [group, other_group]) }
     end
@@ -247,6 +272,31 @@ RSpec.describe GroupPolicy do
           allow(user).to receive(:group).and_return(group)
           allow(other_group).to receive(:invitations).and_return([user])
         end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+    end
+    permissions :leave? do
+      context 'in group, not leader' do
+        before do
+          allow(other_group).to receive(:members).and_return([user])
+          allow(other_group).to receive(:leader)
+            .and_return(instance_spy('user'))
+        end
+        it { is_expected.to permit(user, other_group) }
+      end
+      context 'in locked_group, not leader' do
+        before do
+          allow(other_group).to receive(:members).and_return([user])
+          allow(other_group).to receive(:locked?).and_return(true)
+        end
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'in group, leader' do
+        before { allow(group).to receive(:members).and_return([user]) }
+        it { is_expected.not_to permit(user, group) }
+      end
+      context 'not in group' do
+        before { allow(other_group).to receive(:members).and_return([]) }
         it { is_expected.not_to permit(user, other_group) }
       end
     end

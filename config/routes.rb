@@ -56,6 +56,7 @@ Rails.application.routes.draw do
         put 'finalize'
         put 'finalize_membership'
         put 'lock'
+        delete 'leave'
       end
     end
   end

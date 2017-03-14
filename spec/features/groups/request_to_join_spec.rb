@@ -42,7 +42,7 @@ RSpec.feature 'Students Joining Groups' do
       log_in group.leader
       visit draw_group_path(group.draw, group)
       click_on 'reject'
-      expect(page).to have_content("#{user.full_name}'s Membership deleted")
+      expect(page).to have_content("#{user.full_name}'s membership deleted")
     end
   end
 end

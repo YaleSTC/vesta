@@ -76,6 +76,11 @@ class GroupsController < ApplicationController
     handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
+  def leave
+    result = MembershipDestroyer.destroy(membership: current_user.membership)
+    handle_action(path: draw_group_path(@draw, @group), **result)
+  end
+
   def finalize
     result = GroupFinalizer.finalize(group: @group)
     handle_action(**result)
