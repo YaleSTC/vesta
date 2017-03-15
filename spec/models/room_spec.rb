@@ -9,7 +9,16 @@ RSpec.describe Room, type: :model do
     it { is_expected.to validate_presence_of(:beds) }
     it { is_expected.not_to allow_value(-1).for(:beds) }
     it { is_expected.to belong_to(:suite) }
+    it { is_expected.to have_many(:users) }
     it { is_expected.to validate_presence_of(:suite) }
+  end
+
+  it 'nullify student room_id on deletion' do
+    room = FactoryGirl.create(:room)
+    user = FactoryGirl.create(:user)
+    user.update_columns(room_id: room.id)
+    expect { room.destroy }.to \
+      change { user.reload.room_id }.from(room.id).to(nil)
   end
 
   describe '#type' do
@@ -28,6 +37,13 @@ RSpec.describe Room, type: :model do
     it 'is "common" when zero beds' do
       room = FactoryGirl.build_stubbed(:room, beds: 0)
       expect(room.type).to eq('common')
+    end
+  end
+
+  describe '#number_with_type' do
+    it do
+      room = FactoryGirl.build_stubbed(:room, beds: 2, number: 'L01A')
+      expect(room.number_with_type).to eq('L01A (double)')
     end
   end
 

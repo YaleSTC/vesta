@@ -1,0 +1,10 @@
+<h1><%= @group.name %> - Edit Room Assignments</h1>
+<%= simple_form_for @room_assignment, url: group_room_assignment_path(@group) do |f| %>
+  <%= render 'form_fields', group: @group, f: f %>
+  <%= f.submit 'Update room assignments' %>
+<% end %>
+<% if @group.draw %>
+  <%= link_to 'Back to group', draw_group_path(@group.draw, @group) %>
+<% else %>
+  <%= link_to 'Back to group', group_path(@group) %>
+<% end %>

@@ -22,6 +22,12 @@
   <% if policy(@group).unlock? %>
     <%= link_to 'Unlock All Members', unlock_group_path(@group), method: :put, class: 'button alert' %>
   <% end %>
+  <% if policy(@group).assign_rooms? %>
+    <%= link_to 'Assign rooms', new_group_room_assignment_path(@group), class: 'button' %>
+  <% end %>
+  <% if policy(@group).edit_room_assignment? %>
+    <%= link_to 'Edit room assignments', edit_group_room_assignment_path(@group), class: 'button' %>
+  <% end %>
   <%= link_to('Disband', group_path(@group), method: :delete, class: 'button alert') if policy(@group).destroy? %>
 </div>
 

@@ -91,6 +91,14 @@ class GroupPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def assign_rooms?
+    user_can_assign_rooms?(user, record) && room_assignment_eligible?(record)
+  end
+
+  def edit_room_assignment?
+    user.admin? && rooms_assigned?(record)
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope
@@ -105,5 +113,17 @@ class GroupPolicy < ApplicationPolicy
 
   def student_can_create_group(user)
     (user.draw && user.draw.pre_lottery? && user.on_campus? && !user.group)
+  end
+
+  def user_can_assign_rooms?(user, group)
+    user.admin? || (user.group == group && group.leader == user)
+  end
+
+  def room_assignment_eligible?(group)
+    group.suite.present? && !rooms_assigned?(group)
+  end
+
+  def rooms_assigned?(group)
+    group.leader.room_id.present?
   end
 end

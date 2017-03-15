@@ -43,6 +43,8 @@ class User < ApplicationRecord
   has_one :group, through: :membership
   has_many :memberships, dependent: :destroy
 
+  belongs_to :room
+
   validates :email, uniqueness: true
   validates :username, presence: true, if: :cas_auth?
   validates :username, uniqueness: { case_sensitive: false }, if: :cas_auth?
@@ -50,6 +52,7 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :intent, presence: true
+  validate :room_in_suite, if: ->() { group.present? && group.suite.present? }
 
   enum role: %w(student admin rep)
   enum intent: %w(undeclared on_campus off_campus)
@@ -120,5 +123,10 @@ class User < ApplicationRecord
 
   def cas_auth?
     User.cas_auth?
+  end
+
+  def room_in_suite
+    return if room.suite_id == group.suite.id
+    errors.add(:room, "room must be in the user's group's suite.")
   end
 end

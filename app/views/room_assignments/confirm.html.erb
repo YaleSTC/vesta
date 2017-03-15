@@ -1,0 +1,25 @@
+<h1><%= @group.name %> - Confirm Room Assignments</h1>
+<table>
+  <thead>
+    <tr>
+      <td>Room Number</td>
+      <td>Students</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @room_assignment.assignment_hash.each do |room, members| %>
+      <tr>
+        <td><%= room.number %></td>
+        <td><%= members.map(&:full_name).join(', ') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= simple_form_for @room_assignment, url: group_room_assignment_path(@group) do |f| %>
+  <% @group.members.each do |m| %>
+    <%= f.input "room_id_for_#{m.id}".to_sym, as: :hidden %>
+  <% end %>
+  <%= f.submit 'Confirm room assignments' %>
+<% end %>
+<%= link_to 'Start over', new_group_room_assignment_path, class: 'button secondary' %>
+

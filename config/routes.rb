@@ -74,5 +74,10 @@ Rails.application.routes.draw do
       put 'unlock'
       patch 'select_suite'
     end
+    resource :room_assignment, only: %i(new create edit) do
+      collection do
+        get 'confirm'
+      end
+    end
   end
 end

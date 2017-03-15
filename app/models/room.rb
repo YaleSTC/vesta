@@ -9,6 +9,7 @@
 # @attr [Suite] suite belongs_to association for the Suite that the room is in.
 class Room < ApplicationRecord
   belongs_to :suite
+  has_many :users, dependent: :nullify
 
   validates :suite, presence: true
   validates :number, presence: true, allow_blank: false,
@@ -30,6 +31,13 @@ class Room < ApplicationRecord
     else
       'common'
     end
+  end
+
+  # Gets a formatted string of the room number and it's type
+  #
+  # @return [String] e.g. L01A (double)
+  def number_with_type
+    "#{number} (#{type})"
   end
 
   private

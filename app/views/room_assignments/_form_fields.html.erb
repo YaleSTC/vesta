@@ -1,0 +1,4 @@
+<% @group.members.each do |m| %>
+  <%= f.input "room_id_for_#{m.id}".to_sym, label: "#{m.full_name}:", as: :select,
+              collection: @rooms, label_method: :number_with_type %>
+<% end %>
