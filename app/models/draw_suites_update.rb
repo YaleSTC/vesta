@@ -4,7 +4,9 @@
 class DrawSuitesUpdate
   include ActiveModel::Model
 
-  attr_reader :size, :suite_ids, :drawn_suite_ids, :undrawn_suite_ids
+  CONSOLIDATED_ATTRS = %i(suite_ids drawn_ids drawless_ids).freeze
+
+  attr_reader(*CONSOLIDATED_ATTRS)
 
   # permit :update to be called on the class object
   def self.update(**params)
@@ -17,7 +19,8 @@ class DrawSuitesUpdate
   # @param params [#to_h] the parameters from the form
   def initialize(draw:, params: nil)
     @draw = draw
-    @suite_ids = draw.suite_ids
+    prepare_current_suite_attrs
+    @suite_ids = draw.suites.available.map(&:id)
     process_params(params) if params
   end
 
@@ -42,42 +45,49 @@ class DrawSuitesUpdate
 
   attr_reader :draw, :params, :suites_to_add, :suites_to_remove
 
+  def prepare_current_suite_attrs
+    suites_by_size = draw.suites.available.group_by(&:size)
+    suite_hash = suites_by_size.transform_values { |v| v.map(&:id) }
+    suite_hash.each do |size, ids|
+      instance_variable_set("@suite_ids_#{size}", ids)
+    end
+  end
+
   def process_params(params)
-    @params = params.to_h.transform_keys(&:to_sym)
-    @size = extract_size
-    update_ids_param(:suite_ids)
-    update_ids_param(:drawn_suite_ids)
-    update_ids_param(:undrawn_suite_ids)
+    @params = consolidate_params(params.to_h.transform_keys(&:to_sym))
+    CONSOLIDATED_ATTRS.each { |attr| update_ids_param(attr) }
     @suites_to_remove = find_suites_to_remove
     @suites_to_add = find_suites_to_add
   end
 
-  def extract_size
-    raise ArgumentError if size_param_not_an_int
-    params[:size].to_i
-  end
-
-  def size_param_not_an_int
-    params[:size].to_s.match(/\d+/).nil?
+  def consolidate_params(p)
+    p.transform_values! { |v| v.nil? ? [] : v }
+    CONSOLIDATED_ATTRS.each do |attr|
+      consolidated_array = p.each_with_object([]) do |(k, v), array|
+        array << v if k.to_s.include? attr.to_s
+        array
+      end.flatten
+      p.merge!(attr => consolidated_array)
+    end
+    p
   end
 
   def update_ids_param(key)
-    params[key] = [] unless params[key]
-    @params[key] = params[key].reject(&:empty?)
+    params[key].reject!(&:empty?)
   end
 
   def find_suites_to_remove
     return [] unless params[:suite_ids]
     # TODO: refactor not to require an extra db hit here, also makes testing
     # better
-    current_suite_ids = draw.suites.available.where(size: size).map(&:id)
+    current_suite_ids = draw.suites.available.map(&:id)
     passed_suite_ids = params[:suite_ids].map(&:to_i)
     Suite.find(current_suite_ids - passed_suite_ids)
   end
 
   def find_suites_to_add
-    return [] unless params[:drawn_suite_ids] || params[:undrawn_suite_ids]
-    Suite.find(params[:drawn_suite_ids] + params[:undrawn_suite_ids])
+    return [] unless params[:drawn_ids] || params[:drawless_ids]
+    Suite.find(params[:drawn_ids] + params[:drawless_ids])
   end
 
   def remove_suites
@@ -104,5 +114,27 @@ class DrawSuitesUpdate
       object: nil, update_object: self,
       msg: { error: "Suites update failed: #{error}" }
     }
+  end
+
+  # create dynamic attr_readers based on available suite sizes
+  def method_missing(method_name, *args, &block)
+    super unless valid_method_names.include? method_name
+    instance_variable_get("@#{method_name}")
+  end
+
+  def valid_method_names
+    @valid_method_names ||= all_suite_sizes.map { |s| params_for(s) }.flatten
+  end
+
+  def all_suite_sizes
+    @all_suite_sizes ||= SuiteSizesQuery.new(Suite.available).call
+  end
+
+  def params_for(size)
+    CONSOLIDATED_ATTRS.map { |p| "#{p}_#{size}".to_sym }
+  end
+
+  def respond_to_missing?(method_name, include_all = false)
+    valid_method_names.include?(method_name) || super
   end
 end

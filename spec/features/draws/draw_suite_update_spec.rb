@@ -21,7 +21,7 @@ RSpec.feature 'Draw suite update' do
   def visit_update_suite_page
     visit draw_path(draw)
     click_on 'View suites'
-    click_on 'edit-suites-1'
+    click_on 'Edit suites'
   end
 
   def update_suites

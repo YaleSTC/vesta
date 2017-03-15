@@ -9,9 +9,11 @@
       @include grid-column-end;
     }
   }
+}
 
-  a.draw-edit-suites {
-    font-family: $body-font-family;
-    font-size: 0.5em;
+.suites-fields-section {
+  label { display: inline-block; }
+  .toggle-links {
+    font-size: 0.8em;
   }
 }

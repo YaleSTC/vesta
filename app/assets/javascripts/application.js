@@ -21,3 +21,18 @@ $(function(){ $(document).foundation(); });
 $(document).on('change', '.autosubmitme', function() {
   $(this).parents('form').submit();
 });
+
+$(document).on('click', '.suites-fields-section .check-all', function() {
+  set_checkbox_of_parent(this, '.suites-fields-section', true);
+  return false; // prevent scrolling behavior
+});
+
+$(document).on('click', '.suites-fields-section .uncheck-all', function() {
+  set_checkbox_of_parent(this, '.suites-fields-section', false);
+  return false; // prevent scrolling behavior
+});
+
+function set_checkbox_of_parent(element, parent_class, checked) {
+  var parent_div = $(element).parents(parent_class)[0];
+  $(parent_div).find('input[type="checkbox"]').prop('checked', checked);
+}
