@@ -57,6 +57,11 @@ class DrawlessGroupsController < ApplicationController
     handle_action(path: group_path(@group), **result)
   end
 
+  def unlock
+    result = GroupUnlocker.unlock(group: @group)
+    handle_action(path: group_path(@group), **result)
+  end
+
   private
 
   def authorize!

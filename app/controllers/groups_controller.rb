@@ -98,6 +98,11 @@ class GroupsController < ApplicationController
     handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
+  def unlock
+    result = GroupUnlocker.unlock(group: @group)
+    handle_action(path: draw_group_path(@draw, @group), **result)
+  end
+
   def assign_lottery
     @group.lottery_number = group_params['lottery_number'].to_i
     @color_class = @group.save ? 'success' : 'failure'

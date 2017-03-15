@@ -60,6 +60,7 @@ Rails.application.routes.draw do
         put 'finalize'
         put 'finalize_membership'
         put 'lock'
+        put 'unlock'
         delete 'leave'
       end
     end
@@ -68,6 +69,7 @@ Rails.application.routes.draw do
   resources :groups, controller: 'drawless_groups' do
     member do
       put 'lock'
+      put 'unlock'
       patch 'select_suite'
     end
   end

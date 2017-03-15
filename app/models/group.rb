@@ -95,6 +95,13 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     (members - locked_members).empty? && members_count == size
   end
 
+  # Check if there are any locked memberships
+  #
+  # @return [Boolean] true if there are any unlocked members
+  def unlockable?
+    !locked_members.empty? && suite.nil?
+  end
+
   private
 
   # override default attribute getter to include transfers
@@ -163,7 +170,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     if members_count < size
       self.status = 'open'
     elsif members_count == size
-      self.status = 'full' if open?
+      self.status = 'full' unless finalizing? || lockable?
       self.status = 'locked' if lockable?
     end
   end

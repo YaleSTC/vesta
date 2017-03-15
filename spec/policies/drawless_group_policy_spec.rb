@@ -10,7 +10,7 @@ RSpec.describe DrawlessGroupPolicy do
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
     end
-    permissions :edit?, :update?, :destroy?, :select_suite?, :lock? do
+    permissions :edit?, :update?, :destroy?, :select_suite?, :lock?, :unlock? do
       it { is_expected.not_to permit(user, group) }
     end
     context 'student not in group' do
@@ -33,7 +33,7 @@ RSpec.describe DrawlessGroupPolicy do
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
     end
-    permissions :edit?, :update?, :destroy?, :select_suite?, :lock? do
+    permissions :edit?, :update?, :destroy?, :select_suite?, :lock?, :unlock? do
       it { is_expected.not_to permit(user, group) }
     end
     context 'student not in group' do
@@ -59,15 +59,20 @@ RSpec.describe DrawlessGroupPolicy do
     permissions :show?, :edit?, :update?, :destroy? do
       it { is_expected.to permit(user, group) }
     end
-    context 'full group' do
-      before { allow(group).to receive(:full?).and_return(true) }
-      permissions :lock? do
+    permissions :lock? do
+      context 'lockable group' do
+        before do
+          allow(group).to receive(:open?).and_return(false)
+          allow(group).to receive(:locked?).and_return(false)
+        end
         it { is_expected.to permit(user, group) }
       end
-    end
-    context 'not full group' do
-      before { allow(group).to receive(:full?).and_return(false) }
-      permissions :lock? do
+      context 'open group' do
+        before { allow(group).to receive(:open?).and_return(true) }
+        it { is_expected.not_to permit(user, group) }
+      end
+      context 'locked group' do
+        before { allow(group).to receive(:locked?).and_return(true) }
         it { is_expected.not_to permit(user, group) }
       end
     end
@@ -80,6 +85,16 @@ RSpec.describe DrawlessGroupPolicy do
     context 'not locked group' do
       before { allow(group).to receive(:locked?).and_return(false) }
       permissions :select_suite? do
+        it { is_expected.not_to permit(user, group) }
+      end
+    end
+    permissions :unlock? do
+      context 'unlockable group' do
+        before { allow(group).to receive(:unlockable?).and_return(true) }
+        it { is_expected.to permit(user, group) }
+      end
+      context 'not unlockable group' do
+        before { allow(group).to receive(:unlockable?).and_return(false) }
         it { is_expected.not_to permit(user, group) }
       end
     end

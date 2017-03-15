@@ -188,7 +188,7 @@ RSpec.describe GroupPolicy do
       before { allow(group).to receive(:full?).and_return(true) }
       it { is_expected.to permit(user, group) }
     end
-    permissions :lock?, :advanced_edit?, :assign_lottery? do
+    permissions :lock?, :unlock?, :advanced_edit?, :assign_lottery? do
       it { is_expected.not_to permit(user, other_group) }
       it { is_expected.not_to permit(user, group) }
     end
@@ -387,7 +387,7 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, group) }
       end
     end
-    permissions :lock?, :advanced_edit? do
+    permissions :lock?, :unlock?, :advanced_edit? do
       it { is_expected.not_to permit(user, other_group) }
       it { is_expected.not_to permit(user, group) }
     end
@@ -412,12 +412,29 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, group) }
     end
     permissions :lock? do
-      context 'full group' do
-        before { allow(group).to receive(:full?).and_return(true) }
+      context 'lockable group' do
+        before do
+          allow(group).to receive(:open?).and_return(false)
+          allow(group).to receive(:locked?).and_return(false)
+        end
         it { is_expected.to permit(user, group) }
       end
-      context 'not full group' do
-        before { allow(group).to receive(:full?).and_return(false) }
+      context 'open group' do
+        before { allow(group).to receive(:open?).and_return(true) }
+        it { is_expected.not_to permit(user, group) }
+      end
+      context 'locked group' do
+        before { allow(group).to receive(:locked?).and_return(true) }
+        it { is_expected.not_to permit(user, group) }
+      end
+    end
+    permissions :unlock? do
+      context 'unlockable group' do
+        before { allow(group).to receive(:unlockable?).and_return(true) }
+        it { is_expected.to permit(user, group) }
+      end
+      context 'not unlockable group' do
+        before { allow(group).to receive(:unlockable?).and_return(false) }
         it { is_expected.not_to permit(user, group) }
       end
     end
