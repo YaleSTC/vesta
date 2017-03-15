@@ -42,7 +42,7 @@ class Membership < ApplicationRecord
   after_destroy :update_group_status, if: ->(m) { m.group.present? }
 
   def readonly?
-    if locked_changed? && locked
+    if locked_changed?
       # we need to allow the membership to be locked
       false
     else
@@ -86,7 +86,7 @@ class Membership < ApplicationRecord
   end
 
   def lockable?
-    return unless locked_changed?
+    return unless locked_changed? && locked
     errors.add :locked, 'must be an accepted membership' unless accepted?
     errors.add :locked, 'must be a finalizing group' unless group.finalizing?
   end

@@ -68,7 +68,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def lock?
-    user.admin? && record.full?
+    user.admin? && !record.open? && !record.locked?
+  end
+
+  def unlock?
+    user.admin? && record.unlockable?
   end
 
   def assign_lottery?

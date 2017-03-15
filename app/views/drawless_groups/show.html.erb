@@ -17,7 +17,10 @@
   <br />
   <%= link_to 'Edit', edit_group_path(@group), class: 'button secondary' if policy(@group).edit? %>
   <% if policy(@group).lock? %>
-    <%= link_to 'Lock Group', lock_group_path(@group), method: :put, class: 'button alert' if policy(@group).lock? %>
+    <%= link_to 'Lock Group', lock_group_path(@group), method: :put, class: 'button alert' %>
+  <% end %>
+  <% if policy(@group).unlock? %>
+    <%= link_to 'Unlock All Members', unlock_group_path(@group), method: :put, class: 'button alert' %>
   <% end %>
   <%= link_to('Disband', group_path(@group), method: :delete, class: 'button alert') if policy(@group).destroy? %>
 </div>

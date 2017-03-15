@@ -196,4 +196,22 @@ RSpec.describe Group, type: :model do
       expect(group.reload).to be_lockable
     end
   end
+
+  describe '#unlockable?' do
+    it 'returns true when there are _any_ locked members and no suite' do
+      group = FactoryGirl.create(:finalizing_group)
+      group.update!(status: 'full')
+      expect(group.reload).to be_unlockable
+    end
+    it 'returns false if the group has a suite assigned' do
+      group = FactoryGirl.create(:locked_group)
+      allow(group).to receive(:suite)
+        .and_return(instance_spy('suite', nil?: false))
+      expect(group).not_to be_unlockable
+    end
+    it 'returns false if there are no locked members' do
+      group = FactoryGirl.create(:open_group)
+      expect(group).not_to be_unlockable
+    end
+  end
 end

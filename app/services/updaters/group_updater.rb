@@ -21,10 +21,9 @@ class GroupUpdater
   # @return [Hash{Symbol=>Group,Hash,Nil}] the return hash
   def update
     ActiveRecord::Base.transaction do
-      remove_users if pending_users[:remove]
-      group.reload
-      add_users if pending_users[:add]
+      update_members
       group.update!(params)
+      group.update_status!
     end
     success
   rescue ActiveRecord::RecordInvalid => error
@@ -59,6 +58,13 @@ class GroupUpdater
   end
 
   # Note that this occurs within the transaction
+  def update_members
+    remove_users if pending_users[:remove]
+    group.reload
+    add_users if pending_users[:add]
+    group.reload
+  end
+
   def remove_users
     ids = pending_users[:remove].map(&:id)
     group.memberships.where(user_id: ids).delete_all

@@ -31,5 +31,13 @@ RSpec.feature 'Group locking' do
       click_on 'Lock Group'
       expect(group.reload).to be_locked
     end
+
+    it 'can be unlocked' do
+      group = FactoryGirl.create(:locked_group)
+      log_in FactoryGirl.create(:admin)
+      visit draw_group_path(group.draw, group)
+      click_on 'Unlock All Members'
+      expect(page).to have_css('.group-status', text: 'Status: Full')
+    end
   end
 end
