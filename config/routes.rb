@@ -36,7 +36,7 @@ Rails.application.routes.draw do
       post 'intent_report', to: 'draws#filter_intent_report'
       patch 'bulk_on_campus'
       get 'suites', to: 'draws#suite_summary', as: 'suite_summary'
-      get 'suites/:size', to: 'draws#suites_edit', as: 'suites_edit'
+      get 'suites/edit', to: 'draws#suites_edit', as: 'suites_edit'
       patch 'suites', to: 'draws#suites_update', as: 'suites_update'
       get 'students', to: 'draws#student_summary', as: 'student_summary'
       patch 'students', to: 'draws#students_update', as: 'students_update'

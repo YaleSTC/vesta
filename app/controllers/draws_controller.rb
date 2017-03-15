@@ -143,9 +143,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def suites_update_params
-    params.require(:draw_suites_update).permit(:size, suite_ids: [],
-                                                      drawn_suite_ids: [],
-                                                      undrawn_suite_ids: [])
+    params.require(:draw_suites_update).permit(suite_edit_param_hash)
   end
 
   def students_update_params
@@ -202,14 +200,21 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     @ungrouped_students.delete('off_campus')
   end
 
-  def prepare_suites_edit_data # rubocop:disable AbcSize
+  def prepare_suites_edit_data # rubocop:disable AbcSize, MethodLength
+    @suite_sizes ||= SuiteSizesQuery.new(Suite.available).call
     @suites_update ||= DrawSuitesUpdate.new(draw: @draw)
-    @size = params[:size] ? params[:size].to_i : @suites_update.size
-    base_suites = Suite.where(size: @size).available.order(:number)
-    @current_suites = @draw.suites.available.includes(:draws).where(size: @size)
-                           .order(:number)
-    @drawless_suites = DrawlessSuitesQuery.new(base_suites).call
-    @drawn_suites = SuitesInOtherDrawsQuery.new(base_suites).call(draw: @draw)
+    base_suites = Suite.available.order(:number)
+    empty_suite_hash = @suite_sizes.map { |s| [s, []] }.to_h
+    @current_suites = empty_suite_hash.merge(
+      @draw.suites.available.includes(:draws).order(:number).group_by(&:size)
+    )
+    @drawless_suites = empty_suite_hash.merge(
+      DrawlessSuitesQuery.new(base_suites).call.group_by(&:size)
+    )
+    @drawn_suites = empty_suite_hash.merge(
+      SuitesInOtherDrawsQuery.new(base_suites).call(draw: @draw)
+                             .group_by(&:size)
+    )
   end
 
   def prepare_students_edit_data
@@ -245,5 +250,15 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
       result[:path] = student_summary_draw_path(@draw)
     end
     result
+  end
+
+  def suite_edit_param_hash
+    suite_edit_sizes.flat_map do |s|
+      DrawSuitesUpdate::CONSOLIDATED_ATTRS.map { |p| ["#{p}_#{s}".to_sym, []] }
+    end.to_h
+  end
+
+  def suite_edit_sizes
+    @suite_edit_sizes ||= SuiteSizesQuery.new(Suite.available).call
   end
 end

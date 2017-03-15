@@ -1,10 +1,15 @@
-<h1 class="draw-name"><%= @draw.name %> <%= size_str(@size).pluralize.titleize %></h1>
+<h1 class="draw-name"><%= @draw.name %> - Edit Suites</h1>
 <%= simple_form_for @suites_update, url: suites_update_draw_path(@draw), method: :patch do |f| %>
-  <%= f.input :suite_ids, label: 'Current suites', as: :check_boxes, label_method: ->(s) { s.number_with_draws(@draw) }, collection: @current_suites unless @current_suites.empty? %>
-  <%= f.input :undrawn_suite_ids, label: 'Suites not in draws', as: :check_boxes, label_method: :number, collection: @drawless_suites unless @drawless_suites.empty? %>
-  <%= f.input :drawn_suite_ids, label: 'Suites in other draws', as: :check_boxes, label_method: :number_with_draws, collection: @drawn_suites unless @drawn_suites.empty? %>
-  <%= f.input :size, as: :hidden, input_html: { value: @size } %>
-  <%= f.submit 'Update' %>
+  <% @suite_sizes.each do |size| %>
+    <div class="suites-fields" id="suites-fields-<%= size %>">
+      <h4><%= headerize_size(size) %></h4>
+      <%= render 'suite_edit_fields', f: f, size: size, current_suites: @current_suites[size],
+                                      drawless_suites: @drawless_suites[size],
+                                      drawn_suites: @drawn_suites[size], draw: @draw %>
+  </div>
+  <hr />
+<% end %>
+<%= f.submit 'Update' %>
 <% end %>
 <hr />
 <%= link_to 'Back to suite summary', suite_summary_draw_path(@draw) %>

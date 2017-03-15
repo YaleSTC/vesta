@@ -7,57 +7,57 @@ RSpec.describe DrawSuitesUpdate do
     end
   end
 
-  describe '#new' do
-    it 'raises with an invalid size parameter' do
-      draw = FactoryGirl.build_stubbed(:draw)
-      params = instance_spy('ActionController::Parameters', to_h: { size: nil })
-      expect { described_class.new(draw: draw, params: params) }.to \
-        raise_error(ArgumentError)
-    end
-  end
-
   describe '#update' do
     context 'success' do
-      it 'removes current suites of the correct size' do
+      it 'removes current suites of all sizes' do
         draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
         draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: 2)
-        params = mock_params(suite_ids: [])
+        params = mock_params(suite_ids_1: [])
         expect { described_class.update(draw: draw, params: params) }.to \
-          change { draw.suites.count }.by(-1)
+          change { draw.suites.count }.by(-2)
       end
       it 'does not remove suites with groups' do
         draw = FactoryGirl.create(:draw)
         draw.suites << FactoryGirl.create(:suite_with_rooms, group_id: 123)
-        params = mock_params(suite_ids: [])
+        params = mock_params(suite_ids_1: [])
         expect { described_class.update(draw: draw, params: params) }.to \
           change { draw.suites.count }.by(0)
       end
       # rubocop:disable RSpec/ExampleLength
-      it 'adds suites from both drawn_suite_ids and undrawn_suite_ids' do
+      it 'adds suites from both drawn_ids and drawless_ids' do
         draw = FactoryGirl.create(:draw)
-        undrawn_suite = FactoryGirl.create(:suite)
+        drawless_suite = FactoryGirl.create(:suite)
         drawn_suite = create_drawn_suite
-        params = mock_params(drawn_suite_ids: [drawn_suite.id.to_s],
-                             undrawn_suite_ids: [undrawn_suite.id.to_s])
+        params = mock_params(drawn_ids_1: [drawn_suite.id.to_s],
+                             drawless_ids_1: [drawless_suite.id.to_s])
+        expect { described_class.update(draw: draw, params: params) }.to \
+          change { draw.suites.count }.by(2)
+      end
+      it 'handles multiple suite sizes' do
+        draw = FactoryGirl.create(:draw)
+        drawless1 = FactoryGirl.create(:suite)
+        drawless2 = FactoryGirl.create(:suite)
+        params = mock_params(drawless_ids_1: [drawless1.id.to_s],
+                             drawless_ids_2: [drawless2.id.to_s])
         expect { described_class.update(draw: draw, params: params) }.to \
           change { draw.suites.count }.by(2)
       end
       # rubocop:enable RSpec/ExampleLength
       it 'sets :object to nil' do
         draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
-        params = mock_params(suite_ids: [])
+        params = mock_params(suite_ids_1: [])
         result = described_class.update(draw: draw, params: params)
         expect(result[:object]).to be_nil
       end
       it 'sets :update_object to nil' do
         draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
-        params = mock_params(suite_ids: [])
+        params = mock_params(suite_ids_1: [])
         result = described_class.update(draw: draw, params: params)
         expect(result[:update_object]).to be_nil
       end
       it 'sets a success message' do
         draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
-        params = mock_params(suite_ids: [])
+        params = mock_params(suite_ids_1: [])
         result = described_class.update(draw: draw, params: params)
         expect(result[:msg]).to have_key(:success)
       end
@@ -83,7 +83,7 @@ RSpec.describe DrawSuitesUpdate do
 
     context 'error' do
       let(:draw) { FactoryGirl.create(:draw_with_members, suites_count: 1) }
-      let(:params) { mock_params(suite_ids: []) }
+      let(:params) { mock_params(suite_ids_1: []) }
       before do
         # necessary to prevent spy error due to available not being implemented
         draw.suites.available
@@ -103,24 +103,25 @@ RSpec.describe DrawSuitesUpdate do
         expect(result[:msg]).to have_key(:error)
       end
 
-      def broken_suites # rubocop:disable AbcSize
+      def broken_suites
         klass = 'Suite::ActiveRecord_Associations_CollectionProxy'
         instance_spy(klass).tap do |s|
           allow(s).to receive(:destroy).and_raise(ActiveRecord::RecordInvalid)
           # this is necessary to get through the #find_suites_to_remove private
           # method, which will ideally be refactored eventually
-          allow(s).to receive(:where).and_return([Suite.last])
-          allow(s).to receive(:available).and_return(s)
+          allow(s).to receive(:available).and_return([Suite.last])
         end
       end
     end
 
-    def mock_params(suite_ids: nil, drawn_suite_ids: nil,
-                    undrawn_suite_ids: nil)
+    def mock_params(suite_ids_1: nil, drawn_ids_1: nil,
+                    drawless_ids_1: nil, **overrides)
       # takes the default size from the factory :draw_with_members /
       # :suites_with_rooms
-      hash = { suite_ids: suite_ids, drawn_suite_ids: drawn_suite_ids,
-               undrawn_suite_ids: undrawn_suite_ids, size: '1' }
+      hash = {
+        suite_ids_1: suite_ids_1, drawn_ids_1: drawn_ids_1,
+        drawless_ids_1: drawless_ids_1
+      }.merge(overrides)
       instance_spy('ActionController::Parameters', to_h: hash)
     end
 
