@@ -13,6 +13,11 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_one(:membership) }
     it { is_expected.to have_many(:memberships) }
     it { is_expected.to have_one(:group).through(:membership) }
+    it { is_expected.to belong_to(:room) }
+  end
+
+  describe 'other validations' do
+    xit 'checks to make sure an assigned room belongs to the right group'
   end
 
   describe 'CAS username' do

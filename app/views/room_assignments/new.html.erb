@@ -1,0 +1,10 @@
+<h1><%= @group.name %> - Assign Rooms</h1>
+<%= simple_form_for @room_assignment, url: confirm_group_room_assignment_path(@group), method: :get do |f| %>
+  <%= render 'form_fields', group: @group, f: f %>
+  <%= f.submit 'Proceed to confirmation', **with_tooltip(text: 'You will have an opportunity to review the room assignments before submitting.') %>
+<% end %>
+<% if @group.draw %>
+  <%= link_to 'Back to group', draw_group_path(@group.draw, @group) %>
+<% else %>
+  <%= link_to 'Back to group', group_path(@group) %>
+<% end %>
