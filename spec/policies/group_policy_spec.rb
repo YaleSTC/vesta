@@ -188,7 +188,8 @@ RSpec.describe GroupPolicy do
       before { allow(group).to receive(:full?).and_return(true) }
       it { is_expected.to permit(user, group) }
     end
-    permissions :lock?, :unlock?, :advanced_edit?, :assign_lottery? do
+    permissions :lock?, :unlock?, :advanced_edit?, :assign_lottery?,
+                :make_drawless? do
       it { is_expected.not_to permit(user, other_group) }
       it { is_expected.not_to permit(user, group) }
     end
@@ -387,7 +388,7 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, group) }
       end
     end
-    permissions :lock?, :unlock?, :advanced_edit? do
+    permissions :lock?, :advanced_edit?, :unlock?, :make_drawless? do
       it { is_expected.not_to permit(user, other_group) }
       it { is_expected.not_to permit(user, group) }
     end
@@ -408,7 +409,7 @@ RSpec.describe GroupPolicy do
     end
     permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
                 :send_invites?, :advanced_edit?, :view_pending_members?,
-                :reject_pending?, :change_leader? do
+                :reject_pending?, :change_leader?, :make_drawless? do
       it { is_expected.to permit(user, group) }
     end
     permissions :lock? do

@@ -87,6 +87,10 @@ class GroupPolicy < ApplicationPolicy
     edit?
   end
 
+  def make_drawless?
+    user.admin?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

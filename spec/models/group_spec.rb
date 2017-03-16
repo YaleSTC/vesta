@@ -142,6 +142,20 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#pending_memberships' do
+    let(:group) { FactoryGirl.create(:open_group) }
+    it 'returns invitations but not accepted memberships' do
+      user = FactoryGirl.create(:student, draw: group.draw, intent: 'on_campus')
+      m = Membership.create(group: group, user: user, status: 'invited')
+      expect(group.pending_memberships).to match([m])
+    end
+    it 'returns requests but not accepted memberships' do
+      user = FactoryGirl.create(:student, draw: group.draw, intent: 'on_campus')
+      m = Membership.create(group: group, user: user, status: 'requested')
+      expect(group.pending_memberships).to match([m])
+    end
+  end
+
   describe '#members' do
     it 'returns only members with an accepted membership' do
       group = FactoryGirl.create(:open_group)

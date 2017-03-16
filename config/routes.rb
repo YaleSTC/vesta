@@ -62,6 +62,7 @@ Rails.application.routes.draw do
         put 'lock'
         put 'unlock'
         delete 'leave'
+        patch 'make_drawless'
       end
     end
   end

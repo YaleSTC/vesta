@@ -108,6 +108,11 @@ class GroupsController < ApplicationController
     @color_class = @group.save ? 'success' : 'failure'
   end
 
+  def make_drawless
+    result = GroupDrawRemover.remove(group: @group)
+    handle_action(action: 'show', **result)
+  end
+
   private
 
   def authorize!
