@@ -11,9 +11,11 @@
         <% if current_user %>
           <% if current_user.admin? %>
             <%= render 'nav_admin' %>
+          <% elsif current_user.rep? %>
+            <%= render 'nav_rep' %>
           <% else %>
-             <%= render 'nav_student' %>
-           <% end %>
+            <%= render 'nav_student' %>
+          <% end %>
         <% end %>
       </div>
       <div class="top-bar-right">

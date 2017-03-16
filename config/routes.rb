@@ -80,4 +80,6 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resource :email_export, only: %i(new create)
 end

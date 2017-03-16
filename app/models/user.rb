@@ -38,7 +38,7 @@ class User < ApplicationRecord
 
   belongs_to :draw
   has_one :led_group, inverse_of: :leader, dependent: :destroy,
-                      class_name: 'Group'
+                      class_name: 'Group', foreign_key: :leader_id
   has_one :membership, -> { where(status: 'accepted') }, dependent: :destroy
   has_one :group, through: :membership
   has_many :memberships, dependent: :destroy
