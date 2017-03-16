@@ -5,6 +5,7 @@ RSpec.describe 'Special group creation', type: :request do
   let!(:leader) { FactoryGirl.create(:student, intent: 'on_campus') }
   let(:admin) { FactoryGirl.create(:admin) }
   before do
+    FactoryGirl.create(:college)
     FactoryGirl.create(:suite_with_rooms, rooms_count: 1)
     post user_session_path,
          params: { user: { email: admin.email, password: 'passw0rd' } }

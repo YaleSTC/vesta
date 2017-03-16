@@ -22,6 +22,7 @@ class DrawSelectionStarter
   def initialize(draw:, mailer: StudentMailer)
     @draw = draw
     @mailer = mailer
+    @college = College.first
   end
 
   # Start the suite selection phase of a Draw and notify the first group(s) to
@@ -42,7 +43,7 @@ class DrawSelectionStarter
 
   private
 
-  attr_reader :mailer
+  attr_reader :mailer, :college
   attr_accessor :draw
 
   def draw_in_lottery_phase
@@ -57,7 +58,7 @@ class DrawSelectionStarter
 
   def notify_first_groups
     draw.next_groups.each do |group|
-      mailer.selection_invite(group.leader).deliver_later
+      mailer.selection_invite(group.leader, college).deliver_later
     end
   end
 

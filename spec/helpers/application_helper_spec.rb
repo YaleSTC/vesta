@@ -24,4 +24,15 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.headerize_size(1)).to eq('Singles')
     end
   end
+
+  describe '#settings_path' do
+    it 'returns a link to edit the passed college if persisted' do
+      college = instance_spy('college', persisted?: true)
+      expect(helper.settings_path(college)).to match(/edit/)
+    end
+    it 'returns a link to create a college if unpersisted' do
+      college = instance_spy('college', id: nil)
+      expect(helper.settings_path(college)).to match(/new/)
+    end
+  end
 end

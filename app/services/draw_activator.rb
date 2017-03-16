@@ -21,6 +21,7 @@ class DrawActivator
     @draw = draw
     @errors = []
     @mailer = mailer
+    @college = College.first
   end
 
   # Activate a Draw
@@ -36,7 +37,8 @@ class DrawActivator
 
   private
 
-  attr_accessor :draw, :errors, :mailer
+  attr_accessor :draw, :errors
+  attr_reader :college, :mailer
 
   def validate
     errors << 'Draw must be a draft.' unless draw.draft?
@@ -57,7 +59,7 @@ class DrawActivator
 
   def send_emails
     draw.students.each do |student|
-      mailer.draw_invitation(student).deliver_later
+      mailer.draw_invitation(student, college).deliver_later
     end
   end
 

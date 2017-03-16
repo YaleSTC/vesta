@@ -24,4 +24,14 @@ module ApplicationHelper
   def headerize_size(size)
     size_str(size).pluralize.capitalize
   end
+
+  # Return the correct path for settings - creates a new College if one doesn't
+  # exist
+  #
+  # @param college [College] the current_college, may not be persisted
+  # @return [String] the appropriate link
+  def settings_path(college)
+    return edit_college_path(college) if college.id
+    new_college_path
+  end
 end
