@@ -10,7 +10,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def create?
-    (user.draw && !user.group) || user.admin?
+    student_can_create_group(user) || user.admin?
   end
 
   def edit?
@@ -93,5 +93,9 @@ class GroupPolicy < ApplicationPolicy
 
   def group_can_be_edited_by_leader?(group)
     !group.finalizing? && !group.locked?
+  end
+
+  def student_can_create_group(user)
+    (user.draw && user.draw.pre_lottery? && user.on_campus? && !user.group)
   end
 end

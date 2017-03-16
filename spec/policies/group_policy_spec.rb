@@ -10,21 +10,42 @@ RSpec.describe GroupPolicy do
     let(:other_group) { FactoryGirl.build_stubbed(:group) }
 
     permissions :create? do
-      context 'in same draw, not in group' do
+      context 'in pre_lottery draw, not in group, on_campus' do
         before do
-          allow(user).to receive(:draw).and_return(instance_spy('Draw'))
+          draw = instance_spy('draw', pre_lottery?: true)
+          allow(user).to receive(:draw).and_return(draw)
           allow(user).to receive(:group).and_return(nil)
+          allow(user).to receive(:on_campus?).and_return(true)
         end
         it { is_expected.to permit(user, Group) }
       end
-      context 'in same draw, in group' do
+      context 'in pre_lottery draw, in group, on_campus' do
         before do
-          allow(user).to receive(:draw).and_return(instance_spy('Draw'))
-          allow(user).to receive(:group).and_return(instance_spy('Group'))
+          draw = instance_spy('draw', pre_lottery?: true)
+          allow(user).to receive(:draw).and_return(draw)
+          allow(user).to receive(:group).and_return(instance_spy('group'))
+          allow(user).to receive(:on_campus?).and_return(true)
         end
         it { is_expected.not_to permit(user, Group) }
       end
-      context 'not in same draw' do
+      context 'in pre_lottery draw, not in group, not on_campus' do
+        before do
+          draw = instance_spy('draw', pre_lottery?: true)
+          allow(user).to receive(:draw).and_return(draw)
+          allow(user).to receive(:group).and_return(nil)
+          allow(user).to receive(:on_campus?).and_return(false)
+        end
+        it { is_expected.not_to permit(user, Group) }
+      end
+      context 'in non-pre_lottery' do
+        before do
+          draw = instance_spy('draw', pre_lottery?: false)
+          allow(user).to receive(:draw).and_return(draw)
+        end
+        it { is_expected.not_to permit(user, Group) }
+      end
+      context 'not in draw' do
+        before { allow(user).to receive(:draw).and_return(nil) }
         it { is_expected.not_to permit(user, Group) }
       end
     end
@@ -179,21 +200,42 @@ RSpec.describe GroupPolicy do
     let(:other_group) { FactoryGirl.build_stubbed(:group) }
 
     permissions :create? do
-      context 'in draw, not in group' do
+      context 'in pre_lottery draw, not in group, on_campus' do
         before do
-          allow(user).to receive(:draw).and_return(instance_spy('Draw'))
+          draw = instance_spy('draw', pre_lottery?: true)
+          allow(user).to receive(:draw).and_return(draw)
           allow(user).to receive(:group).and_return(nil)
+          allow(user).to receive(:on_campus?).and_return(true)
         end
         it { is_expected.to permit(user, Group) }
       end
-      context 'in same draw, in group' do
+      context 'in pre_lottery draw, in group, on_campus' do
         before do
-          allow(user).to receive(:draw).and_return(instance_spy('Draw'))
-          allow(user).to receive(:group).and_return(instance_spy('Group'))
+          draw = instance_spy('draw', pre_lottery?: true)
+          allow(user).to receive(:draw).and_return(draw)
+          allow(user).to receive(:group).and_return(instance_spy('group'))
+          allow(user).to receive(:on_campus?).and_return(true)
         end
         it { is_expected.not_to permit(user, Group) }
       end
-      context 'not in same draw' do
+      context 'in pre_lottery draw, not in group, not on_campus' do
+        before do
+          draw = instance_spy('draw', pre_lottery?: true)
+          allow(user).to receive(:draw).and_return(draw)
+          allow(user).to receive(:group).and_return(nil)
+          allow(user).to receive(:on_campus?).and_return(false)
+        end
+        it { is_expected.not_to permit(user, Group) }
+      end
+      context 'in non-pre_lottery' do
+        before do
+          draw = instance_spy('draw', pre_lottery?: false)
+          allow(user).to receive(:draw).and_return(draw)
+        end
+        it { is_expected.not_to permit(user, Group) }
+      end
+      context 'not in draw' do
+        before { allow(user).to receive(:draw).and_return(nil) }
         it { is_expected.not_to permit(user, Group) }
       end
     end
