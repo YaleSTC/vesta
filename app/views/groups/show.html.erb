@@ -43,6 +43,10 @@
   <%= link_to 'Unlock All Members', unlock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).unlock? %>
   <%= link_to 'Finalize Group', finalize_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize? %>
   <%= link_to 'Finalize Membership', finalize_membership_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize_membership? %>
+  <% if policy(@group).make_drawless? %>
+    <%= link_to 'Make special group', make_drawless_draw_group_path(@draw, @group), method: :patch,
+                **with_tooltip(text: 'Remove this group and its members from the draw and convert it to a special group.', class_override: 'button alert') %>
+  <% end %>
   <%= link_to('Disband', draw_group_path(@draw, @group), method: :delete, class: 'button alert') if policy(@group).destroy? %>
 </div>
 <%= link_to 'Return to draw', draw_path(@draw) %>

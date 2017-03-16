@@ -73,6 +73,13 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     memberships.where(status: 'invited').map(&:user)
   end
 
+  # Get all of the non-accepted memberships for the group
+  #
+  # @return [Array<Membership>] the memberships that are not accepted
+  def pending_memberships
+    memberships.where.not(status: 'accepted')
+  end
+
   # Get the group's members that can be removed
   #
   # @return[Array<User>] the members of the group with the exception of the
