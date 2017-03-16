@@ -14,7 +14,7 @@ RSpec.feature 'Students Joining Groups' do
     def invite_member(user:, group:)
       visit draw_group_path(group.draw, group)
       click_on 'Invite Members'
-      select user.full_name, from: 'group_invitations'
+      check user.full_name
       click_on 'Send Invitations'
     end
   end
