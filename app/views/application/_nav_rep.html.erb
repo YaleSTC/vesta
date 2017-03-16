@@ -1,0 +1,21 @@
+<ul class="dropdown menu" data-dropdown-menu>
+  <li>
+    <a href="#">Draws</a>
+    <ul class="menu vertical">
+      <% if current_user.draw && policy(current_user.draw).show? %>
+        <li><%= link_to 'My Draw', draw_path(current_user.draw) %></li>
+      <% end %>
+      <li><%= link_to 'All Draws', draws_path %></li>
+    </ul>
+  </li>
+  <% if policy(current_user).edit_intent? %>
+    <li><%= link_to 'Update Housing Intent', edit_intent_user_path(current_user) %></li>
+  <% end %>
+  <% if current_user.group %>
+    <li><%= link_to 'My Group', draw_group_path(current_user.draw, current_user.group) %></li>
+  <% elsif policy(Group).new? %>
+    <li><%= link_to 'Create Housing Group', new_draw_group_path(current_user.draw) %></li>
+  <% end %>
+  <li><%= link_to 'Export Group Leader Emails', new_email_export_path %></li>
+  <li><%= link_to 'All Buildings', buildings_path %></li>
+</ul>

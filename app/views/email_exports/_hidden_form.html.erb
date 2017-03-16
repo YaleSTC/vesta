@@ -1,0 +1,9 @@
+<%= simple_form_for EmailExport.new, url: email_export_path, html: { class: 'email-export-btn' } do |f| %>
+  <% if draw.present? %>
+    <%= f.input :draw_id, as: :hidden, input_html: { value: draw.id } %>
+  <% end %>
+  <% if size.present? %>
+    <%= f.input :size, as: :hidden, input_html: { value: size } %>
+  <% end %>
+  <%= f.button :submit, btn_str, class: 'button secondary' %>
+<% end %>
