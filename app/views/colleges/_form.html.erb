@@ -1,0 +1,7 @@
+<%= simple_form_for @college do |f| %>
+  <%= f.input :name %>
+  <%= f.input :admin_email, label: 'Administrator e-mail', hint: 'Used in e-mails sent to students' %>
+  <%= f.input :site_url, label: 'Site URL', hint: 'The web address used to visit Vesta' %>
+  <%= f.input :dean, hint: 'Used in e-mail signatures' %>
+  <%= f.submit %>
+<% end %>

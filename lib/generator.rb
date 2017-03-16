@@ -8,7 +8,7 @@ module Generator
 
   GENERATORS = { user: UserGenerator, building: BuildingGenerator,
                  suite: SuiteGenerator, room: RoomGenerator,
-                 draw: DrawGenerator }.freeze
+                 draw: DrawGenerator, college: CollegeGenerator }.freeze
 
   def self.generate(model:, count: 1, **overrides)
     # puts "Generating #{count} #{model.camelize}...\n"

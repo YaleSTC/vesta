@@ -3,6 +3,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: 'application#home'
+  resources :colleges, only: %i(new create show edit update)
   resources :buildings
   post 'suite_import/import', to: 'suite_imports#import', as: 'suite_import'
   resources :suites do

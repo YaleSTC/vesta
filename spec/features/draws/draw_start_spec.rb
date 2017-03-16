@@ -4,7 +4,10 @@ require 'rails_helper'
 RSpec.feature 'Draw activation' do
   let(:draw) { FactoryGirl.create(:draw_with_members, status: 'draft') }
   context 'as admin' do
-    before { log_in(FactoryGirl.create(:admin)) }
+    before do
+      FactoryGirl.create(:college)
+      log_in(FactoryGirl.create(:admin))
+    end
 
     it 'can be initiated' do
       visit draw_path(draw)

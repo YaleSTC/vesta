@@ -3,6 +3,7 @@
 
 puts 'Generating seed data....'
 
+Generator.generate(model: 'college', count: 1)
 if User.cas_auth?
   puts 'Please enter your CAS login: '
   cas_login = $stdin.gets.chomp
