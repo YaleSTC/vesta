@@ -19,6 +19,9 @@
             <tr>
               <td>Group Leader</td>
               <td>Status</td>
+              <% if current_user.admin? %>
+                <td>Transfers</td>
+              <% end %>
               <td></td>
             </tr>
           </thead>
@@ -27,6 +30,9 @@
               <tr id="group-<%= group.id %>">
                 <td data-role="group-leader"><%= group.leader.full_name %></td>
                 <td data-role="group-status"><%= group.status.capitalize %></td>
+                <% if current_user.admin? %>
+                  <td data-role="group-transfers"><%= group.transfers %></td>
+                <% end %>
                 <td data-role="group-actions"><%= render actions_partial, group: group, path: path %></td>
               </tr>
             <% end %>
