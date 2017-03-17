@@ -10,13 +10,16 @@
 
 .group-report {
   td[data-role="group-leader"] {
-    width: 40%;
+    width: 35%;
   }
   td[data-role="group-status"] {
     width: 20%;
   }
+  td[data-role="group-transfers"] {
+    width: 10%;
+  }
   td[data-role="group-actions"] {
-    width: 40%;
+    width: 35%;
     text-align: center;
     a.button { margin: 0 }
   }
