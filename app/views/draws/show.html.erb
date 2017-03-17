@@ -69,7 +69,7 @@
   <% if policy(@draw).lottery? %>
     <%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button secondary' %>
   <% end %>
-  <% if policy(Group).new? %>
+  <% if policy(Group).new? && policy(@draw).group_actions? %>
     <%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %>
   <% end %>
   <% if policy(@draw).destroy? %>

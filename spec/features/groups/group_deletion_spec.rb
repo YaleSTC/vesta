@@ -2,8 +2,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Group deletion' do
-  before { log_in FactoryGirl.create(:admin) }
   let(:group) { FactoryGirl.create(:group) }
+  before { log_in FactoryGirl.create(:admin) }
 
   it 'succeeds' do
     msg = "Group #{group.name} deleted."
