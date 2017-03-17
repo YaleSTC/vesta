@@ -106,7 +106,7 @@ class GroupsController < ApplicationController
   end
 
   def select_suite
-    @suites = @draw.suites.where(size: @group.size)
+    @suites = @draw.suites.available.where(size: @group.size)
   end
 
   def assign_suite

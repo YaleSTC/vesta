@@ -152,7 +152,14 @@ class Draw < ApplicationRecord
   #
   # @return [Array<Group>] the next available groups using NextGroupsQuery
   def next_groups
-    NextGroupsQuery.call(draw: self)
+    @next_groups ||= NextGroupsQuery.call(draw: self)
+  end
+
+  # Returns true if the given group is in the next groups to pick suites
+  #
+  # @return [Boolean]
+  def next_group?(group)
+    next_groups.include? group
   end
 
   # Email the leaders of the next groups to select suites.

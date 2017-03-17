@@ -14,7 +14,7 @@ class GroupSuiteSelector < SuiteSelector
     @mailer = mailer
   end
 
-  # Select / assign a suite to a group. Checks to make sure that the grou does
+  # Select / assign a suite to a group. Checks to make sure that the group does
   # not curretly have a suite assigned, that the suite_id corresponds to an
   # existing suite, and that the suite is not currently assigned to a different
   # group. Notifies next groups to select suites.

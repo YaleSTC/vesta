@@ -262,6 +262,21 @@ RSpec.describe Draw, type: :model do
     end
   end
 
+  describe '#next_group?' do
+    it 'returns true when group is in next groups' do
+      group = instance_spy('Group')
+      draw = FactoryGirl.build_stubbed(:draw)
+      allow(draw).to receive(:next_groups).and_return([group])
+      expect(draw.next_group?(group)).to be_truthy
+    end
+    it 'returns false when group is not in next groups' do
+      group = instance_spy('Group')
+      draw = FactoryGirl.build_stubbed(:draw)
+      allow(draw).to receive(:next_groups).and_return([])
+      expect(draw.next_group?(group)).to be_falsey
+    end
+  end
+
   describe '#notify_next_groups' do
     # rubocop:disable RSpec/ExampleLength
     it 'sends a selection invite to the leaders of the next groups' do

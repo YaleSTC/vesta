@@ -84,8 +84,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def select_suite?
-    user.admin? || (user.leader_of?(record) &&
-                    record.draw.next_groups.any? { |g| g == record })
+    user.admin? || (user.leader_of?(record) && record.draw.next_group?(record))
   end
 
   def assign_suite?
