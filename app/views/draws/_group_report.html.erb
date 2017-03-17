@@ -3,8 +3,14 @@
 <% else %>
   <% sizes.each do |size| %>
     <div class="groups-<%= size %>">
-      <h4><span class="group-size-header <%= diff_class(diff[size]) %>"><%= headerize_size(size) %> <%= " - #{pluralize(suite_counts[size], 'suite')}, #{pluralize(group_counts[size], 'group')}" %><%= ' (locked)' if @draw.size_locked?(size) %></span></h4>
-      <%= toggle_size_lock_btn(draw: @draw, size: size, path: path) if policy(@draw).toggle_size_lock? %>
+      <% if diff.present? && suite_counts.present? && group_counts.present? %>
+        <h4><span class="group-size-header <%= diff_class(diff[size]) %>"><%= headerize_size(size) %> <%= " - #{pluralize(suite_counts[size], 'suite')}, #{pluralize(group_counts[size], 'group')}" %><%= ' (locked)' if @draw.size_locked?(size) %></span></h4>
+      <% else %>
+        <h4><%= headerize_size(size) %></h4>
+      <% end %>
+      <% if @draw.present? %>
+        <%= toggle_size_lock_btn(draw: @draw, size: size, path: path) if policy(@draw).toggle_size_lock? %>
+      <% end %>
       <% if groups[size].empty? %>
         <p>No groups of size <%= size %></p>
       <% else %>
@@ -26,7 +32,7 @@
             <% end %>
           </tbody>
         </table>
+      <% end %>
     </div>
   <% end %>
-<% end %>
 <% end %>

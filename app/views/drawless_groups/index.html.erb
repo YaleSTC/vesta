@@ -1,5 +1,8 @@
 <h1>Special Groups</h1>
 <div class="group-report">
-  <%= render 'draws/group_report', sizes: @sizes, groups: @groups_by_size, actions_partial: 'drawless_groups/actions', path: groups_path %>
+  <%= render 'draws/group_report', sizes: @sizes, groups: @groups_by_size,
+                                   actions_partial: 'drawless_groups/actions',
+                                   path: groups_path, diff: nil, group_counts: nil,
+                                   suite_counts: nil %>
 </div>
 <%= link_to 'New Special Group', new_group_path, class: 'button secondary' %>
