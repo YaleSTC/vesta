@@ -6,6 +6,8 @@ FactoryGirl.define do
     draw { leader.draw }
     members { [leader] }
 
+    after(:create) { |g| g.draw&.update(status: 'pre_lottery') }
+
     factory :full_group do
       size 2
       after(:build) do |g|
@@ -14,7 +16,6 @@ FactoryGirl.define do
           g.members << create(:student, draw: g.draw)
         end
       end
-      after(:create) { |g| g.draw.update(status: 'pre_lottery') }
 
       factory :finalizing_group do
         after(:create) do |g|

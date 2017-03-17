@@ -124,9 +124,9 @@ RSpec.describe DrawPolicy do
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
     permissions :show?, :edit?, :update?, :destroy?, :intent_report?,
-                :filter_intent_report?, :group_actions?, :suite_summary?,
-                :suites_edit?, :suites_update?, :student_summary?,
-                :students_update?, :toggle_size_lock? do
+                :filter_intent_report?, :suite_summary?, :suites_edit?,
+                :suites_update?, :student_summary?, :students_update?,
+                :toggle_size_lock? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :index?, :new?, :create? do
@@ -142,6 +142,18 @@ RSpec.describe DrawPolicy do
       context 'when draw is not a draft' do
         before { allow(draw).to receive(:draft?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :group_actions? do
+      context 'when draw is a draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'when draw is not a draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        it { is_expected.to permit(user, draw) }
       end
     end
 

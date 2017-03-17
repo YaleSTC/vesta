@@ -39,7 +39,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def group_actions?
-    user.admin? || record.pre_lottery?
+    (user.admin? && !record.draft?) || record.pre_lottery?
   end
 
   def intent_actions?
