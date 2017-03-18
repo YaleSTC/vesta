@@ -63,7 +63,7 @@ module DrawsHelper
   #
   # @return [String] in format "March 21, 2:00 pm"
   def format_email_date(date)
-    date.strftime('%B %e,%l:%M %P')
+    date.strftime('%B %e, %l:%M %P')
   end
 
   private

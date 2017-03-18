@@ -1,0 +1,3 @@
+<h1><%= @draw.name %> - Results</h1>
+<%= render 'results/suites_table', suites: @suites_with_results %>
+<%= link_to 'Back to draw', draw_path(@draw) %>

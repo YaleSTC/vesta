@@ -1,0 +1,25 @@
+<% if suites.empty? %>
+  <p>No results yet - students must have rooms assigned before we can display results.</p>
+<% else %>
+<table>
+  <thead>
+    <tr>
+      <td>Suite</td>
+      <td>Room</td>
+      <td>Occupents</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% suites.each do |suite| %>
+      <% suite.rooms.order(:number).each do |room| %>
+        <% next if room.beds.zero? %>
+        <tr class="result-room-<%= room.id %>">
+          <td><%= suite.number %></td>
+          <td><%= room.number %></td>
+          <td class="student"><%= room_occupants(room) %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<% end %>

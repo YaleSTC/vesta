@@ -7,6 +7,8 @@ RSpec.describe DrawlessGroupPolicy do
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
     let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    before { allow(Group).to receive(:find).and_return(group) }
+
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
     end
@@ -30,6 +32,8 @@ RSpec.describe DrawlessGroupPolicy do
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
     let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    before { allow(Group).to receive(:find).and_return(group) }
+
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
     end
@@ -53,6 +57,8 @@ RSpec.describe DrawlessGroupPolicy do
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
     let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    before { allow(Group).to receive(:find).and_return(group) }
+
     permissions :new?, :create? do
       it { is_expected.to permit(user, DrawlessGroup) }
     end

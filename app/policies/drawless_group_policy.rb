@@ -15,6 +15,6 @@ class DrawlessGroupPolicy < ApplicationPolicy
   private
 
   def group_policy
-    Pundit.policy!(user, record)
+    Pundit.policy!(user, Group.find(record.id))
   end
 end

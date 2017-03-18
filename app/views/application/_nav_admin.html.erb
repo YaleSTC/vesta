@@ -28,5 +28,12 @@
       <li><%= link_to 'New Building', new_building_path %></li>
     </ul>
   </li>
+  <li>
+    <a href="#">Results</a>
+    <ul class="menu vertical">
+      <li><%= link_to 'Results by students', students_results_path %></li>
+      <li><%= link_to 'Results by suites', suites_results_path %></li>
+    </ul>
+  </li>
   <li><%= link_to 'Settings', settings_path(@current_college) %></li>
 </ul>
