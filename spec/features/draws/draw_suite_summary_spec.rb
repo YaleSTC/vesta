@@ -20,10 +20,12 @@ RSpec.feature 'Draw suite summary' do
   end
 
   def page_has_suite_content?(page, suite)
-    page.assert_selector(:css, '.suite-item a', text: suite.number)
+    page.assert_selector(:css, 'td[data-role="suite-number"]',
+                         text: suite.number)
   end
 
   def page_does_not_have_suite_content?(page, suite)
-    page.refute_selector(:css, '.suite-item a', text: suite.number)
+    page.refute_selector(:css, 'td[data-role="suite-number"]',
+                         text: suite.number)
   end
 end

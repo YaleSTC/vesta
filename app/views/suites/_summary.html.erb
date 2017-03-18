@@ -1,0 +1,43 @@
+<% sizes.each do |size| %>
+  <div class="suites-list" id="suites-<%= size_str(size).pluralize %>">
+    <h3><%= headerize_size(size) %></h3>
+    <p><%= render partial: 'suites/size_link', collection: sizes.select { |s| s != size }, spacer_template: 'shared/slash' %></p>
+    <% unless suites[size].empty? %>
+      <table>
+        <thead>
+          <tr>
+            <td>#</td>
+            <td># Singles</td>
+            <td># Doubles</td>
+            <td># Common</td>
+            <td>Draws</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          <% suites[size].each do |suite| %>
+            <% next if suite.medical %>
+            <tr id="suite-<%= suite.id %>">
+              <td data-role="suite-number"><%= link_to suite.number, suite_path(suite) %></td>
+              <td data-role="suite-singles"><%= suite.singles.count %></td>
+              <td data-role="suite-doubles"><%= suite.doubles.count %></td>
+              <td data-role="suite-common"><%= suite.common_rooms.count %></td>
+              <td data-role="suite-draws">
+                <%= render partial: 'suites/draw_link', collection: suite.draws, spacer_template: 'shared/comma' %>
+              </td>
+              <td data-role="suite-actions">
+                <%= link_to 'View', suite_path(suite), class: 'button' %>
+                <% if policy(suite).edit? %>
+                  <%= link_to 'Edit', edit_suite_path(suite), class: 'button' %>
+                <% end %>
+                <% if policy(suite).destroy? %>
+                  <%= link_to 'Delete', suite_path(suite), method: :delete, class: 'button alert' %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+<% end %>
