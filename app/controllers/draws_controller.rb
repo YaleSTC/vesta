@@ -166,6 +166,10 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(**result)
   end
 
+  def results
+    @suites_with_results = SuitesWithRoomsAssignedQuery.new(@draw.suites).call
+  end
+
   private
 
   def authorize!

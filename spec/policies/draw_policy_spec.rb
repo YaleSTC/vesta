@@ -17,7 +17,7 @@ RSpec.describe DrawPolicy do
                 :oversubscription?, :toggle_size_lock?, :start_lottery?,
                 :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
                 :select_suites?, :assign_suites?, :reminder?, :intent_reminder?,
-                :locking_reminder?, :lock_all_sizes? do
+                :locking_reminder?, :lock_all_sizes?, :results? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
@@ -179,6 +179,17 @@ RSpec.describe DrawPolicy do
           allow(draw).to receive(:intent_deadline)
             .and_return(Time.zone.yesterday)
         end
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :results? do
+      context 'draw is in results phase' do
+        before { allow(draw).to receive(:results?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'draw is not in results phase' do
+        before { allow(draw).to receive(:results?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -387,6 +398,17 @@ RSpec.describe DrawPolicy do
           allow(draw).to receive(:intent_deadline)
             .and_return(Time.zone.yesterday)
         end
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :results? do
+      context 'draw is in results phase' do
+        before { allow(draw).to receive(:results?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'draw is not in results phase' do
+        before { allow(draw).to receive(:results?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end

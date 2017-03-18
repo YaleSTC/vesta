@@ -1,0 +1,21 @@
+<h1>Results by student</h1>
+<% if @students.empty? %>
+  <p>No results yet - students must have rooms assigned before we can display results.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <td>Student</td>
+        <td>Room</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+        <tr class="result-student-<%= student.id %>">
+          <td><%= student.full_name %></td>
+          <td class="room"><%= student.room.number %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

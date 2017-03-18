@@ -112,6 +112,10 @@ class DrawPolicy < ApplicationPolicy
     select_suites?
   end
 
+  def results?
+    (user.admin? || user.rep?) && record.results?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

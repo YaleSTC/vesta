@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       patch 'start_selection'
       get 'select_suites'
       patch 'assign_suites'
+      get 'results'
     end
 
     resources :groups do
@@ -91,4 +92,11 @@ Rails.application.routes.draw do
   end
 
   resource :email_export, only: %i(new create)
+
+  resources :results, only: [] do
+    collection do
+      get 'students'
+      get 'suites'
+    end
+  end
 end
