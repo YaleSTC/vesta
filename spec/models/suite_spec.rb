@@ -60,7 +60,7 @@ RSpec.describe Suite, type: :model do
     context 'valid inputs' do
       expected = { 1 => 'single', 2 => 'double', 3 => 'triple',
                    4 => 'quad', 5 => 'quint', 6 => 'sextet',
-                   7 => 'septet', 8 => 'octet', 9 => '9-Pack' }
+                   7 => 'septet', 8 => 'octet', 9 => '9-pack' }
       expected.each do |size, expected_str|
         it "returns a valid result for #{size}" do
           expect(described_class.size_str(size)).to eq(expected_str)

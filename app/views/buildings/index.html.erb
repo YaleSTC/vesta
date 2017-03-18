@@ -1,8 +1,6 @@
 <h1> Inventory </h1>
 <ul>
   <% @buildings.each do |building| %>
-    <div>
-      <%= render 'summary_table', building: building %>
-    </div>
+    <div><%= render 'summary_table', building: building %></div>
   <% end %>
 </ul>

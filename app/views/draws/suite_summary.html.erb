@@ -1,15 +1,6 @@
 <h1 class="draw-name"><%= @draw.name %> Suites</h1>
-<% @all_sizes.each do |size| %>
-  <div class="suites-list suites-<%= size_str(size).pluralize %>">
-    <h2><%= headerize_size(size) %></h2>
-    <% if @suites_by_size.has_key? size %>
-      <% @suites_by_size[size].each do |suite| %>
-        <div class="suite-item"><%= link_to suite.number, suite_path(suite) %></div>
-      <% end %>
-    <% end %>
-  </div>
-  <hr />
-<% end %>
+<%= render 'suites/summary', sizes: @all_sizes, suites: @suites_by_size %>
+<hr />
 <% if policy(@draw).suites_edit? %>
   <p><%= link_to 'Edit suites', suites_edit_draw_path(@draw), class: 'button' %></p>
 <% end %>

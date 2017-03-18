@@ -36,7 +36,7 @@ class Suite < ApplicationRecord
   def self.size_str(size)
     raise ArgumentError unless size.is_a?(Integer) && size >= 0
     return SIZE_STRS[size] if SIZE_STRS.key? size
-    "#{size}-Pack"
+    "#{size}-pack"
   end
 
   # Return the number of the suite with the names of any draws it belongs to.

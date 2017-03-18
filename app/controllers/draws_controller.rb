@@ -65,6 +65,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def suite_summary
     @all_sizes = SuiteSizesQuery.new(Suite.available).call
     @suites_by_size = SuitesBySizeQuery.new(@draw.suites.available).call
+    @suites_by_size.default = []
   end
 
   def suites_edit
