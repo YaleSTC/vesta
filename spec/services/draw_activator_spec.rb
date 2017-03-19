@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe DrawActivator do
   # we may want to extract this into a shared example if we use this pattern

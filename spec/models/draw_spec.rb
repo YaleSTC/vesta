@@ -282,9 +282,11 @@ RSpec.describe Draw, type: :model do
       draw = FactoryGirl.build_stubbed(:draw)
       group = instance_spy('Group', leader: instance_spy('User'))
       allow(draw).to receive(:next_groups).and_return([group])
-      mailer = instance_spy('student_mailer')
-      draw.notify_next_groups(mailer)
-      expect(mailer).to have_received(:selection_invite).with(group.leader, nil)
+      msg = instance_spy(ActionMailer::MessageDelivery, deliver_later: true)
+      allow(StudentMailer).to receive(:selection_invite).and_return(msg)
+      draw.notify_next_groups(StudentMailer)
+      expect(StudentMailer).to \
+        have_received(:selection_invite).with(user: group.leader)
     end
     # rubocop:enable RSpec/ExampleLength
   end

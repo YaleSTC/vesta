@@ -26,6 +26,7 @@ class GroupFinalizer
         group.leader.membership.update!(locked: true)
       end
     end
+    notify_members
     success
   rescue ActiveRecord::RecordInvalid => failures
     @errors = failures
@@ -61,5 +62,12 @@ class GroupFinalizer
   def success
     { object: [group.draw, group], record: group,
       msg: { success: "#{group.name} is being finalized." } }
+  end
+
+  def notify_members
+    members = group.members - [group.leader]
+    members.each do |m|
+      StudentMailer.finalizing_notification(user: m).deliver_later
+    end
   end
 end

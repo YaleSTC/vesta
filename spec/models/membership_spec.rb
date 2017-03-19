@@ -167,4 +167,25 @@ RSpec.describe Membership, type: :model do
       expect(membership).not_to be_valid
     end
   end
+
+  describe 'email callbacks' do
+    let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
+    # rubocop:disable RSpec/ExampleLength
+    it 'emails leader on invitation acceptance' do
+      g = FactoryGirl.create(:open_group)
+      m = Membership.create(user: FactoryGirl.create(:student, draw: g.draw),
+                            group: g, status: 'invited')
+      allow(StudentMailer).to receive(:joined_group).and_return(msg)
+      m.update(status: 'accepted')
+      expect(StudentMailer).to have_received(:joined_group)
+    end
+    # rubocop:enable RSpec/ExampleLength
+    it 'emails leader when someone leaves' do
+      group = FactoryGirl.create(:full_group)
+      m = group.memberships.last
+      allow(StudentMailer).to receive(:left_group).and_return(msg)
+      m.destroy
+      expect(StudentMailer).to have_received(:left_group)
+    end
+  end
 end

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hi <%= @user.name %>,</p>
+    <p>Your housing group has been disbanded, either by your leader or an admin.
+    Please e-mail <%= @college.admin_email %> if you have any questions.</p>
+    <p>Sincerely,<br /><%= @college.dean %></p>
+  </body>
+</html>

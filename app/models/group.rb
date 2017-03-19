@@ -39,7 +39,10 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
   before_destroy :remove_member_rooms
+
   after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
+  after_destroy :notify_members_of_disband
+
   after_save :update_status!, if: ->(g) { g.transfers_changed? }
 
   attr_reader :remove_ids
@@ -57,7 +60,9 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   # SystemStackError under certain circumstances (skips callbacks).
   def update_status!
     assign_new_status
-    update_columns(status: status) if status && valid?
+    return unless  status && valid?
+    update_columns(status: status)
+    send_locked_email if locked?
   end
 
   # Get the group's membership requests
@@ -111,6 +116,18 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   end
 
   private
+
+  def notify_members_of_disband
+    members.each do |m|
+      StudentMailer.disband_notification(user: m).deliver_later
+    end
+  end
+
+  def send_locked_email
+    members.each do |m|
+      StudentMailer.group_locked(user: m).deliver_later
+    end
+  end
 
   # override default attribute getter to include transfers
   def members_count

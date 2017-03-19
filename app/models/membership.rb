@@ -41,6 +41,9 @@ class Membership < ApplicationRecord
   after_save :update_group_status
   after_destroy :update_group_status, if: ->(m) { m.group.present? }
 
+  after_save :send_joined_email, if: ->() { status_changed? && accepted? }
+  after_destroy :send_left_email, if: ->() { accepted? }
+
   def readonly?
     if locked_changed?
       # we need to allow the membership to be locked
@@ -89,6 +92,16 @@ class Membership < ApplicationRecord
     return unless locked_changed? && locked
     errors.add :locked, 'must be an accepted membership' unless accepted?
     errors.add :locked, 'must be a finalizing group' unless group.finalizing?
+  end
+
+  def send_joined_email
+    StudentMailer.joined_group(joined: user, group: group,
+                               college: College.first).deliver_later
+  end
+
+  def send_left_email
+    StudentMailer.left_group(left: user, group: group,
+                             college: College.first).deliver_later
   end
 
   def update_counter_cache
