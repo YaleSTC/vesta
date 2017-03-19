@@ -27,6 +27,8 @@ class Suite < ApplicationRecord
 
   scope :available, -> { where(group_id: nil) }
 
+  before_save :clear_room_ids, ->(s) { s.group_id_changed? }
+
   # Return the equivalent string for a given suite size
   #
   # @param size [Integer] the suite size
@@ -87,5 +89,15 @@ class Suite < ApplicationRecord
   # @return [Boolean] whether or not the suite is selectable
   def selectable?
     draws.all? { |draw| !(draw.lottery? || draw.suite_selection?) }
+  end
+
+  private
+
+  def clear_room_ids
+    id_array = [group_id, group_id_was].compact
+    members = User.includes(:group).where(groups: { id: id_array })
+    ActiveRecord::Base.transaction { members.update(room_id: nil) }
+  rescue
+    throw(:abort)
   end
 end

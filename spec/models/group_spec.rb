@@ -101,6 +101,14 @@ RSpec.describe Group, type: :model do
     expect(group.reload).to be_full
   end
 
+  it 'removes member room ids when disbanding' do
+    group = FactoryGirl.create(:locked_group, size: 1)
+    suite = FactoryGirl.create(:suite_with_rooms, group_id: group.id)
+    group.leader.update!(room_id: suite.rooms.first.id)
+    expect { group.destroy! }.to \
+      change { group.leader.reload.room_id }.from(suite.rooms.first.id).to(nil)
+  end
+
   describe 'leader is included as a member' do
     it do
       group = FactoryGirl.create(:group)
