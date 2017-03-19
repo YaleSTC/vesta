@@ -28,8 +28,8 @@ class GroupDrawRemover
       pending.each(&:destroy!)
     end
     success
-  rescue ActiveRecord::RecordInvalid => errors
-    error(errors)
+  rescue ActiveRecord::ActiveRecordError => e
+    error(e)
   end
 
   private

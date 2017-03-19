@@ -19,16 +19,16 @@ class MembershipCreator < Creator
 
   private
 
-  def success(membership)
-    { object: [membership.group.draw, membership.group], membership: membership,
-      msg: { success: "Membership in #{membership.group.name} created for "\
-        "#{membership.user.name}." } }
+  def success
+    { object: [obj.group.draw, obj.group], membership: obj,
+      msg: { success: "Membership in #{obj.group.name} created for "\
+        "#{obj.user.name}." } }
   end
 
-  def error(membership)
-    errors = membership.errors.full_messages
+  def error
+    errors = obj.errors.full_messages
     {
-      object: nil, membership: membership,
+      object: nil, membership: obj,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" },
       errors: errors,
       params: params

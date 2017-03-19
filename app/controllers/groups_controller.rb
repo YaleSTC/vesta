@@ -20,9 +20,9 @@ class GroupsController < ApplicationController
     p = group_params.to_h
     p[:leader_id] = current_user.id unless current_user.admin?
     result = GroupCreator.new(p).create!
-    @group = result[:group]
+    @group = result[:record]
     set_form_data unless result[:object]
-    handle_action(path: new_draw_group_path(@draw), **result)
+    handle_action(action: 'new', **result)
   end
 
   def edit; end
@@ -31,7 +31,7 @@ class GroupsController < ApplicationController
     result = GroupUpdater.new(group: @group, params: group_params).update
     @group = result[:record]
     set_form_data unless result[:object]
-    handle_action(path: edit_draw_group_path(@draw, @group), **result)
+    handle_action(action: 'edit', **result)
   end
 
   def destroy
@@ -159,6 +159,7 @@ class GroupsController < ApplicationController
 
   def set_form_data
     @group ||= Group.new(draw: @draw)
+    @group.members.delete_all unless @group.persisted?
     @students = UngroupedStudentsQuery.new(@draw.students.on_campus).call
     @leader_students = @group.members.empty? ? @students : @group.members
     @suite_sizes = @draw.open_suite_sizes
