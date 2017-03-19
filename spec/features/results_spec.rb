@@ -26,6 +26,12 @@ RSpec.feature 'Results' do
     expect(page_has_room_results(page)).to be_truthy
   end
 
+  it 'can export data by student' do
+    visit students_results_path
+    click_on 'Export CSV'
+    expect(page_is_valid_export(page)).to be_truthy
+  end
+
   def page_has_student_results(page)
     data[:members].all? do |member|
       page.assert_selector("tr.result-student-#{member.id} td.room",
@@ -43,6 +49,25 @@ RSpec.feature 'Results' do
                              text: '1 transfer')
       end
     end
+  end
+
+  def page_is_valid_export(page) # rubocop:disable AbcSize
+    headers = page.response_headers
+    filename = "vesta_export_#{Time.zone.today.to_s(:number)}.csv"
+    csv_header_str = ResultsController::EXPORT_HEADERS.map(&:to_s).join(',')
+    headers['Content-Disposition'] == "attachment; filename=\"#{filename}\"" &&
+      headers['Content-Type'] == 'text/csv' &&
+      page.body.include?(csv_header_str) &&
+      data[:members].all? do |student|
+        page.body.include?(export_row_for(student))
+      end
+  end
+
+  def export_row_for(student)
+    [
+      student.last_name, student.first_name, student.username,
+      student.room.suite.number, student.room.number
+    ].join(',')
   end
 
   def create_data # rubocop:disable MethodLength, AbcSize
