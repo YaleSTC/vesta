@@ -57,7 +57,7 @@ class Membership < ApplicationRecord
 
   def user_not_in_group
     return unless user.group && user.group != group
-    errors.add :user, 'already has membership in another group'
+    errors.add :base, "#{user.full_name} already belongs to another group"
   end
 
   def update_group_status
@@ -76,16 +76,17 @@ class Membership < ApplicationRecord
 
   def matching_draw
     return if user.draw == group.draw
-    errors.add :user, 'must belong to same draw as group'
+    errors.add :base, "#{user.full_name} is not in the same draw as the group"
   end
 
   def group_is_open
+    return unless !persisted? || status_changed?
     errors.add :group, 'must be open' unless group.open?
   end
 
   def user_on_campus
     return if user.on_campus?
-    errors.add :user, 'must be living on campus to join a group'
+    errors.add :base, "#{user.full_name} is not living on campus"
   end
 
   def lockable?

@@ -29,7 +29,7 @@ FactoryGirl.define do
         after(:create) do |g|
           g.draw.update(status: 'pre_lottery')
           g.update(status: 'finalizing')
-          g.full_memberships.each { |m| m.update(locked: true) }
+          g.full_memberships.each { |m| m.update!(locked: true) }
           g.update(status: 'locked')
         end
       end

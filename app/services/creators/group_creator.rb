@@ -31,8 +31,21 @@ class GroupCreator < Creator
     @params.delete(:remove_ids)
   end
 
-  def success(group)
-    { object: [group.draw, group], group: group,
-      msg: { success: "#{group.name} created." } }
+  def success
+    {
+      object: [obj.draw, obj], group: obj,
+      msg: { success: "#{obj.name} created." }
+    }
+  end
+
+  def error(object = @obj)
+    errors = object.errors.full_messages
+    {
+      object: nil, record: object,
+      msg: {
+        error: "There was a problem creating the group: #{errors.join(', ')}. "\
+        'Please make sure you are not adding too many students.'
+      }
+    }
   end
 end

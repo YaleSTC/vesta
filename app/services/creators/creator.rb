@@ -23,29 +23,31 @@ class Creator
   #   A results hash with a message to set in the flash and either `nil`
   #   or the created object.
   def create!
-    obj = klass.send(:new, **params)
+    @obj = klass.send(:new, **params)
     if obj.save
-      success(obj)
+      success
     else
-      error(obj)
+      error
     end
+  rescue ActiveRecord::RecordInvalid => e
+    error(e.record)
   end
 
   private
 
-  attr_reader :klass, :params, :name_method
+  attr_reader :klass, :params, :name_method, :obj
 
-  def success(obj)
+  def success
     {
       object: obj, record: obj,
       msg: { success: "#{obj.send(name_method)} created." }
     }
   end
 
-  def error(obj)
-    errors = obj.errors.full_messages
+  def error(object = obj)
+    errors = object.errors.full_messages
     {
-      object: nil, record: obj,
+      object: nil, record: object,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
     }
   end
