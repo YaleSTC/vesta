@@ -126,7 +126,7 @@ class User < ApplicationRecord
   end
 
   def room_in_suite
-    return if room.suite_id == group.suite.id
+    return if !room || room.suite_id == group.suite.id
     errors.add(:room, "room must be in the user's group's suite.")
   end
 end

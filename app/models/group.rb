@@ -38,6 +38,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   validate :validate_status, if: ->(g) { g.size.present? }
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
+  before_destroy :remove_member_rooms
   after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
   after_save :update_status!, if: ->(g) { g.transfers_changed? }
 
@@ -165,6 +166,12 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
 
   def restore_member_draws
     members.each { |u| u.restore_draw.save }
+  end
+
+  def remove_member_rooms
+    ActiveRecord::Base.transaction { members.update(room_id: nil) }
+  rescue
+    throw(:abort)
   end
 
   def validate_locked

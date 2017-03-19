@@ -38,6 +38,14 @@ RSpec.describe Suite, type: :model do
     end
   end
 
+  it 'clears room ids when group assignment changes' do
+    group = FactoryGirl.create(:locked_group, size: 1)
+    suite = FactoryGirl.create(:suite_with_rooms, group_id: group.id)
+    group.leader.update!(room_id: suite.rooms.first.id)
+    expect { group.suite.update!(group_id: nil) }.to \
+      change { group.leader.reload.room_id }.from(suite.rooms.first.id).to(nil)
+  end
+
   describe '.size_str' do
     it 'raises an argument error if a non-integer is passed' do
       size = instance_spy('string')
