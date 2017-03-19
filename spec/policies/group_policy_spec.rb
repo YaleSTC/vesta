@@ -98,8 +98,7 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, other_group) }
     end
     permissions :destroy?, :edit?, :update?, :accept_request?, :change_leader?,
-                :send_invites?, :invite?, :view_pending_members?,
-                :reject_pending? do
+                :view_pending_members?, :reject_pending? do
       context 'not finalizing or locked' do
         before do
           allow(group).to receive(:finalizing?).and_return(false)
@@ -121,6 +120,18 @@ RSpec.describe GroupPolicy do
           allow(group).to receive(:finalizing?).and_return(false)
           allow(group).to receive(:locked?).and_return(true)
         end
+        it { is_expected.not_to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+    end
+    permissions :send_invites?, :invite? do
+      context 'group open' do
+        before { allow(group).to receive(:open?).and_return(true) }
+        it { is_expected.to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'group not open' do
+        before { allow(group).to receive(:open?).and_return(false) }
         it { is_expected.not_to permit(user, group) }
         it { is_expected.not_to permit(user, other_group) }
       end
@@ -258,7 +269,7 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, other_group) }
     end
     permissions :destroy?, :edit?, :update?, :accept_request?, :change_leader?,
-                :send_invites?, :invite?, :reject_pending? do
+                :reject_pending? do
       context 'not finalizing or locked' do
         before do
           allow(group).to receive(:finalizing?).and_return(false)
@@ -280,6 +291,18 @@ RSpec.describe GroupPolicy do
           allow(group).to receive(:finalizing?).and_return(false)
           allow(group).to receive(:locked?).and_return(true)
         end
+        it { is_expected.not_to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+    end
+    permissions :send_invites?, :invite? do
+      context 'group open' do
+        before { allow(group).to receive(:open?).and_return(true) }
+        it { is_expected.to permit(user, group) }
+        it { is_expected.not_to permit(user, other_group) }
+      end
+      context 'group not open' do
+        before { allow(group).to receive(:open?).and_return(false) }
         it { is_expected.not_to permit(user, group) }
         it { is_expected.not_to permit(user, other_group) }
       end
@@ -429,9 +452,19 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, [group]) }
     end
     permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
-                :send_invites?, :advanced_edit?, :view_pending_members?,
-                :reject_pending?, :change_leader?, :make_drawless? do
+                :advanced_edit?, :view_pending_members?, :reject_pending?,
+                :change_leader?, :make_drawless? do
       it { is_expected.to permit(user, group) }
+    end
+    permissions :send_invites?, :invite? do
+      context 'group open' do
+        before { allow(group).to receive(:open?).and_return(true) }
+        it { is_expected.to permit(user, group) }
+      end
+      context 'group not open' do
+        before { allow(group).to receive(:open?).and_return(false) }
+        it { is_expected.not_to permit(user, group) }
+      end
     end
     permissions :lock? do
       context 'lockable group' do

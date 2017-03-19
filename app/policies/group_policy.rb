@@ -39,11 +39,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def send_invites?
-    edit?
+    invite?
   end
 
   def invite?
-    edit?
+    (record.leader == user || user.admin?) && record.open?
   end
 
   def reject_pending?
