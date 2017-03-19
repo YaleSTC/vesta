@@ -97,6 +97,7 @@ Rails.application.routes.draw do
     collection do
       get 'students'
       get 'suites'
+      get 'export'
     end
   end
 end
