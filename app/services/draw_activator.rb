@@ -59,7 +59,7 @@ class DrawActivator
 
   def send_emails
     draw.students.each do |student|
-      mailer.draw_invitation(student, college).deliver_later
+      mailer.draw_invitation(user: student, college: college).deliver_later
     end
   end
 

@@ -236,4 +236,26 @@ RSpec.describe Group, type: :model do
       expect(group).not_to be_unlockable
     end
   end
+
+  context 'on disbanding' do
+    let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
+    it 'notifies members' do
+      group = FactoryGirl.create(:full_group)
+      allow(StudentMailer).to receive(:disband_notification).and_return(msg)
+      group.destroy
+      expect(StudentMailer).to \
+        have_received(:disband_notification).exactly(group.memberships_count)
+    end
+  end
+
+  context 'on locking' do
+    let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
+    it 'notifies members' do
+      group = FactoryGirl.create(:finalizing_group, size: 2)
+      allow(StudentMailer).to receive(:group_locked).and_return(msg)
+      group.memberships.last.update(locked: true)
+      expect(StudentMailer).to \
+        have_received(:group_locked).exactly(group.memberships_count)
+    end
+  end
 end

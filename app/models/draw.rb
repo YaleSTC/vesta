@@ -173,9 +173,8 @@ class Draw < ApplicationRecord
   #
   # @param [Mailer] The mailer to use
   def notify_next_groups(mailer = StudentMailer)
-    college = College.first
     next_groups.each do |group|
-      mailer.selection_invite(group.leader, college).deliver_later
+      mailer.selection_invite(user: group.leader).deliver_later
     end
   end
 
