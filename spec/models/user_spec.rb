@@ -42,8 +42,8 @@ RSpec.describe User, type: :model do
   # rubocop:disable RSpec/ExampleLength
   it 'destroys a dependent membership on destruction' do
     user = FactoryGirl.create(:student, intent: 'on_campus')
-    FactoryGirl.create(:drawless_group, leader: user)
-    membership_id = user.membership.id
+    group = FactoryGirl.create(:drawless_group, size: 2)
+    membership_id = Membership.create!(user: user, group: group).id
     user.destroy
     expect { Membership.find(membership_id) }.to \
       raise_error(ActiveRecord::RecordNotFound)
