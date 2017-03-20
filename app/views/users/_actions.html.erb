@@ -1,0 +1,12 @@
+<% if policy(user).show? %>
+  <%= link_to 'View', user_path(user), class: 'button secondary' %>
+<% end %>
+<% if policy(user).edit? %>
+  <%= link_to 'Edit', edit_user_path(user), class: 'button secondary' %>
+<% end %>
+<% if policy(user).edit_intent? && !user.admin? %>
+  <%= link_to 'Intent', edit_intent_user_path(user), class: 'button' %>
+<% end %>
+<% if policy(user).destroy? %>
+  <%= link_to 'Remove', user_path(user), method: :delete, class: 'button alert' %>
+<% end %>

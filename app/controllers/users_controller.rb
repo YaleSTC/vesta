@@ -2,11 +2,10 @@
 #
 # Users Controller class
 class UsersController < ApplicationController
-  prepend_before_action :set_user, only: %i(show edit update edit_intent
-                                            update_intent)
+  prepend_before_action :set_user, except: %i(index new build create)
 
   def index
-    @users = User.all.group_by(&:role)
+    @users = User.includes(:draw).all.order(:last_name).group_by(&:role)
   end
 
   def show; end
@@ -39,6 +38,11 @@ class UsersController < ApplicationController
                          params: user_params).update
     @user = result[:record]
     handle_action(action: 'edit', **result)
+  end
+
+  def destroy
+    result = Destroyer.new(object: @user, name_method: :full_name).destroy
+    handle_action(**result)
   end
 
   def edit_intent; end
