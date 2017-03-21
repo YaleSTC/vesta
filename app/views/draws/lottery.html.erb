@@ -6,4 +6,7 @@
     </tr>
   <% end %>
 </table>
+<% if policy(@draw).start_selection? %>
+  <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, class: 'button' %>
+<% end %>
 <p><%= link_to 'Back to draw', draw_path(@draw) %></p>
