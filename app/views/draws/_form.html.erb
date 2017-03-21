@@ -1,6 +1,7 @@
 <%= simple_form_for @draw do |f| %>
   <%= f.input :name %>
   <%= f.input :intent_deadline %>
+  <%= f.input :locking_deadline %>
   <% unless @draw.suites.empty? %>
     <%= f.input :locked_sizes, as: :check_boxes, collection: @draw.suite_sizes,
       label_method: ->(s) { "#{size_str(s)}s".capitalize }, include_hidden: false %>

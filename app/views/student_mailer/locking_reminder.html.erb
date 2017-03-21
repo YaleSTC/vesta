@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hi <%= @user.name %>,</p>
+    <p>This is a reminder to lock your group by <%= @locking_date %>, or it will be locked for you. Please e-mail <%= @college.admin_email %> if you have any questions.</p>
+    <p>Sincerely,<br /><%= @college.dean %></p>
+  </body>
+</html>

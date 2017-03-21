@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hi <%= @user.name %>,</p>
+    <p>This is a reminder that you should submit your housing intent by <%= @intent_date %>. Please e-mail <%= @college.admin_email %> if you have any questions.</p>
+    <p>Sincerely,<br /><%= @college.dean %></p>
+  </body>
+</html>

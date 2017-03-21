@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       patch 'activate'
       get 'intent_report'
       post 'intent_report', to: 'draws#filter_intent_report'
+      post 'reminder'
       patch 'bulk_on_campus'
       get 'suites', to: 'draws#suite_summary', as: 'suite_summary'
       get 'suites/edit', to: 'draws#suites_edit', as: 'suites_edit'

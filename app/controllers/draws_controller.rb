@@ -160,6 +160,12 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(**result, path: select_suites_draw_path(@draw))
   end
 
+  def reminder
+    # note that this will always redirect to draw show
+    result = ReminderQueuer.queue(draw: @draw, type: draw_params['email_type'])
+    handle_action(**result)
+  end
+
   private
 
   def authorize!
@@ -172,6 +178,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def draw_params
     params.require(:draw).permit(:name, :intent_deadline, :intent_locked,
+                                 :email_type, :locking_deadline,
                                  suite_ids: [], student_ids: [],
                                  locked_sizes: [])
   end

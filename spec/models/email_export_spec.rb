@@ -25,7 +25,7 @@ RSpec.describe EmailExport do
       it 'returns all leaders without any scoping' do
         expected = leaders.sort_by { |u| [u.last_name, u.first_name] }
         ee = described_class.new.generate
-        expect(ee.leaders).to match(expected)
+        expect(ee.leaders).to match_array(expected)
       end
       it 'scopes to draws' do
         ee = described_class.new(draw_id: group.draw_id.to_s).generate
@@ -39,13 +39,13 @@ RSpec.describe EmailExport do
         expected_array = [group.leader, drawless.leader]
         expected = expected_array.sort_by { |u| [u.last_name, u.first_name] }
         ee = described_class.new(size: '1').generate
-        expect(ee.leaders).to match(expected)
+        expect(ee.leaders).to match_array(expected)
       end
       it 'scopes to locked status' do
         expected_array = [group.leader, group2.leader]
         expected = expected_array.sort_by { |u| [u.last_name, u.first_name] }
         ee = described_class.new(locked: '1').generate
-        expect(ee.leaders).to match(expected)
+        expect(ee.leaders).to match_array(expected)
       end
     end
   end
