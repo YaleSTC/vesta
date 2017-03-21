@@ -39,10 +39,10 @@
   <% end %>
   <%= link_to 'Invite Members', invite_draw_group_path(@draw, @group), class: 'button secondary' if policy(@group).invite? %>
   <%= link_to 'Accept Invitation', accept_invitation_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).accept_invitation? %>
-  <%= link_to 'Lock Group', lock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
-  <%= link_to 'Unlock All Members', unlock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).unlock? %>
   <%= link_to 'Finalize Group', finalize_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize? %>
   <%= link_to 'Finalize Membership', finalize_membership_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize_membership? %>
+  <%= link_to 'Lock Group', lock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
+  <%= link_to 'Unlock All Members', unlock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).unlock? %>
   <% if policy(@group).assign_rooms? %>
     <%= link_to 'Assign rooms', new_group_room_assignment_path(@group), class: 'button' %>
   <% end %>

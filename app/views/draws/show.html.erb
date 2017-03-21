@@ -68,7 +68,7 @@
     <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, class: 'button' %>
   <% end %>
   <% if policy(@draw).lottery? %>
-    <%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button secondary' %>
+    <%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button' %>
   <% end %>
   <% if policy(Group).new? && policy(@draw).group_actions? %>
     <%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %>
