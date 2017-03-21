@@ -9,7 +9,7 @@ class DrawlessGroupPolicy < ApplicationPolicy
   end
 
   def show?
-    record.members.include?(user) || super
+    record.members.include?(user) || user.admin?
   end
 
   private

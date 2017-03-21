@@ -99,18 +99,8 @@ RSpec.describe UserPolicy do
         allow(user).to receive(:draw).and_return(draw)
       end
       permissions :edit_intent?, :update_intent? do
-        context 'user in group' do # rubocop:disable RSpec/NestedGroups
-          before do
-            allow(user).to receive(:group).and_return(instance_spy('group'))
-          end
-          it { is_expected.not_to permit(user, user) }
-        end
-        context 'user not in group' do # rubocop:disable RSpec/NestedGroups
-          before do
-            allow(user).to receive(:group).and_return(nil)
-          end
-          it { is_expected.to permit(user, user) }
-        end
+        it { is_expected.to permit(user, user) }
+        it { is_expected.to permit(user, other_user) }
       end
     end
     context 'draw not pre-lottery status' do
@@ -121,7 +111,8 @@ RSpec.describe UserPolicy do
         allow(user).to receive(:draw).and_return(draw)
       end
       permissions :edit_intent?, :update_intent? do
-        it { is_expected.not_to permit(user, user) }
+        it { is_expected.to permit(user, user) }
+        it { is_expected.to permit(user, other_user) }
       end
     end
     context 'draw intent locked' do
@@ -132,11 +123,11 @@ RSpec.describe UserPolicy do
         allow(user).to receive(:draw).and_return(draw)
       end
       permissions :edit_intent?, :update_intent? do
-        it { is_expected.not_to permit(user, user) }
+        it { is_expected.to permit(user, user) }
+        it { is_expected.to permit(user, other_user) }
       end
     end
-    permissions :show?, :create?, :destroy?, :update?, :edit?,
-                :edit_intent?, :update_intent? do
+    permissions :show?, :create?, :destroy?, :update?, :edit? do
       it { is_expected.not_to permit(user, other_user) }
     end
     permissions :index?, :build? do

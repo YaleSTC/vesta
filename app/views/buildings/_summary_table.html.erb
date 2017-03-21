@@ -5,8 +5,10 @@
       <td>Suite Size</td>
       <td># Suites</td>
       <td># Suites Assigned</td>
-      <td># Suites in Draws</td>
-      <td># Suites not in a Draw</td>
+      <% if policy(Suite).view_draw? %>
+        <td># Suites in Draws</td>
+        <td># Suites not in a Draw</td>
+      <% end %>
     </tr>
   </thead>
   <tbody>
@@ -15,8 +17,10 @@
         <td data-role="suite-size"><%= headerize_size(size) %></td>
         <td data-role="suite-count"><%= suites.count %></td>
         <td data-role="assigned-count"><%= suites.select { |s| s.group_id.present? }.count %></td>
-        <td data-role="draws-count"><%= suites.select { |s| s.draws.present? }.count %></td>
-        <td data-role="not-draw-count"><%= suites.select { |s| s.draws.empty? }.count %></td>
+        <% if policy(Suite).view_draw? %>
+          <td data-role="draws-count"><%= suites.select { |s| s.draws.present? }.count %></td>
+          <td data-role="not-draw-count"><%= suites.select { |s| s.draws.empty? }.count %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

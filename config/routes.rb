@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :colleges, only: %i(new create show edit update)
   resources :buildings
   post 'suite_import/import', to: 'suite_imports#import', as: 'suite_import'
-  resources :suites do
+  resources :suites, except: :index do
     member do
       get 'merge'
       post 'merge', to: 'suites#perform_merge'
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
       post 'split', to: 'suites#perform_split'
     end
   end
-  resources :rooms
+  resources :rooms, except: :index
 
   resources :users do
     member do

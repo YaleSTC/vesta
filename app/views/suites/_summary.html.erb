@@ -16,7 +16,7 @@
         </thead>
         <tbody>
           <% suites[size].each do |suite| %>
-            <% next if suite.medical %>
+            <% next if suite.medical && !policy(suite).medical? %>
             <tr id="suite-<%= suite.id %>">
               <td data-role="suite-number"><%= link_to suite.number, suite_path(suite) %></td>
               <td data-role="suite-singles"><%= suite.singles.count %></td>
