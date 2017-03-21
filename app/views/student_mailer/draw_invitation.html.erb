@@ -5,7 +5,12 @@
   </head>
   <body>
     <p>Hi <%= @user.name %>,</p>
-    <p>The housing process for <%= @college.name %> is now open. Please log in to <a href="<%= @college.site_url %>">Vesta</a> to indicate whether you'll be living on- or off-campus by <%= @intent_deadline %>. If you'll be living on-campus you'll be able to view available housing and form or join a housing group.</p>
+    <p>The housing process for <%= @college.name %> is now open. Please log in to <a href="<%= @college.site_url %>">Vesta</a> to indicate whether you'll be living on- or off-campus
+    <% if @intent_deadline %>
+      by <%= @intent_deadline %>
+    <% end %>
+    .
+    If you'll be living on-campus you'll be able to view available housing and form or join a housing group.</p>
     <p>Please e-mail <%= @college.admin_email %> if you have any questions.</p>
     <p>Sincerely,<br /><%= @college.dean %></p>
   </body>

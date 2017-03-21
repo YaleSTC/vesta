@@ -11,6 +11,13 @@
 # @attr locked_sizes [Array<Integer>] the group sizes that are restricted.
 # @attr intent_locked [Boolean] True when students in the draw can no longer
 #   update their housing intent.
+# @attr last_email_sent [Datetime] The time the last reminder email was sent
+# @attr email_type [Integer] Enum with the type of the last email sent
+#   (currently intent or locking reminders)
+# @attr intent_deadline [Datetime] Deadline to set intent. Not strictly
+#   enforced, just used for display purposes and sending emails.
+# @attr locking_deadline [Datetime] Deadline to lock groups. Not strictly
+#   enforced, just used for display purposes and sending emails.
 class Draw < ApplicationRecord
   has_many :groups
   has_many :students, class_name: 'User', dependent: :nullify
@@ -26,6 +33,7 @@ class Draw < ApplicationRecord
   after_destroy :remove_old_draw_ids
 
   enum status: %w(draft pre_lottery lottery suite_selection results)
+  enum email_type: %w(intent locking)
 
   # Finds all available suite sizes within a draw
   #

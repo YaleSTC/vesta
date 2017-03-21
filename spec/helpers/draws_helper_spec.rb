@@ -101,4 +101,12 @@ RSpec.describe DrawsHelper, type: :helper do
       expect(helper.lock_intent_btn_label(draw)).to include('Unlock Intents')
     end
   end
+
+  describe '#format_email_date' do
+    it 'returns the appropriate format' do
+      expected = 'March 21, 2:00 pm'
+      date = DateTime.new(2017, 3, 21, 14, 0o0).in_time_zone
+      expect(helper.format_email_date(date)).to eq(expected)
+    end
+  end
 end

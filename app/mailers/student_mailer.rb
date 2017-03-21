@@ -11,7 +11,7 @@ class StudentMailer < ApplicationMailer
   def draw_invitation(user:, college: nil)
     determine_college(college)
     @user = user
-    @intent_deadline = user.draw.intent_deadline
+    @intent_deadline = format_date(user.draw.intent_deadline)
     mail(to: @user.email, subject: 'The housing process has begun')
   end
 
@@ -82,9 +82,36 @@ class StudentMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Your housing group is now locked')
   end
 
+  # Send reminder to submit housing intent to a user
+  #
+  # @param user [User] the student to send the reminder to
+  # @param college [College] the college to pull settings from
+  def intent_reminder(user:, college: nil)
+    determine_college(college)
+    @user = user
+    @intent_date = format_date(user.draw.intent_deadline)
+    mail(to: @user.email, subject: 'Reminder to submit housing intent')
+  end
+
+  # Send reminder to lock housing group to a user
+  #
+  # @param user [User] the student to send the reminder to
+  # @param college [College] the college to pull settings from
+  def locking_reminder(user:, college: nil)
+    determine_college(college)
+    @user = user
+    @locking_date = format_date(user.draw.locking_deadline)
+    mail(to: @user.email, subject: 'Reminder to lock housing group')
+  end
+
   private
 
   def determine_college(college)
     @college = college || College.first || College.new
+  end
+
+  def format_date(date)
+    return false unless date
+    date.strftime('%B %e')
   end
 end
