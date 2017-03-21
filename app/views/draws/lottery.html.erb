@@ -1,6 +1,6 @@
 <h1><%= @draw.name %> - Lottery number assignment</h1>
 <table class="lottery-forms-table">
-  <% @draw.groups.each do |group| %>
+  <% @groups.each do |group| %>
     <tr class="lottery-form" id="lottery-form-<%= group.id %>">
       <%= render partial: 'lottery_form', locals: { group: group } %>
     </tr>
