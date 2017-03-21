@@ -10,33 +10,33 @@ RSpec.describe RoomPolicy do
     permissions :show? do
       it { is_expected.to permit(user, room) }
     end
-    permissions :create?, :destroy?, :edit?, :update? do
+    permissions :destroy?, :edit?, :update? do
       it { is_expected.not_to permit(user, room) }
     end
-    permissions :index? do
+    permissions :new?, :create?, :index? do
       it { is_expected.not_to permit(user, Room) }
     end
   end
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :show?, :edit?, :update? do
+    permissions :show? do
       it { is_expected.to permit(user, room) }
     end
-    permissions :index? do
-      it { is_expected.to permit(user, Room) }
+    permissions :new?, :create?, :index? do
+      it { is_expected.not_to permit(user, Room) }
     end
-    permissions :create?, :destroy? do
+    permissions :destroy?, :edit?, :update? do
       it { is_expected.not_to permit(user, room) }
     end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :show?, :edit?, :update?, :create?, :destroy? do
+    permissions :show?, :edit?, :update?, :destroy? do
       it { is_expected.to permit(user, room) }
     end
-    permissions :index? do
+    permissions :new?, :create?, :index? do
       it { is_expected.to permit(user, Room) }
     end
   end

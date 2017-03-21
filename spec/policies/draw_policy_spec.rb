@@ -63,11 +63,14 @@ RSpec.describe DrawPolicy do
     permissions :show?, :suite_summary? do
       it { is_expected.to permit(user, draw) }
     end
+    permissions :suites_edit?, :suites_update? do
+      it { is_expected.to permit(user, draw) }
+    end
     permissions :create?, :edit?, :update?, :destroy?, :activate?,
-                :intent_report?, :filter_intent_report?, :suites_edit?,
-                :suites_update?, :student_summary?, :students_update?,
-                :oversubscription?, :toggle_size_lock?, :start_lottery?,
-                :lottery_confirmation?, :start_selection?, :bulk_on_campus? do
+                :intent_report?, :filter_intent_report?, :student_summary?,
+                :students_update?, :oversubscription?, :toggle_size_lock?,
+                :start_lottery?, :lottery_confirmation?, :start_selection?,
+                :bulk_on_campus? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :index? do

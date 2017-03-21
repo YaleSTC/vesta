@@ -5,16 +5,8 @@ class BuildingPolicy < ApplicationPolicy
     true
   end
 
-  def update?
-    user.rep? || user.admin?
-  end
-
-  def edit?
-    update?
-  end
-
   def index?
-    user.rep? || user.admin?
+    true
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation

@@ -5,14 +5,6 @@ class RoomPolicy < ApplicationPolicy
     true
   end
 
-  def update?
-    user.rep? || user.admin?
-  end
-
-  def index?
-    user.rep? || user.admin?
-  end
-
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

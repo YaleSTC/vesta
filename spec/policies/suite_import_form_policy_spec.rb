@@ -13,7 +13,7 @@ RSpec.describe SuiteImportFormPolicy do
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
     permissions :import? do
-      it { is_expected.to permit(user, SuiteImportForm) }
+      it { is_expected.not_to permit(user, SuiteImportForm) }
     end
   end
 

@@ -23,7 +23,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def suites_edit?
-    edit?
+    edit? || user.rep?
   end
 
   def suites_update?

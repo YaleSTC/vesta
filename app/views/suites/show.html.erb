@@ -1,13 +1,16 @@
 <h1 class="suite-number"><%= @suite.number %></h1>
-  <% if policy(@suite).edit? %>
-    <span class="label secondary suite-medical" style="margin-bottom: 1em;"><%= medical_str(@suite.medical).capitalize %></span>
-  <% end %>
+<% if policy(@suite).medical? %>
+  <span class="label secondary suite-medical" style="margin-bottom: 1em;"><%= medical_str(@suite.medical).capitalize %></span>
+<% end %>
 <ul>
   <li>Status:
     <% if @suite.available? %>
       Available
     <% else %>
-      Unavailable (Assigned to <%= link_to @group.name, group_path(@group) %>)
+      Unavailable
+      <% if !@suite.medical || policy(@suite).medical? %>
+        (Assigned to <%= link_to @group.name, group_path(@group) %>)
+      <% end %>
     <% end %>
   </li>
   <li>Size: <%= size_str(@suite.size).capitalize %></li>
@@ -40,10 +43,15 @@
 <% if policy(@suite).split? %>
   <p><%= link_to 'Split suite', split_suite_path(@suite) %></p>
 <% end %>
-
-<% if policy(@suite).edit? %>
-  <div>
+<div>
+  <% if policy(@suite).edit? %>
+    <%= link_to 'Edit', edit_suite_path(@suite), class: 'button secondary' %>
+  <% end %>
+  <% if policy(@suite).medical? %>
     <%= render 'medical_form', suite: @suite %>
+  <% end %>
+  <% if policy(@suite).destroy? %>
     <%= link_to 'Delete', suite_path(@suite), method: :delete, class: 'button alert' %>
-  </div>
- <% end %>
+  <% end %>
+</div>
+<p><%= link_to 'Back to building', building_path(@suite.building) %></p>

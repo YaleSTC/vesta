@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Class for Group permissions
-class GroupPolicy < ApplicationPolicy
+class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   def show?
     true
   end
@@ -10,16 +10,16 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def create?
-    student_can_create_group(user) || user.admin?
+    student_can_create_group(user) || user_has_uber_permission?(user)
   end
 
   def edit?
     (record.leader == user && group_can_be_edited_by_leader?(record)) ||
-      user.admin?
+      user_has_uber_permission?(user)
   end
 
   def advanced_edit?
-    user.admin?
+    user_has_uber_permission?(user)
   end
 
   def destroy?
@@ -43,7 +43,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def invite?
-    (record.leader == user || user.admin?) && record.open?
+    (record.leader == user || user_has_uber_permission?(user)) && record.open?
   end
 
   def reject_pending?
@@ -68,11 +68,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def lock?
-    user.admin? && !record.open? && !record.locked?
+    user_has_uber_permission?(user) && !record.open? && !record.locked?
   end
 
   def unlock?
-    user.admin? && record.unlockable?
+    user_has_uber_permission?(user) && record.unlockable?
   end
 
   def assign_lottery?
@@ -100,7 +100,8 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def select_suite?
-    user.admin? || (user.leader_of?(record) && record.draw.next_group?(record))
+    user_has_uber_permission?(user) ||
+      (user.leader_of?(record) && record.draw.next_group?(record))
   end
 
   def assign_suite?
@@ -115,6 +116,10 @@ class GroupPolicy < ApplicationPolicy
 
   private
 
+  def user_has_uber_permission?(user)
+    user.rep? || user.admin?
+  end
+
   def group_can_be_edited_by_leader?(group)
     !group.finalizing? && !group.locked?
   end
@@ -124,7 +129,8 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def user_can_assign_rooms?(user, group)
-    user.admin? || (user.group == group && group.leader == user)
+    user_has_uber_permission?(user) ||
+      (user.group == group && group.leader == user)
   end
 
   def room_assignment_eligible?(group)

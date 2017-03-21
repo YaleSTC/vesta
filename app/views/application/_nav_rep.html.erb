@@ -13,7 +13,7 @@
   <% end %>
   <% if current_user.group %>
     <li><%= link_to 'My Group', draw_group_path(current_user.draw, current_user.group) %></li>
-  <% elsif policy(Group).new? %>
+  <% elsif policy(Group).new? && current_user.draw %>
     <li><%= link_to 'Create Housing Group', new_draw_group_path(current_user.draw) %></li>
   <% end %>
   <li><%= link_to 'Export Group Leader Emails', new_email_export_path %></li>

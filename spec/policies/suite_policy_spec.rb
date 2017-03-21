@@ -17,11 +17,11 @@ RSpec.describe SuitePolicy do
         it { is_expected.not_to permit(user, suite) }
       end
     end
-    permissions :index? do
-      it { is_expected.to permit(user, Suite) }
+    permissions :new?, :create?, :view_draw? do
+      it { is_expected.not_to permit(user, Suite) }
     end
-    permissions :create?, :destroy?, :edit?, :update?, :merge?,
-                :perform_merge?, :build_split?, :split?, :perform_split? do
+    permissions :destroy?, :edit?, :update?, :merge?, :perform_merge?,
+                :build_split?, :split?, :perform_split?, :medical? do
       it { is_expected.not_to permit(user, suite) }
     end
   end
@@ -38,43 +38,24 @@ RSpec.describe SuitePolicy do
         it { is_expected.not_to permit(user, suite) }
       end
     end
-    permissions :merge?, :perform_merge? do
-      it { is_expected.to permit(user, suite) }
+    permissions :new?, :create?, :view_draw? do
+      it { is_expected.not_to permit(user, Suite) }
     end
-    permissions :index? do
-      it { is_expected.to permit(user, Suite) }
-    end
-    permissions :create?, :destroy? do
+    permissions :merge?, :perform_merge?, :build_split?, :split?,
+                :perform_split?, :destroy?, :medical? do
       it { is_expected.not_to permit(user, suite) }
-    end
-
-    permissions :build_split?, :split?, :perform_split? do
-      context 'suite has fewer than two rooms' do
-        before do
-          allow(suite).to receive(:rooms).and_return([instance_spy('Room')])
-        end
-        it { is_expected.not_to permit(user, suite) }
-      end
-      context 'suite has at least two rooms' do
-        before do
-          allow(suite).to receive(:rooms)
-            .and_return([instance_spy('Room'), instance_spy('Room')])
-        end
-        it { is_expected.to permit(user, suite) }
-      end
     end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :show?, :edit?, :update?, :create?, :destroy?, :merge?,
-                :perform_merge? do
+    permissions :show?, :edit?, :update?, :destroy?, :merge?, :perform_merge?,
+                :medical? do
       it { is_expected.to permit(user, suite) }
     end
-    permissions :index? do
+    permissions :new?, :create?, :view_draw? do
       it { is_expected.to permit(user, Suite) }
     end
-
     permissions :build_split?, :split?, :perform_split? do
       context 'suite has fewer than two rooms' do
         before do

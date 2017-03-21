@@ -2,7 +2,7 @@
 # Class for SuiteImport permissions.
 class SuiteImportFormPolicy < ApplicationPolicy
   def import?
-    user.rep? || user.admin?
+    user.admin?
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation

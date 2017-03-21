@@ -10,33 +10,39 @@ RSpec.describe BuildingPolicy do
     permissions :show? do
       it { is_expected.to permit(user, building) }
     end
-    permissions :create?, :destroy?, :edit?, :update? do
+    permissions :destroy?, :edit?, :update? do
       it { is_expected.not_to permit(user, building) }
     end
     permissions :index? do
+      it { is_expected.to permit(user, Building) }
+    end
+    permissions :new?, :create? do
       it { is_expected.not_to permit(user, Building) }
     end
   end
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    permissions :show? do
+      it { is_expected.to permit(user, building) }
+    end
+    permissions :destroy?, :edit?, :update? do
+      it { is_expected.not_to permit(user, building) }
+    end
     permissions :index? do
       it { is_expected.to permit(user, Building) }
     end
-    permissions :show?, :edit?, :update? do
-      it { is_expected.to permit(user, building) }
-    end
-    permissions :create?, :destroy? do
-      it { is_expected.not_to permit(user, building) }
+    permissions :new?, :create? do
+      it { is_expected.not_to permit(user, Building) }
     end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :index? do
+    permissions :new?, :create?, :index? do
       it { is_expected.to permit(user, Building) }
     end
-    permissions :show?, :edit?, :update?, :create?, :destroy? do
+    permissions :show?, :edit?, :update?, :destroy? do
       it { is_expected.to permit(user, building) }
     end
   end
