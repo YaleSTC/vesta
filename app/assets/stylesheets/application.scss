@@ -11,3 +11,7 @@
 @import "buildings";
 @import "draws";
 @import "users";
+
+td.actions {
+  a.button { margin: 0 }
+}

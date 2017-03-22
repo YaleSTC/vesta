@@ -1,4 +1,5 @@
 <% sizes.each do |size| %>
+  <% next if suites[size].empty? %>
   <div class="suites-list" id="suites-<%= size_str(size).pluralize %>">
     <h3><%= headerize_size(size) %></h3>
     <p><%= render partial: 'suites/size_link', collection: sizes.select { |s| s != size }, spacer_template: 'shared/slash' %></p>
@@ -25,7 +26,7 @@
               <td data-role="suite-draws">
                 <%= render partial: 'suites/draw_link', collection: suite.draws, spacer_template: 'shared/comma' %>
               </td>
-              <td data-role="suite-actions">
+              <td class="actions" data-role="suite-actions">
                 <%= link_to 'View', suite_path(suite), class: 'button' %>
                 <% if policy(suite).edit? %>
                   <%= link_to 'Edit', edit_suite_path(suite), class: 'button' %>

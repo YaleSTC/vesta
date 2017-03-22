@@ -24,12 +24,9 @@
   </li>
 </ul>
 <h3>Rooms</h3>
-<ul>
-  <% @rooms.each do |room| %>
-    <li><%= link_to room.number, room_path(room) %> (<%= room.type.capitalize %>)</li>
-  <% end %>
-</ul>
-<p><%= link_to 'Add room', new_room_path %></p>
+<%= render 'rooms/summary', rooms: @rooms %>
+<p><%= link_to 'Add room', new_room_path, class: 'button secondary' %></p>
+<hr />
 <% if policy(@suite).merge? %>
   <div class="suite-merging">
     <h3>Merge suites</h3>
@@ -40,8 +37,9 @@
     <% end %>
   </div>
 <% end %>
+<hr />
 <% if policy(@suite).split? %>
-  <p><%= link_to 'Split suite', split_suite_path(@suite) %></p>
+  <p><%= link_to 'Split suite', split_suite_path(@suite), class: 'button' %></p>
 <% end %>
 <div>
   <% if policy(@suite).edit? %>
