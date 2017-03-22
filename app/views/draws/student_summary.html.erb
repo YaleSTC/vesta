@@ -8,7 +8,7 @@
       <h3>Add students by class year</h3>
       <%= simple_form_for @students_update, url: students_update_draw_path(@draw), method: :patch do |f| %>
         <%= f.input :class_year, as: :select, collection: @class_years, required: true %>
-        <%= f.submit 'Assign students' %>
+        <%= f.submit 'Assign students', data: { confirm: 'This will assign ALL students of the selected class year to this draw and cannot be undone! Are you sure you want to proceed?' } %>
       <% end %>
     <% end %>
   </div>

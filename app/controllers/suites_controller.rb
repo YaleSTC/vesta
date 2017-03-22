@@ -33,7 +33,7 @@ class SuitesController < ApplicationController
 
   def destroy
     result = Destroyer.new(object: @suite, name_method: :number).destroy
-    handle_action(**result)
+    handle_action(path: building_path(@suite.building), **result)
   end
 
   def merge

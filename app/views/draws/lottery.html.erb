@@ -1,4 +1,5 @@
 <h1><%= @draw.name %> - Lottery number assignment</h1>
+<p>Please enter a lottery number for each group below. The number will save after you click out of the field (and the background of the relevant row should turn blue). When you're finished please return to the draw page to proceed to suite selection.</p>
 <table class="lottery-forms-table">
   <% @groups.each do |group| %>
     <tr class="lottery-form" id="lottery-form-<%= group.id %>">
@@ -7,6 +8,6 @@
   <% end %>
 </table>
 <% if policy(@draw).start_selection? %>
-  <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, class: 'button' %>
+  <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, data: { confirm: 'Are you sure that you have finished assigning lottery numbers? They cannot be changed after you proceed!' }, class: 'button' %>
 <% end %>
 <p><%= link_to 'Back to draw', draw_path(@draw) %></p>

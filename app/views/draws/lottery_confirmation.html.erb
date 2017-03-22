@@ -19,5 +19,5 @@
 <div>
   <%= link_to 'Back', draw_path(@draw), class: 'button secondary' %>
   <%= link_to 'Proceed to Lottery', start_lottery_draw_path(@draw),
-      method: :patch, class: start_lottery_btn_class(@draw) %>
+    method: :patch, data: { confirm: 'Are you sure you want to proceed to the lottery? This cannot be undone!' }, class: start_lottery_btn_class(@draw) %>
 </div>

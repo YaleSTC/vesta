@@ -1,6 +1,10 @@
 <h1 class="building-name"><%= @building.name %></h1>
 <h2>Suites</h2>
-<%= render 'suites/summary', sizes: @suites.keys, suites: @suites %>
+<% if @suites.empty? %>
+  <p>No suites yet!</p>
+<% else %>
+  <%= render 'suites/summary', sizes: @suites.keys, suites: @suites %>
+<% end %>
 <hr />
 <p><%= link_to 'New Suite', new_suite_path, class: 'button secondary' %></p>
 
@@ -16,4 +20,5 @@ and Doubles is the number of double bedrooms in the suite.</p>
   <%= f.submit 'Import' %>
 <% end %>
 </p>
-<p><%= link_to 'Delete', building_path(@building), method: :delete %></p>
+<hr />
+<p><%= link_to 'Delete', building_path(@building), method: :delete, data: { confirm: 'Are you sure you want to delete this building?' }, class: 'button alert' %></p>

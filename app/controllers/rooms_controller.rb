@@ -28,7 +28,12 @@ class RoomsController < ApplicationController
 
   def destroy
     result = Destroyer.new(object: @room, name_method: :number).destroy
-    handle_action(**result)
+    path = if @room.suite
+             suite_path(@room.suite)
+           else
+             buildings_path
+           end
+    handle_action(path: path, **result)
   end
 
   private
