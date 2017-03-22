@@ -7,7 +7,8 @@ RSpec.feature 'Draw editing' do
 
   it 'succeeds' do
     new_name = 'Froco Draw'
-    visit edit_draw_path(draw)
+    visit draw_path(draw)
+    click_on 'Edit'
     update_draw_name(new_name)
     expect(page).to have_css('.draw-name', text: new_name)
   end
