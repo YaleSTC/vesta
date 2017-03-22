@@ -36,7 +36,8 @@ class GroupsController < ApplicationController
 
   def destroy
     result = Destroyer.new(object: @group, name_method: :name).destroy
-    handle_action(**result, path: params[:redirect_path])
+    path = params[:redirect_path] || draw_path(@draw)
+    handle_action(**result, path: path)
   end
 
   def request_to_join

@@ -42,7 +42,7 @@ class UsersController < ApplicationController
 
   def destroy
     result = Destroyer.new(object: @user, name_method: :full_name).destroy
-    handle_action(**result)
+    handle_action(path: users_path, **result)
   end
 
   def edit_intent; end

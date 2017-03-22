@@ -28,7 +28,7 @@
   <% if policy(@group).edit_room_assignment? %>
     <%= link_to 'Edit room assignments', edit_group_room_assignment_path(@group), class: 'button' %>
   <% end %>
-  <%= link_to('Disband', group_path(@group), method: :delete, class: 'button alert') if policy(@group).destroy? %>
+  <%= link_to('Disband', group_path(@group), method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert') if policy(@group).destroy? %>
 </div>
 
 <%= link_to 'View all special groups', groups_path %>

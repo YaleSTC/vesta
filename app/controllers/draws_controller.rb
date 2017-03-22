@@ -35,7 +35,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def destroy
     result = Destroyer.new(object: @draw, name_method: :name).destroy
-    handle_action(**result)
+    handle_action(path: draws_path, **result)
   end
 
   def activate

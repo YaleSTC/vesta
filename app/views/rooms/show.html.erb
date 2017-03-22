@@ -1,4 +1,10 @@
 <h1 class="room-number"><%= @room.number %></h1>
 <p><%= pluralize(@room.beds, 'bed') %></p>
-<p><%= link_to 'Edit', edit_room_path(@room) %></p>
-<p><%= link_to 'Delete', room_path(@room), method: :delete %></p>
+<div>
+  <% if policy(@room).edit? %>
+    <%= link_to 'Edit', edit_room_path(@room), class: 'button secondary' %>
+  <% end %>
+  <% if policy(@room).destroy? %>
+    <%= link_to 'Delete', room_path(@room), method: :delete, data: { confirm: 'Are you sure you want to delete this room?' }, class: 'button alert' %>
+  <% end %>
+</div>

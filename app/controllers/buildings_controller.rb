@@ -35,7 +35,7 @@ class BuildingsController < ApplicationController
 
   def destroy
     result = Destroyer.new(object: @building, name_method: :name).destroy
-    handle_action(**result)
+    handle_action(path: buildings_path, **result)
   end
 
   private

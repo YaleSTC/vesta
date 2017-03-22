@@ -6,7 +6,7 @@
 # @attr [String] name The name of the building. Must be unique.
 # @attr [Array<Suite>] suites has_many association of Suites in the Building.
 class Building < ApplicationRecord
-  has_many :suites
+  has_many :suites, dependent: :destroy
 
   validates :name, presence: true, allow_blank: false, uniqueness: true
 

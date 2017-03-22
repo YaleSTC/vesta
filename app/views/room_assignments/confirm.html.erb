@@ -19,7 +19,7 @@
   <% @group.members.each do |m| %>
     <%= f.input "room_id_for_#{m.id}".to_sym, as: :hidden %>
   <% end %>
-  <%= f.submit 'Confirm room assignments' %>
+  <%= f.submit 'Confirm room assignments', data: { confirm: 'Are you sure that you want to submit these room assignments? They cannot be changed!' } %>
 <% end %>
 <%= link_to 'Start over', new_group_room_assignment_path, class: 'button secondary' %>
 

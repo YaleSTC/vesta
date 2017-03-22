@@ -6,6 +6,10 @@
 <% end %>
 <% if policy(@user).edit? %>
   <h3 class="user-email"><%= @user.email %></h3>
-  <p><%= link_to 'Edit', edit_user_path(@user), class: 'button secondary' %></p>
+  <div>
+    <%= link_to 'Edit', edit_user_path(@user), class: 'button secondary' %>
+    <% if policy(@user).destroy? %>
+      <%= link_to 'Delete', user_path(@user), method: :delete, data: { confirm: 'Are you sure you want to delete this user?' }, class: 'button alert' %>
+    <% end %>
+  </div>
 <% end %>
-

@@ -1,4 +1,4 @@
-<%= simple_form_for suite do |f| %>
+<%= simple_form_for suite, html: { class: 'hidden-form' } do |f| %>
   <%= f.input :medical, as: :hidden, input_html: { value: !suite.medical } %>
   <%= f.submit medical_btn_str(suite), class: 'primary' %>
 <% end %>

@@ -8,5 +8,5 @@
   <%= link_to 'Intent', edit_intent_user_path(user), class: 'button' %>
 <% end %>
 <% if policy(user).destroy? %>
-  <%= link_to 'Remove', user_path(user), method: :delete, class: 'button alert' %>
+  <%= link_to 'Remove', user_path(user), method: :delete, data: { confirm: 'Are you sure you want to delete this user?' }, class: 'button alert' %>
 <% end %>

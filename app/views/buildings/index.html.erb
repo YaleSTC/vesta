@@ -1,6 +1,6 @@
 <h1> Inventory </h1>
-<ul>
-  <% @buildings.each do |building| %>
-    <div><%= render 'summary_table', building: building %></div>
-  <% end %>
-</ul>
+<% @buildings.each do |building| %>
+  <div><%= render 'summary_table', building: building %></div>
+<% end %>
+<hr />
+<%= link_to 'Add new building', new_building_path, class: 'button secondary' %>

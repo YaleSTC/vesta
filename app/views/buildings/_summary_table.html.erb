@@ -27,4 +27,4 @@
 </table>
 <%= link_to 'View', building_path(building), class: 'button secondary' %>
 <%= link_to 'Edit', edit_building_path(building), class: 'button secondary' if policy(building).edit? %>
-<%= link_to 'Delete', building_path(building), method: :delete, class: 'button alert' if policy(building).destroy? %>
+<%= link_to 'Delete', building_path(building), method: :delete, data: { confirm: 'Are you sure you want to delete this building?' }, class: 'button alert' if policy(building).destroy? %>
