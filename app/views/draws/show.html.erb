@@ -51,6 +51,9 @@
   <hr />
 <% end %>
 <div>
+  <% if policy(@draw).edit? %>
+    <%= link_to 'Edit', edit_draw_path(@draw), class: 'button secondary' %>
+  <% end %>
   <% if policy(@draw).student_summary? %>
     <%= link_to 'View students', student_summary_draw_path(@draw), class: 'button secondary' %>
   <% end %>
