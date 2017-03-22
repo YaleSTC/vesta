@@ -4,7 +4,7 @@ class SuitesController < ApplicationController
   prepend_before_action :set_suite, except: %i(new create index)
 
   def show
-    @rooms = @suite.rooms
+    @rooms = @suite.rooms.order(:number)
     @draws = @suite.draws
     @building = @suite.building
     @group = @suite.group

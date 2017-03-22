@@ -1,5 +1,5 @@
 <h1 class="building-name"><%= @building.name %></h1>
-<h2>Suites</h2>
+<h3>Suites</h3>
 <% if @suites.empty? %>
   <p>No suites yet!</p>
 <% else %>
@@ -8,7 +8,7 @@
 <hr />
 <p><%= link_to 'New Suite', new_suite_path, class: 'button secondary' %></p>
 
-<h2>Import Suites</h2>
+<h3>Import Suites</h3>
 <p>Add many suites at once by uploading a CSV file with the building information.
 The CSV must have the format "Number, Singles, Doubles" where Number is the 
 identifier of the suite, Singles is the number of single bedrooms in the suite,
@@ -21,4 +21,11 @@ and Doubles is the number of double bedrooms in the suite.</p>
 <% end %>
 </p>
 <hr />
-<p><%= link_to 'Delete', building_path(@building), method: :delete, data: { confirm: 'Are you sure you want to delete this building?' }, class: 'button alert' %></p>
+<div>
+  <% if policy(@building).edit? %>
+    <%= link_to 'Edit', edit_building_path(@building), class: 'button' %>
+  <% end %>
+  <% if policy(@building).destroy? %>
+    <%= link_to 'Delete', building_path(@building), method: :delete, data: { confirm: 'Are you sure you want to delete this building?' }, class: 'button alert' %>
+  <% end %>
+</div>

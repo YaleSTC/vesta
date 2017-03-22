@@ -21,7 +21,7 @@
             <%= link_to(user.draw.name, draw_path(user.draw)) if user.draw %>
           </td>
         <% end %>
-        <td data-role="user-actions"><%= render 'actions', user: user  %></td>
+        <td class="actions" data-role="user-actions"><%= render 'actions', user: user  %></td>
       </tr>
     <% end %>
   </tbody>
