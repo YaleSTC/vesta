@@ -26,5 +26,6 @@ module Vesta
       (services_paths + forms_path + lib_paths + %w(/lib/)).map do |s|
         "#{config.root}#{s}"
       end
+    config.time_zone = ENV['RAILS_TIME_ZONE'] || 'UTC'
   end
 end
