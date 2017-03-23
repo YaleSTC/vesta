@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 * Ensure that all group reports display correctly ([#487](https://github.com/YaleSTC/vesta/issues/487)).
 * Ensure that NextGroupsQuery ignores groups with no lottery number set ([#504](https://github.com/YaleSTC/vesta/issues/504)).
 
+### Added
+* Create secondary draws to handle ungrouped students after suite selection ([#162](https://github.com/YaleSTC/vesta/issues/162)).
+
 ### Changed
 * Allow reps to handle oversubscription and lock sizes ([#496](https://github.com/YaleSTC/vesta/issues/496)).
 * Allow students to easily navigate to the draw index ([#519](https://github.com/YaleSTC/vesta/issues/519)).

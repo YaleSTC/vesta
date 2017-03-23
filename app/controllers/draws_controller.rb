@@ -145,9 +145,10 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def select_suites
     @groups = @draw.next_groups
     if @groups.empty?
+      result = DrawResultsStarter.start(draw: @draw)
       @draw.update!(status: 'results')
       flash[:success] = 'All groups have suites!'
-      redirect_to draw_path(@draw)
+      handle_action(**result) && return
     end
     @suite_selector = BulkSuiteSelectionForm.new(groups: @groups)
     draw_suites = @draw.suites.available.where(size: @groups.map(&:size))

@@ -135,7 +135,11 @@ class GroupsController < ApplicationController
 
   def assign_suite
     suite_id = group_params['suite']
-    result = GroupSuiteSelector.select(group: @group, suite_id: suite_id)
+    result = if suite_id.empty? || policy(@draw).select_suites?
+               SuiteRemover.remove(group: @group)
+             else
+               GroupSuiteSelector.select(group: @group, suite_id: suite_id)
+             end
     handle_action(action: 'select_suite', **result)
   end
 

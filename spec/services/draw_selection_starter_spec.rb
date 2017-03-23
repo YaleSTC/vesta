@@ -1,11 +1,10 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe DrawSelectionStarter do
-  # we may want to extract this into a shared example if we use this pattern
-  # across all of our service objects
   describe '.start' do
-    it 'calls :start on an instance of DrawStarter' do
+    it 'calls :start on an instance of DrawSelectionStarter' do
       draw = instance_spy('draw')
       draw_selection_starter = mock_draw_selection_starter(draw: draw)
       described_class.start(draw: draw)
