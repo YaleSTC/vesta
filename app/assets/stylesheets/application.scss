@@ -12,6 +12,14 @@
 @import "draws";
 @import "users";
 
-td.actions {
-  a.button { margin: 0 }
+td.actions a.button { margin: 0 }
+
+.homepage-hero {
+  @include grid-col;
+  text-align: center;
+
+  @include breakpoint(medium) {
+    @include grid-col-size(8);
+    @include grid-col-pos(center);
+  }
 }
