@@ -45,7 +45,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def intent_report
     @filter = IntentReportFilter.new
-    @students = @draw.students.order(:intent)
+    @students = @draw.students.order(:intent, :last_name)
   end
 
   def filter_intent_report

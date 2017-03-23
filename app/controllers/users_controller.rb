@@ -48,7 +48,13 @@ class UsersController < ApplicationController
   def edit_intent; end
 
   def update_intent
-    update
+    respond_to do |format|
+      format.html { update }
+      format.js do
+        @user.intent = user_params['intent']
+        @color_class = @user.save ? 'success' : 'failure'
+      end
+    end
   end
 
   private

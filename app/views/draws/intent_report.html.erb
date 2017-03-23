@@ -1,20 +1,22 @@
-<h1 class="draw-name"><%= @draw.name %></h1>
+<h1 class="draw-name"><%= @draw.name %> - Intent Report</h1>
 <div class="intent-report">
-  <h2>Intent Report</h2>
+  <p>You can view and update the intents of the students in this draw below. Note that selecting a different option in the dropdown menu will <em>immediately</em> change that student's intent.</p>
+  <hr />
   <div class="report_filter">
+    <h3>Filter students</h3>
     <%= simple_form_for @filter, url: intent_report_draw_path(@draw) do |f| %>
       <%= f.input :intents, collection: User.intents.keys, as: :check_boxes,
                             include_hidden: false, error: false %>
       <%= f.submit 'Filter' %>
     <% end %>
   </div>
+  <hr />
   <table>
     <thead>
       <tr>
         <td>Last Name</td>
         <td>First Name</td>
         <td>Intent</td>
-        <td></td>
       </tr>
     </thead>
     <tbody>
@@ -22,8 +24,7 @@
         <tr class="<%= student.intent %>">
           <td data-role="student-last_name"><%= student.last_name %></td>
           <td data-role="student-first_name"><%= student.first_name %></td>
-          <td data-role="student-intent"><%= student.intent %></td>
-          <td><%= link_to 'Edit intent', edit_intent_user_path(student) %></td>
+          <td class="intent-form" id="intent-form-<%= student.id %>" data-role="student-intent"><%= render 'intent_form', user: student %></td>
         </tr>
       <% end %>
     </tbody>

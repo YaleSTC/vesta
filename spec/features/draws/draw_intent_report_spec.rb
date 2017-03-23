@@ -48,7 +48,7 @@ RSpec.feature 'Draw intent report' do
     page_has_intent_report_heading(page) &&
       page_has_appropriate_row(page, student.intent) &&
       page_has_student_data(page, student) &&
-      page_has_intent_update_link(page, student)
+      page_has_intent_update_form(page, student)
   end
 
   def page_has_filtered_report(page, student, other_student)
@@ -62,7 +62,7 @@ RSpec.feature 'Draw intent report' do
   end
 
   def page_has_intent_report_heading(page)
-    page.assert_selector(:css, 'h2', text: /Intent Report/)
+    page.assert_selector(:css, 'h1', text: /Intent Report/)
   end
 
   def page_has_appropriate_row(page, intent)
@@ -71,20 +71,15 @@ RSpec.feature 'Draw intent report' do
 
   def page_has_student_data(page, student)
     page.assert_selector(:css, 'td[data-role="student-first_name"]',
-                         text: student.first_name) &&
-      page.assert_selector(:css, 'td[data-role="student-intent"]',
-                           text: student.intent)
+                         text: student.first_name)
   end
 
   def page_has_no_student_data(page, student)
     page.refute_selector(:css, 'td[data-role="student-first_name"]',
-                         text: student.first_name) &&
-      page.refute_selector(:css, 'td[data-role="student-intent"]',
-                           text: student.intent)
+                         text: student.first_name)
   end
 
-  def page_has_intent_update_link(page, student)
-    page.assert_selector(:link, 'Edit intent',
-                         href: edit_intent_user_path(student))
+  def page_has_intent_update_form(page, student)
+    page.assert_selector(:css, "td.intent-form#intent-form-#{student.id} form")
   end
 end
