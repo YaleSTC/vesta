@@ -88,7 +88,14 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :intent_actions? do
-      before { allow(draw).to receive(:draft?).and_return(false) }
+      context 'draw in pre_lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'draw not in pre_lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
     end
 
     permissions :oversub_report?, :group_report? do
@@ -196,7 +203,14 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :intent_actions? do
-      it { is_expected.to permit(user, draw) }
+      context 'draw in pre_lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'draw not in pre_lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
     end
 
     permissions :oversub_report?, :group_report? do
