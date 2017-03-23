@@ -25,7 +25,7 @@ class Draw < ApplicationRecord
 
   after_destroy :remove_old_draw_ids
 
-  enum status: %w(draft pre_lottery lottery suite_selection)
+  enum status: %w(draft pre_lottery lottery suite_selection results)
 
   # Finds all available suite sizes within a draw
   #

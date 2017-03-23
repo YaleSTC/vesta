@@ -50,6 +50,8 @@ Rails.application.routes.draw do
                                as: 'toggle_size_lock'
       get 'lottery'
       patch 'start_selection'
+      get 'select_suites'
+      patch 'assign_suites'
     end
 
     resources :groups do
