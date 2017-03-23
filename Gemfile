@@ -9,6 +9,7 @@ gem 'devise_cas_authenticatable', '~> 1.9.2'
 gem "flutie"
 gem "honeybadger"
 gem "jquery-rails"
+gem "jquery-ui-rails", "~> 6.0.1"
 gem "normalize-rails", "~> 3.0.0"
 gem "pg"
 gem "puma"
