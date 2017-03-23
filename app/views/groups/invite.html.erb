@@ -2,3 +2,4 @@
   <%= f.input :invitations, label: 'Students to invite', as: :check_boxes, label_method: :full_name, collection: @students %>
   <%= f.button :submit, 'Send Invitations' %>
 <% end %>
+<%= link_to 'Return to group', draw_group_path(@draw, @group) %>

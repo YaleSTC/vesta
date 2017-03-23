@@ -1,2 +1,3 @@
 <h1>Edit <%= @college.name %> Settings</h1>
 <%= render "form", college: @college %>
+<%= link_to 'Cancel', college_path(@college) %>

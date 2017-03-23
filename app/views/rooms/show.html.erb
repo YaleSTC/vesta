@@ -8,3 +8,4 @@
     <%= link_to 'Delete', room_path(@room), method: :delete, data: { confirm: 'Are you sure you want to delete this room?' }, class: 'button alert' %>
   <% end %>
 </div>
+<%= link_to 'Return to suite', suite_path(@room.suite) %>

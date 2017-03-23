@@ -10,4 +10,4 @@
 <% if policy(@draw).start_selection? %>
   <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, data: { confirm: 'Are you sure that you have finished assigning lottery numbers? They cannot be changed after you proceed!' }, class: 'button' %>
 <% end %>
-<p><%= link_to 'Back to draw', draw_path(@draw) %></p>
+<p><%= link_to 'Return to draw', draw_path(@draw) %></p>

@@ -1,2 +1,3 @@
 <h1>Edit Building <%= @building.name %></h1>
 <%= render "form", building: @building %>
+<%= link_to 'Cancel', building_path(@building) %>
