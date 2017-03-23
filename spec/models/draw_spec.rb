@@ -195,6 +195,22 @@ RSpec.describe Draw, type: :model do
     xit 'returns the nuber of students in the draw'
   end
 
+  describe '#group_count' do
+    it 'returns the number of groups in the draw' do
+      draw = FactoryGirl.create(:draw_with_members)
+      FactoryGirl.create(:group, leader: draw.students.first)
+      expect(draw.group_count).to eq(1)
+    end
+  end
+
+  describe '#available_suite_count' do
+    it 'returns number of available suites' do
+      draw = FactoryGirl.create(:draw_with_members, suites_count: 2)
+      draw.suites.first.update!(group_id: FactoryGirl.create(:group).id)
+      expect(draw.available_suite_count).to eq(1)
+    end
+  end
+
   describe '#before_lottery?' do
     let(:draw) { FactoryGirl.build_stubbed(:draw) }
 

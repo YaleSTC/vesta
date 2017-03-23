@@ -10,7 +10,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def show; end
 
   def index
-    @draws = Draw.all
+    @draws = Draw.all.order(:name)
   end
 
   def new

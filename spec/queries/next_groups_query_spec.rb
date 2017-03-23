@@ -11,13 +11,13 @@ RSpec.describe NextGroupsQuery do
 
   it 'returns the next groups to select suites' do
     result = described_class.call(draw: draw)
-    expect(result).to match([draw.groups.first])
+    expect(result).to match_array([draw.groups.first])
   end
 
   it 'returns multiple groups if tied' do
     draw.groups[1].update(lottery_number: 1)
     result = described_class.call(draw: draw)
-    expect(result).to match(draw.groups[0..1])
+    expect(result).to match_array(draw.groups[0..1])
   end
 
   it 'skips groups with assigned suites' do
@@ -25,21 +25,21 @@ RSpec.describe NextGroupsQuery do
     draw.suites.find_by(size: group_to_skip.size)
         .update(group_id: group_to_skip.id)
     result = described_class.call(draw: draw)
-    expect(result).to match([draw.groups[1]])
+    expect(result).to match_array([draw.groups[1]])
   end
 
   it 'can be scoped by passing a relation' do
     triple = triple_in_draw(draw: draw, lottery_number: 1)
     draw.groups << triple
     result = described_class.new(Group.where(size: 3)).call(draw: draw)
-    expect(result).to match([triple])
+    expect(result).to match_array([triple])
   end
 
   it 'returns an empty array if none' do
     draw.groups.each_with_index do |group, i|
       draw.suites[i].update(group_id: group.id)
     end
-    expect(described_class.call(draw: draw)).to match([])
+    expect(described_class.call(draw: draw)).to match_array([])
   end
 
   def triple_in_draw(draw:, lottery_number:)

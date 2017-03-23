@@ -82,17 +82,14 @@ class Draw < ApplicationRecord
   #
   # @return [Boolean] whether or not all on-campus students are in groups
   def all_students_grouped?
-    @grouped_query ||= UngroupedStudentsQuery.new(
-      students.where(intent: %w(undeclared on_campus))
-    ).call.count.zero?
+    ungrouped_count.zero?
   end
 
   # Query method to see if there are no undeclared students in the draw
   #
   # @return [Boolean] whether or not the draw has no undeclared students
   def all_intents_declared?
-    @undeclared_count ||= students.undeclared.count
-    @undeclared_count.zero?
+    undeclared_count.zero?
   end
 
   # Query method to see if all the groups in the draw are locked
@@ -109,6 +106,9 @@ class Draw < ApplicationRecord
     suites.includes(:draws).available.all?(&:selectable?)
   end
 
+  # Return the number of students in the draw
+  #
+  # @return [Integer] the number of students in the draw
   def student_count
     @student_count ||= students.count
   end
@@ -118,6 +118,18 @@ class Draw < ApplicationRecord
   # @return [integer] the number of beds in all available suites
   def bed_count
     @bed_count ||= suites.available.sum(:size)
+  end
+
+  # Returns the number of groups in the draw
+  #
+  # @return [Integer] the number of groups in the draw
+  def group_count
+    @group_count ||= groups.count
+  end
+
+  # Returns the number of available suites in the draw
+  def available_suite_count
+    @available_suite_count = suites.available.count
   end
 
   # Query method to check whether or not a draw is not yet in the lottery phase
@@ -180,8 +192,15 @@ class Draw < ApplicationRecord
 
   private
 
-  def group_count
-    @group_count ||= groups.count
+  def undeclared_count
+    @undeclared_count ||= students.undeclared.count
+  end
+
+  def ungrouped_count
+    @ungrouped_query ||= UngroupedStudentsQuery.new(
+      students.where(intent: %w(undeclared on_campus))
+    ).call
+    @ungrouped_query.count
   end
 
   def remove_old_draw_ids

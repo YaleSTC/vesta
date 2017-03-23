@@ -1,9 +1,3 @@
-<h1>Draws</h1>
-<ul>
-  <% @draws.each do |draw| %>
-    <li><%= link_to draw.name, draw_path(draw) %></li>
-  <% end %>
-</ul>
-<hr />
+<h1>All Draws</h1>
+<%= render 'table', draws: @draws %>
 <%= link_to 'New draw', new_draw_path, class: 'button' %>
-
