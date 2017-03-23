@@ -2,7 +2,7 @@
 # Class for User permissions
 class UserPolicy < ApplicationPolicy
   def show?
-    user.admin? || user == record
+    true
   end
 
   def edit_intent?

@@ -6,7 +6,7 @@
     <h4>On Campus</h4>
     <ul style="columns: 5; list-style-type: none;">
       <% @ungrouped_students['on_campus'].each do |student| %>
-        <li><%= student.full_name %></li>
+        <li><%= link_to student.full_name, user_path(student) %></li>
       <% end %>
     </ul>
   <% end %>
@@ -14,7 +14,7 @@
     <h4>Undeclared Intent</h4>
     <ul style="columns: 5; list-style-type: none;">
       <% @ungrouped_students['undeclared'].each do |student| %>
-        <li><%= student.full_name %></li>
+        <li><%= link_to student.full_name, user_path(student) %></li>
       <% end %>
     </ul>
   <% end %>
