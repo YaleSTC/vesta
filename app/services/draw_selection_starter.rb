@@ -1,8 +1,8 @@
 # frozen_string_literal: true
-#
-# Service object to handle the starting of the lottery phase for a draw. Checks
-# to make sure that the draw has the correct status and has enough beds for
-# students, as well as no ungrouped students, and updates the status.
+
+# Service object to handle the starting of the suite selection phase for a draw.
+# Checks to make sure that the draw is in the correct phase and that the lottery
+# is complete. Notifies the first groups for suite selection.
 class DrawSelectionStarter
   include ActiveModel::Model
 

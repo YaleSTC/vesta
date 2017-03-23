@@ -163,6 +163,25 @@ RSpec.describe Draw, type: :model do
     end
   end
 
+  describe '#ungrouped_students' do
+    let(:draw) { FactoryGirl.create(:draw_with_members, students_count: 4) }
+
+    before do
+      FactoryGirl.create(:group, leader: draw.students.first)
+      draw.students[1].update!(intent: 'off_campus')
+      draw.students[2].update!(intent: 'undeclared')
+    end
+    it 'returns all students that do not belong to groups' do
+      # Tried to use draw.students but it looks like changing those users
+      # changes the order of the returned results (maybe orders by updated_at by
+      # default?)
+      expected = UngroupedStudentsQuery.new(
+        draw.students.where(intent: %w(undeclared on_campus))
+      ).call
+      expect(draw.ungrouped_students).to match_array(expected)
+    end
+  end
+
   describe '#all_intents_declared?' do
     let(:draw) { FactoryGirl.create(:draw_with_members) }
 
@@ -339,5 +358,18 @@ RSpec.describe Draw, type: :model do
         have_received(:selection_invite).with(user: group.leader)
     end
     # rubocop:enable RSpec/ExampleLength
+  end
+
+  describe '#all_groups_have_suites?' do
+    let(:draw) { FactoryGirl.create(:draw_in_selection, groups_count: 2) }
+
+    before { draw.suites.last.update!(group_id: draw.groups.last.id) }
+    it 'returns true if all groups have suites assigned' do
+      draw.suites.first.update!(group_id: draw.groups.first.id)
+      expect(draw.reload.all_groups_have_suites?).to be_truthy
+    end
+    it 'returns false if not all groups have suites assigned' do
+      expect(draw.all_groups_have_suites?).to be_falsey
+    end
   end
 end

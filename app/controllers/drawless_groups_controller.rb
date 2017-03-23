@@ -1,11 +1,14 @@
 # frozen_string_literal: true
-#
+
 # Controller class for 'special' (admin-created outside of draw) housing groups.
 class DrawlessGroupsController < ApplicationController
   prepend_before_action :set_group, except: %i(new create index)
   before_action :set_form_data, only: %i(new edit)
 
   def show
+    if @group.draw.present?
+      redirect_to(draw_group_path(@group.draw, @group)) && return
+    end
     @compatible_suites = Suite.available.where(size: @group.size).order(:number)
     @compatible_suites_no_draw = @compatible_suites.includes(:draws)
                                                    .where(draws: { id: nil })

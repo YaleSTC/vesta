@@ -90,7 +90,17 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   #
   # @return [Boolean] whether or not all on-campus students are in groups
   def all_students_grouped?
-    ungrouped_count.zero?
+    ungrouped_students.count.zero?
+  end
+
+  # Return all ungrouped on-campus or undeclared students for a given draw
+  #
+  # @return [User::ActiveRecord_Collection] the ungrouped non-off-campus
+  #   students in the draw
+  def ungrouped_students
+    @ungrouped_students ||= UngroupedStudentsQuery.new(
+      students.where(intent: %w(undeclared on_campus))
+    ).call
   end
 
   # Query method to see if there are no undeclared students in the draw
@@ -205,6 +215,13 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
     end
   end
 
+  # Query param to check whether or not all groups have selected suites
+  #
+  # @return [Boolean] whether or not all groups have selected suites
+  def all_groups_have_suites?
+    groups.includes(:suite).where(suites: { id: nil }).count.zero?
+  end
+
   private
 
   def undeclared_count
@@ -216,10 +233,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   end
 
   def ungrouped_count
-    @ungrouped_query ||= UngroupedStudentsQuery.new(
-      students.where(intent: %w(undeclared on_campus))
-    ).call
-    @ungrouped_query.count
+    ungrouped_students.count
   end
 
   # rubocop:disable Rails/SkipsModelValidations
