@@ -6,8 +6,9 @@ class DrawlessGroupsController < ApplicationController
   before_action :set_form_data, only: %i(new edit)
 
   def show
-    @compatible_suites = Suite.available.where(size: @group.size)
-    @compatible_suites_no_draw = @compatible_suites.where(draw_id: [])
+    @compatible_suites = Suite.available.where(size: @group.size).order(:number)
+    @compatible_suites_no_draw = @compatible_suites.includes(:draws)
+                                                   .where(draws: { id: nil })
     @compatible_suites_in_draw = @compatible_suites - @compatible_suites_no_draw
 
     render layout: 'application_with_sidebar'
