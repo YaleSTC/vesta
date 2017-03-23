@@ -1,2 +1,11 @@
-<center><h1>Welcome to Vesta</h1></center>
+<div class="homepage-hero">
+  <h1>Welcome to Vesta</h1>
+  <p>
+  Vesta is a web app that manages the housing process for Yale's residential colleges.
+  <% unless @current_college.name.empty? || @current_college.admin_email.empty? %>
+    This site was set up for <b><%= @current_college.name %></b> and you can log in by clicking <%= link_to 'here', new_user_session_path %>. If you don't have access and believe that you should, please contact the <%= link_to 'site administrators', "mailto:#{@current_college.admin_email}" %>.
+  <% end %>
+  </p>
+  <p>If you'd like to learn more about Vesta you can visit our <%= link_to 'documentation site', 'https://yalestc.github.io/vesta', target: '_blank' %>. For technical questions please <%= link_to 'open an issue', 'https://github.com/YaleSTC/vesta/issues/new' %> or contact the <%= link_to 'developer team', 'mailto:vesta-support@yale.edu' %>.
+</div>
 

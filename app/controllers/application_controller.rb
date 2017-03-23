@@ -3,10 +3,10 @@
 class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
-  before_action :authenticate_user!, unless: :devise_controller?
+  before_action :authenticate_user!, unless: :unauthenticated?
   before_action :check_college, unless: :devise_controller?
-  before_action :authorize!, except: :home, unless: :devise_controller?
-  after_action :verify_authorized, except: :home, unless: :devise_controller?
+  before_action :authorize!, except: :home, unless: :unauthenticated?
+  after_action :verify_authorized, except: :home, unless: :unauthenticated?
 
   rescue_from Pundit::NotAuthorizedError do |exception|
     Honeybadger.notify(exception)
@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
   def home; end
 
   private
+
+  def unauthenticated?
+    devise_controller? || self.class == HighVoltage::PagesController
+  end
 
   # Abstract method to handle object CRUD. Handles success, failure,
   # and setting the flash appropriately.

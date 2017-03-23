@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.feature 'Authentication' do
   it 'enforces log in to access the app' do
-    visit '/'
+    visit '/draws'
     expect(page).to have_content('sign in')
   end
   it 'allows users to log in' do
