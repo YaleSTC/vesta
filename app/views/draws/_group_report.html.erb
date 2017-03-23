@@ -5,7 +5,7 @@
   <% sizes.each do |size| %>
     <div class="groups-<%= size %>">
       <% if diff.present? && suite_counts.present? && group_counts.present? %>
-        <h4><span class="group-size-header <%= diff_class(diff[size]) %>"><%= headerize_size(size) %> <%= " - #{pluralize(suite_counts[size], 'suite')}, #{pluralize(group_counts[size], 'group')}" %><%= ' (locked)' if @draw.size_locked?(size) %></span></h4>
+        <h4><%= headerize_size(size) %><%= ' (locked)' if @draw.size_locked?(size) %> - <span class="group-size-header <%= diff_class(diff[size]) %>"><%= "#{pluralize(suite_counts[size], 'suite')}, #{pluralize(group_counts[size], 'group')}" %><%= oversub_str(diff[size]) %></span></h4>
       <% else %>
         <h4><%= headerize_size(size) %></h4>
       <% end %>

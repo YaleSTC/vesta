@@ -20,6 +20,13 @@ module DrawsHelper
     'zero'
   end
 
+  # Return a string describing the subscription status of a group size in words
+  def oversub_str(diff)
+    return ' (oversubscribed)' if diff.negative?
+    return ' (fully subscribed)' if diff.zero?
+    ''
+  end
+
   # Return the link to lock or unlock a specific group size for a draw
   def toggle_size_lock_btn(draw:, size:, path:)
     return lock_size_btn(draw, size, path) unless draw.size_locked?(size)
