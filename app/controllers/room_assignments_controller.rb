@@ -4,7 +4,7 @@
 class RoomAssignmentsController < ApplicationController
   prepend_before_action :set_room_assignment
   prepend_before_action :set_group
-  before_action :set_rooms, only: %i(new edit)
+  before_action :set_rooms
 
   def new; end
 

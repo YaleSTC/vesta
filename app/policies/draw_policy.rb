@@ -43,7 +43,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def intent_actions?
-    !user.student?
+    (user.admin? || user.rep?) && record.pre_lottery?
   end
 
   def bulk_on_campus?

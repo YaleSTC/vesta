@@ -16,7 +16,7 @@
         <p>No groups of size <%= size %></p>
       <% else %>
         <%= render 'email_exports/hidden_form', draw: @draw, size: size, btn_str: "Export #{size_str(size)} group leader emails" %>
-        <table>
+        <table class="group-report-1">
           <thead>
             <tr>
               <td>Group Leader</td>

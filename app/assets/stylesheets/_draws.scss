@@ -8,7 +8,7 @@
   .zero { background-color: lighten($success-color, 72%); }
 }
 
-.group-report {
+.group-report-1 {
   td[data-role="group-leader"] {
     width: 35%;
   }
@@ -21,7 +21,9 @@
   td[data-role="group-actions"] {
     width: 35%;
   }
+}
 
+.group-report {
   .group-size-header {
     &.zero {
       font-weight: bold;
