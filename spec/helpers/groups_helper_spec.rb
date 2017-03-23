@@ -9,13 +9,20 @@ RSpec.describe GroupsHelper, type: :helper do
 
     it 'returns the full name with an unlocked membership' do
       allow(membership).to receive(:locked?).and_return(false)
-      expect(helper.member_str(member, group)).to eq(member.full_name)
+      expect(helper.member_str(member, group)).to match(member.full_name)
     end
 
     it 'returns the full name and notes a locked membership' do
       allow(membership).to receive(:locked?).and_return(true)
       expect(helper.member_str(member, group)).to \
-        eq(member.full_name + ' (locked)')
+        match(/#{member.full_name}.*(locked)/)
+    end
+
+    it 'returns the full name and notes a leader membership' do
+      allow(group).to receive(:leader).and_return(member)
+      allow(membership).to receive(:locked?).and_return(true)
+      expect(helper.member_str(member, group)).to \
+        match(/#{member.full_name}.*(leader)/)
     end
 
     def mock_group(member, membership)

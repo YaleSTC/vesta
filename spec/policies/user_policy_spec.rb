@@ -9,6 +9,7 @@ RSpec.describe UserPolicy do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
     permissions :show? do
       it { is_expected.to permit(user, user) }
+      it { is_expected.to permit(user, other_user) }
     end
     permissions :edit?, :update? do
       it { is_expected.not_to permit(user, user) }
@@ -57,11 +58,10 @@ RSpec.describe UserPolicy do
         it { is_expected.not_to permit(user, user) }
       end
     end
-    permissions :show?, :create?, :destroy?, :update?, :edit?,
-                :edit_intent?, :update_intent? do
+    permissions :destroy?, :update?, :edit?, :edit_intent?, :update_intent? do
       it { is_expected.not_to permit(user, other_user) }
     end
-    permissions :index?, :build? do
+    permissions :index?, :build?, :create?, :new? do
       it { is_expected.not_to permit(user, User) }
     end
     permissions :draw_info? do
@@ -87,6 +87,7 @@ RSpec.describe UserPolicy do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
     permissions :show? do
       it { is_expected.to permit(user, user) }
+      it { is_expected.to permit(user, other_user) }
     end
     permissions :edit?, :update? do
       it { is_expected.not_to permit(user, user) }
@@ -127,10 +128,10 @@ RSpec.describe UserPolicy do
         it { is_expected.to permit(user, other_user) }
       end
     end
-    permissions :show?, :create?, :destroy?, :update?, :edit? do
+    permissions :destroy?, :update?, :edit? do
       it { is_expected.not_to permit(user, other_user) }
     end
-    permissions :index?, :build? do
+    permissions :index?, :build?, :create?, :new? do
       it { is_expected.not_to permit(user, User) }
     end
     permissions :draw_info? do
@@ -154,11 +155,11 @@ RSpec.describe UserPolicy do
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    permissions :show?, :create?, :destroy?, :update?, :edit?,
+    permissions :show?, :destroy?, :update?, :edit?,
                 :edit_intent?, :update_intent? do
       it { is_expected.to permit(user, other_user) }
     end
-    permissions :index?, :build? do
+    permissions :index?, :build?, :create?, :new? do
       it { is_expected.to permit(user, User) }
     end
     permissions :draw_info? do
