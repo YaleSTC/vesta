@@ -129,6 +129,26 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(action: 'show', **result)
   end
 
+  def select_suites
+    @groups = @draw.next_groups
+    if @groups.empty?
+      @draw.update!(status: 'results')
+      flash[:success] = 'All groups have suites!'
+      redirect_to draw_path(@draw)
+    end
+    @suite_selector = BulkSuiteSelectionForm.new(groups: @groups)
+    draw_suites = @draw.suites.available.where(size: @groups.map(&:size))
+    @suites_by_size = SuitesBySizeQuery.new(draw_suites).call
+  end
+
+  def assign_suites
+    @groups = @draw.next_groups
+    @suite_selector = BulkSuiteSelectionForm.new(groups: @groups)
+    @suite_selector.prepare(params: suite_selector_params)
+    result = @suite_selector.submit
+    handle_action(**result, path: select_suites_draw_path(@draw))
+  end
+
   private
 
   def authorize!
@@ -159,6 +179,11 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def filter_params
     params.fetch(:intent_report_filter, {}).permit(intents: [])
+  end
+
+  def suite_selector_params
+    params.require(:bulk_suite_selection_form)
+          .permit(@suite_selector.valid_field_ids)
   end
 
   def set_draw

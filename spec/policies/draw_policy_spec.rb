@@ -15,7 +15,8 @@ RSpec.describe DrawPolicy do
                 :intent_report?, :filter_intent_report?, :suites_edit?,
                 :suites_update?, :student_summary?, :students_update?,
                 :oversubscription?, :toggle_size_lock?, :start_lottery?,
-                :lottery_confirmation?, :start_selection?, :bulk_on_campus? do
+                :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
+                :select_suites?, :assign_suites? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
@@ -126,6 +127,17 @@ RSpec.describe DrawPolicy do
       end
       context 'draw is in lottery phase' do
         before { allow(draw).to receive(:lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
+
+    permissions :select_suites?, :assign_suites? do
+      context 'draw is not in suite selection phase' do
+        before { allow(draw).to receive(:suite_selection?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw is in suite selection phase' do
+        before { allow(draw).to receive(:suite_selection?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
     end
@@ -241,6 +253,17 @@ RSpec.describe DrawPolicy do
       end
       context 'draw is in lottery phase' do
         before { allow(draw).to receive(:lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
+
+    permissions :select_suites?, :assign_suites? do
+      context 'draw is not in suite selection phase' do
+        before { allow(draw).to receive(:suite_selection?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw is in suite selection phase' do
+        before { allow(draw).to receive(:suite_selection?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
     end

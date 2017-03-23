@@ -2,6 +2,8 @@
 #
 # Service object to select suites for a given group.
 class SuiteSelector
+  attr_reader :errors
+
   # Allow for :select to be called on the parent class
   def self.select(**params)
     new(**params).select
@@ -34,7 +36,7 @@ class SuiteSelector
 
   private
 
-  attr_accessor :errors
+  attr_writer :errors
   attr_reader :group, :suite_id, :suite
 
   def valid?
