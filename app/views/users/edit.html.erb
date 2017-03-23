@@ -1,4 +1,4 @@
-<h1> Editing <%= @user.name %> </h1>
+<h1>Editing <%= @user.name %></h1>
 <%= simple_form_for @user do |f| %>
   <%= f.input :first_name %>
   <%= f.input :last_name %>
@@ -6,3 +6,4 @@
   <%= f.input :role, collection: User.roles.keys %>
   <%= f.submit 'Save' %>
 <% end %>
+<%= link_to 'Cancel', user_path(@user) %>
