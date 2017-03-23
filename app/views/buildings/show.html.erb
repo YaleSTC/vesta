@@ -3,7 +3,7 @@
 <% if @suites.empty? %>
   <p>No suites yet!</p>
 <% else %>
-  <%= render 'suites/summary', sizes: @suites.keys, suites: @suites %>
+  <%= render 'suites/summary', sizes: @suites.keys.sort, suites: @suites %>
 <% end %>
 <hr />
 <p><%= link_to 'New Suite', new_suite_path, class: 'button secondary' %></p>
