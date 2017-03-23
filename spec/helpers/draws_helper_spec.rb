@@ -30,6 +30,18 @@ RSpec.describe DrawsHelper, type: :helper do
     end
   end
 
+  describe '#oversub_str' do
+    it 'returns " (oversubscribed)" if negative' do
+      expect(helper.oversub_str(-1)).to eq(' (oversubscribed)')
+    end
+    it 'returns " (fully subscribed)" if zero' do
+      expect(helper.oversub_str(0)).to eq(' (fully subscribed)')
+    end
+    it 'returns "" if positive' do
+      expect(helper.oversub_str(1)).to eq('')
+    end
+  end
+
   describe '#diff_class' do
     it 'returns positive if diff is positive' do
       expect(helper.diff_class(1)).to eq('positive')

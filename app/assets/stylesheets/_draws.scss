@@ -3,9 +3,9 @@
 @import "draws_lottery";
 
 .oversub-report {
-  .positive { background-color: lighten($success-color, 72%); }
+  .positive { background-color: lighten(#5F712D, 50%); }
   .negative { background-color: lighten($alert-color, 53%); }
-  .zero { background-color: lighten($warning-color, 53%); }
+  .zero { background-color: lighten($success-color, 72%); }
 }
 
 .group-report {
@@ -25,10 +25,13 @@
   }
 
   .group-size-header {
-    padding: 0.2em;
+    &.zero {
+      font-weight: bold;
+      color: $success-color;
+    }
     &.negative {
-      background-color: $alert-color;
-      color: white;
+      font-weight: bold;
+      color: $alert-color;
     }
   }
 }
