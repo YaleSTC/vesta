@@ -24,6 +24,12 @@ RSpec.describe SuiteImportForm do
       result = described_class.import(file: file, building: building)
       expect(result[:msg].keys).to eq([:success])
     end
+    it 'creates the rooms' do
+      # from the fixture
+      count = 6
+      described_class.import(file: file, building: building)
+      expect(Room).to have_received(:create!).exactly(count)
+    end
 
     def stub_suite_create
       allow(Suite).to receive(:create!)
