@@ -1,5 +1,35 @@
 .top-bar-title {
+	a {
+		color: $white;
+	}
+	text-transform: uppercase;
   font-family: "yale", serif;
-  font-size: 1.8em;
-  margin-top: 0.1em;
+  font-size: 2em;
+}
+
+.menu {
+	a {
+		color: $white;
+	}
+	background: $white
+}
+
+.submenu {
+	a {
+		color: $primary-color
+	}
+}
+.is-dropdown-submenu {
+	background-color: $white !important;
+}
+
+.arrow-down {
+  width: 0; 
+  height: 0; 
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid $white;
+  float: right;
+  margin-top: 7px;
+  margin-left: 2px;
 }

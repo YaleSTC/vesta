@@ -1,19 +1,20 @@
 <ul class="dropdown menu" data-dropdown-menu>
   <li>
-    <a href="#">Draws</a>
+    <a href="#">Draws <div class="arrow-down"></div></a>
+
     <ul class="menu vertical">
       <li><%= link_to 'All Draws', draws_path %></li>
       <li><%= link_to 'New Draw', new_draw_path %></li>
     </ul>
   </li>
   <li>
-    <a href="#">Special Groups</a>
+    <a href="#">Special Groups <div class="arrow-down"></div></a>
     <ul class="menu vertical">
       <li><%= link_to 'All Special Groups', groups_path %></li>
       <li><%= link_to 'Create Special Group', new_group_path %></li>
     </ul>
   </li>
-  <li><a href="#">Users</a>
+  <li><a href="#">Users <div class="arrow-down"></div></a>
     <ul class="menu vertical">
       <li><%= link_to 'All Users', users_path %></li>
       <li><%= link_to 'Add User', new_user_path %></li>
@@ -21,7 +22,7 @@
     </ul>
   </li>
   <li>
-    <a href="#">Inventory</a>
+    <a href="#">Inventory <div class="arrow-down"></div></a>
     <ul class="menu vertical">
       <li><%= link_to 'All Buildings', buildings_path %></li>
       <li><%= link_to 'New Building', new_building_path %></li>
