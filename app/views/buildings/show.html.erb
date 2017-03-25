@@ -13,6 +13,7 @@
 The CSV must have the format "Number, Singles, Doubles" where Number is the 
 identifier of the suite, Singles is the number of single bedrooms in the suite,
 and Doubles is the number of double bedrooms in the suite.</p>
+<p> <%= link_to 'Download a template CSV', '/vesta_housing_template.csv' %></p>
 <p>
 <%= simple_form_for @suite_importer, url: suite_import_path do |f| %>
   <%= f.hidden_field :building_id, value: @building.id %>

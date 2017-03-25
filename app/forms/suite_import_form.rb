@@ -5,7 +5,7 @@ class SuiteImportForm
   include ActiveModel::Model
   require 'csv'
 
-  HEADER = %w(number singles doubles).freeze
+  HEADER = %w(number singles doubles common).freeze
 
   # Initialize a new SuiteImporter and call #import on it
   def self.import(**params)
@@ -48,23 +48,28 @@ class SuiteImportForm
     row_number = index + 2
     ActiveRecord::Base.transaction do
       suite = Suite.create!(building: building, number: row['number'])
-      create_rooms(suite: suite, singles: row['singles'].to_i,
-                   doubles: row['doubles'].to_i)
+      create_rooms(suite: suite, row: row)
     end
     successes << row_number
   rescue
     failures << row_number
   end
 
-  def create_rooms(suite:, doubles:, singles:)
+  def create_rooms(suite:, row:)
     total = 0
-    singles.times do |i|
-      Room.create!(beds: 1, suite: suite, number: room_name(suite, total + i))
+    hash = row_counts(row)
+    hash.each do |beds, count|
+      count.times do |i|
+        Room.create!(beds: beds, suite: suite,
+                     number: room_name(suite, total + i))
+      end
+      total += count
     end
-    total += singles
-    doubles.times do |i|
-      Room.create!(beds: 2, suite: suite, number: room_name(suite, total + i))
-    end
+  end
+
+  def row_counts(row)
+    { 1 => row['singles'].to_i, 2 => row['doubles'].to_i,
+      0 => row['common'].to_i }
   end
 
   def room_name(suite, count)
