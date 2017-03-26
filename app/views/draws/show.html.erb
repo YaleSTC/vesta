@@ -7,7 +7,7 @@
 <% end %>
 <% if policy(@draw).oversub_report? %>
   <div class="oversub-report">
-    <%= render 'oversub_report', draw: @draw %>
+    <%= render 'oversub_report', draw: @draw, path: draw_path(@draw) %>
   </div>
   <hr />
 <% end %>

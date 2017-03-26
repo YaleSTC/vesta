@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       get 'oversubscription', to: 'draws#oversubscription', as: 'oversub'
       patch 'size_lock/:size', to: 'draws#toggle_size_lock',
                                as: 'toggle_size_lock'
+      patch 'lock_all_sizes'
       get 'lottery'
       patch 'start_selection'
       get 'select_suites'

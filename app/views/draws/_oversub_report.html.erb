@@ -1,5 +1,10 @@
 <h3>Draw Summary</h3>
-<%= link_to 'Handle oversubscription', oversub_draw_path(draw), class: 'button' if draw.oversubscribed? && policy(draw).oversubscription? %>
+<div>
+  <%= link_to 'Handle oversubscription', oversub_draw_path(draw), class: 'button' if draw.oversubscribed? && policy(draw).oversubscription? %>
+  <% if policy(draw).lock_all_sizes? && !draw.open_suite_sizes.empty? %>
+    <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(draw, redirect_path: path), method: :patch, class: 'button' %>
+  <% end %>
+</div>
 <table>
   <thead>
     <tr>
@@ -8,7 +13,9 @@
       <td>Groups</td>
       <td>Locked Groups</td>
       <td>Leftover Suites</td>
-    </tr>
+      <% if policy(draw).toggle_size_lock? %>
+        <td></td>
+      <% end %>
   </thead>
   <tbody>
     <% @sizes.each do |size| %>
@@ -18,6 +25,9 @@
         <td data-role="group-count"><%= @group_counts[size] %></td>
         <td data-role="locked-count"><%= @locked_counts[size] %></td>
         <td data-role="oversubscription"><%= @diff[size] %></td>
+        <% if policy(draw).toggle_size_lock? %>
+          <td class="actions"><%= toggle_size_lock_btn(draw: draw, size: size, path: path) %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
