@@ -1,7 +1,7 @@
 <h1 class="draw-name">Entering Lottery Phase for <%= @draw.name %></h1>
 <% if policy(@draw).oversub_report? %>
   <div class="oversub-report">
-    <%= render 'oversub_report', draw: @draw %>
+    <%= render 'oversub_report', draw: @draw, path: lottery_confirmation_draw_path(@draw) %>
   </div>
   <hr />
 <% end %>

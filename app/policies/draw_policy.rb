@@ -78,6 +78,10 @@ class DrawPolicy < ApplicationPolicy
     edit?
   end
 
+  def lock_all_sizes?
+    toggle_size_lock?
+  end
+
   def lottery?
     record.lottery? && (user.admin? || user.rep?)
   end
