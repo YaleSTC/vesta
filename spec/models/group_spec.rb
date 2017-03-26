@@ -30,6 +30,11 @@ RSpec.describe Group, type: :model do
         group.size = 2
         expect(group.valid?).to be_falsey
       end
+      it 'only runs on changing size' do
+        group = FactoryGirl.create(:full_group, size: 2)
+        allow(group.draw).to receive(:open_suite_sizes).and_return([1])
+        expect(group.valid?).to be_truthy
+      end
     end
     context 'for drawless groups' do
       it 'must be an existing suite size' do

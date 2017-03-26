@@ -33,7 +33,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
                                         only_integer: true }
   validates :lottery_number, numericality: { allow_nil: true }
 
-  validate :validate_suite_size_inclusion
+  validate :validate_suite_size_inclusion, if: ->() { size_changed? }
   validate :validate_members_count, if: ->(g) { g.size.present? }
   validate :validate_status, if: ->(g) { g.size.present? }
 
