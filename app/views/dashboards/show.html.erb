@@ -1,0 +1,47 @@
+<% unless current_user.admin? %>
+  <div class="card">
+    <div class="card-divider">
+      <h4>Welcome to Vesta!</h4>
+    </div>
+    <div class="card-section">
+      <p>Use the links above to navigate your housing draw.</p>
+      <% unless @college.student_info_text.blank? %>
+        <p><%= @college.student_info_text %></p>
+      <% end %>
+      <% unless @college.floor_plan_url.blank? %>
+        <p><%= link_to 'View floorplan', @college.floor_plan_url, target: '_blank', rel: 'nofollow' %></p>
+      <% end %>
+    </div>
+  </div>
+  <% if @suite.present? %>
+    <div class="card">
+      <div class="card-divider">
+        <h4>Your suite: <%= link_to @suite.number, suite_path(@suite) %></h4>
+      </div>
+      <div class="card-section">
+        <% if @room.present? %>
+          <p>Your room is <%= @room.number_with_type %></p>
+        <% else %>
+          <p>Your leader has not yet submitted room assignments!</p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+<% unless current_user.student? %>
+  <% if @draws.empty? %>
+    <p>Welcome to Vesta! Use the navbar above to manage housing inventory and create draws!</p>
+  <% else %>
+    <% @draw_hash.each do |draw, hash| %>
+      <div class="card">
+        <div class="card-divider">
+          <h4><%= link_to draw.name, draw_path(draw) %> (<%= draw.status.humanize %>)</h4>
+        </div>
+        <div class="card-section">
+          <%= render hash[:partial], draw: draw, hash: hash %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
