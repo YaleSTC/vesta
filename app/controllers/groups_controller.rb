@@ -2,7 +2,7 @@
 # rubocop:disable Metrics/ClassLength
 # Controller for Groups
 class GroupsController < ApplicationController
-  layout 'application_with_sidebar'
+  layout 'application_with_sidebar', except: %i(new create edit update)
   prepend_before_action :set_group, except: %i(new create)
   prepend_before_action :set_draw
   before_action :authorize_draw!, except: %i(select_suite assign_suite show
