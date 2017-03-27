@@ -2,8 +2,6 @@
 #
 # Mailer class for student e-mails
 class StudentMailer < ApplicationMailer
-  default from: 'no-reply@vesta.site'
-
   # Send initial invitation to students in a draw
   #
   # @param user [User] the user to send the invitation to

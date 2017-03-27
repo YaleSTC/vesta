@@ -71,6 +71,7 @@ group :test do
 end
 
 group :staging, :production do
+  gem "daemons", "~> 1.2.4"
   gem "rack-timeout"
   gem "rails_stdout_logging"
 end
