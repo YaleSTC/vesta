@@ -14,7 +14,9 @@ class GroupsController < ApplicationController
     @compatible_suites = @draw.suites.available.where(size: @group.size)
   end
 
-  def new; end
+  def new
+    authorize @draw, :create_new_group?
+  end
 
   def create
     p = group_params.to_h

@@ -12,7 +12,7 @@
         <% if policy(@draw).lottery? %>
           <li><%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button' %></li>
         <% end %>
-        <% if policy(Group).new? && policy(@draw).group_actions? %>
+        <% if policy(Group).new? && policy(@draw).create_new_group? %>
           <li><%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %></li>
         <% end %>
         <% if @draw.oversubscribed? && policy(@draw).oversubscription? %>
@@ -145,28 +145,32 @@
     <hr />
   <% end %>
     <div>
-      <% if policy(@draw).intent_reminder? %>
-        <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
-          <%= f.input :email_type, as: 'hidden',
-            input_html: { value: 'intent' } %>
-          <%= f.submit 'Send intent reminder',
-            **with_tooltip(text: 'Emails students a reminder to submit their housing intent',
-                           class_override: 'button') %>
+      <% if policy(@draw).intent_reminder? || policy(@draw).locking_reminder? %>
+        <h3>Reminder E-mails</h3>
+        <% if policy(@draw).intent_reminder? %>
+          <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
+            <%= f.input :email_type, as: 'hidden',
+              input_html: { value: 'intent' } %>
+            <%= f.submit 'Send intent reminder',
+              **with_tooltip(text: 'Emails students a reminder to submit their housing intent',
+                            class_override: 'button') %>
+          <% end %>
+          <% if @draw.last_email_sent.present? %>
+            (Last reminder was sent <%= format_email_date(@draw.last_email_sent) %>)
+          <% end %>
+        <% elsif policy(@draw).locking_reminder? %>
+          <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
+            <%= f.input :email_type, as: 'hidden', input_html: { value: 'locking' } %>
+            <%= f.submit 'Send locking reminder',
+                        **with_tooltip(text: 'Emails students a reminder to lock their group',
+                                        class_override: 'button') %>
+          <% end %>
+          <% if @draw.last_email_sent.present? %>
+            (Last reminder was sent <%= format_email_date(@draw.last_email_sent) %>.
+            It was for <%= @draw.email_type %>.
+          <% end %>
         <% end %>
-        <% if @draw.last_email_sent.present? %>
-          (Last reminder was sent <%= format_email_date(@draw.last_email_sent) %>)
-        <% end %>
-      <% elsif policy(@draw).locking_reminder? %>
-        <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
-          <%= f.input :email_type, as: 'hidden', input_html: { value: 'locking' } %>
-          <%= f.submit 'Send locking reminder',
-                       **with_tooltip(text: 'Emails students a reminder to lock their group',
-                                      class_override: 'button') %>
-        <% end %>
-        <% if @draw.last_email_sent.present? %>
-          (Last reminder was sent <%= format_email_date(@draw.last_email_sent) %>.
-          It was for <%= @draw.email_type %>.
-        <% end %>
+        <hr />
       <% end %>
     </div>
   <%= link_to 'View all draws', draws_path %>
