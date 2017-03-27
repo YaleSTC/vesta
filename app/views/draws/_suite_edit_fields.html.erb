@@ -1,18 +1,18 @@
 <% unless current_suites.empty? %>
   <div class="suites-fields-section">
     <%= f.label "suite_ids_#{size}".to_sym, label: 'Current suites', class: 'inline-lable' %> <span class="toggle-links"><a href="#" class="check-all">all</a> / <a href="#" class="uncheck-all">none</a></span>
-    <%= f.input_field "suite_ids_#{size}".to_sym, as: :check_boxes, label_method: ->(s) { s.number_with_draws(draw) }, collection: current_suites %>
+    <div><%= f.input_field "suite_ids_#{size}".to_sym, as: :check_boxes, label_method: ->(s) { s.number_with_draws(draw) }, collection: current_suites %></div>
   </div>
 <% end %>
 <% unless drawless_suites.empty? %>
   <div class="suites-fields-section">
     <%= f.label "drawless_ids_#{size}".to_sym, label: 'Suites not in draws', class: 'inline-lable' %> <span class="toggle-links"><a href="#" class="check-all">all</a> / <a href="#" class="uncheck-all">none</a></span>
-    <%= f.input_field "drawless_ids_#{size}".to_sym, as: :check_boxes, label_method: :number, collection: drawless_suites %>
+    <div><%= f.input_field "drawless_ids_#{size}".to_sym, as: :check_boxes, label_method: :number, collection: drawless_suites %></div>
   </div>
 <% end %>
 <% unless drawn_suites.empty? %>
   <div class="suites-fields-section">
     <%= f.label "drawn_ids_#{size}".to_sym, label: 'Suites in other draws', class: 'inline-lable' %> <span class="toggle-links"><a href="#" class="check-all">all</a> / <a href="#" class="uncheck-all">none</a></span>
-    <%= f.input_field "drawn_ids_#{size}".to_sym, as: :check_boxes, label_method: :number_with_draws, collection: drawn_suites %>
+    <div><%= f.input_field "drawn_ids_#{size}".to_sym, as: :check_boxes, label_method: :number_with_draws, collection: drawn_suites %></div>
   </div>
 <% end %>

@@ -8,7 +8,7 @@ RSpec.feature 'Draw student assignment' do
     before { FactoryGirl.create_pair(:student, class_year: 2016) }
     it 'can be performed' do
       visit draw_path(draw)
-      click_on 'View student'
+      click_on 'View / edit students'
       bulk_assign_students(2016)
       message = 'Students successfully updated'
       expect(page).to have_css('.flash-success', text: message)

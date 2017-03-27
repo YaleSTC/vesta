@@ -1,10 +1,4 @@
 <h3>Draw Summary</h3>
-<div>
-  <%= link_to 'Handle oversubscription', oversub_draw_path(draw), class: 'button' if draw.oversubscribed? && policy(draw).oversubscription? %>
-  <% if policy(draw).lock_all_sizes? && !draw.open_suite_sizes.empty? %>
-    <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(draw, redirect_path: path), method: :patch, class: 'button' %>
-  <% end %>
-</div>
 <table>
   <thead>
     <tr>

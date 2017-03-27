@@ -3,7 +3,11 @@
 
   @include breakpoint(medium) {
     display: inline-block;
-    width: 20%;
+    width: 33%;
     word-wrap: break-word;
+  }
+
+  label {
+    line-height: 1;
   }
 }
