@@ -42,6 +42,10 @@ class DrawPolicy < ApplicationPolicy
     (user.admin? && !record.draft?) || record.pre_lottery?
   end
 
+  def create_new_group?
+    record.pre_lottery?
+  end
+
   def intent_actions?
     (user.admin? || user.rep?) && record.pre_lottery?
   end
@@ -69,7 +73,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def oversub_report?
-    !record.draft? && !record.suites.empty?
+    record.pre_lottery? && !record.suites.empty?
   end
 
   def group_report?
@@ -101,7 +105,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def start_selection?
-    edit? && record.lottery? && record.lottery_complete?
+    edit? && record.lottery?
   end
 
   def select_suites?

@@ -77,7 +77,7 @@ module DrawsHelper
             toggle_size_lock_draw_path(draw, size, redirect_path: path),
             method: :patch, **with_tooltip(
               text: "Prevent students from forming more groups of size #{size}",
-              class_override: 'button', id: "lock-size-#{size}"
+              class_override: 'button expanded', id: "lock-size-#{size}"
             )
   end
 
@@ -86,7 +86,7 @@ module DrawsHelper
             toggle_size_lock_draw_path(draw, size, redirect_path: path),
             method: :patch, **with_tooltip(
               text: "Allow studenst to form groups of size #{size}",
-              class_override: 'button', id: "unlock-size-#{size}"
+              class_override: 'button expanded', id: "unlock-size-#{size}"
             )
   end
 end

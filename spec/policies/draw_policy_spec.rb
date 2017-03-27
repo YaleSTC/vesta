@@ -38,9 +38,10 @@ RSpec.describe DrawPolicy do
     permissions :intent_actions? do
       it { is_expected.not_to permit(user, draw) }
     end
+
     permissions :oversub_report?, :group_report? do
-      context 'when draw is not a draft' do
-        before { allow(draw).to receive(:draft?).and_return(false) }
+      context 'when draw is pre lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         context 'when draw has suites' do
           before do
             allow(draw).to receive(:suites)
@@ -53,8 +54,8 @@ RSpec.describe DrawPolicy do
           it { is_expected.not_to permit(user, draw) }
         end
       end
-      context 'when draw is a draft' do
-        before { allow(draw).to receive(:draft?).and_return(true) }
+      context 'when draw is not pre lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -78,7 +79,7 @@ RSpec.describe DrawPolicy do
     permissions :new?, :index? do
       it { is_expected.not_to permit(user, Draw) }
     end
-    permissions :group_actions? do
+    permissions :group_actions?, :create_new_group? do
       context 'non-pre-lottery draw' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
@@ -231,7 +232,8 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :start_lottery?, :lottery_confirmation?, :oversubscription? do
+    permissions :start_lottery?, :lottery_confirmation?, :oversubscription?,
+                :create_new_group? do
       context 'when draw is pre_lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         it { is_expected.to permit(user, draw) }
@@ -244,19 +246,11 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :start_selection? do
-      context 'when draw is in lottery and all numbers assigned' do
+      context 'when draw is in lottery' do
         before do
           allow(draw).to receive(:lottery?).and_return(true)
-          allow(draw).to receive(:lottery_complete?).and_return(true)
         end
         it { is_expected.to permit(user, draw) }
-      end
-      context 'when draw is in lottery but not all numbers assigned' do
-        before do
-          allow(draw).to receive(:lottery?).and_return(true)
-          allow(draw).to receive(:lottery_complete?).and_return(false)
-        end
-        it { is_expected.not_to permit(user, draw) }
       end
       context 'when draw is not in lottery' do
         before do
@@ -278,8 +272,8 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :oversub_report?, :group_report? do
-      context 'when draw is not a draft' do
-        before { allow(draw).to receive(:draft?).and_return(false) }
+      context 'when draw is pre lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         context 'when draw has suites' do
           before do
             allow(draw).to receive(:suites)
@@ -292,8 +286,8 @@ RSpec.describe DrawPolicy do
           it { is_expected.not_to permit(user, draw) }
         end
       end
-      context 'when draw is a draft' do
-        before { allow(draw).to receive(:draft?).and_return(true) }
+      context 'when draw is not pre lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
