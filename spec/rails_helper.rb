@@ -32,6 +32,7 @@ RSpec.configure do |config|
     ENV.delete('CAS_BASE_URL')
     # Remove all PROFILE_REQUESTER keys from ENV to avoid issuing requests
     ENV.delete_if { |k, _v| !k.match(/PROFILE_REQUEST_/).nil? }
+    ENV['MAILER_FROM'] = 'foo@example.com'
     DatabaseCleaner.clean_with(:deletion)
   end
   config.before(:each) { DatabaseCleaner.strategy = :transaction }
