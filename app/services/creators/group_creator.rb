@@ -12,11 +12,11 @@ class GroupCreator < Creator
 
   private
 
-  def process_params
+  def process_params # rubocop:disable AbcSize
     @params = params.to_h.transform_keys(&:to_sym)
-    add_draw_to_params if params[:leader_id]
-    remove_blank_members if params[:member_ids]
-    remove_remove_ids_from_params if params[:remove_ids]
+    add_draw_to_params if params[:leader_id].present?
+    remove_blank_members if params[:member_ids].present?
+    remove_remove_ids_from_params if params[:remove_ids].present?
   end
 
   def add_draw_to_params
