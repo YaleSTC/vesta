@@ -179,4 +179,17 @@ RSpec.describe Suite, type: :model do
       end
     end
   end
+
+  describe '#number_with_medical' do
+    let(:suite) { FactoryGirl.build_stubbed(:suite) }
+    it 'returns the number if not a medical suite' do
+      allow(suite).to receive(:medical).and_return(false)
+      expect(suite.number_with_medical).to eq(suite.number)
+    end
+    it 'indicates if the suite is a medical suite' do
+      allow(suite).to receive(:medical).and_return(true)
+      expected = "#{suite.number} (medical)"
+      expect(suite.number_with_medical).to eq(expected)
+    end
+  end
 end

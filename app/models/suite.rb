@@ -91,6 +91,14 @@ class Suite < ApplicationRecord
     draws.all? { |draw| !(draw.lottery? || draw.suite_selection?) }
   end
 
+  # Return the suite number, indicating if the suite is a medical suite or not
+  #
+  # @return [String] the number with medical status indicated
+  def number_with_medical
+    return number unless medical
+    "#{number} (medical)"
+  end
+
   private
 
   def clear_room_ids
