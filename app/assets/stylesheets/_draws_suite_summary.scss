@@ -5,7 +5,7 @@
     @include grid-column(12);
 
     @include breakpoint(medium) {
-      @include grid-column(3);
+      @include grid-column(4);
       @include grid-column-end;
     }
   }
@@ -16,4 +16,6 @@
   .toggle-links {
     font-size: 0.8em;
   }
+
+  div { margin-bottom: 0.5em; }
 }

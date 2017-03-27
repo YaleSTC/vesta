@@ -1,7 +1,6 @@
 <% if groups.all? { |_s, groups| groups.empty? } %>
   <p>There are no groups yet.</p>
 <% else %>
-  <div><%= render 'email_exports/hidden_form', draw: @draw, size: nil, btn_str: "Export all group leader emails" %></div>
   <% sizes.each do |size| %>
     <div class="groups-<%= size %>">
       <% if diff.present? && suite_counts.present? && group_counts.present? %>
@@ -9,13 +8,9 @@
       <% else %>
         <h4><%= headerize_size(size) %></h4>
       <% end %>
-      <% if @draw.present? %>
-        <%= toggle_size_lock_btn(draw: @draw, size: size, path: path) if policy(@draw).toggle_size_lock? %>
-      <% end %>
       <% if groups[size].empty? %>
         <p>No groups of size <%= size %></p>
       <% else %>
-        <%= render 'email_exports/hidden_form', draw: @draw, size: size, btn_str: "Export #{size_str(size)} group leader emails" %>
         <table class="group-report-1">
           <thead>
             <tr>

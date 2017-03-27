@@ -50,6 +50,8 @@ RSpec.describe 'draws/show.html.erb' do
     assign(:draw, draw)
     assign(:intent_metrics, {})
     assign(:groups_by_size, {})
+    assign(:group_sizes, {})
+    assign(:suite_sizes, {})
     assign(:ungrouped_students, {})
   end
 
@@ -60,6 +62,8 @@ RSpec.describe 'draws/show.html.erb' do
     mock_policy = instance_spy('draw_policy', oversub_report?: false, **stubs)
     without_partial_double_verification do
       allow(view).to receive(:policy).with(draw).and_return(mock_policy)
+      allow(view).to receive(:current_user)
+        .and_return(FactoryGirl.build(:admin))
     end
   end
 
