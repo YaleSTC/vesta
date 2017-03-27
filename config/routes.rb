@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   unauthenticated :user do
     root to: 'high_voltage/pages#show', id: 'home', as: 'landing_page'
   end
-  root to: 'application#home'
+  root to: 'dashboards#show'
   resources :colleges, only: %i(new create show edit update)
   resources :buildings
   post 'suite_import/import', to: 'suite_imports#import', as: 'suite_import'

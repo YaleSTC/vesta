@@ -1,4 +1,4 @@
-<%= render 'group_details' %>
+<%= render 'group_details', group: @group %>
 <% if policy(@group).view_pending_members? %>
   <% unless @group.requests.empty? %>
     <h3 class="group-requests">Requests:</h3>

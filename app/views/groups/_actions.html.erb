@@ -1,8 +1,8 @@
-<%= link_to 'View', draw_group_path(@draw, group), class: 'button' %>
+<%= link_to 'View', draw_group_path(group.draw, group), class: 'button' %>
 <% if policy(group).edit? %>
-  <%= link_to 'Edit', edit_draw_group_path(@draw, group), class: 'button' %>
+  <%= link_to 'Edit', edit_draw_group_path(group.draw, group), class: 'button' %>
 <% end %>
 <% if policy(group).destroy? %>
-  <%= link_to 'Disband', draw_group_path(@draw, group, redirect_path: path), method: :delete,
+  <%= link_to 'Disband', draw_group_path(group.draw, group, redirect_path: path), method: :delete,
               data: { confirm:  'Are you sure you want to disband this group?' }, class: 'button alert' %>
 <% end %>
