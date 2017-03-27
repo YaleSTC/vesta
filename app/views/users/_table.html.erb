@@ -4,9 +4,6 @@
       <td>Last Name</td>
       <td>First Name</td>
       <td>Username</td>
-      <% unless users.all?(&:admin?) %>
-        <td>Draw</td>
-      <% end %>
       <td></td>
     </tr>
   </thead>
@@ -16,12 +13,7 @@
         <td data-role="user-last_name"><%= user.last_name %></td>
         <td data-role="user-first_name"><%= user.first_name %></td>
         <td data-role="user-username"><%= user.username %></td>
-        <% unless user.admin? %>
-          <td data-role="user-draw">
-            <%= link_to(user.draw.name, draw_path(user.draw)) if user.draw %>
-          </td>
-        <% end %>
-        <td class="actions" data-role="user-actions"><%= render 'actions', user: user  %></td>
+        <td class="actions" data-role="user-actions"><%= render 'users/actions', user: user  %></td>
       </tr>
     <% end %>
   </tbody>
