@@ -20,7 +20,7 @@ class GroupsController < ApplicationController
 
   def create
     p = group_params.to_h
-    p[:leader_id] = current_user.id unless current_user.admin?
+    p[:leader_id] = current_user.id if current_user.student?
     result = GroupCreator.new(p).create!
     @group = result[:record]
     set_form_data unless result[:object]

@@ -9,7 +9,14 @@ RSpec.describe DrawPolicy do
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
     permissions :show?, :suite_summary? do
-      it { is_expected.to permit(user, draw) }
+      context 'not draft' do
+        before { allow(draw).to receive(:draft?).and_return(false) }
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
     end
     permissions :new?, :create?, :destroy?, :edit?, :update?, :activate?,
                 :intent_report?, :filter_intent_report?, :suites_edit?,
@@ -21,7 +28,7 @@ RSpec.describe DrawPolicy do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :index? do
-      it { is_expected.not_to permit(user, Draw) }
+      it { is_expected.to permit(user, Draw) }
     end
 
     permissions :group_actions? do
@@ -66,18 +73,18 @@ RSpec.describe DrawPolicy do
     permissions :show?, :suite_summary? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :suites_edit?, :suites_update? do
-      it { is_expected.to permit(user, draw) }
-    end
-    permissions :create?, :edit?, :update?, :destroy?, :activate?,
-                :intent_report?, :filter_intent_report?, :student_summary?,
-                :students_update?, :oversubscription?, :toggle_size_lock?,
-                :start_lottery?, :lottery_confirmation?, :start_selection?,
-                :bulk_on_campus?, :lock_all_sizes? do
+    permissions :edit?, :update?, :destroy?, :activate?, :intent_report?,
+                :filter_intent_report?, :student_summary?, :students_update?,
+                :oversubscription?, :toggle_size_lock?, :start_lottery?,
+                :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
+                :lock_all_sizes? do
       it { is_expected.not_to permit(user, draw) }
     end
-    permissions :new?, :index? do
+    permissions :new?, :create? do
       it { is_expected.not_to permit(user, Draw) }
+    end
+    permissions :index? do
+      it { is_expected.to permit(user, Draw) }
     end
     permissions :group_actions?, :create_new_group? do
       context 'non-pre-lottery draw' do
