@@ -42,7 +42,8 @@ class CollegesController < ApplicationController
   end
 
   def college_params
-    params.require(:college).permit(:name, :admin_email, :dean, :site_url)
+    params.require(:college).permit(:name, :admin_email, :dean, :site_url,
+                                    :floor_plan_url, :student_info_text)
   end
 
   def set_college
