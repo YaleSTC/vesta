@@ -11,6 +11,7 @@
   </thead>
   <tbody>
     <% draws.each do |draw| %>
+      <% next unless policy(draw).show? %>
       <tr id="draw-<%= draw.id %>">
         <td data-role="draw-name"><%= link_to draw.name, draw_path(draw) %></td>
         <td data-role="draw-status"><%= draw.status.humanize %></td>

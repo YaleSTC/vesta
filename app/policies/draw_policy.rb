@@ -3,6 +3,10 @@
 # Class for Draw permissions
 class DrawPolicy < ApplicationPolicy
   def show?
+    user.admin? || user.rep? || !record.draft?
+  end
+
+  def index?
     true
   end
 
