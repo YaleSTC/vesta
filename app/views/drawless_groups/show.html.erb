@@ -8,7 +8,7 @@
     <% end %>
   <% else %>
     <%= simple_form_for @group, url: select_suite_group_path(@group), method: :patch do |f| %>
-      <%= f.input :suite, collection: @compatible_suites, label_method: :number, selected: @group.suite.try(:id) %>
+      <%= f.input :suite, collection: @compatible_suites, label_method: :number_with_medical, selected: @group.suite.try(:id) %>
       <%= f.submit 'Assign suite' %>
     <% end %>
   <% end %>
