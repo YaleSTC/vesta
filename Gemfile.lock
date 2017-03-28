@@ -262,7 +262,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
-    skylight (0.10.6)
+    skylight (1.1.0)
       activesupport (>= 3.0.0)
     slop (3.6.0)
     spring (2.0.0)
@@ -361,7 +361,7 @@ DEPENDENCIES
   shoulda-matchers
   simple_form (~> 3.4.0)
   simplecov
-  skylight
+  skylight (~> 1.1.0)
   spring
   spring-commands-rspec
   sprockets (>= 3.0.0)
