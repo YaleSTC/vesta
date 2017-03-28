@@ -288,7 +288,7 @@ GEM
     uniform_notifier (1.10.0)
     warden (1.2.7)
       rack (>= 1.0)
-    web-console (3.3.1)
+    web-console (3.4.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
       debug_inspector
@@ -358,7 +358,7 @@ DEPENDENCIES
   timecop
   title
   uglifier (~> 3.1.11)
-  web-console
+  web-console (~> 3.4.0)
   webmock
   yard
 
