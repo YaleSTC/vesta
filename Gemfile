@@ -7,7 +7,7 @@ gem "delayed_job_active_record", "~> 4.1.1"
 gem 'devise', '~> 4.2.0'
 gem 'devise_cas_authenticatable', '~> 1.9.2'
 gem "flutie"
-gem "honeybadger"
+gem "honeybadger", "~> 3.1.0"
 gem "jquery-rails"
 gem "jquery-ui-rails", "~> 6.0.1"
 gem "normalize-rails", "~> 3.0.0"
