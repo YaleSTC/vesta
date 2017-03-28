@@ -100,6 +100,12 @@ RSpec.describe Group, type: :model do
       raise_error(ActiveRecord::RecordNotFound)
   end
 
+  it 'clears suite assignments on destruction' do
+    group = FactoryGirl.create(:locked_group)
+    suite = FactoryGirl.create(:suite, group_id: group.id)
+    expect { group.destroy }.to change { suite.reload.group }.to(nil)
+  end
+
   it 'updates status when changing transfer students' do
     group = FactoryGirl.create(:open_group, size: 2)
     group.update(transfers: 1)
