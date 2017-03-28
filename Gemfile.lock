@@ -51,7 +51,7 @@ GEM
       execjs (~> 2.0)
     bcrypt (3.1.11)
     builder (3.2.3)
-    bullet (5.4.2)
+    bullet (5.5.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.10.0)
     bundler-audit (0.5.0)
@@ -310,7 +310,7 @@ PLATFORMS
 DEPENDENCIES
   autoprefixer-rails (~> 6.7.7)
   awesome_print
-  bullet
+  bullet (~> 5.5.1)
   bundler-audit (>= 0.5.0)
   capybara-webkit
   codeclimate-test-reporter (~> 1.0.0)
