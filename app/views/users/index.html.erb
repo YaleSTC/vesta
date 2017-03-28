@@ -8,7 +8,7 @@
   <p>No admins!</p>
 <% end %>
 
-<h3 id="reps">Housing Committee</h3>
+<h3 id="reps">Housing Committee (<%= @users['rep'].size %> total)</h3>
 <p><a href="#top">Back to top</a></p>
 <% if @users.has_key? 'rep' %>
   <%= render 'table', users: @users['rep'] %>
@@ -16,10 +16,24 @@
   <p>No housing committee members!</p>
 <% end %>
 
-<h3 id="students">Students</h3>
+<h3 id="students">Students (<%= @users['student'].empty? ? 0 : @users['student'].values.map(&:size).reduce(:+) %> total)</h3>
 <p><a href="#top">Back to top</a></p>
 <% if @users.has_key? 'student' %>
-  <%= render 'table', users: @users['student'] %>
+  <ul class="tabs" data-tabs id="student-year-tabs">
+    <% @users['student'].keys.sort.each do |year| %>
+      <li class="tabs-title<%= @users['student'].keys.sort.first == year ? ' is-active' : '' %>">
+        <a href="#students-<%= year %>"<%= @users['student'].keys.sort.first == year ? ' aria-selected=true' : '' %>><%= year %></a>
+      </li>
+    <% end %>
+  </ul>
+  <div class="tabs-content" data-tabs-content="student-year-tabs">
+    <% @users['student'].keys.sort.each do |year| %>
+      <div class="tabs-panel<%= @users['student'].keys.sort.first == year ? ' is-active' : '' %>" id="students-<%= year %>">
+        <h4>Class of <%= year %> (<%= @users['student'][year].size %> total)</h4>
+        <%= render 'table', users: @users['student'][year] %>
+      </div>
+    <% end %>
+  </div>
 <% else %>
   <p>No regular students!</p>
 <% end %>

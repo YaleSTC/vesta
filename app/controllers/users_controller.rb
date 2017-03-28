@@ -5,7 +5,12 @@ class UsersController < ApplicationController
   prepend_before_action :set_user, except: %i(index new build create)
 
   def index
-    @users = User.includes(:draw).all.order(:last_name).group_by(&:role)
+    @users = User.includes(:draw).all.order(:class_year, :last_name)
+                 .group_by(&:role)
+    if @users['student']
+      @users['student'] = @users['student'].group_by(&:class_year)
+    end
+    @users.default = []
   end
 
   def show; end

@@ -16,7 +16,7 @@ RSpec.feature 'Draw editing' do
   it 'redirects to /edit on failure' do
     visit edit_draw_path(draw)
     update_draw_name('')
-    expect(page).to have_content('Edit Draw')
+    expect(page).to have_content('Edit')
   end
 
   def update_draw_name(new_name)

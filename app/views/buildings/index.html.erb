@@ -4,4 +4,6 @@
   <div><%= render 'summary_table', building: building %></div>
 <% end %>
 <hr />
-<%= link_to 'Add new building', new_building_path, class: 'button secondary' %>
+<% if policy(Building).new? %>
+  <%= link_to 'Add new building', new_building_path, class: 'button secondary' %>
+<% end %>

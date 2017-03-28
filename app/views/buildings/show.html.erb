@@ -7,7 +7,7 @@
   <%= render 'suites/summary', sizes: @suites.keys.sort, suites: @suites %>
 <% end %>
 <hr />
-<p><%= link_to 'New Suite', new_suite_path, class: 'button secondary' %></p>
+<p><%= link_to 'New Suite', new_suite_path, class: 'button secondary' if policy(Suite).new? %></p>
 
 <h3>Import Suites</h3>
 <p>Add many suites at once by uploading a CSV file with the building information.

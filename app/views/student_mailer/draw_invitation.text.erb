@@ -1,5 +1,9 @@
 Hi <%= @user.name %>,
-The housing process for <%= @college.name %> is now open. Please log in to <%= @college.site_url %> to indicate whether you'll be living on- or off-campus by <%= @intent_deadline %>. If you'll be living on-campus you'll be able to view available housing and form or join a housing group.
+The housing process for <%= @college.name %> is now open. Please log in to <%= @college.site_url %>.
+<% unless @intent_locked %>
+  Please indicate whether you'll be living on- or off-campus by <%= @intent_deadline %>.
+<% end %>
+If you'll be living on-campus you'll be able to view available housing and form or join a housing group.
 Please e-mail <%= @college.admin_email %> if you have any questions.
 Sincerely,
 <%= @college.dean %>

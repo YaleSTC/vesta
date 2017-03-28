@@ -13,6 +13,21 @@
       <% end %>
     </div>
   </div>
+  <% if @draw.present? %>
+    <div class="card">
+      <div class="card-divider">
+        <h4>Your draw: <%= link_to @draw.name, draw_path(@draw) %></h4>
+      </div>
+      <div class="card-section">
+        <% if @intent_deadline.present? %>
+          <p>Deadline to submit intent: <%= @intent_deadline.strftime('%B %e') %></p>
+        <% end %>
+        <% if @locking_deadline.present? %>
+          <p>Deadline to form a group: <%= @locking_deadline.strftime('%B %e') %></p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
   <% if @suite.present? %>
     <div class="card">
       <div class="card-divider">

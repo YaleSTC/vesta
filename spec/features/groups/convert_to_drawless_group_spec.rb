@@ -10,6 +10,6 @@ RSpec.feature 'Convert to drawless group' do
     visit draw_group_path(group.draw, group)
     click_on 'Make special group'
     expect(page).to have_css('.flash-success',
-                             text: /Group is now a special group/)
+                             text: /is now a special group/)
   end
 end

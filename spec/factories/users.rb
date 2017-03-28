@@ -7,6 +7,7 @@ FactoryGirl.define do
     last_name { 'Last' }
     role { 'student' }
     intent { 'on_campus' }
+    class_year { Time.zone.today.year }
 
     factory :student_in_draw do
       after(:build) do |user|

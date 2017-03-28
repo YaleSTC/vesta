@@ -18,8 +18,7 @@ SimpleForm.setup do |config| # rubocop:disable Metrics/BlockLength
     b.optional :readonly
     b.use :label_input
     b.use :error, wrap_with: { tag: :small, class: :error }
-
-    # b.use :hint,  wrap_with: { tag: :span, class: :hint }
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
   end
 
   config.wrappers :horizontal_form, tag: 'div', class: 'row',
