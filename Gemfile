@@ -36,7 +36,7 @@ group :development do
   gem "spring", "~> 2.0.1"
   gem "spring-commands-rspec"
   gem "web-console", "~> 3.4.0"
-  gem "yard"
+  gem "yard", "~> 0.9.8"
 end
 
 group :development, :test do
