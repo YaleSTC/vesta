@@ -258,7 +258,7 @@ GEM
     skylight (1.1.0)
       activesupport (>= 3.0.0)
     slop (3.6.0)
-    spring (2.0.0)
+    spring (2.0.1)
       activesupport (>= 4.2)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -351,7 +351,7 @@ DEPENDENCIES
   simple_form (~> 3.4.0)
   simplecov
   skylight (~> 1.1.0)
-  spring
+  spring (~> 2.0.1)
   spring-commands-rspec
   sprockets (>= 3.0.0)
   sprockets-es6

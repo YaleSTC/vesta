@@ -33,7 +33,7 @@ gem 'foundation-rails', '~> 6.3.0.0'
 
 group :development do
   gem "listen"
-  gem "spring"
+  gem "spring", "~> 2.0.1"
   gem "spring-commands-rspec"
   gem "web-console"
   gem "yard"
