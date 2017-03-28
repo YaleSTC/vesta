@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby "2.3.1"
 
 gem "autoprefixer-rails", "~> 6.7.7"
-gem "delayed_job_active_record"
+gem "delayed_job_active_record", "~> 4.1.1"
 gem 'devise', '~> 4.2.0'
 gem 'devise_cas_authenticatable', '~> 1.9.2'
 gem "flutie"

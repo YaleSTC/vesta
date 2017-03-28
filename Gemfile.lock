@@ -291,7 +291,7 @@ GEM
     title (0.0.7)
       i18n
       rails (>= 3.1)
-    tzinfo (1.2.2)
+    tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
@@ -327,7 +327,7 @@ DEPENDENCIES
   codeclimate-test-reporter (~> 1.0.0)
   daemons (~> 1.2.4)
   database_cleaner
-  delayed_job_active_record
+  delayed_job_active_record (~> 4.1.1)
   devise (~> 4.2.0)
   devise_cas_authenticatable (~> 1.9.2)
   dotenv-rails
