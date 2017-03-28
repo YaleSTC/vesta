@@ -22,7 +22,6 @@ gem "simple_form", "~> 3.4.0"
 gem "skylight", "~> 1.1.0"
 gem "sprockets", ">= 3.0.0"
 gem "sprockets-es6"
-gem "suspenders"
 gem "title"
 gem "uglifier"
 
