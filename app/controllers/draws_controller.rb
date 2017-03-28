@@ -63,8 +63,9 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def suite_summary
-    @all_sizes = SuiteSizesQuery.new(@draw.suites.available).call
-    @suites_by_size = SuitesBySizeQuery.new(@draw.suites.available).call
+    suites = @draw.suites.available.where(medical: false)
+    @all_sizes = SuiteSizesQuery.new(suites).call
+    @suites_by_size = SuitesBySizeQuery.new(suites).call
     @suites_by_size.default = []
   end
 
@@ -257,12 +258,14 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def prepare_suites_edit_data # rubocop:disable AbcSize, MethodLength
-    @suite_sizes ||= SuiteSizesQuery.new(Suite.available).call
+    draw_suites = @draw.suites.available.where(medical: false)
+    all_suites = Suite.available.where(medical: false)
+    @suite_sizes ||= SuiteSizesQuery.new(all_suites).call
     @suites_update ||= DrawSuitesUpdate.new(draw: @draw)
-    base_suites = Suite.available.order(:number)
+    base_suites = all_suites.order(:number)
     empty_suite_hash = @suite_sizes.map { |s| [s, []] }.to_h
     @current_suites = empty_suite_hash.merge(
-      @draw.suites.available.includes(:draws).order(:number).group_by(&:size)
+      draw_suites.includes(:draws).order(:number).group_by(&:size)
     )
     @drawless_suites = empty_suite_hash.merge(
       DrawlessSuitesQuery.new(base_suites).call.group_by(&:size)
