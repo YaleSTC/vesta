@@ -81,7 +81,7 @@ class Membership < ApplicationRecord
 
   def group_is_open
     return unless !persisted? || status_changed?
-    errors.add :group, 'must be open' unless group.open?
+    errors.add :group, 'cannot accept additional members' unless group.open?
   end
 
   def user_on_campus

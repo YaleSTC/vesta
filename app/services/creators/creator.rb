@@ -47,7 +47,7 @@ class Creator
   def error(object = obj)
     errors = object.errors.full_messages
     {
-      object: nil, record: object,
+      object: nil, record: obj,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
     }
   end
