@@ -46,6 +46,13 @@ RSpec.describe Suite, type: :model do
       change { group.leader.reload.room_id }.from(suite.rooms.first.id).to(nil)
   end
 
+  it 'removes draws if changed to a medical suite' do
+    draw = FactoryGirl.create(:draw)
+    suite = FactoryGirl.create(:suite, draws: [draw])
+    expect { suite.update!(medical: true) }.to \
+      change { suite.draws.to_a }.to([])
+  end
+
   describe '.size_str' do
     it 'raises an argument error if a non-integer is passed' do
       size = instance_spy('string')
