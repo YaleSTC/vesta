@@ -157,7 +157,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-byebug (3.4.0)
+    pry-byebug (3.4.2)
       byebug (~> 9.0)
       pry (~> 0.10)
     pry-rails (0.3.4)
@@ -333,7 +333,7 @@ DEPENDENCIES
   listen
   normalize-rails (~> 3.0.0)
   pg (~> 0.20.0)
-  pry-byebug
+  pry-byebug (~> 3.4.2)
   pry-rails
   puma (~> 3.8.2)
   pundit (~> 1.1.0)
