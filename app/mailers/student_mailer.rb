@@ -9,6 +9,7 @@ class StudentMailer < ApplicationMailer
   def draw_invitation(user:, college: nil)
     determine_college(college)
     @user = user
+    @intent_locked = user.draw.intent_locked
     @intent_deadline = format_date(user.draw.intent_deadline)
     mail(to: @user.email, subject: 'The housing process has begun')
   end

@@ -7,4 +7,6 @@
                                    suite_counts: nil %>
 </div>
 <hr />
-<%= link_to 'New Special Group', new_group_path, class: 'button secondary' %>
+<% if policy(DrawlessGroup).new? %>
+  <%= link_to 'New Special Group', new_group_path, class: 'button secondary' %>
+<% end %>

@@ -66,9 +66,17 @@ class DashboardsController < ApplicationController
 
   def student_variables
     @college = College.first || College.new
+    @draw = current_user.draw
+    set_deadlines
     group = current_user.group
     @suite = group.suite if group.present?
     @room = current_user.room if @suite.present?
+  end
+
+  def set_deadlines
+    return unless @draw.present?
+    @intent_deadline = @draw.intent_deadline
+    @locking_deadline = @draw.locking_deadline
   end
 
   def authorize!

@@ -1,10 +1,14 @@
 <%= simple_form_for @draw do |f| %>
   <%= f.input :name %>
-  <%= f.input :intent_deadline %>
-  <%= f.input :locking_deadline %>
+  <%= f.input :intent_deadline, include_blank: true,
+      hint: 'Used to send emails and to display a deadline to students; will NOT prevent intent changes after the deadline.' %>
+
+    <%= f.input :locking_deadline, include_blank: true,
+      hint: "This should be after the intent deadline, if you've set one! Also only used in emails and for display purposes." %>
   <% unless @draw.suites.empty? %>
     <%= f.input :locked_sizes, as: :check_boxes, collection: @draw.suite_sizes,
-      label_method: ->(s) { "#{size_str(s)}s".capitalize }, include_hidden: false %>
+      label_method: ->(s) { "#{size_str(s)}s".capitalize }, include_hidden: false,
+      hint: 'Checking these prevents students from creating new groups of that size' %>
   <% end %>
   <%= f.submit %>
 <% end %>

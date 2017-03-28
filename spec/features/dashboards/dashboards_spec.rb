@@ -25,6 +25,20 @@ RSpec.feature 'Dashboards' do
         expect(page).to have_content('Vesta')
       end
     end
+
+    context 'with draw' do
+      context 'with deadlines' do
+        it_behaves_like 'renders' do
+          let(:student) do
+            FactoryGirl.create(:student_in_draw).tap do |s|
+              s.draw.update(intent_deadline: Time.zone.tomorrow,
+                            locking_deadline: Time.zone.tomorrow + 1.day)
+            end
+          end
+        end
+      end
+    end
+
     context 'without group' do
       it_behaves_like 'renders' do
         let(:student) { FactoryGirl.create(:student_in_draw) }

@@ -145,9 +145,16 @@
     </div>
     <hr />
   <% end %>
+  <% if @draw.intent_deadline.present? || @draw.locking_deadline.present? %>
     <div>
+      <h3>Deadlines</h3>
+      <% if @draw.intent_deadline.present? %>
+        <p>Deadline to submit intent: <%= @draw.intent_deadline.strftime('%B %e') %></p>
+      <% end %>
+      <% if @draw.locking_deadline.present? %>
+        <p>Deadline to form a group: <%= @draw.locking_deadline.strftime('%B %e') %></p>
+      <% end %>
       <% if policy(@draw).intent_reminder? || policy(@draw).locking_reminder? %>
-        <h3>Reminder E-mails</h3>
         <% if policy(@draw).intent_reminder? %>
           <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
             <%= f.input :email_type, as: 'hidden',
@@ -171,8 +178,9 @@
             It was for <%= @draw.email_type %>.
           <% end %>
         <% end %>
-        <hr />
       <% end %>
+      <hr />
     </div>
+  <% end %>
   <%= link_to 'View all draws', draws_path %>
 </div>

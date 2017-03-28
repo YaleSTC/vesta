@@ -1,4 +1,4 @@
-<% provide(:title, 'Edit Draw') %>
-<h1>Edit Draw</h1>
+<% provide(:title, "Edit #{@draw.name}") %>
+<h1>Edit <%= @draw.name %></h1>
 <%= render "form", draw: @draw %>
 <%= link_to 'Cancel', draw_path(@draw) %>

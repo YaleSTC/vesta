@@ -26,7 +26,7 @@
 </ul>
 <h3>Rooms</h3>
 <%= render 'rooms/summary', rooms: @rooms %>
-<p><%= link_to 'Add room', new_room_path, class: 'button secondary' %></p>
+<p><%= link_to 'Add room', new_room_path, class: 'button secondary' if policy(Room).new? %></p>
 <hr />
 <% if policy(@suite).merge? %>
   <div class="suite-merging">
