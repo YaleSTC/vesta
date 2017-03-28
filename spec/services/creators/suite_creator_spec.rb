@@ -18,7 +18,7 @@ RSpec.describe SuiteCreator do
       expect(described_class.new(params).create![:msg]).to have_key(:success)
     end
     def params_hash
-      { number: 'L01', building: FactoryGirl.build_stubbed(:building) }
+      { number: 'L01', building: FactoryGirl.build(:building) }
     end
   end
   it 'does not create when given invalid params' do

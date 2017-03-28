@@ -19,7 +19,7 @@ RSpec.describe RoomCreator do
     end
 
     def params_hash
-      { number: 'L01', suite: FactoryGirl.build_stubbed(:suite) }
+      { number: 'L01', suite: FactoryGirl.build(:suite) }
     end
   end
   it 'does not create when given invalid params' do

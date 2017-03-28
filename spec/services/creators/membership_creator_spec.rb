@@ -30,8 +30,8 @@ RSpec.describe MembershipCreator do
     # rubocop:disable RSpec/InstanceVariable
     def params_hash
       @group ||= FactoryGirl.create(:open_group)
-      @user ||= FactoryGirl.build_stubbed(:student, intent: 'on_campus',
-                                                    draw: @group.draw)
+      @user ||= FactoryGirl.build(:student, intent: 'on_campus',
+                                            draw: @group.draw)
       { group: @group, user: @user, status: 'requested' }
     end
     # rubocop:enable RSpec/InstanceVariable
