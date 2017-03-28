@@ -19,11 +19,10 @@ class DrawlessGroupCreator < Creator
   # @return [Hash{Symbol=>Group,Hash}] a results hash with a message to set in
   #   flash an either `nil` or the created group.
   def create!
-    @obj = ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction do
       ensure_valid_members
-      group = Group.new(**params)
-      group.save!
-      group
+      @obj = Group.new(**params)
+      @obj.save!
     end
     success
   rescue ActiveRecord::RecordInvalid => e

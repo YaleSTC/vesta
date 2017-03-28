@@ -38,10 +38,10 @@ class GroupCreator < Creator
     }
   end
 
-  def error(object = @obj)
+  def error(object = obj)
     errors = object.errors.full_messages
     {
-      object: nil, record: object,
+      object: nil, record: obj,
       msg: {
         error: "There was a problem creating the group: #{errors.join(', ')}. "\
         'Please make sure you are not adding too many students.'
