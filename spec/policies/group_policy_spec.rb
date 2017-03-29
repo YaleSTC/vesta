@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+# rubocop:disable RSpec/ScatteredSetup, RSpec/RepeatedExample
+
 require 'rails_helper'
 
 RSpec.describe GroupPolicy do
@@ -216,31 +219,36 @@ RSpec.describe GroupPolicy do
     end
 
     permissions :select_suite?, :assign_suite? do
-      context 'next group, group leader' do
-        before do
-          draw = instance_spy('Draw')
-          allow(draw).to receive(:next_group?).with(group).and_return(true)
-          allow(group).to receive(:draw).and_return(draw)
-        end
-        it { is_expected.to permit(user, group) }
-      end
-      context 'group leader, not next group' do
-        before do
-          draw = instance_spy('Draw')
-          allow(draw).to receive(:next_group?).with(group).and_return(false)
-          allow(group).to receive(:draw).and_return(draw)
-        end
-        it { is_expected.not_to permit(user, group) }
-      end
-      context 'next group, not leader' do
-        before do
-          draw = instance_spy('Draw')
-          allow(draw).to receive(:next_group?).with(other_group)
-            .and_return(true)
-          allow(other_group).to receive(:draw).and_return(draw)
-        end
-        it { is_expected.not_to permit(user, other_group) }
-      end
+      it { is_expected.not_to permit(user, other_group) }
+      it { is_expected.not_to permit(user, group) }
+
+      # commented out because this feature was removed for pilot
+      #
+      # context 'next group, group leader' do
+      #   before do
+      #     draw = instance_spy('Draw')
+      #     allow(draw).to receive(:next_group?).with(group).and_return(true)
+      #     allow(group).to receive(:draw).and_return(draw)
+      #   end
+      #   it { is_expected.to permit(user, group) }
+      # end
+      # context 'group leader, not next group' do
+      #   before do
+      #     draw = instance_spy('Draw')
+      #     allow(draw).to receive(:next_group?).with(group).and_return(false)
+      #     allow(group).to receive(:draw).and_return(draw)
+      #   end
+      #   it { is_expected.not_to permit(user, group) }
+      # end
+      # context 'next group, not leader' do
+      #   before do
+      #     draw = instance_spy('Draw')
+      #     allow(draw).to receive(:next_group?).with(other_group)
+      #       .and_return(true)
+      #     allow(other_group).to receive(:draw).and_return(draw)
+      #   end
+      #   it { is_expected.not_to permit(user, other_group) }
+      # end
     end
   end
 

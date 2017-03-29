@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class for Group permissions
 class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   def show?
@@ -100,8 +101,7 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def select_suite?
-    user_has_uber_permission?(user) ||
-      (user.leader_of?(record) && record.draw.next_group?(record))
+    user_has_uber_permission?(user)
   end
 
   def assign_suite?
