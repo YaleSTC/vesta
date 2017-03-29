@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Membership, type: :model do
@@ -170,6 +171,7 @@ RSpec.describe Membership, type: :model do
 
   describe 'email callbacks' do
     let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
+
     # rubocop:disable RSpec/ExampleLength
     it 'emails leader on invitation acceptance' do
       g = FactoryGirl.create(:open_group)
@@ -186,6 +188,34 @@ RSpec.describe Membership, type: :model do
       allow(StudentMailer).to receive(:left_group).and_return(msg)
       m.destroy
       expect(StudentMailer).to have_received(:left_group)
+    end
+  end
+
+  describe 'pending membership destruction' do
+    context 'on the user creating their own group' do
+      it do
+        inv_group = FactoryGirl.create(:open_group, size: 2)
+        u = FactoryGirl.create(:user, draw: inv_group.draw)
+        invite = Membership.create(group: inv_group, user: u, status: 'invited')
+        FactoryGirl.create(:group, leader: u)
+        expect { invite.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+    context 'on the user accepting another membership' do
+      it do # rubocop:disable RSpec/ExampleLength
+        inv_group = FactoryGirl.create(:open_group, size: 2)
+        req_group = create_group_in_draw(inv_group.draw)
+        u = FactoryGirl.create(:user, draw: inv_group.draw)
+        inv = Membership.create(group: inv_group, user: u, status: 'invited')
+        req = Membership.create(group: req_group, user: u, status: 'requested')
+        inv.update(status: 'accepted')
+        expect { req.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      def create_group_in_draw(draw)
+        l = FactoryGirl.create(:user, draw: draw)
+        FactoryGirl.create(:open_group, size: 2, leader: l)
+      end
     end
   end
 end

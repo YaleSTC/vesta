@@ -14,6 +14,13 @@ AllCops:
     - 'bin/*'
 Rails:
   Enabled: true
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Rails/Blank:
+  Enabled: false
+
 Metrics/BlockLength:
   Exclude:
     - 'Rakefile'

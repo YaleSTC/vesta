@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v0.1.3 - 2017-03-29
+### Fixed
+* Destroy pending memberships on invitation and request acceptance ([#513](https://github.com/YaleSTC/vesta/issues/513)).
+
 ## v0.1.2 - 2017-03-29
 ### Changed
 * Downgrade Ruby to v2.3.1 ([#506](https://github.com/YaleSTC/vesta/issues/506)).
@@ -8,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ## v0.1.1 - 2017-03-29
 ### Fixed
 * Prevent students from performing suite selection ([#501](https://github.com/YaleSTC/vesta/issues/501)).
+
 
 ### Changed
 * Downgrade Ruby to v2.3.3 ([#493](https://github.com/YaleSTC/vesta/issues/493)).
