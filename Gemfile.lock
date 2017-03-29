@@ -107,7 +107,7 @@ GEM
     ffaker (2.4.0)
     ffi (1.9.14)
     flutie (2.0.0)
-    formulaic (0.3.0)
+    formulaic (0.4.0)
       activesupport
       capybara
       i18n
@@ -323,7 +323,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.8.0)
   ffaker (~> 2.4.0)
   flutie
-  formulaic
+  formulaic (~> 0.4.0)
   foundation-rails (~> 6.3.0.0)
   high_voltage
   honeybadger (~> 3.1.0)
