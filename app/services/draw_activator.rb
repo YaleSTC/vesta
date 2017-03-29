@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Service object to handle the activation of a draw. Checks to make sure the
 # draw has the correct status, updates the status, and sends e-mail invitations
 # to students in the draw.
@@ -43,9 +43,6 @@ class DrawActivator
   def validate
     errors << 'Draw must be a draft.' unless draw.draft?
     errors << 'Draw must have at least one student.' unless draw.students?
-    return if draw.enough_beds?
-    errors << 'Draw must have at least one bed per student; you should add '\
-        'more suites or remove some students.'
   end
 
   def currently_valid?
