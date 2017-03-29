@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Model to represent Housing Draws.
 #
 # @attr name [String] The name of the housing draw -- e.g. "Junior Draw 2016"
@@ -18,7 +18,7 @@
 #   enforced, just used for display purposes and sending emails.
 # @attr locking_deadline [Datetime] Deadline to lock groups. Not strictly
 #   enforced, just used for display purposes and sending emails.
-class Draw < ApplicationRecord
+class Draw < ApplicationRecord # rubocop:disable ClassLength
   has_many :groups
   has_many :students, class_name: 'User', dependent: :nullify
   has_many :draws_suites, dependent: :delete_all
@@ -74,9 +74,9 @@ class Draw < ApplicationRecord
   # Query method to see if a draw has enough beds for its students.
   #
   # @return [Boolean] whether or not the draw has as many or more beds than it
-  #   has students
+  #   has on-campus students
   def enough_beds?
-    bed_count >= student_count
+    bed_count >= on_campus_student_count
   end
 
   # Query method to see if a draw has at least one group.
@@ -204,6 +204,10 @@ class Draw < ApplicationRecord
     @undeclared_count ||= students.undeclared.count
   end
 
+  def on_campus_student_count
+    @on_campus_count ||= students.on_campus.count
+  end
+
   def ungrouped_count
     @ungrouped_query ||= UngroupedStudentsQuery.new(
       students.where(intent: %w(undeclared on_campus))
@@ -211,9 +215,11 @@ class Draw < ApplicationRecord
     @ungrouped_query.count
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
   def remove_old_draw_ids
     User.where(old_draw_id: id).update_all(old_draw_id: nil)
   end
+  # rubocop:enable Rails/SkipsModelValidations
 
   def cannot_lock_intent_if_undeclared
     return if all_intents_declared?

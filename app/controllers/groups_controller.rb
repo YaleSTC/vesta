@@ -115,7 +115,12 @@ class GroupsController < ApplicationController
   end
 
   def assign_lottery
-    @group.lottery_number = group_params['lottery_number'].to_i
+    number = if group_params['lottery_number'].empty?
+               nil
+             else
+               group_params['lottery_number'].to_i
+             end
+    @group.lottery_number = number
     @color_class = @group.save ? 'success' : 'failure'
   end
 
