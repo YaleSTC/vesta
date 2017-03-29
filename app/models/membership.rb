@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Model for relationships between Groups and Users.
 # Updates the group status on creation and destruction.
 # Validations:
@@ -43,6 +43,8 @@ class Membership < ApplicationRecord
 
   after_save :send_joined_email, if: ->() { status_changed? && accepted? }
   after_destroy :send_left_email, if: ->() { accepted? }
+
+  after_save :destroy_pending, if: ->() { accepted? }
 
   def readonly?
     if locked_changed?
@@ -105,11 +107,17 @@ class Membership < ApplicationRecord
                              college: College.first).deliver_later
   end
 
+  def destroy_pending
+    return unless status_changed? || id_changed?
+    user.memberships.where.not(id: id).destroy_all
+  end
+
   def update_counter_cache
     return unless status_changed?
     increment_counter_cache
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
   def increment_counter_cache
     group.increment!(:memberships_count) if accepted?
   end
@@ -117,4 +125,5 @@ class Membership < ApplicationRecord
   def decrement_counter_cache
     group.decrement!(:memberships_count) if accepted?
   end
+  # rubocop:enable Rails/SkipsModelValidations
 end
