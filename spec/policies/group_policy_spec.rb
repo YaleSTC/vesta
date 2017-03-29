@@ -94,7 +94,7 @@ RSpec.describe GroupPolicy do
       end
     end
     permissions :index? do
-      it { is_expected.to permit(user, [group, other_group]) }
+      it { is_expected.to permit(user, Group) }
     end
     permissions :show? do
       it { is_expected.to permit(user, group) }
@@ -263,7 +263,7 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, Group) }
     end
     permissions :index? do
-      it { is_expected.to permit(user, [group]) }
+      it { is_expected.to permit(user, Group) }
     end
     permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
                 :advanced_edit?, :view_pending_members?, :reject_pending?,

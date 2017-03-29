@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Draw group report' do
@@ -18,6 +19,7 @@ RSpec.feature 'Draw group report' do
 
   context 'as leader' do
     let(:user) { groups.first.leader }
+
     before { log_in user }
     it 'displays a table with only the appropriate button' do
       visit draw_path(draw)
@@ -25,6 +27,16 @@ RSpec.feature 'Draw group report' do
         expect(page_has_group_report(page: page, group: group,
                                      edit: user == group.leader)).to be_truthy
       end
+    end
+  end
+
+  context 'printable report' do
+    before { log_in FactoryGirl.create(:student, role: 'rep') }
+
+    it 'can be viewed by reps' do
+      visit draw_path(draw)
+      click_on 'View groups'
+      expect(page).to have_css('td[data-role="group-members"]')
     end
   end
 

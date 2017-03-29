@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 # rubocop:disable Metrics/ClassLength
 # Controller for Groups
 class GroupsController < ApplicationController
-  layout 'application_with_sidebar', except: %i(new create edit update)
-  prepend_before_action :set_group, except: %i(new create)
+  layout 'application_with_sidebar', except: %i(new create edit update index)
+  prepend_before_action :set_group, except: %i(new create index)
   prepend_before_action :set_draw
   before_action :authorize_draw!, except: %i(select_suite assign_suite show
                                              assign_lottery)
@@ -12,6 +13,11 @@ class GroupsController < ApplicationController
   def show
     @same_size_groups_count = @draw.groups.where(size: @group.size).count
     @compatible_suites = @draw.suites.available.where(size: @group.size)
+  end
+
+  def index
+    @groups = @draw.groups.includes(:leader, :members).order('users.last_name')
+                   .group_by(&:size).sort.to_h
   end
 
   def new

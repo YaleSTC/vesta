@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Draw editing' do
@@ -8,7 +9,7 @@ RSpec.feature 'Draw editing' do
   it 'succeeds' do
     new_name = 'Froco Draw'
     visit draw_path(draw)
-    click_on 'Edit'
+    click_on 'Edit draw'
     update_draw_name(new_name)
     expect(page).to have_css('.draw-name', text: new_name)
   end
