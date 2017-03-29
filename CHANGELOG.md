@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Added
+* Add printable group report for draws ([#488](https://github.com/YaleSTC/vesta/issues/488)).
+
 ## v0.1.3 - 2017-03-29
 ### Fixed
 * Add several tweaks / improvements to the student experience ([#207](https://github.com/YaleSTC/vesta/issues/207)).

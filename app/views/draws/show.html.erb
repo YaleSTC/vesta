@@ -79,16 +79,27 @@
           </li>
         <% end %>
         <li>
-          <a href="#">Draw Config</a>
+          <a href="#">Draw Information</a>
           <ul class="menu vertical nested">
-            <% if policy(@draw).edit? %>
-              <li><%= link_to 'Edit', edit_draw_path(@draw), class: 'button secondary' %></li>
-            <% end %>
             <% if policy(@draw).student_summary? %>
-              <li><%= link_to 'View / edit students', student_summary_draw_path(@draw), class: 'button secondary' %></li>
+              <li><%= link_to 'View students', student_summary_draw_path(@draw), class: 'button secondary' %></li>
             <% end %>
             <% if policy(@draw).suite_summary? %>
               <li><%= link_to 'View suites', suite_summary_draw_path(@draw), class: 'button secondary' %></li>
+            <% end %>
+            <% if policy(Group).index? %>
+              <li><%= link_to 'View groups', draw_groups_path(@draw), class: 'button secondary' %></li>
+            <% end %>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Draw Config</a>
+          <ul class="menu vertical nested">
+            <% if policy(@draw).edit? %>
+              <li><%= link_to 'Edit draw', edit_draw_path(@draw), class: 'button secondary' %></li>
+            <% end %>
+            <% if policy(@draw).student_summary? %>
+              <li><%= link_to 'Edit students', student_summary_draw_path(@draw), class: 'button secondary' %></li>
             <% end %>
             <% if policy(@draw).suites_edit? %>
               <li><%= link_to 'Edit suites', suites_edit_draw_path(@draw), class: 'button secondary' %></li>
@@ -107,6 +118,9 @@
         <% end %>
         <% if policy(@draw).suite_summary? %>
           <li><%= link_to 'View suites', suite_summary_draw_path(@draw), class: 'button secondary' %></li>
+        <% end %>
+        <% if policy(Group).index? %>
+          <li><%= link_to 'View groups', draw_groups_path(@draw), class: 'button secondary' %></li>
         <% end %>
       </ul>
     <% end %>

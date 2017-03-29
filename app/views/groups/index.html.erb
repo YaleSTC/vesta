@@ -1,0 +1,36 @@
+<% provide(:title, "#{@draw.name} - All Groups") %>
+<h1><%= @draw.name %> - All Groups</h1>
+<% if @groups.empty? %>
+  <p>There are no groups in this draw yet.</p>
+<% else %>
+  <div class="printable-group-report">
+    <% @groups.each do |size, group_array| %>
+      <h3><%= headerize_size(size) %></h3>
+      <table>
+        <thead>
+          <tr>
+            <td>Group Leader</td>
+            <td>Other Members</td>
+            <td>Transfers</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% group_array.each do |group| %>
+            <tr>
+              <td data-role="group-leader">
+                <% if policy(group).show? %>
+                  <%= link_to group.leader.full_name, draw_group_path(@draw, group) %>
+                <% end %>
+              </td>
+              <td data-role="group-members"><%= group.members.map(&:full_name).join(', ') %></td>
+              <td data-role="group-transfers"><%= group.transfers %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+<% end %>
+<% if policy(@draw).show? %>
+  <%= link_to 'Return to draw', draw_path(@draw) %>
+<% end %>
