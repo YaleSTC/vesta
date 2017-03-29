@@ -17,7 +17,7 @@
     <h4>Add/Remove by NetID</h4>
     <%= simple_form_for @student_assignment_form, url: students_update_draw_path(@draw), method: :patch do |f| %>
       <%= f.input :username %>
-      <%= f.input :adding, label: 'Action', as: :radio_buttons, collection: [['Add', true], ['Remove', false]], required: true %>
+      <%= f.input :adding, label: 'Action', as: :select, collection: [['Add', true], ['Remove', false]], required: true %>
       <%= f.submit 'Process' %>
     <% end %>
   </div>
