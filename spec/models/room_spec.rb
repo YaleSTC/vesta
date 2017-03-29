@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Room, type: :model do
   describe 'basic validations' do
     subject { FactoryGirl.build(:room) }
+
     it { is_expected.to validate_presence_of(:number) }
     it { is_expected.to validate_uniqueness_of(:number).case_insensitive }
     it { is_expected.to validate_presence_of(:beds) }
@@ -16,7 +18,9 @@ RSpec.describe Room, type: :model do
   it 'nullify student room_id on deletion' do
     room = FactoryGirl.create(:room)
     user = FactoryGirl.create(:user)
+    # rubocop:disable Rails/SkipsModelValidations
     user.update_columns(room_id: room.id)
+    # rubocop:enable Rails/SkipsModelValidations
     expect { room.destroy }.to \
       change { user.reload.room_id }.from(room.id).to(nil)
   end
@@ -68,7 +72,7 @@ RSpec.describe Room, type: :model do
       room.update_attributes(beds: 2)
       expect(suite).to have_received(:increment!).with(:size, 1).twice
     end
-    it 'updates the new suite when switching' do
+    it 'updates the old suite when switching' do
       old_suite, new_suite = FactoryGirl.create_pair(:suite)
       room = FactoryGirl.create(:room, beds: 1, suite: old_suite)
       expect { room.update(suite_id: new_suite.id) }.to \
