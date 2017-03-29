@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v0.1.2 - 2017-03-29
+### Changed
+* Downgrade Ruby to v2.3.1 ([#506](https://github.com/YaleSTC/vesta/issues/506)).
+
 ## v0.1.1 - 2017-03-29
 ### Fixed
 * Prevent students from performing suite selection ([#501](https://github.com/YaleSTC/vesta/issues/501)).
