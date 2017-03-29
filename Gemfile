@@ -63,7 +63,7 @@ group :test do
   gem "formulaic", "~> 0.4.0"
   gem "launchy"
   gem "shoulda-matchers"
-  gem "simplecov", require: false
+  gem "simplecov", "~> 0.14.1", require: false
   gem "codeclimate-test-reporter", "~> 1.0.0"
   gem "timecop"
   gem "webmock"
