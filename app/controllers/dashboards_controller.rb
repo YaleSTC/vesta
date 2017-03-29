@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Controller for Dashboards
 class DashboardsController < ApplicationController
   before_action :authorize!
@@ -68,13 +69,18 @@ class DashboardsController < ApplicationController
     @college = College.first || College.new
     @draw = current_user.draw
     set_deadlines
-    group = current_user.group
-    @suite = group.suite if group.present?
+    set_group_info
+  end
+
+  def set_group_info
+    @group = current_user.group
+    @pending = current_user.memberships if @group.blank?
+    @suite = @group.suite if @group.present?
     @room = current_user.room if @suite.present?
   end
 
   def set_deadlines
-    return unless @draw.present?
+    return if @draw.blank?
     @intent_deadline = @draw.intent_deadline
     @locking_deadline = @draw.locking_deadline
   end

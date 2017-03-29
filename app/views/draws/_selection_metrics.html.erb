@@ -1,0 +1,13 @@
+<h3>Suite selection status</h3>
+<p>Other <%= headerize_size(group.size).downcase %> that have not yet selected a suite:</p>
+<ol>
+  <% without_suites.each do |g| %>
+    <% if g == group %>
+      <li>Your group!</li>
+    <% else %>
+      <li><%= link_to g.name, draw_group_path(draw, g) %></li>
+    <% end %>
+  <% end %>
+</ol>
+<p>Available suites:</p>
+<%= render 'groups/suites_table', suites: valid_suites %>
