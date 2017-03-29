@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawActivator do
@@ -25,13 +26,6 @@ RSpec.describe DrawActivator do
       result = described_class.activate(draw: draw)
       expect(result[:msg][:error]).to \
         include('Draw must have at least one student.')
-    end
-
-    it 'checks to make sure that there are enough beds for students' do
-      draw = instance_spy('draw', enough_beds?: false)
-      result = described_class.activate(draw: draw)
-      expect(result[:msg][:error]).to \
-        include('Draw must have at least one bed per student')
     end
 
     it 'updates the status of the draw to pre_lottery' do

@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 * Add printable group report for draws ([#488](https://github.com/YaleSTC/vesta/issues/488)).
 
+### Removed
+* Remove validation on the number of beds being greater or equal to the number
+  of students from draw activation ([#494](https://github.com/YaleSTC/vesta/issues/494)).
+
 ## v0.1.3 - 2017-03-29
 ### Fixed
 * Add several tweaks / improvements to the student experience ([#207](https://github.com/YaleSTC/vesta/issues/207)).
