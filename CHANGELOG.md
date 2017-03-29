@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 * Add printable group report for draws ([#488](https://github.com/YaleSTC/vesta/issues/488)).
 
+### Changed
+* Reps can now view the intent report but cannot use to change the intents of
+  other students ([#495](https://github.com/YaleSTC/vesta/issues/495)).
+
 ### Removed
 * Remove validation on the number of beds being greater or equal to the number
   of students from draw activation ([#494](https://github.com/YaleSTC/vesta/issues/494)).
