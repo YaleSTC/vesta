@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Draw student assignment' do
   let(:draw) { FactoryGirl.create(:draw) }
+
   before { log_in FactoryGirl.create(:admin) }
   describe 'bulk adding' do
     before { FactoryGirl.create_pair(:student, class_year: 2016) }
@@ -22,6 +24,7 @@ RSpec.feature 'Draw student assignment' do
 
   describe 'single user adding' do
     let!(:student) { FactoryGirl.create(:student, username: 'foo') }
+
     it 'can be performed' do
       visit student_summary_draw_path(draw)
       fill_in 'draw_student_assignment_form_username', with: 'foo'
@@ -33,6 +36,7 @@ RSpec.feature 'Draw student assignment' do
 
   describe 'single user removing' do
     let(:student) { FactoryGirl.create(:student, username: 'foo') }
+
     before { draw.students << student }
     it 'can be performed' do
       visit student_summary_draw_path(draw)
@@ -43,7 +47,7 @@ RSpec.feature 'Draw student assignment' do
 
     def remove_user(username:)
       fill_in 'draw_student_assignment_form_username', with: username
-      choose 'Remove'
+      select 'Remove'
       click_on 'Process'
     end
   end
