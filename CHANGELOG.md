@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## v0.1.3 - 2017-03-29
 ### Fixed
+* Add several tweaks / improvements to the student experience ([#207](https://github.com/YaleSTC/vesta/issues/207)).
 * Destroy pending memberships on invitation and request acceptance ([#513](https://github.com/YaleSTC/vesta/issues/513)).
 
 ## v0.1.2 - 2017-03-29

@@ -125,6 +125,13 @@
     </div>
     <hr />
   <% end %>
+  <% if policy(@draw).selection_metrics? %>
+    <div>
+      <%= render 'selection_metrics', draw: @draw, group: current_user.group,
+        without_suites: @without_suites, valid_suites: @valid_suites %>
+    </div>
+    <hr />
+  <% end %>
   <% if policy(@draw).group_report? %>
     <div class="group-report">
       <h3>Group Report</h3>

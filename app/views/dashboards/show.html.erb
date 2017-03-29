@@ -13,17 +13,30 @@
       <% end %>
     </div>
   </div>
-  <% if @draw.present? %>
+  <% if @draw.present? && !@draw.draft? %>
     <div class="card">
       <div class="card-divider">
         <h4>Your draw: <%= link_to @draw.name, draw_path(@draw) %></h4>
       </div>
       <div class="card-section">
+        <p>You are living <%= current_user.intent.humanize.downcase %>.</p>
         <% if @intent_deadline.present? %>
           <p>Deadline to submit intent: <%= @intent_deadline.strftime('%B %e') %></p>
         <% end %>
         <% if @locking_deadline.present? %>
           <p>Deadline to form a group: <%= @locking_deadline.strftime('%B %e') %></p>
+        <% end %>
+        <% if @group.present? %>
+          <p><%= link_to 'Your group', draw_group_path(@draw, @group) %>
+        (<%= size_str(@group.size).capitalize %>, <%= @group.status.humanize %>)</p>
+        <% elsif @pending.present? && !@pending.empty? %>
+          <hr />
+          <p>Your membership invitations and requests:</p>
+          <ul>
+            <% @pending.each do |m| %>
+              <li><%= link_to m.group.name, draw_group_path(@draw, m.group) %> (<%= m.status %>)</li>
+            <% end %>
+          </ul>
         <% end %>
       </div>
     </div>

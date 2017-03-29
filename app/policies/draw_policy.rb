@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Class for Draw permissions
 class DrawPolicy < ApplicationPolicy
   def show?
@@ -122,6 +122,10 @@ class DrawPolicy < ApplicationPolicy
 
   def results?
     (user.admin? || user.rep?) && record.results?
+  end
+
+  def selection_metrics?
+    (user.rep? || user.student?) && record.suite_selection?
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation

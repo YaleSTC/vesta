@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Controller for Draws
 class DrawsController < ApplicationController # rubocop:disable ClassLength
   prepend_before_action :set_draw, except: %i(index new create)
@@ -7,7 +7,9 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                                              start_selection
                                              lottery_confirmation)
 
-  def show; end
+  def show
+    calculate_selection_metrics if policy(@draw).selection_metrics?
+  end
 
   def index
     @draws = Draw.all.order(:name)
@@ -23,8 +25,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(action: 'new', **result)
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     result = Updater.new(object: @draw, name_method: :name,
@@ -255,6 +256,14 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     @ungrouped_students = UngroupedStudentsQuery.new(@draw.students).call
                                                 .group_by(&:intent)
     @ungrouped_students.delete('off_campus')
+  end
+
+  def calculate_selection_metrics
+    size = current_user.group.size
+    @without_suites = @draw.groups.includes(:suite)
+                           .where(size: size, suites: { group_id: nil })
+                           .order(:lottery_number)
+    @valid_suites = @draw.suites.available.where(medical: false, size: size)
   end
 
   def prepare_suites_edit_data # rubocop:disable AbcSize, MethodLength
