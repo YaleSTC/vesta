@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "2.4.1"
+ruby "2.3.3"
 
 gem "autoprefixer-rails", "~> 6.7.7"
 gem "delayed_job_active_record", "~> 4.1.1"
