@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Draw, type: :model do
@@ -35,6 +36,7 @@ RSpec.describe Draw, type: :model do
 
   describe '#suite_sizes' do
     let(:draw) { FactoryGirl.build_stubbed(:draw) }
+
     it 'returns an array of all the available suite sizes in the draw' do
       instance_spy('SuiteSizesQuery', call: [1, 2]).tap do |q|
         allow(SuiteSizesQuery).to receive(:new).with(draw.suites.available)
@@ -46,6 +48,7 @@ RSpec.describe Draw, type: :model do
 
   describe '#group_sizes' do
     let(:draw) { FactoryGirl.build_stubbed(:draw) }
+
     it 'returns an array of group sizes in the draw' do
       instance_spy('group_sizes_query', call: [1, 2]).tap do |q|
         allow(GroupSizesQuery).to receive(:new).with(draw.suites.available)
@@ -94,17 +97,17 @@ RSpec.describe Draw, type: :model do
   end
 
   describe '#enough_beds?' do
-    it 'returns true if bed_count >= student_count' do
+    it 'returns true if bed_count >= on_campus_student_count' do
       draw = FactoryGirl.build_stubbed(:draw)
       allow(draw).to receive(:bed_count).and_return(2)
-      allow(draw).to receive(:student_count).and_return(1)
+      allow(draw).to receive(:on_campus_student_count).and_return(1)
       expect(draw.enough_beds?).to be_truthy
     end
 
-    it 'returns false if bed_count < student_count' do
+    it 'returns false if bed_count < on_campus_student_count' do
       draw = FactoryGirl.build_stubbed(:draw)
       allow(draw).to receive(:bed_count).and_return(1)
-      allow(draw).to receive(:student_count).and_return(2)
+      allow(draw).to receive(:on_campus_student_count).and_return(2)
       expect(draw.enough_beds?).to be_falsey
     end
   end
@@ -162,6 +165,7 @@ RSpec.describe Draw, type: :model do
 
   describe '#all_intents_declared?' do
     let(:draw) { FactoryGirl.create(:draw_with_members) }
+
     it 'returns false if there are any undeclared students in the draw' do
       draw.students.first.update(intent: 'undeclared')
       expect(draw.all_intents_declared?).to be_falsey
@@ -226,8 +230,12 @@ RSpec.describe Draw, type: :model do
       draw.status = 'lottery'
       expect(draw).not_to be_before_lottery
     end
-    it 'returns false if the draw is in the lottery phase' do
+    it 'returns false if the draw is in the suite_selection phase' do
       draw.status = 'suite_selection'
+      expect(draw).not_to be_before_lottery
+    end
+    it 'returns false if the draw is in the results phase' do
+      draw.status = 'results'
       expect(draw).not_to be_before_lottery
     end
   end
@@ -259,6 +267,7 @@ RSpec.describe Draw, type: :model do
 
   describe '#lottery_complete?' do
     let(:draw) { FactoryGirl.create(:draw_in_lottery) }
+
     it 'returns true if all groups have lottery numbers assigned' do
       draw.groups.each { |g| g.update(lottery_number: 1) }
       expect(draw.lottery_complete?).to be_truthy

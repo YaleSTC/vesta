@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Fixed
+* Allow group lottery number removal ([#486](https://github.com/YaleSTC/vesta/issues/486)).
+
 ### Added
 * Add printable group report for draws ([#488](https://github.com/YaleSTC/vesta/issues/488)).
 
