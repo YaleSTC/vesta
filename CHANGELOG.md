@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v0.1.1 - 2017-03-29
 ### Fixed
 * Prevent students from performing suite selection ([#501](https://github.com/YaleSTC/vesta/issues/501)).
 
