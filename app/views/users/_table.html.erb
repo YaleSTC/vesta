@@ -5,7 +5,9 @@
       <td>First Name</td>
       <td>Username</td>
       <td>Class Year</td>
-      <td></td>
+      <% unless hide_actions %>
+        <td></td>
+      <% end %>
     </tr>
   </thead>
   <tbody>
@@ -15,7 +17,9 @@
         <td data-role="user-first_name"><%= user.first_name %></td>
         <td data-role="user-username"><%= user.username %></td>
         <td data-role="user-class_year"><%= user.class_year %></td>
-        <td class="actions" data-role="user-actions"><%= render 'users/actions', user: user  %></td>
+        <% unless hide_actions %>
+          <td class="actions" data-role="user-actions"><%= render 'users/actions', user: user  %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
