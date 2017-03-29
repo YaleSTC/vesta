@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 * Add printable group report for draws ([#488](https://github.com/YaleSTC/vesta/issues/488)).
+* Add size lock buttons to oversubscription page ([#497](https://github.com/YaleSTC/issues/497)).
 
 ### Changed
 * Remove user action buttons from the draw student summary ([#489](https://github.com/YaleSTC/vesta/issues/489)).
