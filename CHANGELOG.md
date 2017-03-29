@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 * Add printable group report for draws ([#488](https://github.com/YaleSTC/vesta/issues/488)).
 
 ### Changed
+* Remove user action buttons from the draw student summary ([#489](https://github.com/YaleSTC/vesta/issues/489)).
 * Reps can now view the intent report but cannot use to change the intents of
   other students ([#495](https://github.com/YaleSTC/vesta/issues/495)).
 

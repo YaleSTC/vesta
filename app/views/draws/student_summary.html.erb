@@ -24,8 +24,8 @@
 </div>
 <hr />
 <div class="students-list">
-  <h3>Students in draw</h3>
-  <%= render 'users/table', users: @students %>
+  <h3>Students in draw (<%= @students.count %> total)</h3>
+  <%= render 'users/table', users: @students, hide_actions: true %>
 </div>
 <hr />
 <%= link_to 'Return to draw', draw_path(@draw) %>
