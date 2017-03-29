@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Draw intent report' do
@@ -29,6 +30,14 @@ RSpec.feature 'Draw intent report' do
     visit intent_report_draw_path(draw)
     click_on 'Filter'
     expect(page_has_unfiltered_report(page, student, other)).to be_truthy
+  end
+
+  it 'does not display form when rep' do
+    create_student_data(draw: draw, intents: %w(on_campus))
+    log_in(FactoryGirl.create(:student, role: 'rep'))
+    visit draw_path(draw)
+    click_link('View intent report')
+    expect(page).to have_css('td[data-role="student-intent"]')
   end
 
   def create_student_data(draw:, intents: %w(on_campus))

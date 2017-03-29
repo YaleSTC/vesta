@@ -1,13 +1,17 @@
 # frozen_string_literal: true
-# rubocop:disable RSpec/NestedGroups
+
+# rubocop:disable RSpec/NestedGroups, RSpec/RepeatedExample
+# rubocop:disable RSpec/ScatteredSetup
 require 'rails_helper'
 
 RSpec.describe DrawPolicy do
   subject { described_class }
+
   let(:draw) { FactoryGirl.build_stubbed(:draw) }
 
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+
     permissions :show?, :suite_summary? do
       context 'not draft' do
         before { allow(draw).to receive(:draft?).and_return(false) }
@@ -70,14 +74,15 @@ RSpec.describe DrawPolicy do
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    permissions :show?, :suite_summary? do
+
+    permissions :show?, :suite_summary?, :intent_report?,
+                :filter_intent_report? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :edit?, :update?, :destroy?, :activate?, :intent_report?,
-                :filter_intent_report?, :student_summary?, :students_update?,
-                :oversubscription?, :toggle_size_lock?, :start_lottery?,
-                :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
-                :lock_all_sizes? do
+    permissions :edit?, :update?, :destroy?, :activate?, :student_summary?,
+                :students_update?, :oversubscription?, :toggle_size_lock?,
+                :start_lottery?, :lottery_confirmation?, :start_selection?,
+                :bulk_on_campus?, :lock_all_sizes? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -198,6 +203,7 @@ RSpec.describe DrawPolicy do
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+
     permissions :show?, :edit?, :update?, :destroy?, :intent_report?,
                 :filter_intent_report?, :suite_summary?, :suites_edit?,
                 :suites_update?, :student_summary?, :students_update?,

@@ -15,7 +15,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def intent_report?
-    edit?
+    user.admin? || user.rep?
   end
 
   def filter_intent_report?
