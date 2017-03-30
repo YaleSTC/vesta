@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Service object to unlock groups
 class GroupUnlocker
   # Initialize a new GroupUnlocker and call #unlock on it
@@ -22,6 +22,7 @@ class GroupUnlocker
     return error('Group has no locked memberships') unless group.unlockable?
     ActiveRecord::Base.transaction do
       locked_memberships.each { |m| m.update!(locked: false) }
+      group.status = 'full' if group.finalizing?
       group.update_status!
     end
     success

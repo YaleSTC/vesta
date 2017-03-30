@@ -58,7 +58,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   # SystemStackError under certain circumstances (skips callbacks).
   def update_status!
     assign_new_status
-    return unless  status && valid?
+    return unless status && valid?
     update_columns(status: status)
     send_locked_email if locked?
   end
