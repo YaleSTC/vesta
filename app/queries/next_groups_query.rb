@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query object to identify and return the next available groups to select
 # suites.
 class NextGroupsQuery
@@ -23,6 +23,7 @@ class NextGroupsQuery
   #   lottery number
   def call(draw:)
     lottery_number = next_lottery_number(draw)
+    return [] unless lottery_number
     @relation.where(draw: draw, lottery_number: lottery_number)
   end
 
