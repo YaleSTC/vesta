@@ -7,7 +7,7 @@
       <td>Groups</td>
       <td>Locked Groups</td>
       <td>Leftover Suites</td>
-      <% if policy(draw).toggle_size_lock? %>
+      <% if policy(draw).lock_all_sizes? %>
         <td></td>
       <% end %>
   </thead>
@@ -19,7 +19,7 @@
         <td data-role="group-count"><%= @group_counts[size] %></td>
         <td data-role="locked-count"><%= @locked_counts[size] %></td>
         <td data-role="oversubscription"><%= @diff[size] %></td>
-        <% if policy(draw).toggle_size_lock? %>
+        <% if policy(draw).lock_all_sizes? %>
           <td class="actions"><%= toggle_size_lock_btn(draw: draw, size: size, path: path) %></td>
         <% end %>
       </tr>
