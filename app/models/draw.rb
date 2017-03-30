@@ -147,6 +147,13 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
     %w(draft pre_lottery).include? status
   end
 
+  # Query method to check whether or not a draw is in the lottery phase or after
+  #
+  # @return [Boolean] whether or not the draw is in or past the lottery phase
+  def lottery_or_later?
+    %w(lottery suite_selection results).include? status
+  end
+
   # Query method to return whether or not all groups have lottery numbers
   # assigned
   #

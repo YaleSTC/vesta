@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Fixed
+* Ensure that all group reports display correctly ([#487](https://github.com/YaleSTC/vesta/issues/487)).
+
 ## v0.1.4 - 2017-03-29
 ### Fixed
 * Allow group lottery number removal ([#486](https://github.com/YaleSTC/vesta/issues/486)).

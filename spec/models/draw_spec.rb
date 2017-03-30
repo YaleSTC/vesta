@@ -240,6 +240,31 @@ RSpec.describe Draw, type: :model do
     end
   end
 
+  describe '#lottery_or_later?' do
+    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+
+    it 'returns true if draw is a draft' do
+      draw.status = 'draft'
+      expect(draw).not_to be_lottery_or_later
+    end
+    it 'returns true if draw is in the pre_lottery phase' do
+      draw.status = 'pre_lottery'
+      expect(draw).not_to be_lottery_or_later
+    end
+    it 'returns false if the draw is in the lottery phase' do
+      draw.status = 'lottery'
+      expect(draw).to be_lottery_or_later
+    end
+    it 'returns false if the draw is in the suite_selection phase' do
+      draw.status = 'suite_selection'
+      expect(draw).to be_lottery_or_later
+    end
+    it 'returns false if the draw is in the results phase' do
+      draw.status = 'results'
+      expect(draw).to be_lottery_or_later
+    end
+  end
+
   describe '#oversubscribed?' do
     it 'returns true if the draw is oversubscribed' do
       draw = FactoryGirl.create(:oversubscribed_draw)
