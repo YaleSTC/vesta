@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe NextGroupsQuery do
   let(:draw) { FactoryGirl.create(:draw_in_lottery, groups_count: 2) }
+
   before do
     draw.groups.each_with_index do |group, i|
       group.update(lottery_number: i + 1)
@@ -39,6 +41,11 @@ RSpec.describe NextGroupsQuery do
     draw.groups.each_with_index do |group, i|
       draw.suites[i].update(group_id: group.id)
     end
+    expect(described_class.call(draw: draw)).to match_array([])
+  end
+
+  it 'ignores groups with no lottery number' do
+    draw.groups.each { |g| g.update!(lottery_number: nil) }
     expect(described_class.call(draw: draw)).to match_array([])
   end
 
