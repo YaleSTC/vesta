@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 ### Fixed
 * Ensure that all group reports display correctly ([#487](https://github.com/YaleSTC/vesta/issues/487)).
+* Fix nav bar for special group members ([#474](https://github.com/YaleSTC/vesta/issues/474)).
 
 ## v0.1.4 - 2017-03-29
 ### Fixed
