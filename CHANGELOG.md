@@ -12,8 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 * Remove user action buttons from the draw student summary ([#489](https://github.com/YaleSTC/vesta/issues/489)).
-* Reps can now view the intent report but cannot use to change the intents of
-  other students ([#495](https://github.com/YaleSTC/vesta/issues/495)).
+* Allow reps to view the draw intent report ([#495](https://github.com/YaleSTC/vesta/issues/495)).
 
 ### Removed
 * Remove validation on the number of beds being greater or equal to the number
