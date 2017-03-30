@@ -1,13 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v0.1.4 - 2017-03-29
 ### Fixed
 * Allow group lottery number removal ([#486](https://github.com/YaleSTC/vesta/issues/486)).
+* Remove accidental ERB closing tags from joined group e-mail ([#520](https://github.com/YaleSTC/vesta/issues/520)).
 
 ### Added
 * Add printable group report for draws ([#488](https://github.com/YaleSTC/vesta/issues/488)).
-* Add size lock buttons to oversubscription page ([#497](https://github.com/YaleSTC/issues/497)).
+* Add size lock buttons to oversubscription page ([#497](https://github.com/YaleSTC/vesta/issues/497)).
 
 ### Changed
 * Remove user action buttons from the draw student summary ([#489](https://github.com/YaleSTC/vesta/issues/489)).
