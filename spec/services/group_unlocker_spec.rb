@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GroupUnlocker do
@@ -7,19 +8,28 @@ RSpec.describe GroupUnlocker do
   end
   describe '#unlock' do
     describe 'success' do
-      let(:group) { FactoryGirl.create(:locked_group) }
-      it 'returns a success flash' do
-        expect(described_class.unlock(group: group)[:msg].keys).to \
-          eq([:success])
+      shared_examples 'unlocks groups' do
+        it 'returns a success flash' do
+          expect(described_class.unlock(group: group)[:msg].keys).to \
+            eq([:success])
+        end
+        it 'updates the group status' do
+          described_class.unlock(group: group)
+          expect(group.reload).to be_full
+        end
       end
-      it 'updates the group status' do
-        described_class.unlock(group: group)
-        expect(group.reload).not_to be_locked
+
+      it_behaves_like 'unlocks groups' do
+        let(:group) { FactoryGirl.create(:locked_group) }
+      end
+      it_behaves_like 'unlocks groups' do
+        let(:group) { FactoryGirl.create(:finalizing_group) }
       end
     end
 
     context 'failure' do
       let(:group) { FactoryGirl.create(:open_group) }
+
       it 'returns an error flash' do
         expect(described_class.unlock(group: group)[:msg].keys).to eq([:error])
       end

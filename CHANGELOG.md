@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Allow reps to handle oversubscription and lock sizes ([#496](https://github.com/YaleSTC/vesta/issues/496)).
 * Allow students to easily navigate to the draw index ([#519](https://github.com/YaleSTC/vesta/issues/519)).
+* Ensure that unlocking a group removes the finalizing status ([#527](https://github.com/YaleSTC/vesta/issues/527)).
 
 ## v0.1.4 - 2017-03-29
 ### Fixed
