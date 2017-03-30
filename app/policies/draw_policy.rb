@@ -81,7 +81,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def group_report?
-    oversub_report?
+    !record.groups.empty?
   end
 
   def start_lottery?

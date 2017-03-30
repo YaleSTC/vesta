@@ -149,10 +149,10 @@
   <% if policy(@draw).group_report? %>
     <div class="group-report">
       <h3>Group Report</h3>
-      <% if @draw.lottery? || @draw.suite_selection? || @draw.results? %>
+      <% if @draw.lottery_or_later? %>
         <%= render 'groups/secondary_report', groups: @groups_by_size, path: draw_path(@draw),
           actions_partial: 'groups/actions' %>
-      <% else %>
+      <% elsif @draw.before_lottery? %>
         <%= render 'group_report', sizes: @sizes, groups: @groups_by_size,
           diff: @diff, group_counts: @group_counts, suite_counts: @suite_counts,
           actions_partial: 'groups/actions', path: draw_path(@draw) %>

@@ -50,7 +50,7 @@ RSpec.describe DrawPolicy do
       it { is_expected.not_to permit(user, draw) }
     end
 
-    permissions :oversub_report?, :group_report? do
+    permissions :oversub_report? do
       context 'when draw is pre lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         context 'when draw has suites' do
@@ -67,6 +67,19 @@ RSpec.describe DrawPolicy do
       end
       context 'when draw is not pre lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :group_report? do
+      context 'when draw has groups' do
+        before do
+          allow(draw).to receive(:groups).and_return([instance_spy('group')])
+        end
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'when draw has no groups' do
+        before { allow(draw).to receive(:groups).and_return([]) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -104,6 +117,40 @@ RSpec.describe DrawPolicy do
 
     permissions :intent_actions? do
       it { is_expected.to permit(user, draw) }
+    end
+
+    permissions :oversub_report? do
+      context 'when draw is pre lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        context 'when draw has suites' do
+          before do
+            allow(draw).to receive(:suites)
+              .and_return([instance_spy('suite')])
+          end
+          it { is_expected.to permit(user, draw) }
+        end
+        context 'when draw has no suites' do
+          before { allow(draw).to receive(:suites).and_return([]) }
+          it { is_expected.not_to permit(user, draw) }
+        end
+      end
+      context 'when draw is not pre lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :group_report? do
+      context 'when draw has groups' do
+        before do
+          allow(draw).to receive(:groups).and_return([instance_spy('group')])
+        end
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'when draw has no groups' do
+        before { allow(draw).to receive(:groups).and_return([]) }
+        it { is_expected.not_to permit(user, draw) }
+      end
     end
 
     permissions :lottery? do
@@ -270,7 +317,7 @@ RSpec.describe DrawPolicy do
       it { is_expected.to permit(user, draw) }
     end
 
-    permissions :oversub_report?, :group_report? do
+    permissions :oversub_report? do
       context 'when draw is pre lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         context 'when draw has suites' do
@@ -287,6 +334,19 @@ RSpec.describe DrawPolicy do
       end
       context 'when draw is not pre lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :group_report? do
+      context 'when draw has groups' do
+        before do
+          allow(draw).to receive(:groups).and_return([instance_spy('group')])
+        end
+        it { is_expected.to permit(user, draw) }
+      end
+      context 'when draw has no groups' do
+        before { allow(draw).to receive(:groups).and_return([]) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
