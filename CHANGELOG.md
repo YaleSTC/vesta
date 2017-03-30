@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+## v0.1.5 - 2017-03-30
 ### Fixed
 * Fix nav bar for special group members ([#474](https://github.com/YaleSTC/vesta/issues/474)).
 * Ensure that all group reports display correctly ([#487](https://github.com/YaleSTC/vesta/issues/487)).
@@ -14,6 +16,7 @@ All notable changes to this project will be documented in this file.
 * Allow reps to handle oversubscription and lock sizes ([#496](https://github.com/YaleSTC/vesta/issues/496)).
 * Allow students to easily navigate to the draw index ([#519](https://github.com/YaleSTC/vesta/issues/519)).
 * Ensure that unlocking a group removes the finalizing status ([#527](https://github.com/YaleSTC/vesta/issues/527)).
+* Improve display of ungrouped and undeclared users on draw page ([#531](https://github.com/YaleSTC/vesta/issues/531)).
 
 ## v0.1.4 - 2017-03-29
 ### Fixed
