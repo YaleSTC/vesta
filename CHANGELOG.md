@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 * Create secondary draws to handle ungrouped students after suite selection ([#162](https://github.com/YaleSTC/vesta/issues/162)).
+* Add HTTP --> HTTPS redirect for all traffic when deploying to AWS Elastic
+  Beanstalk ([#535](https://github.com/YaleSTC/vesta/issues/535)).
 
 ### Changed
 * Allow reps to handle oversubscription and lock sizes ([#496](https://github.com/YaleSTC/vesta/issues/496)).
