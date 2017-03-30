@@ -92,13 +92,13 @@ RSpec.describe DrawPolicy do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
 
     permissions :show?, :suite_summary?, :intent_report?,
-                :filter_intent_report? do
+                :filter_intent_report?, :toggle_size_lock? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :edit?, :update?, :destroy?, :activate?, :student_summary?,
-                :students_update?, :oversubscription?, :toggle_size_lock?,
-                :start_lottery?, :lottery_confirmation?, :start_selection?,
-                :bulk_on_campus?, :lock_all_sizes? do
+                :students_update?, :oversubscription?, :start_lottery?,
+                :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
+                :lock_all_sizes? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -115,6 +115,18 @@ RSpec.describe DrawPolicy do
       context 'pre-lottery draw' do
         before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         it { is_expected.to permit(user, draw) }
+      end
+    end
+
+    permissions :oversubscription? do
+      context 'when draw is pre_lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+
+      context 'when draw is not pre lottery' do
+        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
       end
     end
 
