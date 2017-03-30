@@ -22,14 +22,17 @@ RSpec.describe DrawPolicy do
         it { is_expected.not_to permit(user, draw) }
       end
     end
-    permissions :new?, :create?, :destroy?, :edit?, :update?, :activate?,
-                :intent_report?, :filter_intent_report?, :suites_edit?,
-                :suites_update?, :student_summary?, :students_update?,
-                :oversubscription?, :toggle_size_lock?, :start_lottery?,
-                :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
-                :select_suites?, :assign_suites?, :reminder?, :intent_reminder?,
+    permissions :destroy?, :edit?, :update?, :activate?, :intent_report?,
+                :filter_intent_report?, :suites_edit?, :suites_update?,
+                :student_summary?, :students_update?, :oversubscription?,
+                :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
+                :start_selection?, :bulk_on_campus?, :select_suites?,
+                :assign_suites?, :reminder?, :intent_reminder?,
                 :locking_reminder?, :lock_all_sizes?, :results? do
       it { is_expected.not_to permit(user, draw) }
+    end
+    permissions :new?, :create? do
+      it { is_expected.not_to permit(user, Draw) }
     end
     permissions :index? do
       it { is_expected.to permit(user, Draw) }

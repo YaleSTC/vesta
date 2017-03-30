@@ -1,13 +1,15 @@
 <ul class="dropdown menu" data-dropdown-menu>
-  <li>
-    <a href="#">Draws</a>
-    <ul class="menu vertical">
-      <% if current_user.draw && policy(current_user.draw).show? %>
+  <% if current_user.draw && policy(current_user.draw).show? %>
+    <li>
+      <a href="#">Draws</a>
+      <ul class="menu vertical">
         <li><%= link_to 'My Draw', draw_path(current_user.draw) %></li>
-      <% end %>
-      <li><%= link_to 'All Draws', draws_path %></li>
-    </ul>
-  </li>
+        <li><%= link_to 'All Draws', draws_path %></li>
+      </ul>
+    </li>
+  <% else %>
+    <li><%= link_to 'All Draws', draws_path %></li>
+  <% end %>
   <% if policy(current_user).edit_intent? %>
     <li><%= link_to 'Update Housing Intent', edit_intent_user_path(current_user) %></li>
   <% end %>

@@ -1,34 +1,37 @@
-<table>
-  <thead>
-    <tr>
-      <td>Name</td>
-      <td>Status</td>
-      <td># students</td>
-      <td># available suites</td>
-      <td># groups</td>
-      <td></td>
-    </tr>
-  </thead>
-  <tbody>
-    <% draws.each do |draw| %>
-      <% next unless policy(draw).show? %>
-      <tr id="draw-<%= draw.id %>">
-        <td data-role="draw-name"><%= link_to draw.name, draw_path(draw) %></td>
-        <td data-role="draw-status"><%= draw.status.humanize %></td>
-        <td data-role="draw-student-count"><%= draw.student_count %></td>
-        <td data-role="draw-suite-count"><%= draw.available_suite_count %></td>
-        <td data-role="draw-group-count"><%= draw.group_count %></td>
-        <td class="actions" data-role="draw-actions">
-          <%= link_to 'View', draw_path(draw), class: 'button' %>
-          <% if policy(draw).edit? %>
-            <%= link_to 'Edit', edit_draw_path(draw), class: 'button' %>
-          <% end %>
-          <% if policy(draw).destroy? %>
-            <%= link_to 'Delete', draw_path(draw), method: :delete, data: { confirm: 'Are you sure you want to delete this draw?' }, class: 'button alert' %>
-          <% end %>
-        </td>
+<% if draws.none? { |d| policy(d).show? } %>
+  <p>There are currently no active draws.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Status</td>
+        <td># students</td>
+        <td># available suites</td>
+        <td># groups</td>
+        <td></td>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-
+    </thead>
+    <tbody>
+      <% draws.each do |draw| %>
+        <% next unless policy(draw).show? %>
+        <tr id="draw-<%= draw.id %>">
+          <td data-role="draw-name"><%= link_to draw.name, draw_path(draw) %></td>
+          <td data-role="draw-status"><%= draw.status.humanize %></td>
+          <td data-role="draw-student-count"><%= draw.student_count %></td>
+          <td data-role="draw-suite-count"><%= draw.available_suite_count %></td>
+          <td data-role="draw-group-count"><%= draw.group_count %></td>
+          <td class="actions" data-role="draw-actions">
+            <%= link_to 'View', draw_path(draw), class: 'button' %>
+            <% if policy(draw).edit? %>
+              <%= link_to 'Edit', edit_draw_path(draw), class: 'button' %>
+            <% end %>
+            <% if policy(draw).destroy? %>
+              <%= link_to 'Delete', draw_path(draw), method: :delete, data: { confirm: 'Are you sure you want to delete this draw?' }, class: 'button alert' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
