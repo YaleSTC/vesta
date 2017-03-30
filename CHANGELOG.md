@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Added
+* Add HTTP --> HTTPS redirect for all traffic when deploying to AWS Elastic
+  Beanstalk ([#535](https://github.com/YaleSTC/vesta/issues/535)).
 
 ## v0.1.5 - 2017-03-30
 ### Fixed
