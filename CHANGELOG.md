@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 * Fix nav bar for special group members ([#474](https://github.com/YaleSTC/vesta/issues/474)).
 * Ensure that all group reports display correctly ([#487](https://github.com/YaleSTC/vesta/issues/487)).
 * Ensure that NextGroupsQuery ignores groups with no lottery number set ([#504](https://github.com/YaleSTC/vesta/issues/504)).
+* Allow students to easily navigate to the draw index ([#519](https://github.com/YaleSTC/vesta/issues/519)).
 
 ## v0.1.4 - 2017-03-29
 ### Fixed
