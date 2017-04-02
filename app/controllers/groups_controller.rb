@@ -7,7 +7,7 @@ class GroupsController < ApplicationController
   prepend_before_action :set_group, except: %i(new create index)
   prepend_before_action :set_draw
   before_action :authorize_draw!, except: %i(select_suite assign_suite show
-                                             assign_lottery)
+                                             assign_lottery index)
   before_action :set_form_data, only: %i(new edit)
 
   def show
