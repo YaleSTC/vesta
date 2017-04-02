@@ -125,7 +125,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def selection_metrics?
-    (user.rep? || user.student?) && record.suite_selection?
+    record.suite_selection? && user.draw == record && user.group.present?
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation
