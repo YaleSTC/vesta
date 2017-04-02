@@ -481,4 +481,43 @@ RSpec.describe DrawPolicy do
       end
     end
   end
+
+  context 'role-agnostic permissions' do
+    let(:user) { FactoryGirl.build_stubbed(:user) }
+
+    permissions :selection_metrics? do
+      context 'in suite selection' do
+        before { allow(draw).to receive(:suite_selection?).and_return(true) }
+
+        context 'user has group and is in draw' do
+          before do
+            allow(user).to receive(:draw).and_return(draw)
+            group = instance_spy('group', present?: true)
+            allow(user).to receive(:group).and_return(group)
+          end
+          it { is_expected.to permit(user, draw) }
+        end
+        context 'user has no group but is in draw' do
+          before do
+            allow(user).to receive(:draw).and_return(draw)
+            allow(user).to receive(:group).and_return(nil)
+          end
+          it { is_expected.not_to permit(user, draw) }
+        end
+        context 'user has a group but is not in draw' do
+          before do
+            allow(user).to receive(:draw).and_return(nil)
+            group = instance_spy('group', present?: true)
+            allow(user).to receive(:group).and_return(group)
+          end
+          it { is_expected.not_to permit(user, draw) }
+        end
+      end
+
+      context 'not in suite selection' do
+        before { allow(draw).to receive(:suite_selection?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+  end
 end
