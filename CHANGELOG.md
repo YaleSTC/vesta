@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Fixed
+* Allow reps to view the group report in all draw phases. ([#546](https://github.com/YaleSTC/vesta/issues/546)).
+
 ### Added
 * Add HTTP --> HTTPS redirect for all traffic when deploying to AWS Elastic
   Beanstalk ([#535](https://github.com/YaleSTC/vesta/issues/535)).
