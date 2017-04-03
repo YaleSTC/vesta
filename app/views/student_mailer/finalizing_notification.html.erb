@@ -5,7 +5,7 @@
   </head>
   <body>
     <p>Hi <%= @user.name %>,</p>
-    <p>Your group is now in the process of being confirmed. Please go to <%= "#{@college.site_url}#{@finalizing_path}" %> to confirm your membership.</p>
+    <p>Your group is now in the process of being confirmed. Please go to <a href="<%= @finalizing_url %>"><%= @finalizing_url %></a> to confirm your membership.</p>
     <p>Please e-mail <%= @college.admin_email %> if you have any questions.</p>
     <p>Sincerely,<br /><%= @college.dean %></p>
   </body>

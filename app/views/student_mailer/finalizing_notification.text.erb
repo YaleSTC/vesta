@@ -1,5 +1,5 @@
 Hi <%= @user.name %>,
-Your group is now in the process of being confirmed. Please go to <%= "#{@college.site_url}#{@finalizing_path}" %> to confirm your membership.
+Your group is now in the process of being confirmed. Please go to <%= @finalizing_url %> to confirm your membership.
 Please e-mail <%= @college.admin_email %> if you have any questions.
 Sincerely,
 <%= @college.dean %>

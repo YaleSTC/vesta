@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Mailer class for student e-mails
 class StudentMailer < ApplicationMailer
   # Send initial invitation to students in a draw
@@ -39,13 +39,14 @@ class StudentMailer < ApplicationMailer
   # @param user [User] the group leader to send the notification to
   # @param college [College] the college to pull settings from
   def finalizing_notification(user:, college: nil)
+    return unless user.group
     determine_college(college)
     @user = user
-    @finalizing_path = if user.group.draw
-                         draw_groups_url(user.group)
-                       else
-                         groups_url(user.group)
-                       end
+    @finalizing_url = if user.group.draw
+                        draw_group_url(user.draw, user.group)
+                      else
+                        group_url(user.group)
+                      end
     mail(to: @user.email, subject: 'Confirm your housing group')
   end
 
