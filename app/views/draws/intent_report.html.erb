@@ -12,27 +12,34 @@
     <% end %>
   </div>
   <hr />
-  <table>
-    <thead>
-      <tr>
-        <td>Last Name</td>
-        <td>First Name</td>
-        <td>Intent</td>
-      </tr>
-    </thead>
-    <tbody>
-      <% @students.each do |student| %>
-        <tr class="<%= student.intent %>">
-          <td data-role="student-last_name"><%= student.last_name %></td>
-          <td data-role="student-first_name"><%= student.first_name %></td>
-          <% if policy(student).update_intent? %>
-            <td class="intent-form" id="intent-form-<%= student.id %>" data-role="student-intent"><%= render 'intent_form', user: student %></td>
-          <% else %>
-            <td data-role="student-intent"><%= student.intent.humanize %></td>
+  <% if @students_by_intent.empty? %>
+    <p>There are no students in this draw yet!</p>
+  <% else %>
+    <% @intent_metrics.each do |intent, count| %>
+      <h3><%= intent %> (<%= pluralize(count, 'student') %>)</h3>
+      <table>
+        <thead>
+          <tr>
+            <td>Last Name</td>
+            <td>First Name</td>
+            <td>Intent</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% @students_by_intent[intent].each do |student| %>
+            <tr class="<%= student.intent %>">
+              <td data-role="student-last_name"><%= student.last_name %></td>
+              <td data-role="student-first_name"><%= student.first_name %></td>
+              <% if policy(student).update_intent? %>
+                <td class="intent-form" id="intent-form-<%= student.id %>" data-role="student-intent"><%= render 'intent_form', user: student %></td>
+              <% else %>
+                <td data-role="student-intent"><%= student.intent.humanize %></td>
+              <% end %>
+            </tr>
           <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+        </tbody>
+      </table>
+    <% end %>
+  <% end %>
 </div>
 <%= link_to 'Return to draw', draw_path(@draw) %>
