@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GroupsHelper, type: :helper do
@@ -31,6 +32,21 @@ RSpec.describe GroupsHelper, type: :helper do
         allow(group).to receive(:find_by).with(user_id: member.id)
           .and_return(membership)
       end
+    end
+  end
+
+  context '#sort_by_lottery' do
+    let(:group1) { instance_spy('group', lottery_number: 2) }
+    let(:leader1) { instance_spy('user', last_name: 'Foo') }
+    let(:group2) { instance_spy('group', lottery_number: nil, leader: leader1) }
+    let(:leader2) { instance_spy('user', last_name: 'Bar') }
+    let(:group3) { instance_spy('group', lottery_number: nil, leader: leader2) }
+    let(:group4) { instance_spy('group', lottery_number: 1) }
+    let!(:groups) { [group1, group2, group3, group4] }
+
+    it 'sorts groups by lottery number (nil first) then leader last name' do
+      expect(helper.sort_by_lottery(groups)).to \
+        match_array([group3, group2, group4, group1])
     end
   end
 end
