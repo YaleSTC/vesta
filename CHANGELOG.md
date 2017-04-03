@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 * Fix 404 page title ([#579](https://github.com/YaleSTC/vesta/issues/579)).
 * Permit students to view the draw page during suite selection ([#584](https://github.com/YaleSTC/vesta/issues/584)).
 
+### Added
+* Add intent counts to the intent report ([#539](https://github.com/YaleSTC/vesta/issues/539)).
+
 ## v0.1.7 - 2017-04-05
 ### Added
 * Add building names to suite labels where appropriate ([#561](https://github.com/YaleSTC/vesta/issues/561)).
