@@ -7,12 +7,26 @@ RSpec.describe Room, type: :model do
     subject { FactoryGirl.build(:room) }
 
     it { is_expected.to validate_presence_of(:number) }
-    it { is_expected.to validate_uniqueness_of(:number).case_insensitive }
     it { is_expected.to validate_presence_of(:beds) }
     it { is_expected.not_to allow_value(-1).for(:beds) }
     it { is_expected.to belong_to(:suite) }
     it { is_expected.to have_many(:users) }
     it { is_expected.to validate_presence_of(:suite) }
+
+    describe 'number uniqueness' do
+      it 'allows duplicates that belong to separate suites' do
+        number = 'L01'
+        FactoryGirl.create(:room, number: number)
+        room = FactoryGirl.build(:room, number: number)
+        expect(room.valid?).to be_truthy
+      end
+      it 'does not allow case-insensitive duplicates in the same suite' do
+        suite = FactoryGirl.create(:suite)
+        FactoryGirl.create(:room, number: 'L01', suite: suite)
+        room = FactoryGirl.build(:room, number: 'l01', suite: suite)
+        expect(room.valid?).to be_falsey
+      end
+    end
   end
 
   it 'nullify student room_id on deletion' do

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Model to represent the lowest-level of facility information
 #
 # @attr [String] number The identifier of the room. Must be unique
@@ -13,7 +13,7 @@ class Room < ApplicationRecord
 
   validates :suite, presence: true
   validates :number, presence: true, allow_blank: false,
-                     uniqueness: { case_senstive: false }
+                     uniqueness: { scope: :suite, case_sensitive: false }
   validates :beds, presence: true,
                    numericality: { only_integer: true,
                                    greater_than_or_equal_to: 0 }
@@ -56,6 +56,7 @@ class Room < ApplicationRecord
     update_suite_size_based_on_assignment if suite_id_changed?
   end
 
+  # rubocop:disable Rails/SkipsModelValidations
   def update_suite_size_based_on_beds
     delta = beds - beds_was
     suite.increment!(:size, delta)
@@ -74,4 +75,5 @@ class Room < ApplicationRecord
   def decrement_suite_size
     suite.decrement!(:size, beds)
   end
+  # rubocop:enable Rails/SkipsModelValidations
 end
