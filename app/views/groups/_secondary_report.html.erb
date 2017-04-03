@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <% groups[size].sort_by(&:lottery_number).each do |group| %>
+        <% sort_by_lottery(groups[size]).each do |group| %>
           <tr id="group-<%= group.id %>">
             <td data-role="group-leader"><%= group.leader.full_name %></td>
             <td data-role="group-status"><%= group.status.capitalize %></td>
