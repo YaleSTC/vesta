@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Fixed
+* Fix broken group confirmation e-mails ([#555](https://github.com/YaleSTC/vesta/issues/555)).
 
 ## v0.1.7 - 2017-04-05
 ### Added
