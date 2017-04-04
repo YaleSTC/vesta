@@ -40,7 +40,7 @@ RSpec.feature 'Draw suite selection' do
     def assign_suites(groups, suites)
       groups.each_with_index do |group, i|
         suite = suites[i]
-        select suite.number,
+        select suite.name,
                from: "bulk_suite_selection_form_suite_id_for_#{group.id}"
       end
       click_on 'Assign suites'

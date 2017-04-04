@@ -1,6 +1,6 @@
 <%= simple_form_for @room do |f| %>
   <%= f.input :number %>
   <%= f.input :beds %>
-  <%= f.association :suite, label_method: :number %>
+  <%= f.input :suite_id, as: :select, collection: Suite.all, label_method: :name %>
   <%= f.submit %>
 <% end %>

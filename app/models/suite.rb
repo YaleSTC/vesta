@@ -40,17 +40,24 @@ class Suite < ApplicationRecord
     "#{size}-pack"
   end
 
-  # Return the number of the suite with the names of any draws it belongs to.
+  # Return the building name with the suite number
+  #
+  # @return [String] the building name with the suite number
+  def name
+    "#{building.name} #{number}"
+  end
+
+  # Return the name of the suite with the names of any draws it belongs to.
   # Optionally excludes a single draw passed in.
   #
   # @param [Draw] the draw to exclude
-  # @return [String] the suite number with draw names
-  def number_with_draws(draw = nil)
-    return number if draws.empty?
+  # @return [String] the suite name with draw names
+  def name_with_draws(draw = nil)
+    return name if draws.empty?
     draws_to_display = draws.where.not(id: draw.try(:id))
-    return number if draws_to_display.empty?
+    return name if draws_to_display.empty?
     draws_str = draws_to_display.map(&:name).join(', ')
-    "#{number} (#{draws_str})"
+    "#{name} (#{draws_str})"
   end
 
   # Return whether or not a suite is available

@@ -14,7 +14,7 @@
     <% end %>
   <% end %>
 <% elsif @group.suite.present? %>
-  <h3>Suite: <%= @group.suite.number %></h3>
+  <h3>Suite: <%= @group.suite.name %></h3>
 <% end %>
 <hr />
 <div>
@@ -43,10 +43,10 @@
   </h3>
   <% unless @compatible_suites_no_draw.count.zero? %>
     <h4>Not in Any Draw</h4>
-    <%= render 'groups/suites_table', suites: @compatible_suites_no_draw %>
+    <%= render 'groups/suites_table', suites: @compatible_suites_no_draw.group_by(&:building) %>
   <% end %>
   <% unless @compatible_suites_in_draw.count.zero? %>
     <h4>In Draw(s)</h4>
-    <%= render 'groups/suites_table', suites: @compatible_suites_in_draw %>
+    <%= render 'groups/suites_table', suites: @compatible_suites_in_draw.group_by(&:building) %>
   <% end %>
 <% end %>

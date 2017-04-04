@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Suite, type: :model do
@@ -88,31 +89,31 @@ RSpec.describe Suite, type: :model do
     end
   end
 
-  describe '#number_with_draws' do
-    it 'returns the number if the suite belongs to no draws' do
+  describe '#name_with_draws' do
+    it 'returns the name if the suite belongs to no draws' do
       suite = FactoryGirl.build_stubbed(:suite)
       allow(suite).to receive(:draws).and_return([])
-      expect(suite.number_with_draws).to eq(suite.number)
+      expect(suite.name_with_draws).to eq(suite.name)
     end
-    it 'returns the number if the suite only belongs to the passed draw' do
+    it 'returns the name if the suite only belongs to the passed draw' do
       suite = FactoryGirl.create(:suite)
       draw = FactoryGirl.create(:draw)
       suite.draws << draw
-      expect(suite.number_with_draws(draw)).to eq(suite.number)
+      expect(suite.name_with_draws(draw)).to eq(suite.name)
     end
-    it 'returns the number with other draw names' do
+    it 'returns the name with other draw names' do
       suite = FactoryGirl.create(:suite)
       draw = FactoryGirl.create(:draw)
       suite.draws << draw
-      expected = "#{suite.number} (#{draw.name})"
-      expect(suite.number_with_draws).to eq(expected)
+      expected = "#{suite.name} (#{draw.name})"
+      expect(suite.name_with_draws).to eq(expected)
     end
     it 'excludes the passed draw' do
       draw = FactoryGirl.create(:draw_with_members, suites_count: 1,
                                                     students_count: 0)
       draw2 = FactoryGirl.create(:draw)
-      expected = "#{draw.suites.first.number} (#{draw.name})"
-      expect(draw.suites.first.number_with_draws(draw2)).to eq(expected)
+      expected = "#{draw.suites.first.name} (#{draw.name})"
+      expect(draw.suites.first.name_with_draws(draw2)).to eq(expected)
     end
   end
 
@@ -132,6 +133,7 @@ RSpec.describe Suite, type: :model do
     let(:single) { FactoryGirl.create(:single) }
     let(:double) { FactoryGirl.create(:double) }
     let(:common) { FactoryGirl.create(:room, beds: 0) }
+
     before do
       suite.rooms << single
       suite.rooms << double
@@ -189,6 +191,7 @@ RSpec.describe Suite, type: :model do
 
   describe '#number_with_medical' do
     let(:suite) { FactoryGirl.build_stubbed(:suite) }
+
     it 'returns the number if not a medical suite' do
       allow(suite).to receive(:medical).and_return(false)
       expect(suite.number_with_medical).to eq(suite.number)
@@ -197,6 +200,16 @@ RSpec.describe Suite, type: :model do
       allow(suite).to receive(:medical).and_return(true)
       expected = "#{suite.number} (medical)"
       expect(suite.number_with_medical).to eq(expected)
+    end
+  end
+
+  describe '#name' do
+    let(:suite) { FactoryGirl.build_stubbed(:suite) }
+    let(:building) { suite.building }
+
+    it 'returns the building name and suite number' do
+      expected = "#{building.name} #{suite.number}"
+      expect(suite.name).to eq(expected)
     end
   end
 end

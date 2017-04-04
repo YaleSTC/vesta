@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+## v0.1.7 - 2017-04-05
+### Added
+* Add building names to suite labels where appropriate ([#561](https://github.com/YaleSTC/vesta/issues/561)).
+
 ## v0.1.6 - 2017-04-05
 ### Fixed
 * Allow duplicate room numbers in different suites ([#261](https://github.com/YaleSTC/vesta/issues/261)).

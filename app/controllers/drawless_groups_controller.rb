@@ -9,9 +9,11 @@ class DrawlessGroupsController < ApplicationController
     if @group.draw.present?
       redirect_to(draw_group_path(@group.draw, @group)) && return
     end
-    @compatible_suites = Suite.available.where(size: @group.size).order(:number)
-    @compatible_suites_no_draw = @compatible_suites.includes(:draws)
-                                                   .where(draws: { id: nil })
+    @compatible_suites = Suite.available.where(size: @group.size)
+                              .includes(:building, :rooms).order(:number)
+    @compatible_suites_no_draw =
+      @compatible_suites.includes(:draws, :building, :rooms)
+                        .where(draws: { id: nil })
     @compatible_suites_in_draw = @compatible_suites - @compatible_suites_no_draw
 
     render layout: 'application_with_sidebar'

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Room Creation' do
@@ -18,6 +19,6 @@ RSpec.feature 'Room Creation' do
 
   def fill_in_room_info(suite:, **attrs)
     attrs.each { |a, v| fill_in a.to_s, with: v }
-    select(suite.number, from: 'room_suite_id')
+    select(suite.name, from: 'room_suite_id')
   end
 end

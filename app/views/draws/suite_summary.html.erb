@@ -1,6 +1,6 @@
 <% provide(:title, "#{@draw.name} - Suites") %>
 <h1 class="draw-name"><%= @draw.name %> - Suites</h1>
-<%= render 'suites/summary', sizes: @all_sizes, suites: @suites_by_size %>
+<%= render 'suites/summary', sizes: @all_sizes, suites: @suites_by_size, label_method: :name %>
 <hr />
 <% if policy(@draw).suites_edit? %>
   <p><%= link_to 'Edit suites', suites_edit_draw_path(@draw), class: 'button' %></p>
