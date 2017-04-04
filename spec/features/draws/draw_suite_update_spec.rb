@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Draw suite update' do
@@ -35,7 +36,7 @@ RSpec.feature 'Draw suite update' do
   end
 
   def add_drawn_suite(suite)
-    check suite.number_with_draws
+    check suite.name_with_draws
   end
 
   def add_undrawn_suite(suite)
