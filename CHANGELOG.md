@@ -11,6 +11,10 @@ All notable changes to this project will be documented in this file.
 * Add HTTP --> HTTPS redirect for all traffic when deploying to AWS Elastic
   Beanstalk ([#535](https://github.com/YaleSTC/vesta/issues/535)).
 
+### Changed
+* Permit group disbanding during suite selection only when there are no suites
+  left ([#563](https://github.com/YaleSTC/vesta/issues/563)).
+
 ## v0.1.5 - 2017-03-30
 ### Fixed
 * Fix nav bar for special group members ([#474](https://github.com/YaleSTC/vesta/issues/474)).
