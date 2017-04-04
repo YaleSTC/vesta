@@ -4,13 +4,13 @@
 <%= simple_form_for @suite_selector, url: assign_suites_draw_path(@draw), method: :patch do |f| %>
   <% @groups.each do |group| %>
     <div id="group-fields-<%= group.id %>" class="actions">
-      <h3 style="display: inline-block; margin-right: 0.3em;"><%= group.name %></h3>
-      <%= link_to 'Disband', draw_group_path(@draw, group, redirect_path: select_suites_draw_path(@draw)), method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert small' %>
+      <h3><%= group.name %></h3>
       <% if @suites_by_size[group.size] %>
         <%= f.label "suite_id_for_#{group.id}".to_sym, text: group.name, style: 'display: none;' %>
         <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size], label_method: :number %>
       <% else %>
         <p>There are no more suites of size <%= group.size %> available. You must disband this group to proceed and its members will have to regroup following this draw.</p>
+        <%= link_to 'Disband', draw_group_path(@draw, group, redirect_path: select_suites_draw_path(@draw)), method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert small' %>
       <% end %>
     </div>
     <hr />

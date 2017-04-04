@@ -22,11 +22,11 @@ RSpec.feature 'Draw suite selection' do
     end
 
     it 'permits disbanding of groups' do
+      draw.suites.delete_all
       visit draw_path(draw)
       click_on 'Select suites'
       within("#group-fields-#{groups.first.id}") { click_on 'Disband' }
-      expect(page).to have_css('.flash-notice',
-                               text: "Group #{groups.first.name} deleted")
+      expect(page).to have_css('.flash-notice', text: /Group.+deleted/)
     end
 
     it 'creates secondary draws if necessary' do
