@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v0.1.6 - 2017-04-05
 ### Fixed
 * Allow duplicate room numbers in different suites ([#261](https://github.com/YaleSTC/vesta/issues/261)).
 * Allow the draw page to be viewed during the lottery ([#544](https://github.com/YaleSTC/vesta/issues/544)).
@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   Beanstalk ([#535](https://github.com/YaleSTC/vesta/issues/535)).
 
 ### Changed
-* Permit group disbanding during suite selection only when there are no suites
+* Prevent group disbanding during suite selection when there are still suites
   left ([#563](https://github.com/YaleSTC/vesta/issues/563)).
 
 ## v0.1.5 - 2017-03-30
