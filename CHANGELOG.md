@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Changed
+* Re-enabled student suite selection
+([#502] (https://github.com/YaleSTC/vesta/issues/502)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed
@@ -84,4 +87,3 @@ All notable changes to this project will be documented in this file.
 
 ## v0.1.0 - 2017-03-28
 *Initial Release*
-

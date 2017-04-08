@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SuiteSelector do
@@ -48,6 +49,12 @@ RSpec.describe SuiteSelector do
         suite = mock_suite(id: 123, present: false)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
         expect(result[:msg].keys).to match([:error])
+      end
+      it 'fails if the group is not locked' do
+        group = instance_spy('group', suite: nil, locked?: false)
+        suite = mock_suite(id: 123)
+        result = described_class.select(group: group, suite_id: suite.id.to_s)
+        expect(result[:object]).to be_nil
       end
     end
     context' success' do

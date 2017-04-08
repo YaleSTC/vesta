@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to select suites for a given group.
 class SuiteSelector
@@ -39,13 +40,15 @@ class SuiteSelector
   attr_writer :errors
   attr_reader :group, :suite_id, :suite
 
-  def valid?
+  def valid? # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     if group_already_has_suite
       errors << 'Group already has a suite assigned.'
     elsif suite_id_missing
       errors << 'You must pass a suite id.'
     elsif suite_does_not_exist
       errors << 'Suite does not exist.'
+    elsif group_not_locked
+      errors << 'Group must be locked.'
     elsif suite_already_assigned
       errors << 'Suite is assigned to a different group'
     end
@@ -54,6 +57,10 @@ class SuiteSelector
 
   def group_already_has_suite
     group.suite.present?
+  end
+
+  def group_not_locked
+    !group.locked?
   end
 
   def suite_id_missing

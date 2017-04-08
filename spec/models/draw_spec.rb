@@ -10,6 +10,7 @@ RSpec.describe Draw, type: :model do
     it { is_expected.to have_many(:draws_suites) }
     it { is_expected.to have_many(:suites).through(:draws_suites) }
     it { is_expected.to validate_presence_of(:status) }
+    it { is_expected.to validate_presence_of(:suite_selection_mode) }
 
     it 'cannot lock intent if undeclared students' do
       draw = FactoryGirl.create(:draw, status: 'pre_lottery')

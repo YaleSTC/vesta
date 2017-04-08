@@ -5,13 +5,14 @@ require 'rails_helper'
 RSpec.feature 'Suite Selection' do
   context 'valid' do
     let(:leader) do
-      FactoryGirl.create(:draw_in_selection).next_groups.first.leader.tap do |l|
+      FactoryGirl.create(:draw_in_selection, suite_selection_mode:
+                  'student_selection')
+                 .next_groups.first.leader.tap do |l|
         l.update(password: 'password')
       end
     end
 
-    # not running because this was disabled for pilot
-    xit 'can be performed by group leaders' do
+    it 'can be performed by group leaders' do
       suite = leader.draw.suites.where(size: leader.group.size).first
       log_in leader
       select_suite(suite.number)
@@ -30,6 +31,27 @@ RSpec.feature 'Suite Selection' do
       FactoryGirl.create(:open_group).leader.tap do |l|
         l.update(password: 'password')
         l.reload
+      end
+    end
+
+    it 'link does not show' do
+      log_in leader
+      expect(page).not_to have_content('Select Suite')
+    end
+
+    it 'cannot reach page' do
+      log_in leader
+      visit select_suite_draw_group_path(leader.draw, leader.group)
+      expect(page).to have_content("don't have permission")
+    end
+  end
+
+  context 'admin mode' do
+    let(:leader) do
+      FactoryGirl.create(:draw_in_selection, suite_selection_mode:
+                  'admin_selection')
+                 .next_groups.first.leader.tap do |l|
+        l.update(password: 'password')
       end
     end
 

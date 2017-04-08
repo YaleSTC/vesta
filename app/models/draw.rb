@@ -26,6 +26,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
 
   validates :name, presence: true
   validates :status, presence: true
+  validates :suite_selection_mode, presence: true
 
   validate :cannot_lock_intent_if_undeclared,
            if: ->() { intent_locked_changed? }
@@ -34,6 +35,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
 
   enum status: %w(draft pre_lottery lottery suite_selection results)
   enum email_type: %w(intent locking)
+  enum suite_selection_mode: %w(admin_selection student_selection)
 
   # Finds all available suite sizes within a draw
   #
