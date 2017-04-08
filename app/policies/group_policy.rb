@@ -101,7 +101,8 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def select_suite?
-    user_has_uber_permission?(user)
+    user_has_uber_permission?(user) ||
+      student_can_select_suite?
   end
 
   def assign_suite?
@@ -115,6 +116,11 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   private
+
+  def student_can_select_suite?
+    return false unless record.draw.student_selection?
+    user.leader_of?(record) && record.draw.next_group?(record)
+  end
 
   def user_has_uber_permission?(user)
     user.rep? || user.admin?

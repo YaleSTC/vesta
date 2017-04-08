@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170327022019) do
+ActiveRecord::Schema.define(version: 20170415175000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,15 +50,16 @@ ActiveRecord::Schema.define(version: 20170327022019) do
 
   create_table "draws", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.integer  "status",           default: 0,     null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "status",               default: 0,     null: false
     t.date     "intent_deadline"
-    t.integer  "locked_sizes",     default: [],    null: false, array: true
-    t.boolean  "intent_locked",    default: false, null: false
+    t.integer  "locked_sizes",         default: [],    null: false, array: true
+    t.boolean  "intent_locked",        default: false, null: false
     t.datetime "last_email_sent"
     t.integer  "email_type"
     t.date     "locking_deadline"
+    t.integer  "suite_selection_mode", default: 0,     null: false
   end
 
   create_table "draws_suites", id: false, force: :cascade do |t|
