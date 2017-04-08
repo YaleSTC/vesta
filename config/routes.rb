@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable BlockLength
 Rails.application.routes.draw do
   devise_for :users
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
       post 'merge', to: 'suites#perform_merge'
       get 'split'
       post 'split', to: 'suites#perform_split'
+      post 'unmerge'
     end
   end
   resources :rooms, except: :index

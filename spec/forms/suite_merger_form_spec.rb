@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SuiteMergerForm, type: :model do
@@ -63,6 +64,7 @@ RSpec.describe SuiteMergerForm, type: :model do
 
   describe '#submit' do
     let(:suite) { FactoryGirl.create(:suite_with_rooms) }
+
     context 'success' do
       let(:other_suite) do
         FactoryGirl.create(:suite_with_rooms, building: suite.building)
@@ -71,6 +73,7 @@ RSpec.describe SuiteMergerForm, type: :model do
         other = FactoryGirl.create(:suite_with_rooms, building: suite.building)
         mock_params(other_suite_number: other.number, number: 'foo')
       end
+
       it 'creates a new suite of the combined size' do
         result = described_class.submit(suite: suite, params: params)
         expect(result[:object].size).to eq(suite.size + other_suite.size)
@@ -88,6 +91,15 @@ RSpec.describe SuiteMergerForm, type: :model do
         draw.suites << suite
         result = described_class.submit(suite: suite, params: params)
         expect(result[:object].draws.map(&:id)).to include(draw.id)
+      end
+      it 'calls :store_original_suite! on the rooms' do
+        # TODO: figure out why this fails
+        # also perhaps figure out how to test that this gets sent to each room
+        room = suite.rooms.first
+        allow(room).to receive(:store_original_suite!)
+          .with(any_args).and_return(room)
+        described_class.submit(suite: suite, params: params)
+        expect(room).to have_received(:store_original_suite!)
       end
       it 'returns nil for :form_object' do
         result = described_class.submit(suite: suite, params: params)

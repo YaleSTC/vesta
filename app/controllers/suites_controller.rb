@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Controller for Suites
 class SuitesController < ApplicationController
   prepend_before_action :set_suite, except: %i(new create index)
@@ -21,8 +22,7 @@ class SuitesController < ApplicationController
     handle_action(action: 'new', **result)
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     result = Updater.new(object: @suite, name_method: :number,
@@ -62,6 +62,11 @@ class SuitesController < ApplicationController
     result = SuiteSplitForm.submit(suite: @suite, params: suite_split_params)
     @split_form = result[:form_object] if result[:form_object]
     handle_action(path: building_path(@suite.building), **result)
+  end
+
+  def unmerge
+    result = SuiteUnmerger.unmerge(suite: @suite)
+    handle_action(**result)
   end
 
   private

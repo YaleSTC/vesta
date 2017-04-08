@@ -99,4 +99,17 @@ RSpec.describe Room, type: :model do
         change { new_suite.reload.size }.by(1)
     end
   end
+
+  describe '#store_original_suite!' do
+    it 'sets the original suite' do
+      room = FactoryGirl.create(:room)
+      expect { room.store_original_suite! }.to \
+        change { room.original_suite }.from('').to(room.suite.number)
+    end
+    it 'does not change anything if original suite already set' do
+      room = FactoryGirl.create(:room, original_suite: 'L01')
+      expect { room.store_original_suite! }.not_to \
+        change { room.original_suite }
+    end
+  end
 end
