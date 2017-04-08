@@ -21,6 +21,9 @@ All notable changes to this project will be documented in this file.
 * Fix n+3 query in suites summary partial ([#567](https://yale.githost.io/sdmp/rails/vesta/issues/567)).
 * Fix intermittent test failure in lottery number removal ([#532](https://yale.githost.io/sdmp/rails/vesta/issues/532)).
 
+### Added
+* Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
+
 ## v0.1.8 - 2017-04-19
 ### Fixed
 * Fix broken group confirmation e-mails ([#555](https://github.com/YaleSTC/vesta/issues/555)).

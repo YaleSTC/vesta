@@ -26,6 +26,10 @@ class SuitePolicy < ApplicationPolicy
     edit? && record.rooms.size >= 2
   end
 
+  def unmerge?
+    record.rooms.map(&:original_suite).none?(&:blank?) && edit?
+  end
+
   def view_draw?
     edit?
   end

@@ -39,6 +39,9 @@
   </div>
 <% end %>
 <hr />
+<% if policy(@suite).unmerge? %>
+  <p><%= link_to 'Unmerge suite', unmerge_building_suite_path(@building, @suite), class: 'button', method: :post %></p>
+<% end %>
 <% if policy(@suite).split? %>
   <p><%= link_to 'Split suite', split_building_suite_path(@building, @suite), class: 'button' %></p>
 <% end %>

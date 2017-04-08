@@ -64,6 +64,11 @@ class SuitesController < ApplicationController
     handle_action(path: building_path(@suite.building), **result)
   end
 
+  def unmerge
+    result = SuiteUnmerger.unmerge(suite: @suite)
+    handle_action(**result)
+  end
+
   private
 
   def authorize!

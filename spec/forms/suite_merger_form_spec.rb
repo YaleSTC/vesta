@@ -92,6 +92,16 @@ RSpec.describe SuiteMergerForm, type: :model do
         result = described_class.submit(suite: suite, params: params)
         expect(result[:record].draws.map(&:id)).to include(draw.id)
       end
+      # rubocop:disable RSpec/ExampleLength
+      it 'calls :store_original_suite! on the rooms' do
+        suite.rooms.each do |room|
+          allow(room).to receive(:store_original_suite!)
+            .with(any_args).and_return(room)
+        end
+        described_class.submit(suite: suite, params: params)
+        expect(suite.rooms).to all(have_received(:store_original_suite!))
+      end
+      # rubocop:enable RSpec/ExampleLength
       it 'returns nil for :form_object' do
         result = described_class.submit(suite: suite, params: params)
         expect(result[:form_object]).to be_nil
