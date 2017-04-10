@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Rails/Output
 
 puts 'Generating seed data....'
@@ -24,6 +25,8 @@ Generator.generate(model: 'user', count: 15)
 # fix this eventually so that we never generate empty suites
 Suite.where(size: 0).destroy_all
 
-Generator.generate(model: 'draw', count: 3)
+PreLotteryDrawGenerator.generate
+LotteryDrawGenerator.generate
+SuiteSelectionDrawGenerator.generate
 
 puts 'Finished!'
