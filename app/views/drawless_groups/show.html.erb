@@ -43,10 +43,10 @@
   </h3>
   <% unless @compatible_suites_no_draw.count.zero? %>
     <h4>Not in Any Draw</h4>
-    <%= render 'groups/suites_table', suites: @compatible_suites_no_draw.group_by(&:building) %>
+    <%= render 'groups/suites_table', suites: @compatible_suites_no_draw %>
   <% end %>
   <% unless @compatible_suites_in_draw.count.zero? %>
     <h4>In Draw(s)</h4>
-    <%= render 'groups/suites_table', suites: @compatible_suites_in_draw.group_by(&:building) %>
+    <%= render 'groups/suites_table', suites: @compatible_suites_in_draw %>
   <% end %>
 <% end %>

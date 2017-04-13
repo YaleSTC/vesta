@@ -7,11 +7,10 @@ RSpec.feature 'Draw suite selection' do
   let(:groups) { draw.groups.order(:lottery_number) }
   let(:suites) { draw.suites }
 
+  before { groups.first.update(lottery_number: 1) }
+
   context 'as admin' do
-    before do
-      groups.first.update(lottery_number: 1)
-      log_in FactoryGirl.create(:admin)
-    end
+    before { log_in FactoryGirl.create(:admin) }
 
     it 'can be done by admins' do
       visit draw_path(draw)
@@ -48,9 +47,19 @@ RSpec.feature 'Draw suite selection' do
   end
 
   context 'as rep' do
+    before { log_in FactoryGirl.create(:user, role: 'rep') }
+
+    it 'can view draw page' do
+      visit draw_path(draw)
+      expect(page).to have_content(draw.name)
+    end
+  end
+
+  context 'as student in group' do
     before do
-      groups.first.update(lottery_number: 1)
-      log_in FactoryGirl.create(:user, role: 'rep')
+      student = groups.first.leader
+      student.password = 'passw0rd'
+      log_in student
     end
 
     it 'can view draw page' do

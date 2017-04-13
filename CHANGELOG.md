@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 ### Fixed
 * Fix broken group confirmation e-mails ([#555](https://github.com/YaleSTC/vesta/issues/555)).
+* Fix 404 page title ([#579](https://github.com/YaleSTC/vesta/issues/579)).
+* Permit students to view the draw page during suite selection ([#584](https://github.com/YaleSTC/vesta/issues/584)).
 
 ## v0.1.7 - 2017-04-05
 ### Added
