@@ -9,12 +9,7 @@ class DrawlessGroupsController < ApplicationController
     if @group.draw.present?
       redirect_to(draw_group_path(@group.draw, @group)) && return
     end
-    @compatible_suites = Suite.available.where(size: @group.size)
-                              .includes(:building, :rooms).order(:number)
-    @compatible_suites_no_draw =
-      @compatible_suites.includes(:draws, :building, :rooms)
-                        .where(draws: { id: nil })
-    @compatible_suites_in_draw = @compatible_suites - @compatible_suites_no_draw
+    generate_suites_data
 
     render layout: 'application_with_sidebar'
   end
@@ -90,5 +85,15 @@ class DrawlessGroupsController < ApplicationController
     @students = UngroupedStudentsQuery.call
     @leader_students = @group.members.empty? ? @students : @group.members
     @suite_sizes = SuiteSizesQuery.call
+  end
+
+  def generate_suites_data
+    @compatible_suites = Suite.available.where(size: @group.size)
+                              .includes(:building, :rooms, :draws)
+                              .order(:number)
+    @compatible_suites_no_draw =
+      @compatible_suites.select { |s| s.draws.empty? }.group_by(&:building)
+    @compatible_suites_in_draw =
+      @compatible_suites.select { |s| s.draws.present? }.group_by(&:building)
   end
 end

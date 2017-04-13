@@ -264,7 +264,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     @without_suites = @draw.groups.includes(:suite)
                            .where(size: size, suites: { group_id: nil })
                            .order(:lottery_number)
-    @valid_suites = @draw.suites.available.where(medical: false, size: size)
+    @valid_suites = @draw.suites.includes(:building).available
+                         .where(medical: false, size: size).group_by(&:building)
   end
 
   def prepare_suites_edit_data # rubocop:disable AbcSize, MethodLength
