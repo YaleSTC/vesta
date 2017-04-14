@@ -47,6 +47,16 @@ RSpec.describe Suite, type: :model do
       change { group.leader.reload.room_id }.from(suite.rooms.first.id).to(nil)
   end
 
+  it 'removes other draws if already assigned' do
+    draw1 = FactoryGirl.create(:draw)
+    draw2 = FactoryGirl.create(:draw)
+    group = FactoryGirl.create(:locked_group, size: 1)
+    suite = FactoryGirl.create(:suite_with_rooms, draws: [draw1, draw2])
+    group.leader.update!(room_id: suite.rooms.first.id, draw: draw1)
+    expect { suite.update!(group_id: group.id) }.to \
+      change { suite.draws.to_a }.to([])
+  end
+
   it 'removes draws if changed to a medical suite' do
     draw = FactoryGirl.create(:draw)
     suite = FactoryGirl.create(:suite, draws: [draw])
