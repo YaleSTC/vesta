@@ -107,7 +107,7 @@ RSpec.describe DrawPolicy do
     permissions :index? do
       it { is_expected.to permit(user, Draw) }
     end
-    permissions :group_actions?, :create_new_group? do
+    permissions :group_actions? do
       context 'non-pre-lottery draw' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
@@ -300,8 +300,7 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :start_lottery?, :lottery_confirmation?, :oversubscription?,
-                :create_new_group? do
+    permissions :start_lottery?, :lottery_confirmation?, :oversubscription? do
       context 'when draw is pre_lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(true) }
         it { is_expected.to permit(user, draw) }

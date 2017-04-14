@@ -21,9 +21,7 @@ class GroupsController < ApplicationController
                    .group_by(&:size).sort.to_h
   end
 
-  def new
-    authorize @draw, :create_new_group?
-  end
+  def new; end
 
   def create
     p = group_params.to_h

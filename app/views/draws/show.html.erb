@@ -13,7 +13,7 @@
         <% if policy(@draw).lottery? %>
           <li><%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button' %></li>
         <% end %>
-        <% if policy(Group).new? && policy(@draw).create_new_group? %>
+        <% if policy(Group).new? && policy(@draw).group_actions? %>
           <li><%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %></li>
         <% end %>
         <% if @draw.oversubscribed? && policy(@draw).oversubscription? %>
