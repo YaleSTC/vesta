@@ -29,7 +29,7 @@ class Suite < ApplicationRecord
 
   before_save :clear_room_ids, ->(s) { s.group_id_changed? }
   before_save :remove_draw_from_medical_suites, ->(s) { s.medical_changed? }
-  before_save :remove_other_draws_after_assigned, ->(s) { s.group_id_changed?}
+  before_save :remove_other_draws_after_assigned, ->(s) { s.group_id_changed? }
 
   # Return the equivalent string for a given suite size
   #
