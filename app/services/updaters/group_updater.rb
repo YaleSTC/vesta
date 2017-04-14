@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Service object to update groups
 class GroupUpdater
   # Allows calling of :update on new instance of the class
@@ -39,6 +39,7 @@ class GroupUpdater
     @pending_users = { add: users(:member_ids), remove: users(:remove_ids) }
     delete_user_id_keys_from_params
     delete_leader_id_if_empty
+    delete_size_if_empty
   end
 
   def users(key)
@@ -57,6 +58,10 @@ class GroupUpdater
     params.delete(:leader_id) if params[:leader_id].empty?
   end
 
+  def delete_size_if_empty
+    params.delete(:size) if params[:size].blank?
+  end
+
   # Note that this occurs within the transaction
   def update_members
     remove_users if pending_users[:remove]
@@ -68,7 +73,9 @@ class GroupUpdater
   def remove_users
     ids = pending_users[:remove].map(&:id)
     group.memberships.where(user_id: ids).delete_all
+    # rubocop:disable Rails/SkipsModelValidations
     group.decrement!(:memberships_count, ids.size)
+    # rubocop:enable Rails/SkipsModelValidations
     group.update_status!
   end
 

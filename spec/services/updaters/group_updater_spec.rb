@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GroupUpdater do
@@ -31,6 +32,17 @@ RSpec.describe GroupUpdater do
                          to_h: { 'member_ids' => [to_add.id.to_s] })
         described_class.update(group: group, params: p)
         expect(to_add.reload.intent).to eq('on_campus')
+      end
+    end
+
+    context 'size is locked' do
+      it 'deletes the empty size key from the params' do
+        group = FactoryGirl.create(:full_group, size: 2)
+        p = instance_spy('ActionController::Parameters',
+                         to_h: { 'leader_id' => group.members.last.id.to_s,
+                                 'size' => '' })
+        result = described_class.update(group: group, params: p)
+        expect(result[:msg]).to have_key(:success)
       end
     end
 
