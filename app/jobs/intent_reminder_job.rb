@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Job to send intent deadline reminders
 class IntentReminderJob < ApplicationJob
   queue_as :default
@@ -7,7 +8,8 @@ class IntentReminderJob < ApplicationJob
   #
   # @param [Draw] the draw to send reminders in
   def perform(draw:)
-    draw.students.each { |s| send_email(s) }
+    students = draw.students.where(intent: %w(undeclared))
+    students.each { |s| send_email(s) }
   end
 
   private
