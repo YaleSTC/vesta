@@ -8,7 +8,7 @@
 <% end %>
 <hr />
 <p><%= link_to 'New Suite', new_suite_path, class: 'button secondary' if policy(Suite).new? %></p>
-
+<% if policy(SuiteImportForm).import? %>
 <h3>Import Suites</h3>
 <p>Add many suites at once by uploading a CSV file with the building information.
 The CSV must have the format "Number, Singles, Doubles" where Number is the 
@@ -30,4 +30,5 @@ and Doubles is the number of double bedrooms in the suite.</p>
     <%= link_to 'Delete', building_path(@building), method: :delete, data: { confirm: 'Are you sure you want to delete this building?' }, class: 'button alert' %>
   <% end %>
 </div>
+<% end %>
 <%= link_to 'View all buildings', buildings_path %>
