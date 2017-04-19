@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
 * Fix broken group confirmation e-mails ([#555](https://github.com/YaleSTC/vesta/issues/555)).
 * Fix 404 page title ([#579](https://github.com/YaleSTC/vesta/issues/579)).
 * Permit students to view the draw page during suite selection ([#584](https://github.com/YaleSTC/vesta/issues/584)).
-* Allow admins to do group CRUD regardless of draw state([#585](https://github.com/YaleSTC/vesta/issues/585)).
+* Allow admins to do group CRUD regardless of draw state ([#585](https://github.com/YaleSTC/vesta/issues/585)).
+* Humanize the intent report content ([#597](https://github.com/YaleSTC/vesta/issues/597)).
 
 ### Added
 * Add intent counts to the intent report ([#539](https://github.com/YaleSTC/vesta/issues/539)).
