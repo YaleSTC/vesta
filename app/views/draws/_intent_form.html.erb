@@ -1,3 +1,3 @@
 <%= simple_form_for user, url: update_intent_user_path(user), remote: :true do |f| %>
-  <%= f.input :intent, collection: User.intents.keys, as: :select, input_html: { class: 'autosubmitme' } %>
+  <%= f.input :intent, collection: User.intents.keys, label_method: :humanize, as: :select, input_html: { class: 'autosubmitme' } %>
 <% end %>

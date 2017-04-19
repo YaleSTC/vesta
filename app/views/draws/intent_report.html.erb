@@ -6,7 +6,7 @@
   <div class="report_filter">
     <h3>Filter students</h3>
     <%= simple_form_for @filter, url: intent_report_draw_path(@draw) do |f| %>
-      <%= f.input :intents, collection: User.intents.keys, as: :check_boxes,
+      <%= f.input :intents, collection: User.intents.keys, label_method: :humanize, as: :check_boxes,
         include_hidden: false, error: false %>
       <%= f.submit 'Filter' %>
     <% end %>
@@ -16,7 +16,7 @@
     <p>There are no students in this draw yet!</p>
   <% else %>
     <% @intent_metrics.each do |intent, count| %>
-      <h3><%= intent %> (<%= pluralize(count, 'student') %>)</h3>
+      <h3><%= intent.humanize %> (<%= pluralize(count, 'student') %>)</h3>
       <table>
         <thead>
           <tr>
