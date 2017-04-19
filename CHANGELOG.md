@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+## v0.1.8 - 2017-04-19
 ### Fixed
 * Fix broken group confirmation e-mails ([#555](https://github.com/YaleSTC/vesta/issues/555)).
 * Fix 404 page title ([#579](https://github.com/YaleSTC/vesta/issues/579)).
