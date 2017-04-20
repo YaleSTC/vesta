@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170327022019) do
+ActiveRecord::Schema.define(version: 20170408182142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,10 +95,11 @@ ActiveRecord::Schema.define(version: 20170327022019) do
 
   create_table "rooms", force: :cascade do |t|
     t.integer  "suite_id"
-    t.string   "number",                 null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "beds",       default: 0, null: false
+    t.string   "number",                      null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "beds",           default: 0,  null: false
+    t.string   "original_suite", default: "", null: false
     t.index ["suite_id"], name: "index_rooms_on_suite_id", using: :btree
   end
 

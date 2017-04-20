@@ -7,6 +7,8 @@
 # @attr [Integer] beds The number of beds within the room.
 #   For common rooms, this is 0.
 # @attr [Suite] suite belongs_to association for the Suite that the room is in.
+# @attr [String] original_suite The original suite that the room was in. Is an
+#   empty string unless the room belongs to a merged suite.
 class Room < ApplicationRecord
   belongs_to :suite
   has_many :users, dependent: :nullify
@@ -38,6 +40,16 @@ class Room < ApplicationRecord
   # @return [String] e.g. L01A (double)
   def number_with_type
     "#{number} (#{type})"
+  end
+
+  # Sets the original suite to the current suite, unless it is already set
+  #
+  # @params [Hash] attrs Other attributes to update
+  #
+  # @return [Boolean] Whether or not the update was successful
+  def store_original_suite!(**attrs)
+    attrs[:original_suite] = suite.number if original_suite.blank?
+    update!(attrs)
   end
 
   private

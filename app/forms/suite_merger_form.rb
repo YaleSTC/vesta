@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Form / service object for merging two suites together. Ensures suites belong
 # to the same building.
@@ -116,7 +117,7 @@ class SuiteMergerForm
   def destroy_and_create_suites(rooms: [], draws: [])
     destroy_old_suites
     new_suite = Suite.create!(number: number, building: suite.building)
-    rooms.each { |room| room.update!(suite_id: new_suite.id) }
+    rooms.each { |room| room.store_original_suite!(suite_id: new_suite.id) }
     draws.each { |draw| draw.suites << new_suite }
     new_suite.reload
   end
