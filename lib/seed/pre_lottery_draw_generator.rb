@@ -6,16 +6,13 @@ class PreLotteryDrawGenerator
     new(overrides: overrides).generate
   end
 
-  def initialize(overrides: {}); end
+  def initialize(overrides: {});  end
 
-  def generate
-    DrawGenerator.generate.tap do |d|
-      3.times { GroupGenerator.generate(draw: d) }
+  def generate(overrides: {})
+    DrawGenerator.generate(overrides: overrides).tap do |d|
+      3.times { GroupGenerator.generate(draw: d, overrides: overrides) }
       d.update(status: 'pre_lottery')
     end
   end
 
-  private
-
-  attr_reader :params
 end

@@ -7,7 +7,7 @@ class DrawGenerator
   end
 
   def initialize(overrides: {})
-    gen_params(overrides: overrides)
+    gen_params(overrides)
   end
 
   def generate

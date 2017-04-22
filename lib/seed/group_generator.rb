@@ -20,8 +20,8 @@ class GroupGenerator
 
   def gen_params(draw:, overrides: {})
     size = draw.suite_sizes.sample
-    members = Array.new(size) do
-      UserGenerator.generate(draw: draw, intent: 'on_campus')
+    members=Array.new(size) do |d|
+      UserGenerator.generate(draw: draw, intent: 'on_campus') 
     end
     @params ||= { leader: members.sample,
                   size: size,

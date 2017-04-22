@@ -10,7 +10,7 @@ describe LotteryDrawGenerator do
     end
 
     it 'makes the draw be in pre-lottery' do
-      expect(described_class.generate) .to be_lottery
+      expect(described_class.generate).to be_lottery
     end
   end
 end

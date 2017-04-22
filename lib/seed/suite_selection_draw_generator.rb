@@ -8,8 +8,8 @@ class SuiteSelectionDrawGenerator
 
   def initialize(overrides: {}); end
 
-  def generate
-    LotteryDrawGenerator.generate.tap do |d|
+  def generate(overrides: {})
+    LotteryDrawGenerator.generate(overrides: overrides).tap do |d|
       d.groups.each do |g|
         g.lottery_number = (g.id / 2).round
       end
@@ -17,7 +17,4 @@ class SuiteSelectionDrawGenerator
     end
   end
 
-  private
-
-  attr_reader :params
 end

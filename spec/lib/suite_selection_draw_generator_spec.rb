@@ -10,7 +10,7 @@ describe SuiteSelectionDrawGenerator do
     end
 
     it 'makes the draw be in pre-lottery' do
-      expect(described_class.generate) .to \
+      expect(described_class.generate).to \
         be_suite_selection
     end
   end
