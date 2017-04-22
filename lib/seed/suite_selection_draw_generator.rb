@@ -16,5 +16,4 @@ class SuiteSelectionDrawGenerator
       d.update(status: 'suite_selection')
     end
   end
-
 end

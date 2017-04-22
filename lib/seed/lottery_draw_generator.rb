@@ -6,7 +6,7 @@ class LotteryDrawGenerator
     new(overrides: overrides).generate
   end
 
-  def initialize(overrides: {});  end
+  def initialize(overrides: {}); end
 
   def generate(overrides: {})
     create_draw_params(overrides: overrides)
@@ -36,5 +36,4 @@ class LotteryDrawGenerator
       DrawLotteryStarter.start(draw: d)
     end
   end
-
 end

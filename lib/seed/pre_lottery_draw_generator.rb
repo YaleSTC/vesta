@@ -6,7 +6,7 @@ class PreLotteryDrawGenerator
     new(overrides: overrides).generate
   end
 
-  def initialize(overrides: {});  end
+  def initialize(overrides: {}); end
 
   def generate(overrides: {})
     DrawGenerator.generate(overrides: overrides).tap do |d|
@@ -14,5 +14,4 @@ class PreLotteryDrawGenerator
       d.update(status: 'pre_lottery')
     end
   end
-
 end
