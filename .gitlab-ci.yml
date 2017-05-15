@@ -1,0 +1,23 @@
+image: yale.githost.io:4678/sdmp/rails/docker-rails-capybara/image:latest
+
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: gitlab_ci_test
+  POSTGRES_USER: runner
+  POSTGRES_PASSWORD: ""
+
+test:
+  before_script:
+    - ruby -v
+    - which ruby
+    - gem install bundler --no-ri --no-rdoc
+  script:
+    - bundle check --path vendor/bundle || bundle install --path vendor/bundle
+    - cp config/database.yml.gitlab config/database.yml
+    - bundle exec rake check_style 'git diff origin/master --name-status'
+    - xvfb-run -a bundle exec rake
+  cache:
+    paths:
+      - vendor/bundle

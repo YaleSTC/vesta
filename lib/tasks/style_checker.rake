@@ -6,6 +6,8 @@ RUBY_PASS = %w(true no\ offenses files\ found).freeze
 EXISTING_FILES = /^[^D].*/
 FILE = /^[A-Z]\t(.*)$/
 
+DIFF_CMD = 'git diff master --name-status'
+
 desc 'Style checks files that differ from master'
 task :check_style do
   puts diff_output
@@ -45,9 +47,13 @@ def diff
   @diff ||= process_diff
 end
 
+def diff_cmd
+  @cmd ||= ARGV[1] || DIFF_CMD
+end
+
 def process_diff
-  all = `git diff master --name-status`
-  existing_files = all.split("\n").grep(EXISTING_FILES)
+  raw = `#{diff_cmd}`
+  existing_files = raw.split("\n").grep(EXISTING_FILES)
   existing_files.map! { |f| FILE.match(f) }.compact!
   existing_files.map { |f| f[1] }
 end
