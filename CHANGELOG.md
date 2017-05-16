@@ -3,8 +3,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Changed
-* Re-enabled student suite selection
-([#502] (https://github.com/YaleSTC/vesta/issues/502)).
+* Re-enable student suite selection ([#502](https://github.com/YaleSTC/vesta/issues/502)).
+* Update to Ruby v2.4.1 ([#607](https://yale.githost.io/sdmp/rails/vesta/issues/607)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed
