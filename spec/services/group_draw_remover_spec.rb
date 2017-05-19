@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe GroupDrawRemover do
-  describe '.remove' do
-    xit 'calls :remove on an instance of GroupDrawRemover'
-  end
-
   describe '#remove' do
     context 'success' do
       let(:member) { instance_spy('user', draw_id: 123) }

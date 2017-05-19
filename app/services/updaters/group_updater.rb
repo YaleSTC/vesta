@@ -2,10 +2,7 @@
 
 # Service object to update groups
 class GroupUpdater
-  # Allows calling of :update on new instance of the class
-  def self.update(**params)
-    new(**params).update
-  end
+  include Callable
 
   # Instantiates a new DrawlessGroupUpdater
   #
@@ -29,6 +26,8 @@ class GroupUpdater
   rescue ActiveRecord::RecordInvalid => error
     error(error)
   end
+
+  make_callable :update
 
   private
 

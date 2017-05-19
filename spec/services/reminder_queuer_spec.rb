@@ -1,12 +1,12 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ReminderQueuer do
-  xit 'test for .queue'
-
   context 'invalid reminder type' do
     let(:draw) { instance_spy('draw', update!: true) }
     let(:type) { 'foo' }
+
     it 'returns an error' do
       results = described_class.queue(draw: draw, type: type)
       expect(results[:msg].keys).to contain_exactly(:error)
@@ -29,6 +29,7 @@ RSpec.describe ReminderQueuer do
       end
     end
     let(:type) { 'intent' }
+
     it 'returns an error' do
       results = described_class.queue(draw: draw, type: type)
       expect(results[:msg].keys).to contain_exactly(:error)
@@ -41,6 +42,7 @@ RSpec.describe ReminderQueuer do
   end
   context 'success' do
     let(:draw) { instance_spy('draw', update!: true) }
+
     it 'returns success' do
       type = 'intent'
       allow(IntentReminderJob).to receive(:perform_later)

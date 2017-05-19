@@ -22,7 +22,7 @@ class DrawlessGroupsController < ApplicationController
   def new; end
 
   def create
-    result = DrawlessGroupCreator.new(drawless_group_params).create!
+    result = DrawlessGroupCreator.create(params: drawless_group_params)
     @group = result[:record]
     set_form_data unless result[:redirect_object]
     handle_action(action: 'new', **result)
@@ -39,7 +39,7 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def destroy
-    result = Destroyer.new(object: @group, name_method: :name).destroy
+    result = Destroyer.destroy(object: @group, name_method: :name)
     handle_action(path: groups_path, **result)
   end
 

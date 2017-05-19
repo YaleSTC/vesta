@@ -3,11 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe DrawStudentsUpdate do
-  describe '.update' do
-    xit 'calls :update on a new instance of DrawStudentsUpdate' do
-    end
-  end
-
   describe '#update' do
     context 'success' do
       it 'bulk-adds users of a passed class year' do

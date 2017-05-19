@@ -2,10 +2,7 @@
 
 # Service object to unlock groups
 class GroupUnlocker
-  # Initialize a new GroupUnlocker and call #unlock on it
-  def self.unlock(**params)
-    new(**params).unlock
-  end
+  include Callable
 
   # Initialize a GroupLocker
   #
@@ -28,6 +25,8 @@ class GroupUnlocker
   rescue ActiveRecord::RecordInvalid => errors
     error(error_messages(errors))
   end
+
+  make_callable :unlock
 
   private
 

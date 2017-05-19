@@ -3,10 +3,7 @@
 #
 # Service object to remove the suite from a given group.
 class SuiteRemover
-  # Allow for :remove to be called on the parent class
-  def self.remove(**params)
-    new(**params).remove
-  end
+  include Callable
 
   # Initialize a new SuiteRemover
   #
@@ -30,6 +27,8 @@ class SuiteRemover
       error
     end
   end
+
+  make_callable :remove
 
   private
 

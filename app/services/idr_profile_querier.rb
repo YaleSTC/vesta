@@ -1,13 +1,11 @@
 # frozen_string_literal: true
+
 require 'open-uri'
 
 # Service object to query the Yale IDR web service (or one similar to it) for
 # profile data. Expects an XML response, meant to be as general as possible.
 class IDRProfileQuerier
-  # Allows for :query to be called on the class itself
-  def self.query(**params)
-    new(**params).query
-  end
+  include Callable
 
   # Initialize a ProfileRequester
   #
@@ -29,6 +27,8 @@ class IDRProfileQuerier
     parse_results
     attr_hash
   end
+
+  make_callable :query
 
   private
 

@@ -2,9 +2,7 @@
 
 # Seed script generator for Rooms
 class RoomGenerator
-  def self.generate(**overrides)
-    new(overrides: overrides).generate
-  end
+  include Callable
 
   def initialize(overrides: {})
     gen_params(overrides: overrides)
@@ -13,6 +11,8 @@ class RoomGenerator
   def generate
     RoomCreator.new(params).create![:redirect_object]
   end
+
+  make_callable :generate
 
   private
 

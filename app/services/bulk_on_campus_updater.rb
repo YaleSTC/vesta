@@ -1,12 +1,8 @@
 # frozen_string_literal: true
 
-#
 # Service object to set all undeclared students in a draw to on_campus intent
 class BulkOnCampusUpdater
-  # allow calling :update on the base class
-  def self.update(**params)
-    new(**params).update
-  end
+  include Callable
 
   # Initialize a new instance of BulkOnCampusUpdater
   #
@@ -23,6 +19,8 @@ class BulkOnCampusUpdater
     put_all_undeclared_students_on_campus
     success
   end
+
+  make_callable :update
 
   private
 

@@ -2,9 +2,7 @@
 
 # Seed script generator for Users
 class UserGenerator
-  def self.generate(**overrides)
-    new(overrides: overrides).generate
-  end
+  include Callable
 
   def self.generate_admin(**overrides)
     new(overrides: overrides.merge(role: 'admin')).generate
@@ -19,6 +17,8 @@ class UserGenerator
     Creator.new(klass: User, params: params,
                 name_method: :name).create![:redirect_object]
   end
+
+  make_callable :generate
 
   private
 

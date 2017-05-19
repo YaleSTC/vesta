@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe SuiteSplitForm, type: :model do
-  describe '.submit' do
-    xit 'calls #submit on a new instance of SuiteSplitForm'
-  end
-
   describe 'validations' do
     it 'validates suite presence' do
       params = mock_params({})

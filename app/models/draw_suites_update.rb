@@ -4,15 +4,11 @@
 # Form / service object to handle the updating of draw suites
 class DrawSuitesUpdate
   include ActiveModel::Model
+  include Callable
 
   CONSOLIDATED_ATTRS = %i(suite_ids drawn_ids drawless_ids).freeze
 
   attr_reader(*CONSOLIDATED_ATTRS)
-
-  # permit :update to be called on the class object
-  def self.update(**params)
-    new(**params).update
-  end
 
   # Initialize a new DrawSuitesUpdate
   #
@@ -41,6 +37,8 @@ class DrawSuitesUpdate
   rescue ActiveRecord::RecordInvalid => error
     error(error)
   end
+
+  make_callable :update
 
   private
 

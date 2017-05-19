@@ -5,6 +5,7 @@
 # to the same building.
 class SuiteMergerForm
   include ActiveModel::Model
+  include Callable
 
   attr_reader :other_suite_number, :other_suite
   attr_writer :number
@@ -16,11 +17,6 @@ class SuiteMergerForm
   validate :both_suites_different
   validate :both_suites_in_same_building
   validate :both_suites_available
-
-  # Allows for calling :submit on the class object
-  def self.submit(**params)
-    new(**params).submit
-  end
 
   # Initialize a new SuiteMergerForm
   # @param suite [Suite] the base suite to merge into
@@ -56,6 +52,8 @@ class SuiteMergerForm
   rescue ActiveRecord::RecordInvalid => error
     error(error)
   end
+
+  make_callable :submit
 
   private
 

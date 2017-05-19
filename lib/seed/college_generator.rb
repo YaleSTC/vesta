@@ -2,9 +2,7 @@
 
 # Seed script generator for Colleges
 class CollegeGenerator
-  def self.generate(**overrides)
-    new(overrides: overrides).generate
-  end
+  include Callable
 
   def initialize(overrides: {})
     gen_params(overrides: overrides)
@@ -14,6 +12,8 @@ class CollegeGenerator
     Creator.new(klass: College, params: params, name_method: :name)
            .create![:redirect_object]
   end
+
+  make_callable :generate
 
   private
 

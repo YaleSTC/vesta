@@ -5,10 +5,7 @@
 # draw. Validates that the size is one for which there are currently available
 # suites.
 class DrawSizeLockToggler
-  # permit calling :toggle on the base class
-  def self.toggle(**params)
-    new(**params).toggle
-  end
+  include Callable
 
   # Initialize a new DrawSizeLockToggler
   #
@@ -26,6 +23,8 @@ class DrawSizeLockToggler
     return success if draw.save
     error(draw.errors.full_messages.join(', '))
   end
+
+  make_callable :toggle
 
   private
 

@@ -26,7 +26,7 @@ class GroupsController < ApplicationController
   def create
     p = group_params.to_h
     p[:leader_id] = current_user.id if current_user.student?
-    result = GroupCreator.new(p).create!
+    result = GroupCreator.create(params: p)
     @group = result[:record]
     set_form_data unless result[:redirect_object]
     handle_action(action: 'new', **result)
@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
   def edit; end
 
   def update
-    result = GroupUpdater.new(group: @group, params: group_params).update
+    result = GroupUpdater.update(group: @group, params: group_params)
     @group = result[:record]
     set_form_data unless result[:redirect_object]
     handle_action(action: 'edit', **result)

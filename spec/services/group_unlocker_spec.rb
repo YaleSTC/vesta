@@ -3,9 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe GroupUnlocker do
-  describe '.unlock' do
-    xit 'calls #unlock on a new instance'
-  end
   describe '#unlock' do
     describe 'success' do
       shared_examples 'unlocks groups' do

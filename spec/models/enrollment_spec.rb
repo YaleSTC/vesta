@@ -1,25 +1,13 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/fake_profile_querier'
 
 RSpec.describe Enrollment do
   context 'validations' do
     subject { described_class.new(ids: '') }
-    it { is_expected.to validate_presence_of(:ids) }
-  end
 
-  describe '.enroll' do
-    it 'calls :enroll on a new instance of Enrollment' do
-      enrollment = mock_enrollment(ids: 'foo')
-      described_class.enroll(ids: 'foo')
-      expect(enrollment).to have_received(:enroll)
-    end
-    def mock_enrollment(**params)
-      instance_spy('Enrollment').tap do |enrollment|
-        allow(described_class).to receive(:new).with(**params)
-          .and_return(enrollment)
-      end
-    end
+    it { is_expected.to validate_presence_of(:ids) }
   end
 
   describe '#enroll' do

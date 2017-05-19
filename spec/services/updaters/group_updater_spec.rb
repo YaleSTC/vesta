@@ -3,11 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe GroupUpdater do
-  describe '.update' do
-    xit 'allows for calling :update on the parent class' do
-    end
-  end
-
   describe '#update' do
     # rubocop:disable RSpec/ExampleLength
     context 'group is full' do

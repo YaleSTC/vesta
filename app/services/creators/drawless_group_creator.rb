@@ -1,15 +1,15 @@
 # frozen_string_literal: true
+
 #
 # Service object for 'special' (non-draw) housing groups
-# TODO: If we end up adding more shared behavior between GroupCreator and this
-# class, don't duplicate and either use inheritance or a module to keep things
-# DRY.
-class DrawlessGroupCreator < Creator
+class DrawlessGroupCreator
+  include Callable
+
   # Initialize a new SpecialGroupCreator
   #
   # @param params [#to_h] the params for the group
-  def initialize(params)
-    super(klass: Group, name_method: :name, params: params)
+  def initialize(params:)
+    @params = params.to_h.transform_keys(&:to_sym)
     process_params
   end
 
@@ -18,30 +18,36 @@ class DrawlessGroupCreator < Creator
   #
   # @return [Hash{Symbol=>Group,Hash}] a results hash with a message to set in
   #   flash an either `nil` or the created group.
-  def create!
+  def create
     ActiveRecord::Base.transaction do
       ensure_valid_members
-      @obj = Group.new(**params)
-      @obj.save!
+      @group = Group.new(**params)
+      @group.save!
     end
     success
   rescue ActiveRecord::RecordInvalid => e
     error(e.record)
   end
 
+  make_callable :create
+
   private
+
+  attr_reader :klass, :params, :name_method, :group
 
   def process_params
     @params = params.to_h.transform_keys(&:to_sym)
-    remove_blank_members if params[:member_ids]
-    remove_remove_ids_from_params if params[:remove_ids]
+    remove_blank_members
+    remove_remove_ids_from_params
   end
 
   def remove_blank_members
+    return unless params[:member_ids]
     @params[:member_ids] = params[:member_ids].reject(&:empty?)
   end
 
   def remove_remove_ids_from_params
+    return unless params[:remove_ids]
     @params.delete(:remove_ids)
   end
 
@@ -55,5 +61,23 @@ class DrawlessGroupCreator < Creator
   def all_member_ids
     return params[:leader_id] unless params[:member_ids].present?
     params[:member_ids] + [params[:leader_id]]
+  end
+
+  def success
+    {
+      redirect_object: group, record: group,
+      msg: { success: "#{group.name} created." }
+    }
+  end
+
+  def error(object = group)
+    errors = object.errors.full_messages
+    {
+      redirect_object: nil, record: group,
+      msg: {
+        error: "There was a problem creating the group: #{errors.join(', ')}. "\
+        'Please make sure you are not adding too many students.'
+      }
+    }
   end
 end

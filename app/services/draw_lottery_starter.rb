@@ -6,6 +6,7 @@
 # students, as well as no ungrouped students, and updates the status.
 class DrawLotteryStarter
   include ActiveModel::Model
+  include Callable
 
   attr_reader :draw
 
@@ -17,12 +18,6 @@ class DrawLotteryStarter
   validate :no_contested_suites, if: ->() { draw.present? }
   validate :all_groups_locked, if: ->() { draw.present? }
   validate :suite_sizes_available, if: ->() { draw.present? }
-
-  # Class method to permit calling :start on the class without instantiating the
-  # service object directly
-  def self.start(**params)
-    new(**params).start
-  end
 
   # Initialize a new DrawLotteryStarter
   #
@@ -41,6 +36,8 @@ class DrawLotteryStarter
     errors.add(:base, 'Draw update failed')
     error
   end
+
+  make_callable :start
 
   private
 

@@ -3,14 +3,6 @@
 #
 # Service object to update memberships
 class MembershipUpdater < Updater
-  # Class method to permit calling :update on the class without instantiating
-  # the service object directly
-  #
-  # @param params [Hash] any parameters to be passed to the initializer
-  def self.update(**params)
-    new(**params).update
-  end
-
   # Initialize a MembershipUpdater
   #
   # @param membership [Membership] The membership object to be updated

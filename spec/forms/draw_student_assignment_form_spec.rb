@@ -5,10 +5,6 @@ require 'rails_helper'
 RSpec.describe DrawStudentAssignmentForm, type: :model do
   let(:draw) { FactoryGirl.create(:draw) }
 
-  describe '.submit' do
-    xit 'allows for :submit to be called on the parent class'
-  end
-
   describe 'validations' do
     subject(:form_object) { described_class.new(draw: draw) }
 

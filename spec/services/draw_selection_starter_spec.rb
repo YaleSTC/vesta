@@ -1,17 +1,8 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe DrawSelectionStarter do
-  describe '.start' do
-    it 'calls :start on an instance of DrawSelectionStarter' do
-      draw = instance_spy('draw')
-      draw_selection_starter = mock_draw_selection_starter(draw: draw)
-      described_class.start(draw: draw)
-      expect(draw_selection_starter).to have_received(:start)
-    end
-  end
-
   describe '#start' do
     it 'checks to make sure that the draw is in lottery' do
       draw = instance_spy('draw', lottery?: false)

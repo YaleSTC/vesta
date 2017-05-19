@@ -4,6 +4,8 @@
 # Base class for updater service objects.
 # Handles param conversion, perisistance, and provides default messages.
 class Updater
+  include Callable
+
   # Initialize a new Updater.
   #
   # @param object [ApplicationRecord] The object to be updated
@@ -28,6 +30,8 @@ class Updater
       error
     end
   end
+
+  make_callable :update
 
   private
 

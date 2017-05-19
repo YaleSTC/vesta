@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 # Seed script generator for Draws
 class DrawGenerator
-  def self.generate(**overrides)
-    new(overrides: overrides).generate
-  end
+  include Callable
 
   def initialize(overrides: {})
     gen_params(overrides: overrides)
   end
 
   def generate
-    DrawCreator.new(params).create![:object]
+    Creator.create!(params: params, klass: Draw, name_method: :name)[:object]
   end
+
+  make_callable :generate
 
   private
 

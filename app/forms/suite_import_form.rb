@@ -4,14 +4,10 @@
 # Form Object for Suite Importing
 class SuiteImportForm
   include ActiveModel::Model
+  include Callable
   require 'csv'
 
   HEADER = %w(number singles doubles common).freeze
-
-  # Initialize a new SuiteImporter and call #import on it
-  def self.import(**params)
-    new(**params).import
-  end
 
   # Initialize a new SuiteImporter and call #import on it
   #
@@ -39,6 +35,8 @@ class SuiteImportForm
     end
     result
   end
+
+  make_callable :import
 
   private
 

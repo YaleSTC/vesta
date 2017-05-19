@@ -3,10 +3,7 @@
 #
 # Base class for destroyer service objects. Provides default messages.
 class Destroyer
-  # Call #destroy on a new instance
-  def self.destroy(**params)
-    new(**params).destroy
-  end
+  include Callable
 
   # Initialize a new Destroyer.
   #
@@ -31,6 +28,8 @@ class Destroyer
       error
     end
   end
+
+  make_callable :destroy
 
   private
 

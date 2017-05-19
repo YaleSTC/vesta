@@ -3,10 +3,7 @@
 #
 # Service object to finalize groups
 class GroupFinalizer
-  # Initialize a new GroupFinalizer and call #finalize on it
-  def self.finalize(**params)
-    new(**params).finalize
-  end
+  include Callable
 
   # Initialize a GroupFinalizer
   #
@@ -33,6 +30,8 @@ class GroupFinalizer
     @errors = failures
     error
   end
+
+  make_callable :finalize
 
   private
 

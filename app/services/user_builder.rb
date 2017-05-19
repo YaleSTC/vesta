@@ -4,10 +4,7 @@
 # Service object for building a user record for creation. Currently takes in a
 # username, ultimately will request data from IDR.
 class UserBuilder
-  # Allow for the calling of :build on the parent class
-  def self.build(**params)
-    new(**params).build
-  end
+  include Callable
 
   # Initialize a UserBuilder
   #
@@ -37,6 +34,8 @@ class UserBuilder
     assign_profile_attrs
     success
   end
+
+  make_callable :build
 
   # Returns whether the identifying attribute is already assigned to a different
   # user

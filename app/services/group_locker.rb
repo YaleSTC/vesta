@@ -3,10 +3,7 @@
 #
 # Service object to lock groups
 class GroupLocker
-  # Initialize a new GroupLocker and call #lock on it
-  def self.lock(**params)
-    new(**params).lock
-  end
+  include Callable
 
   # Initialize a GroupLocker
   #
@@ -29,6 +26,8 @@ class GroupLocker
   rescue ActiveRecord::RecordInvalid => errors
     error(errors.record.errors.full_messages)
   end
+
+  make_callable :lock
 
   private
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Controller for Buildings
 class BuildingsController < ApplicationController
   prepend_before_action :set_building, except: %i(new create index)
@@ -18,13 +19,13 @@ class BuildingsController < ApplicationController
   end
 
   def create
-    result = BuildingCreator.new(building_params).create!
+    result = Creator.create!(params: building_params, klass: Building,
+                             name_method: :name)
     @building = result[:record]
     handle_action(action: 'new', **result)
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     result = Updater.new(object: @building, name_method: :name,

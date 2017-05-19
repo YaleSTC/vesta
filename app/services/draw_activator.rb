@@ -4,13 +4,7 @@
 # draw has the correct status, updates the status, and sends e-mail invitations
 # to students in the draw.
 class DrawActivator
-  # Class method to permit calling :activate on the class without instantiating
-  # the service object directly
-  #
-  # @param draw [Draw] the draw in question
-  def self.activate(draw:)
-    new(draw: draw).activate
-  end
+  include Callable
 
   # Initialize a new DrawActivator
   #
@@ -34,6 +28,8 @@ class DrawActivator
     send_emails if currently_valid?
     currently_valid? ? success : error
   end
+
+  make_callable :activate
 
   private
 

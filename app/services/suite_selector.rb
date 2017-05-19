@@ -3,12 +3,9 @@
 #
 # Service object to select suites for a given group.
 class SuiteSelector
-  attr_reader :errors
+  include Callable
 
-  # Allow for :select to be called on the parent class
-  def self.select(**params)
-    new(**params).select
-  end
+  attr_reader :errors
 
   # Initialize a new SuiteSelector
   #
@@ -35,6 +32,8 @@ class SuiteSelector
       error
     end
   end
+
+  make_callable :select
 
   private
 

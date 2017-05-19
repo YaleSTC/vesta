@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'spec_helper'
+
+require 'rails_helper'
 
 REQUIRED_CONFIG_PARAMS =
   %w(PROFILE_REQUEST_URL PROFILE_REQUEST_QUERY_PARAM PROFILE_REQUEST_FIRST_NAME
@@ -25,14 +26,6 @@ DUMMY_PROFILE_HASH = { first_name: 'Jane', last_name: 'Smith',
                        college: 'AB' }.freeze
 
 RSpec.describe IDRProfileQuerier do
-  describe '.query' do
-    it 'calls :query on an instance of IDRProfileQuerier' do
-      profile_querier = mock_profile_querier(id: 'foo')
-      described_class.query(id: 'foo')
-      expect(profile_querier).to have_received(:query)
-    end
-  end
-
   describe '#query' do
     context 'success' do
       before do

@@ -20,7 +20,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def create
-    result = DrawCreator.new(draw_params).create!
+    result = Creator.create!(params: draw_params, klass: Draw,
+                             name_method: :name)
     @draw = result[:record]
     handle_action(action: 'new', **result)
   end
@@ -28,14 +29,14 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def edit; end
 
   def update
-    result = Updater.new(object: @draw, name_method: :name,
-                         params: draw_params).update
+    result = Updater.update(object: @draw, name_method: :name,
+                            params: draw_params)
     @draw = result[:record]
     handle_action(action: 'edit', **result)
   end
 
   def destroy
-    result = Destroyer.new(object: @draw, name_method: :name).destroy
+    result = Destroyer.destroy(object: @draw, name_method: :name)
     handle_action(path: draws_path, **result)
   end
 

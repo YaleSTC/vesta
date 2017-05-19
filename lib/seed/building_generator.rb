@@ -2,17 +2,18 @@
 
 # Seed script generator for Buildings
 class BuildingGenerator
-  def self.generate(**overrides)
-    new(overrides: overrides).generate
-  end
+  include Callable
 
   def initialize(overrides: {})
     gen_params(overrides: overrides)
   end
 
   def generate
-    BuildingCreator.new(params).create![:redirect_object]
+    Creator.create!(params: params, klass: Building,
+                    name_method: :name)[:redirect_object]
   end
+
+  make_callable :generate
 
   private
 

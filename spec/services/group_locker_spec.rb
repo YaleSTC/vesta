@@ -1,10 +1,8 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GroupLocker do
-  describe '.lock' do
-    xit 'calls #lock on a new instance'
-  end
   describe '#lock' do
     shared_examples 'success' do
       it 'returns a success flash' do

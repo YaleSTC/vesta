@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe SuiteMergerForm, type: :model do
-  describe '.submit' do
-    xit 'calls #submit on a new instance of SuiteMergerForm'
-  end
-
   describe 'validations' do
     it 'requires a suite' do
       params = mock_params(other_suite_number: '1234', number: 'foo')

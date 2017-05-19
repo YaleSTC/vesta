@@ -6,6 +6,8 @@
 #
 # @abstract
 class Creator
+  include Callable
+
   # Initialize a new Creator.
   #
   # @param klass [Class] The model class to be created.
@@ -33,6 +35,8 @@ class Creator
   rescue ActiveRecord::RecordInvalid => e
     error(e.record)
   end
+
+  make_callable :create!
 
   private
 

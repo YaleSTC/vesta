@@ -4,9 +4,6 @@ require 'rails_helper'
 
 RSpec.describe SuiteImportForm do
   include ActionDispatch::TestProcess
-  describe '.import' do
-    xit 'calls #import on a new instance'
-  end
 
   context 'valid csv' do
     let(:building) { instance_spy('Building') }

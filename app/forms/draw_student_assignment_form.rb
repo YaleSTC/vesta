@@ -6,6 +6,7 @@
 # saves their previeous draw ID so they can be restored.
 class DrawStudentAssignmentForm
   include ActiveModel::Model
+  include Callable
 
   attr_accessor :username, :adding
 
@@ -13,11 +14,6 @@ class DrawStudentAssignmentForm
   validates :adding, inclusion: { in: [true, false] }
   validate :student_found
   validate :student_valid
-
-  # Allows for calling :submit on the parent class
-  def self.submit(**params)
-    new(**params).submit
-  end
 
   # Initializes a DrawStudentAssignmentForm
   #
@@ -46,6 +42,8 @@ class DrawStudentAssignmentForm
   rescue ActiveRecord::RecordInvalid => error
     error(error)
   end
+
+  make_callable :submit
 
   private
 

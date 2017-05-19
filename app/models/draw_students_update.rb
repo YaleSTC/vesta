@@ -4,13 +4,9 @@
 # Form / service object to handle the updating of draw students
 class DrawStudentsUpdate
   include ActiveModel::Model
+  include Callable
 
   attr_reader :class_year, :to_add
-
-  # permit :update to be called on the parent class
-  def self.update(**params)
-    new(**params).update
-  end
 
   # Initialize a new DrawStudentsUpdate
   #
@@ -38,6 +34,8 @@ class DrawStudentsUpdate
   rescue ActiveRecord::RecordInvalid => error
     error(error)
   end
+
+  make_callable :update
 
   private
 

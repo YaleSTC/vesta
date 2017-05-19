@@ -3,15 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe SuiteRemover do
-  describe '.remove' do
-    it 'calls :remove on a new instance of SuiteRemover' do
-      group = instance_spy('group')
-      suite_remover = mock_suite_remover(group: group)
-      described_class.remove(group: group)
-      expect(suite_remover).to have_received(:remove)
-    end
-  end
-
   describe '#remove' do
     context 'failure' do
       it 'checks that the group has a suite' do

@@ -3,9 +3,7 @@
 #
 # Class to create memberships for many users with the same attributes
 class MembershipBatchCreator
-  def self.run(**params)
-    new(params).run
-  end
+  include Callable
 
   # Create a new MembershipBatchCreator
   #
@@ -14,7 +12,7 @@ class MembershipBatchCreator
   # @param [#to_h] params The params for the memberships
   def initialize(user_ids:, group:, **params)
     @users = User.find(user_ids.reject(&:empty?))
-    @params = params
+    @params = params.to_h
     @group = group
   end
 
@@ -26,10 +24,12 @@ class MembershipBatchCreator
   def run
     return error if too_many_invitations?
     @results = users.map do |u|
-      MembershipCreator.create!(params.to_h.merge(user: u, group: group))
+      MembershipCreator.create!(user: u, group: group, **params)
     end
     build_result
   end
+
+  make_callable :run
 
   private
 

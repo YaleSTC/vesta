@@ -6,17 +6,13 @@
 # assigned to the same draws as the original suite.
 class SuiteSplitForm
   include ActiveModel::Model
+  include Callable
 
   attr_accessor :suite
 
   validates :suite, presence: true
   validate :suite_has_at_least_two_rooms, if: ->(f) { f.suite.present? }
   validate :all_room_suite_numbers_present, if: ->(f) { f.suite.present? }
-
-  # Allows for calling :submit on the class object
-  def self.submit(**params)
-    new(**params).submit
-  end
 
   # Initialize a new SuiteSplitForm
   # @param suite [Suite] the base suite to merge into
@@ -44,6 +40,8 @@ class SuiteSplitForm
   rescue ActiveRecord::RecordInvalid => error
     error(error)
   end
+
+  make_callable :submit
 
   private
 

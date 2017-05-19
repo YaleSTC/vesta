@@ -3,15 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe SuiteSelector do
-  describe '.select' do
-    it 'calls :select on a new instance of SuiteSelector' do
-      group = instance_spy('group')
-      suite_selector = mock_suite_selector(group: group, suite_id: '123')
-      described_class.select(group: group, suite_id: '123')
-      expect(suite_selector).to have_received(:select)
-    end
-  end
-
   describe '#select' do
     context 'failure' do
       it 'checks that the suite_id is passed' do

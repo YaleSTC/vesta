@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Users Controller class
 class UsersController < ApplicationController
@@ -31,7 +32,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    result = UserCreator.new(user_params).create!
+    result = UserCreator.create!(params: user_params)
     @user = result[:user]
     handle_action(action: 'new', **result)
   end

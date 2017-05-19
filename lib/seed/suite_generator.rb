@@ -2,9 +2,7 @@
 
 # Seed script generator for Suites
 class SuiteGenerator
-  def self.generate(**overrides)
-    new(overrides: overrides).generate
-  end
+  include Callable
 
   def initialize(overrides: {})
     gen_params(overrides: overrides)
@@ -13,6 +11,8 @@ class SuiteGenerator
   def generate
     SuiteCreator.new(params).create![:redirect_object]
   end
+
+  make_callable :generate
 
   private
 

@@ -3,18 +3,13 @@
 #
 # Service object to create memberships.
 class MembershipCreator < Creator
-  # Class method to permit calling :create! on the class without instantiating
-  # the service object directly
-  #
-  # @param [#to_h] params The params for the membership
-  def self.create!(params)
-    new(params).create!
-  end
-
   # Initialize a MembershipCreator
   #
-  # @param [#to_h] params The params for the membership
-  def initialize(params)
+  # @param [User] user The user to create the membership for
+  # @param [Group] group The group to create the membership in
+  def initialize(user:, group:, **params)
+    params[:user] = user
+    params[:group] = group
     super(klass: Membership, name_method: nil, params: params)
   end
 

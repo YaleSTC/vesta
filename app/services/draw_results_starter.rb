@@ -5,16 +5,11 @@
 # students, as well as no ungrouped students, and updates the status.
 class DrawResultsStarter
   include ActiveModel::Model
+  include Callable
 
   # validates :draw, presence: :true
   validate :draw_in_selection_phase
   validate :no_more_suiteless_groups
-
-  # Class method to permit calling :start on the class without instantiating the
-  # service object directly
-  def self.start(**params)
-    new(**params).start
-  end
 
   # Initialize a new DrawResultsStarter
   #
@@ -43,6 +38,8 @@ class DrawResultsStarter
     errors.add(:base, "Draw update failed: #{e.message}")
     error
   end
+
+  make_callable :start
 
   private
 

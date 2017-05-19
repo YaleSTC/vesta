@@ -5,10 +5,7 @@
 # group. It handles the removal of the draw from all group members and destroys
 # all pending invitations and requests.
 class GroupDrawRemover
-  # permits the calling of :remove on the class
-  def self.remove(**params)
-    new(**params).remove
-  end
+  include Callable
 
   # Initializes a new GroupDrawRemover
   #
@@ -32,6 +29,8 @@ class GroupDrawRemover
   rescue ActiveRecord::ActiveRecordError => e
     error(e)
   end
+
+  make_callable :remove
 
   private
 

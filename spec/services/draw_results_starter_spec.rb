@@ -3,15 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe DrawResultsStarter do
-  describe '.start' do
-    it 'calls :start on an instance of DrawResultsStarter' do
-      draw = instance_spy('draw')
-      draw_results_starter = mock_draw_results_starter(draw: draw)
-      described_class.start(draw: draw)
-      expect(draw_results_starter).to have_received(:start)
-    end
-  end
-
   describe '#start' do
     it 'checks to make sure that the draw is in selection' do
       draw = instance_spy('draw', suite_selection?: false)

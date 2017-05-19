@@ -30,6 +30,8 @@ class GroupSuiteSelector < SuiteSelector
     end
   end
 
+  make_callable :select
+
   private
 
   attr_reader :mailer

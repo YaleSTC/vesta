@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe MembershipBatchCreator do
@@ -10,7 +11,7 @@ RSpec.describe MembershipBatchCreator do
     batch.run
     users.each do |u|
       expect(MembershipCreator).to have_received(:create!)
-        .with(params_hash.to_h.merge(user: u))
+        .with(**params_hash.to_h.merge(user: u))
     end
   end
 
@@ -18,7 +19,9 @@ RSpec.describe MembershipBatchCreator do
     it 'contains success and error' do
       result = described_class.run(user_ids: users.map { |u| u.id.to_s },
                                    **params_hash)
+      # rubocop:disable Style/MixinGrouping
       expect(result[:msg].keys).to include(:success, :error)
+      # rubocop:enable Style/MixinGrouping
     end
   end
 

@@ -3,17 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe DrawLotteryStarter do
-  # we may want to extract this into a shared example if we use this pattern
-  # across all of our service objects
-  describe '.start' do
-    it 'calls :start on an instance of DrawStarter' do
-      draw = instance_spy('draw')
-      draw_lottery_starter = mock_draw_lottery_starter(draw: draw)
-      described_class.start(draw: draw)
-      expect(draw_lottery_starter).to have_received(:start)
-    end
-  end
-
   describe '#start' do
     context 'validations' do
       it 'draw is in pre-lottery' do

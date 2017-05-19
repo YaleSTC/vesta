@@ -4,16 +4,12 @@
 # @attr ids [String] the admin-entered string of multiple user IDs to import
 class Enrollment
   include ActiveModel::Model
+  include Callable
 
   attr_reader :successes
   attr_accessor :ids, :ids_array
 
   validates :ids, presence: true
-
-  # Allow for the calling of :enroll on the parent class
-  def self.enroll(**params)
-    new(**params).enroll
-  end
 
   # Initialize an Enrollment
   #
@@ -44,6 +40,8 @@ class Enrollment
     ids_array.each { |id| process_id(id) }
     build_result
   end
+
+  make_callable :enroll
 
   # View helper to determine whether or not user records will have the :username
   # attribute set (as opposed to checking for CAS directly). Assumes that if the

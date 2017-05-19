@@ -1,15 +1,8 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UserBuilder do
-  describe '.build' do
-    it 'calls :build on an instance of UserBuilder' do
-      user_builder = mock_user_builder(id_attr: 'foo')
-      described_class.build(id_attr: 'foo')
-      expect(user_builder).to have_received(:build)
-    end
-  end
-
   describe '#build' do
     context 'success' do
       it 'returns instance of User class' do

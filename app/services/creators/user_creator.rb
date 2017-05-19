@@ -3,16 +3,13 @@
 #
 # Service object to create users.
 class UserCreator
-  # Allow for the calling of :create! on the parent class
-  def self.create!(params)
-    new(params).create!
-  end
+  include Callable
 
   # Initialize a UserCreator
   #
   # @param [ActionController::Parameters] params The params object from
   #   the UsersController.
-  def initialize(params, mailer = UserMailer)
+  def initialize(params:, mailer: UserMailer)
     @params = params.to_h.transform_keys(&:to_sym)
     @mailer = mailer
     @user = User.new(@params)
@@ -30,6 +27,8 @@ class UserCreator
     mailer.new_user_confirmation(user: user, password: password).deliver_later
     success
   end
+
+  make_callable :create!
 
   private
 

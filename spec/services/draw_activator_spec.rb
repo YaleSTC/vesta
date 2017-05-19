@@ -3,17 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe DrawActivator do
-  # we may want to extract this into a shared example if we use this pattern
-  # across all of our service objects
-  describe '.start' do
-    it 'calls :start on an instance of DrawStarter' do
-      draw = instance_spy('draw')
-      draw_activator = mock_draw_activator(draw: draw)
-      described_class.activate(draw: draw)
-      expect(draw_activator).to have_received(:activate)
-    end
-  end
-
   describe '#activate' do
     it 'checks to make sure that the draw is a draft' do
       draw = instance_spy('draw', draft?: false)

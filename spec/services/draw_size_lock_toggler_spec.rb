@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe DrawSizeLockToggler do
-  describe '.toggle' do
-    xit 'calls :toggle on an instance of DrawSizeLockToggler'
-  end
-
   describe '#toggle' do
     let(:draw) { FactoryGirl.create(:draw_with_members) }
 

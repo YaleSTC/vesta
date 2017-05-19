@@ -3,10 +3,7 @@
 #
 # Class to enqueue reminder email jobs
 class ReminderQueuer
-  # Create new instance of ReminderQueuer, call #queue on it
-  def self.queue(**params)
-    new(**params).queue
-  end
+  include Callable
 
   # Initialize a new ReminderQueuer
   #
@@ -27,6 +24,8 @@ class ReminderQueuer
   rescue ArgumentError => e
     error(e.message)
   end
+
+  make_callable :queue
 
   private
 

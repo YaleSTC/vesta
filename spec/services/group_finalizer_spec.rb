@@ -3,9 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe GroupFinalizer do
-  describe '.finalize' do
-    xit 'calls #finalize on a new instance'
-  end
   context 'successful' do
     let(:group) { mock_group }
 
