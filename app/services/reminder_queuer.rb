@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Class to enqueue reminder email jobs
 class ReminderQueuer
@@ -45,14 +46,14 @@ class ReminderQueuer
 
   def success
     {
-      object: @draw,
+      redirect_object: @draw,
       msg: { notice: "Sent #{type} reminders." }
     }
   end
 
   def error(error)
     {
-      object: @draw,
+      redirect_object: @draw,
       msg: { error: "Error sending #{type} reminders: #{error}." }
     }
   end

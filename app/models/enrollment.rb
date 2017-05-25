@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Form object for user enrollments (bulk creation / import)
 # @attr ids [String] the admin-entered string of multiple user IDs to import
 class Enrollment
@@ -38,7 +39,7 @@ class Enrollment
   #
   # @return [Hash{Symbol=>Array,Hash,Nil}] a results hash with the message(s) to
   #   set in the appropriate flashes as well as the created user objects and the
-  #   controller action to render. Always sets :object as nil.
+  #   controller action to render. Always sets :redirect_object as nil.
   def enroll
     ids_array.each { |id| process_id(id) }
     build_result
@@ -83,7 +84,7 @@ class Enrollment
 
   def build_result
     {
-      object: nil, users: successes.map { |s| s[:user] },
+      redirect_object: nil, users: successes.map { |s| s[:user] },
       msg: { success: success_msg, alert: alert_msg,
              error: failure_msg },
       action: action_to_render,

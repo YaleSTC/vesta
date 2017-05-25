@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service objects for group leaders to select a suite for their group.
 class GroupSuiteSelector < SuiteSelector
@@ -18,7 +19,8 @@ class GroupSuiteSelector < SuiteSelector
   # group. Notifies next groups to select suites.
   #
   # @return [Hash{symbol=>Group,Hash}] a results hash with a message to set in
-  #   the flash, nil or the group as the :object, and an action to render.
+  #   the flash, nil or the group as the :redirect_object,
+  #   and an action to render.
   def select
     if assign_suite_to_group
       notify_next_groups
@@ -44,7 +46,7 @@ class GroupSuiteSelector < SuiteSelector
 
   def success
     {
-      object: [group.draw, group],
+      redirect_object: [group.draw, group],
       msg: { success: "Suite #{suite.number} assigned to #{group.name}" }
     }
   end

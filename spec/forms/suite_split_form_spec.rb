@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SuiteSplitForm, type: :model do
@@ -30,8 +31,10 @@ RSpec.describe SuiteSplitForm, type: :model do
 
   describe '#submit' do
     let(:suite) { FactoryGirl.create(:suite_with_rooms, rooms_count: 2) }
+
     context 'success' do
       let(:params) { valid_params(suite) }
+
       it 'creates a new suite of the combined size' do
         result = described_class.submit(suite: suite, params: params)
         expect(result[:suites].length).to eq(2)
@@ -56,9 +59,9 @@ RSpec.describe SuiteSplitForm, type: :model do
         result = described_class.submit(suite: suite, params: params)
         expect(result[:suites].first.rooms).to eq([room])
       end
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :form_object to nil' do
         result = described_class.submit(suite: suite, params: params)
@@ -72,9 +75,10 @@ RSpec.describe SuiteSplitForm, type: :model do
 
     context 'failures' do
       let(:params) { mock_params({}) }
+
       it 'returns the original suite as the object' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:object]).to eq(suite)
+        expect(result[:redirect_object]).to eq(suite)
       end
       it 'returns the form object' do
         object = described_class.new(suite: suite, params: params)

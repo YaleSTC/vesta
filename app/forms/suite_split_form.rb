@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Form / service object for splitting a suite into two or more smaller suites.
 # Ensures that all rooms are assigned to new suites and that new suites are
@@ -30,9 +31,9 @@ class SuiteSplitForm
   # new suite to the draw(s) that the original suites belonged to.
   #
   # @return [Hash{Symbol=>String,SuiteSplitForm,Nil,Suite,Hash}] a results hash
-  #   for `handle_action`, sets the :object to either the new suite or the
-  #   original suite, :form_object to nil if success or self if failure, and a
-  #   flash message
+  #   for `handle_action`, sets the :redirect_object to either the new suite or
+  #   the original suite, :form_object to nil if success or self if failure,
+  #   and a flash message
   def submit
     return error(errors.full_messages.join(', ')) unless valid?
     @new_suites = ActiveRecord::Base.transaction do
@@ -103,14 +104,14 @@ class SuiteSplitForm
 
   def success
     {
-      object: nil, form_object: nil, suites: new_suites,
+      redirect_object: nil, form_object: nil, suites: new_suites,
       msg: { success: 'Suite successfully split' }
     }
   end
 
   def error(errors)
     {
-      object: suite, form_object: self, suites: nil,
+      redirect_object: suite, form_object: self, suites: nil,
       msg: { error: "Suite split failed: #{errors}" }
     }
   end

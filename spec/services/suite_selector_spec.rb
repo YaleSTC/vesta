@@ -17,32 +17,32 @@ RSpec.describe SuiteSelector do
       it 'checks that the suite_id is passed' do
         group = instance_spy('group', suite: nil)
         result = described_class.select(group: group, suite_id: nil)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'checks that the group has no suite' do
         group = instance_spy('group',
                              suite: instance_spy('suite', present?: true))
         suite = mock_suite(id: 123)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'checks that the suite exists' do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123, present: false)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'checks that the suite is not already assigned' do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123, has_group: true)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'fails if the update fails' do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123, update: false)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets an error message in the flash' do
         group = instance_spy('group', suite: nil)
@@ -54,7 +54,7 @@ RSpec.describe SuiteSelector do
         group = instance_spy('group', suite: nil, locked?: false)
         suite = mock_suite(id: 123)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
     end
     context' success' do
@@ -62,7 +62,7 @@ RSpec.describe SuiteSelector do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:object]).to eq(group)
+        expect(result[:redirect_object]).to eq(group)
       end
       it 'updates the suite to belong to the group' do
         group = instance_spy('group', suite: nil)

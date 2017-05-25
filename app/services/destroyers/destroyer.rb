@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Base class for destroyer service objects. Provides default messages.
 class Destroyer
@@ -36,10 +37,11 @@ class Destroyer
   attr_reader :object, :name, :klass
 
   def success
-    { object: nil, msg: { notice: "#{klass} #{name} deleted." } }
+    { redirect_object: nil, msg: { notice: "#{klass} #{name} deleted." } }
   end
 
   def error
-    { object: object, msg: { error: "#{klass} #{name} couldn't be deleted." } }
+    { redirect_object: object,
+      msg: { error: "#{klass} #{name} couldn't be deleted." } }
   end
 end

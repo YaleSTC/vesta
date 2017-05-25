@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawlessGroupUpdater do
@@ -62,11 +63,11 @@ RSpec.describe DrawlessGroupUpdater do
     # rubocop:enable RSpec/ExampleLength
 
     context 'success' do
-      it 'sets to the :object to the group' do
+      it 'sets to the :redirect_object to the group' do
         group = instance_spy('group', update!: true)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
         result = described_class.update(group: group, params: p)
-        expect(result[:object]).to eq(group)
+        expect(result[:redirect_object]).to eq(group)
       end
       it 'sets the :group to the group' do
         group = instance_spy('group', update!: true)
@@ -82,7 +83,7 @@ RSpec.describe DrawlessGroupUpdater do
       end
     end
     context 'failure' do
-      it 'sets the :object to nil' do
+      it 'sets the :redirect_object to nil' do
         group = instance_spy('group')
         allow(group).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })

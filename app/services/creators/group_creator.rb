@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to create Groups.
 class GroupCreator < Creator
@@ -33,7 +34,7 @@ class GroupCreator < Creator
 
   def success
     {
-      object: [obj.draw, obj], group: obj,
+      redirect_object: [obj.draw, obj], group: obj,
       msg: { success: "#{obj.name} created." }
     }
   end
@@ -41,7 +42,7 @@ class GroupCreator < Creator
   def error(object = obj)
     errors = object.errors.full_messages
     {
-      object: nil, record: obj,
+      redirect_object: nil, record: obj,
       msg: {
         error: "There was a problem creating the group: #{errors.join(', ')}. "\
         'Please make sure you are not adding too many students.'

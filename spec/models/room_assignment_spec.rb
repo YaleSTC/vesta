@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe RoomAssignment do
@@ -34,7 +35,7 @@ RSpec.describe RoomAssignment do
     it 'calls prepare first' do
       ra = described_class.new(group: group)
       params = mock_params(1 => 1, 2 => 2)
-      allow(ra).to receive(:prepare).and_return(object: nil)
+      allow(ra).to receive(:prepare).and_return(redirect_object: nil)
       ra.assign(params)
       expect(ra).to have_received(:prepare).with(params).at_least(1)
     end

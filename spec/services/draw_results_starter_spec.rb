@@ -38,7 +38,7 @@ RSpec.describe DrawResultsStarter do
       draw = instance_spy('draw', validity_stubs(valid: true,
                                                  all_students_grouped?: true))
       result = described_class.start(draw: draw)
-      expect(result[:object]).to eq(draw)
+      expect(result[:redirect_object]).to eq(draw)
     end
     it 'sets a success message' do
       draw = instance_spy('draw', validity_stubs(valid: true,
@@ -77,7 +77,7 @@ RSpec.describe DrawResultsStarter do
     it 'sets the object key to nil in the hash on failure' do
       draw = instance_spy('draw', validity_stubs(valid: false))
       result = described_class.start(draw: draw)
-      expect(result[:object]).to be_nil
+      expect(result[:redirect_object]).to be_nil
     end
   end
 

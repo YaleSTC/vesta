@@ -74,7 +74,7 @@ class DrawResultsStarter
           else
             success_msg
           end
-    { object: draw, msg: msg }
+    { redirect_object: draw, msg: msg }
   end
 
   def success_msg
@@ -87,7 +87,7 @@ class DrawResultsStarter
 
   def error
     msg = "There was a problem completing suite selection:\n#{error_msgs}"
-    { object: nil, msg: { error: msg } }
+    { redirect_object: nil, msg: { error: msg } }
   end
 
   def error_msgs

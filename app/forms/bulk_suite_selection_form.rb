@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to handle the bulk assignment of suites to groups. Ensures that
 # suites are available, groups don't have suites assigned, and optionally that
@@ -106,12 +107,12 @@ class BulkSuiteSelectionForm
 
   def success
     msg = 'Suites successfully assigned, please handle the next groups.'
-    { object: nil, service_object: nil, msg: { success: msg } }
+    { redirect_object: nil, service_object: nil, msg: { success: msg } }
   end
 
   def error(error_msgs)
     {
-      object: nil, service_object: self,
+      redirect_object: nil, service_object: self,
       msg: { error: "There was a problem: #{error_msgs}" }
     }
   end

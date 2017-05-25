@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Seed script generator for Rooms
 class RoomGenerator
   def self.generate(**overrides)
@@ -10,7 +11,7 @@ class RoomGenerator
   end
 
   def generate
-    RoomCreator.new(params).create![:object]
+    RoomCreator.new(params).create![:redirect_object]
   end
 
   private

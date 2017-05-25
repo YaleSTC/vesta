@@ -58,11 +58,11 @@ RSpec.describe GroupUpdater do
     # rubocop:enable RSpec/ExampleLength
 
     context 'success' do
-      it 'sets to the :object to the group and draw' do
+      it 'sets to the :redirect_object to the group and draw' do
         group = instance_spy('group', update!: true)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
         result = described_class.update(group: group, params: p)
-        expect(result[:object]).to eq([group.draw, group])
+        expect(result[:redirect_object]).to eq([group.draw, group])
       end
       it 'sets the :group to the group' do
         group = instance_spy('group', update!: true)
@@ -78,12 +78,12 @@ RSpec.describe GroupUpdater do
       end
     end
     context 'failure' do
-      it 'sets the :object to nil' do
+      it 'sets the :redirect_object to nil' do
         group = instance_spy('group')
         allow(group).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
         result = described_class.update(group: group, params: p)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets an error message' do
         group = instance_spy('group')

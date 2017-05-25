@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to handle the starting of the lottery phase for a draw. Checks
 # to make sure that the draw has the correct status and has enough beds for
@@ -91,12 +92,13 @@ class DrawLotteryStarter
   end
 
   def success
-    { object: draw, msg: { success: 'You can now assign lottery numbers' } }
+    { redirect_object: draw,
+      msg: { success: 'You can now assign lottery numbers' } }
   end
 
   def error
     msg = "There was a problem proceeding to the lottery phase:\n#{error_msgs}"
-    { object: nil, msg: { error: msg } }
+    { redirect_object: nil, msg: { error: msg } }
   end
 
   def error_msgs

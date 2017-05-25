@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SuiteMergerForm, type: :model do
@@ -63,6 +64,7 @@ RSpec.describe SuiteMergerForm, type: :model do
 
   describe '#submit' do
     let(:suite) { FactoryGirl.create(:suite_with_rooms) }
+
     context 'success' do
       let(:other_suite) do
         FactoryGirl.create(:suite_with_rooms, building: suite.building)
@@ -71,23 +73,25 @@ RSpec.describe SuiteMergerForm, type: :model do
         other = FactoryGirl.create(:suite_with_rooms, building: suite.building)
         mock_params(other_suite_number: other.number, number: 'foo')
       end
+
       it 'creates a new suite of the combined size' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:object].size).to eq(suite.size + other_suite.size)
+        expect(result[:redirect_object].size).to \
+          eq(suite.size + other_suite.size)
       end
       it 'creates a new suite with the defined number' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:object].number).to eq('foo')
+        expect(result[:redirect_object].number).to eq('foo')
       end
       it 'creates a new suite with the correct building' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:object].building).to eq(suite.building)
+        expect(result[:redirect_object].building).to eq(suite.building)
       end
       it 'creates a new suite with the correct draw' do
         draw = FactoryGirl.create(:draw)
         draw.suites << suite
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:object].draws.map(&:id)).to include(draw.id)
+        expect(result[:redirect_object].draws.map(&:id)).to include(draw.id)
       end
       it 'returns nil for :form_object' do
         result = described_class.submit(suite: suite, params: params)
@@ -103,7 +107,7 @@ RSpec.describe SuiteMergerForm, type: :model do
       it 'returns nil as the object' do
         params = mock_params(other_suite_number: nil)
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'returns the form object' do
         params = mock_params(other_suite_number: nil)

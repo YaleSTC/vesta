@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GroupSuiteSelector do
@@ -35,7 +36,7 @@ RSpec.describe GroupSuiteSelector do
         group = instance_spy('group', suite: nil, draw: draw)
         suite = mock_suite(id: 123)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(result[:object]).to eq([group.draw, group])
+        expect(result[:redirect_object]).to eq([group.draw, group])
       end
       it 'sets a success message in the flash' do
         draw = instance_spy('draw', next_groups: [])

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Seed script generator for Suites
 class SuiteGenerator
   def self.generate(**overrides)
@@ -10,7 +11,7 @@ class SuiteGenerator
   end
 
   def generate
-    SuiteCreator.new(params).create![:object]
+    SuiteCreator.new(params).create![:redirect_object]
   end
 
   private

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Model / form object for room assignment. Ensures that all students in a group
 # are assigned rooms, that all rooms belong to the group's suite, and that no
@@ -85,7 +86,7 @@ class RoomAssignment
 
   def process_params(p)
     assign_current_attrs(p)
-    @params = p.to_h.select { |_k, v| !v.empty? }
+    @params = p.to_h.reject { |_k, v| v.empty? }
                .transform_keys { |k| member_id_from_field(k) }
                .transform_values(&:to_i)
   end
@@ -130,11 +131,11 @@ class RoomAssignment
 
   def success
     obj = group.draw ? [group.draw, group] : group
-    { object: obj, msg: { notice: 'Successfully assigned rooms' } }
+    { redirect_object: obj, msg: { notice: 'Successfully assigned rooms' } }
   end
 
   def error(errors)
-    { object: nil, msg: { error: errors.join(', ') } }
+    { redirect_object: nil, msg: { error: errors.join(', ') } }
   end
 
   # creates dynamic attr_readers for user fields

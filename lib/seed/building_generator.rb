@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Seed script generator for Buildings
 class BuildingGenerator
   def self.generate(**overrides)
@@ -10,7 +11,7 @@ class BuildingGenerator
   end
 
   def generate
-    BuildingCreator.new(params).create![:object]
+    BuildingCreator.new(params).create![:redirect_object]
   end
 
   private

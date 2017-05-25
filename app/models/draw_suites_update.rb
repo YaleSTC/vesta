@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Form / service object to handle the updating of draw suites
 class DrawSuitesUpdate
@@ -99,19 +100,20 @@ class DrawSuitesUpdate
   end
 
   def no_action_warning
-    { object: nil, update_object: self, msg: { alert: 'No changes selected' } }
+    { redirect_object: nil, update_object: self,
+      msg: { alert: 'No changes selected' } }
   end
 
   def success
     {
-      object: nil, update_object: nil,
+      redirect_object: nil, update_object: nil,
       msg: { success: 'Suites successfully updated' }
     }
   end
 
   def error(error)
     {
-      object: nil, update_object: self,
+      redirect_object: nil, update_object: self,
       msg: { error: "Suites update failed: #{error}" }
     }
   end

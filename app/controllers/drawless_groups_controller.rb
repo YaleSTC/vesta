@@ -24,7 +24,7 @@ class DrawlessGroupsController < ApplicationController
   def create
     result = DrawlessGroupCreator.new(drawless_group_params).create!
     @group = result[:record]
-    set_form_data unless result[:object]
+    set_form_data unless result[:redirect_object]
     handle_action(action: 'new', **result)
   end
 
@@ -34,7 +34,7 @@ class DrawlessGroupsController < ApplicationController
     result = DrawlessGroupUpdater.update(group: @group,
                                          params: drawless_group_params)
     @group = result[:record]
-    set_form_data unless result[:object]
+    set_form_data unless result[:redirect_object]
     handle_action(action: 'edit', **result)
   end
 

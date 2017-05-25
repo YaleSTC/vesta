@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to remove the suite from a given group.
 class SuiteRemover
@@ -20,7 +21,8 @@ class SuiteRemover
   # has a suite assigned.
   #
   # @return [Hash{symbol=>Group,Hash}] a results hash with a message to set in
-  #   the flash, nil or the group as the :object, and an action to render.
+  #   the flash, nil or the group as the :redirect_object,
+  #   and an action to render.
   def remove
     if remove_suite_from_group
       success
@@ -52,14 +54,14 @@ class SuiteRemover
 
   def success
     {
-      object: group,
+      redirect_object: group,
       msg: { success: "Suite removed from #{group.name}" }
     }
   end
 
   def error
     {
-      object: nil,
+      redirect_object: nil,
       msg: { error: "Oops, there was a problem:\n#{errors.join("\n")}" }
     }
   end

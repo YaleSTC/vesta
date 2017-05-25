@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Form / service object for adding or removing a single user to/from a draw by
 # username. Removes them from their current draw (if they belong to one) and
@@ -32,8 +33,8 @@ class DrawStudentAssignmentForm
   # returns an error.
   #
   # @return Hash{Symbol=>Nil,DrawStudentAssignmentForm,Hash} a result hash
-  #   containing nil for the :object, the DrawStudentAssignmentForm set to
-  #   :update_object if there were any failures, and a flash message
+  #   containing nil for the :redirect_object, the DrawStudentAssignmentForm
+  #   set to :update_object if there were any failures, and a flash message
   def submit
     return error(error_msgs) unless valid?
     if adding?
@@ -92,14 +93,14 @@ class DrawStudentAssignmentForm
   def success
     verb = adding? ? 'added' : 'removed'
     {
-      object: nil, update_object: nil,
+      redirect_object: nil, update_object: nil,
       msg: { success: "#{student.full_name} successfully #{verb}" }
     }
   end
 
   def error(error)
     {
-      object: nil, update_object: self,
+      redirect_object: nil, update_object: self,
       msg: { error: "Student update failed: #{error}" }
     }
   end

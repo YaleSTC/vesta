@@ -93,14 +93,14 @@ class GroupUpdater
 
   def success
     {
-      object: [group.draw, group], record: group,
+      redirect_object: [group.draw, group], record: group,
       msg: { success: 'Group successfully updated!' }
     }
   end
 
   def error(error)
     {
-      object: nil, record: group,
+      redirect_object: nil, record: group,
       msg: { error: "Group update failed: #{error}" }
     }
   end

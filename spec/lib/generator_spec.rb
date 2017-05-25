@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Generator do
-  OBJECTS = [User, Room, Suite, Building, Draw].freeze
+  OBJECTS = [User, Room, Suite, Building, Draw, College].freeze
 
   shared_examples 'generates a valid' do |klass|
     it klass.to_s do

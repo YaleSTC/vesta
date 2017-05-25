@@ -1,14 +1,17 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawStudentAssignmentForm, type: :model do
   let(:draw) { FactoryGirl.create(:draw) }
+
   describe '.submit' do
     xit 'allows for :submit to be called on the parent class'
   end
 
   describe 'validations' do
     subject(:form_object) { described_class.new(draw: draw) }
+
     it { is_expected.to validate_presence_of(:username) }
     # commenting this out due to a shoulda_matchers warning
     # it do
@@ -36,11 +39,11 @@ RSpec.describe DrawStudentAssignmentForm, type: :model do
         expect { described_class.submit(draw: draw, params: params) }.to \
           change { draw.students.count }.by(0)
       end
-      it 'sets :object as nil' do
+      it 'sets :redirect_object as nil' do
         FactoryGirl.create(:student, username: 'foo')
         params = mock_params(username: 'foo', adding: 'true')
         result = described_class.submit(draw: draw, params: params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object as nil' do
         FactoryGirl.create(:student, username: 'foo')
@@ -57,11 +60,11 @@ RSpec.describe DrawStudentAssignmentForm, type: :model do
     end
 
     context 'failure' do
-      it 'sets :object as nil' do
+      it 'sets :redirect_object as nil' do
         FactoryGirl.create(:student, username: 'foo')
         params = mock_params(username: '', adding: 'true')
         result = described_class.submit(draw: draw, params: params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to the form object' do
         FactoryGirl.create(:student, username: 'foo')

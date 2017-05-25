@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Form / service object for merging two suites together. Ensures suites belong
 # to the same building.
@@ -41,9 +42,9 @@ class SuiteMergerForm
   # new suite to the draw(s) that the original suites belonged to.
   #
   # @return [Hash{Symbol=>String,SuiteMergerForm,Nil,Suite,Hash}] a results hash
-  #   for `handle_action`, sets the :object to either the new suite or the
-  #   original suite, :form_object to nil if success or self if failure, and a
-  #   flash message
+  #   for `handle_action`, sets the :redirect_object to either the new suite or
+  #   the original suite, :form_object to nil if success or self if failure,
+  #   and a flash message
   def submit
     return error(errors.full_messages.join(', ')) unless valid?
     @new_suite = ActiveRecord::Base.transaction do
@@ -128,14 +129,14 @@ class SuiteMergerForm
 
   def success
     {
-      object: new_suite, form_object: nil,
+      redirect_object: new_suite, form_object: nil,
       msg: { success: 'Suites successfully merged' }
     }
   end
 
   def error(errors)
     {
-      object: nil, form_object: self,
+      redirect_object: nil, form_object: self,
       msg: { error: "Suite merger failed: #{errors}" }
     }
   end

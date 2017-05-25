@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GroupDrawRemover do
@@ -12,6 +13,7 @@ RSpec.describe GroupDrawRemover do
       let(:group) { instance_spy('group', draw_id: 123) }
       let(:membership) { instance_spy('membership') }
       let(:invitation) { instance_spy('membership') }
+
       before do
         allow(group).to receive(:members).and_return([member])
         allow(group).to receive(:pending_memberships).and_return([invitation])
@@ -28,9 +30,9 @@ RSpec.describe GroupDrawRemover do
         described_class.remove(group: group)
         expect(invitation).to have_received(:destroy!)
       end
-      it 'sets the :object to the group' do
+      it 'sets the :redirect_object to the group' do
         result = described_class.remove(group: group)
-        expect(result[:object]).to eq(group)
+        expect(result[:redirect_object]).to eq(group)
       end
       it 'sets a success message' do
         result = described_class.remove(group: group)
@@ -41,13 +43,14 @@ RSpec.describe GroupDrawRemover do
     context 'failure' do
       let(:draw) { instance_spy('draw') }
       let(:group) { instance_spy('group', draw: draw) }
+
       before do
         allow(group).to receive(:update!)
           .and_raise(ActiveRecord::RecordInvalid)
       end
-      it 'sets the :object to the draw and group' do
+      it 'sets the :redirect_object to the draw and group' do
         result = described_class.remove(group: group)
-        expect(result[:object]).to match([draw, group])
+        expect(result[:redirect_object]).to match([draw, group])
       end
       it 'sets a success message' do
         result = described_class.remove(group: group)

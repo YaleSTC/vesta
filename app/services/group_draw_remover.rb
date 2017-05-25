@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to handle the conversion of a regular group to a drawless
 # group. It handles the removal of the draw from all group members and destroys
@@ -38,14 +39,14 @@ class GroupDrawRemover
 
   def success
     {
-      object: group,
+      redirect_object: group,
       msg: { success: "#{group.name} is now a special group" }
     }
   end
 
   def error(errors)
     {
-      object: [group.draw, group],
+      redirect_object: [group.draw, group],
       msg: { error: "Error converting group to a special group: #{errors}" }
     }
   end

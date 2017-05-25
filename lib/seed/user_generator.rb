@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Seed script generator for Users
 class UserGenerator
   def self.generate(**overrides)
@@ -16,7 +17,7 @@ class UserGenerator
 
   def generate
     Creator.new(klass: User, params: params,
-                name_method: :name).create![:object]
+                name_method: :name).create![:redirect_object]
   end
 
   private

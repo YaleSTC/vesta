@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GroupFinalizer do
@@ -22,9 +23,9 @@ RSpec.describe GroupFinalizer do
       described_class.finalize(group: group)
       expect(group).to have_received(:finalizing!)
     end
-    it 'returns the redirect objects in :object' do
+    it 'returns the redirect objects in :redirect_object' do
       results = described_class.finalize(group: group)
-      expect(results[:object]).to eq([group.draw, group])
+      expect(results[:redirect_object]).to eq([group.draw, group])
     end
     it 'returns a success msg' do
       results = described_class.finalize(group: group)

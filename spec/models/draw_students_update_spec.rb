@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawStudentsUpdate do
@@ -23,12 +24,12 @@ RSpec.describe DrawStudentsUpdate do
         expect { described_class.update(draw: draw, params: params) }.to \
           change { draw.students.count }.by(1)
       end
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         draw = FactoryGirl.create(:draw)
         FactoryGirl.create(:student, class_year: 2016)
         params = mock_params(class_year: '2016')
         result = described_class.update(draw: draw, params: params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to nil' do
         draw = FactoryGirl.create(:draw)
@@ -53,10 +54,10 @@ RSpec.describe DrawStudentsUpdate do
     end
 
     context 'warning' do
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         draw = FactoryGirl.create(:draw)
         result = described_class.update(draw: draw, params: mock_params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to the update object' do
         draw = FactoryGirl.create(:draw)
@@ -71,12 +72,12 @@ RSpec.describe DrawStudentsUpdate do
     end
 
     context 'error' do
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         draw = FactoryGirl.create(:draw)
         bad_user = create_bad_user
         params = mock_params(class_year: bad_user.class_year.to_s)
         result = described_class.update(draw: draw, params: params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to the update object' do
         draw = FactoryGirl.create(:draw)

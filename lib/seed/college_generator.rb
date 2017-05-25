@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Seed script generator for Colleges
 class CollegeGenerator
   def self.generate(**overrides)
@@ -11,7 +12,7 @@ class CollegeGenerator
 
   def generate
     Creator.new(klass: College, params: params, name_method: :name)
-           .create![:object]
+           .create![:redirect_object]
   end
 
   private

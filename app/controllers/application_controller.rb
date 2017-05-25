@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Base controller class.
 class ApplicationController < ActionController::Base
   include Pundit
@@ -33,9 +34,9 @@ class ApplicationController < ActionController::Base
   # @param [String] action The action to render when no object passed.
   #   (Creation / update failure, destruction success)
   # @param [String] path The path to redirect to when no object passed.
-  def handle_action(object:, msg:, action: nil, path: nil, **_)
+  def handle_action(redirect_object:, msg:, action: nil, path: nil, **_)
     msg.each { |flash_type, msg_str| flash[flash_type] = msg_str }
-    redirect_to(object) && return if object
+    redirect_to(redirect_object) && return if redirect_object
     complete_request(action: action, path: path)
   end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SuiteRemover do
@@ -16,15 +17,15 @@ RSpec.describe SuiteRemover do
       it 'checks that the group has a suite' do
         group = instance_spy('group', suite: nil)
         result = described_class.remove(group: group)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
-      it 'fails if the update fails' do
+      it 'returns a nil redirect_object if the update fails' do
         suite = mock_suite(id: 123, update: false)
         group = instance_spy('group', suite: suite)
         result = described_class.remove(group: group)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
-      it 'fails if the update fails' do
+      it 'returns an error flash if the update fails' do
         suite = mock_suite(id: 123, update: false)
         group = instance_spy('group', suite: suite)
         result = described_class.remove(group: group)
@@ -36,7 +37,7 @@ RSpec.describe SuiteRemover do
         suite = mock_suite(id: 123)
         group = instance_spy('group', suite: suite)
         result = described_class.remove(group: group)
-        expect(result[:object]).to eq(group)
+        expect(result[:redirect_object]).to eq(group)
       end
       it 'removes the suite from the group' do
         suite = mock_suite(id: 123)

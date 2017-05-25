@@ -44,7 +44,7 @@ RSpec.describe DrawSelectionStarter do
     it 'returns the updated draw on success' do
       draw = instance_spy('draw', validity_stubs(valid: true))
       result = described_class.start(draw: draw)
-      expect(result[:object]).to eq(draw)
+      expect(result[:redirect_object]).to eq(draw)
     end
 
     it 'sends invitations to the first group(s) to select' do
@@ -56,7 +56,7 @@ RSpec.describe DrawSelectionStarter do
     it 'sets the object key to nil in the hash on failure' do
       draw = instance_spy('draw', validity_stubs(valid: false))
       result = described_class.start(draw: draw)
-      expect(result[:object]).to be_nil
+      expect(result[:redirect_object]).to be_nil
     end
   end
 

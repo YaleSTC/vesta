@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe BulkSuiteSelectionForm do
@@ -36,7 +37,7 @@ RSpec.describe BulkSuiteSelectionForm do
 
       it 'returns a null object' do
         result = bulk_selector.submit
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'returns a null service object' do
         result = bulk_selector.submit
@@ -48,9 +49,42 @@ RSpec.describe BulkSuiteSelectionForm do
       end
       it 'calls select on all suite selectors generated' do
         bulk_selector.submit
-        selectors.each do |s|
-          expect(s).to have_received(:select)
+        expect(selectors).to all(have_received(:select))
+      end
+    end
+
+    describe 'validations' do
+      let(:groups) do
+        Array.new(2) do |i|
+          instance_spy('group', id: i + 1, draw: nil, name: "Foo#{i + 1}")
         end
+      end
+
+      it 'all groups to have been passed' do
+        ps = mock_params(1 => 1)
+        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
+        result = bulk_selector.submit
+        expect(result[:msg][:error]).to include('select a suite for all groups')
+      end
+      it 'duplicate suites' do
+        ps = mock_params(1 => 1, 2 => 1)
+        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
+        result = bulk_selector.submit
+        expect(result[:msg][:error]).to include('select different suites')
+      end
+      it 'returns errors from all SuiteSelectors' do
+        ps = mock_params(1 => 1, 2 => 2)
+        mock_failing_selectors
+        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
+        result = bulk_selector.submit
+        expect(result[:msg][:error]).to include('Foo1 - 1; Foo2 - 2')
+      end
+      it 'a draw mismatch' do
+        groups = prepare_draw_mismatch_data
+        ps = mock_params(1 => 1)
+        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
+        result = bulk_selector.submit
+        expect(result[:msg][:error]).to include('to suites in the same draw')
       end
     end
 
@@ -65,7 +99,7 @@ RSpec.describe BulkSuiteSelectionForm do
         ps = mock_params(1 => 1)
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
         result = bulk_selector.submit
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets the service object' do
         ps = mock_params(1 => 1)
@@ -79,53 +113,21 @@ RSpec.describe BulkSuiteSelectionForm do
         result = bulk_selector.submit
         expect(result[:msg].keys).to eq([:error])
       end
-      it 'checks for all groups to have been passed ' do
-        ps = mock_params(1 => 1)
-        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
-        expect(result[:msg][:error]).to include('select a suite for all groups')
-      end
-      it 'checks for duplicate suites' do
-        ps = mock_params(1 => 1, 2 => 1)
-        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
-        expect(result[:msg][:error]).to include('select different suites')
-      end
-      it 'returns errors from all SuiteSelectors' do
-        ps = mock_params(1 => 1, 2 => 2)
-        mock_failing_selectors
-        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
-        expect(result[:msg][:error]).to include('Foo1 - 1; Foo2 - 2')
-      end
-      it 'checks for a draw mismatch' do
-        groups = prepare_draw_mismatch_data
-        ps = mock_params(1 => 1)
-        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
-        expect(result[:msg][:error]).to include('to suites in the same draw')
-      end
-      it 'checks for all groups to have been passed ' do
-        ps = mock_params(1 => 1)
-        bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
-        expect(result[:msg][:error]).to include('select a suite for all groups')
-      end
+    end
 
-      def prepare_draw_mismatch_data # rubocop:disable MethodLength, AbcSize
-        draw = instance_spy('draw')
-        instance_spy('Suite::ActiveRecord_Association').tap do |s|
-          allow(s).to receive(:include?).and_return(false)
-          allow(s).to receive(:available).and_return(s)
-          allow(draw).to receive(:suites).and_return(s)
-        end
-        groups = [instance_spy('group', id: 1, draw: draw)]
-        instance_spy('suite').tap do |s|
-          allow(Suite).to receive(:find_by).with(id: '1').and_return(s)
-          allow(Suite).to receive(:find_by).with(id: 1).and_return(s)
-        end
-        groups
+    def prepare_draw_mismatch_data # rubocop:disable MethodLength, AbcSize
+      draw = instance_spy('draw')
+      instance_spy('Suite::ActiveRecord_Association').tap do |s|
+        allow(s).to receive(:include?).and_return(false)
+        allow(s).to receive(:available).and_return(s)
+        allow(draw).to receive(:suites).and_return(s)
       end
+      groups = [instance_spy('group', id: 1, draw: draw)]
+      instance_spy('suite').tap do |s|
+        allow(Suite).to receive(:find_by).with(id: '1').and_return(s)
+        allow(Suite).to receive(:find_by).with(id: 1).and_return(s)
+      end
+      groups
     end
 
     def mock_valid_selectors

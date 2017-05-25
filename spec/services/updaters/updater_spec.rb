@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Updater do
@@ -7,7 +8,7 @@ RSpec.describe Updater do
     suite = mock_suite(valid: true)
     updater = described_class.new(object: suite, name_method: :number,
                                   params: params)
-    expect(updater.update[:object]).to eq(suite)
+    expect(updater.update[:redirect_object]).to eq(suite)
   end
   it 'returns the updated record' do
     params = instance_spy('ActionController::Parameters', to_h: {})
@@ -21,7 +22,7 @@ RSpec.describe Updater do
     suite = mock_suite(valid: false)
     updater = described_class.new(object: suite, name_method: :number,
                                   params: params)
-    expect(updater.update[:object]).to be_nil
+    expect(updater.update[:redirect_object]).to be_nil
   end
   it 'returns the record even if invalid' do
     params = instance_spy('ActionController::Parameters', to_h: {})

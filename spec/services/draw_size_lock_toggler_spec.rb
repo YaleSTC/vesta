@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawSizeLockToggler do
@@ -8,6 +9,7 @@ RSpec.describe DrawSizeLockToggler do
 
   describe '#toggle' do
     let(:draw) { FactoryGirl.create(:draw_with_members) }
+
     context 'success' do
       it 'locks the size when unlocked' do
         expect { described_class.toggle(draw: draw, size: '1') }.to \
@@ -18,9 +20,9 @@ RSpec.describe DrawSizeLockToggler do
         expect { described_class.toggle(draw: draw, size: '1') }.to \
           change { draw.size_locked?(1) }
       end
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         result = described_class.toggle(draw: draw, size: '1')
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets a success flash message' do
         result = described_class.toggle(draw: draw, size: '1')
@@ -33,9 +35,9 @@ RSpec.describe DrawSizeLockToggler do
         expect { described_class.toggle(draw: draw, size: 'a') }.not_to \
           change { draw.locked_sizes }
       end
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         result = described_class.toggle(draw: draw, size: 'a')
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets an error flash message' do
         result = described_class.toggle(draw: draw, size: 'a')

@@ -6,7 +6,7 @@ RSpec.describe SuiteCreator do
   context 'success' do
     it 'sucessfully creates a suite' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
-      expect(described_class.new(params).create![:object]).to \
+      expect(described_class.new(params).create![:redirect_object]).to \
         be_instance_of(Suite)
     end
     it 'returns the suite object' do
@@ -24,7 +24,7 @@ RSpec.describe SuiteCreator do
   end
   it 'does not create when given invalid params' do
     params = instance_spy('ActionController::Parameters', to_h: {})
-    expect(described_class.new(params).create![:object]).to be_nil
+    expect(described_class.new(params).create![:redirect_object]).to be_nil
   end
   it 'returns the suite even if invalid' do
     params = instance_spy('ActionController::Parameters', to_h: {})

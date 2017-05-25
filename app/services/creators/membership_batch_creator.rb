@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Class to create memberships for many users with the same attributes
 class MembershipBatchCreator
@@ -35,7 +36,7 @@ class MembershipBatchCreator
   attr_reader :users, :successes, :failures, :results, :params, :group
 
   def error
-    { object: nil, msg: { error: 'Too many invitations' } }
+    { redirect_object: nil, msg: { error: 'Too many invitations' } }
   end
 
   def too_many_invitations?
@@ -44,7 +45,7 @@ class MembershipBatchCreator
 
   def build_result
     @successes, @failures = results.partition { |r| r[:msg].key? :success }
-    { object: [group.draw, group], msg: build_flash }
+    { redirect_object: [group.draw, group], msg: build_flash }
   end
 
   def build_flash

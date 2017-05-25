@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object for building a user record for creation. Currently takes in a
 # username, ultimately will request data from IDR.
@@ -26,9 +27,9 @@ class UserBuilder
   # Build a user record based on the given input, ensuring that it is unique
   #
   # @return [Hash{symbol=>User,Hash,Nil}] a results hash with a message to set
-  #   in the flash, nil as the :object value, the user record as the :user
-  #   value, and the :action to render. The :object is always set to nil so that
-  #   handle_action properly renders the template set in :action.
+  #   in the flash, nil as the :redirect_object value, the user record as the
+  #   :user value, and the :action to render. The :redirect_object is always set
+  #   to nil so that handle_action properly renders the template set in :action.
   def build
     return invalid_error if id_attr.empty?
     return duplicate_error if exists?
@@ -53,7 +54,7 @@ class UserBuilder
   attr_reader :id_attr, :id_symbol, :querier
 
   def result_hash
-    { object: nil, user: user }
+    { redirect_object: nil, user: user }
   end
 
   def success

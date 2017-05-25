@@ -26,7 +26,8 @@ class SuiteSelector
   # group.
   #
   # @return [Hash{symbol=>Group,Hash}] a results hash with a message to set in
-  #   the flash, nil or the group as the :object, and an action to render.
+  #   the flash, nil or the group as the :redirect_object,
+  #   and an action to render.
   def select
     if assign_suite_to_group
       success
@@ -87,14 +88,14 @@ class SuiteSelector
 
   def success
     {
-      object: group,
+      redirect_object: group,
       msg: { success: "Suite #{suite.number} assigned to #{group.name}" }
     }
   end
 
   def error
     {
-      object: nil,
+      redirect_object: nil,
       msg: { error: "Oops, there was a problem:\n#{errors.join("\n")}" }
     }
   end

@@ -40,7 +40,7 @@ RSpec.describe MembershipCreator do
 
   it 'does not create when given invalid params' do
     params = instance_spy('ActionController::Parameters', to_h: {})
-    expect(described_class.new(params).create![:object]).to be_nil
+    expect(described_class.new(params).create![:redirect_object]).to be_nil
   end
   it 'returns the membership even if invalid' do
     params = instance_spy('ActionController::Parameters', to_h: {})

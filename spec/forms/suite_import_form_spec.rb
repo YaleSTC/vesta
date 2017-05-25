@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SuiteImportForm do
@@ -10,15 +11,16 @@ RSpec.describe SuiteImportForm do
   context 'valid csv' do
     let(:building) { instance_spy('Building') }
     let(:file) { fixture_file_upload(csv_path('suite_upload'), 'text/csv') }
+
     before { stub_suite_create }
 
     it 'creates the suites' do
       described_class.import(file: file, building: building)
       expect(Suite).to have_received(:create!).twice
     end
-    it 'returns nil in :object' do
+    it 'returns nil in :redirect_object' do
       result = described_class.import(file: file, building: building)
-      expect(result[:object]).to be_nil
+      expect(result[:redirect_object]).to be_nil
     end
     it 'returns a success flash' do
       result = described_class.import(file: file, building: building)
@@ -41,15 +43,16 @@ RSpec.describe SuiteImportForm do
   context 'missing header' do
     let(:building) { instance_spy('Building') }
     let(:file) { fixture_file_upload(csv_path('suite_no_header'), 'text/csv') }
+
     before { allow(Suite).to receive(:create!) }
 
     it 'creates no suites' do
       described_class.import(file: file, building: building)
       expect(Suite).not_to have_received(:create!)
     end
-    it 'returns nil in :object' do
+    it 'returns nil in :redirect_object' do
       result = described_class.import(file: file, building: building)
-      expect(result[:object]).to be_nil
+      expect(result[:redirect_object]).to be_nil
     end
     it 'returns an error flash' do
       result = described_class.import(file: file, building: building)
@@ -60,15 +63,16 @@ RSpec.describe SuiteImportForm do
   context 'some create failures' do
     let(:building) { instance_spy('Building') }
     let(:file) { fixture_file_upload(csv_path('suite_upload'), 'text/csv') }
+
     before { stub_suite_create(building) }
 
-    it 'returns building in :object' do
+    it 'returns building in :redirect_object' do
       result = described_class.import(file: file, building: building)
-      expect(result[:object]).to be_nil
+      expect(result[:redirect_object]).to be_nil
     end
     it 'returns an error flash and a success flash' do
       result = described_class.import(file: file, building: building)
-      expect(result[:msg].keys).to match_array([:success, :error])
+      expect(result[:msg].keys).to match_array(%i(success error))
     end
     def stub_suite_create(building)
       allow(Suite).to receive(:create!)
@@ -80,6 +84,6 @@ RSpec.describe SuiteImportForm do
   end
 
   def csv_path(filename)
-    "#{Rails.root}/spec/fixtures/#{filename}.csv"
+    Rails.root.join('spec', 'fixtures', "#{filename}.csv")
   end
 end

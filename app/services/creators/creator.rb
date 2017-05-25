@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Abstract base class for creator service objects.
 # Handles param conversion, perisistance, and provides default messages.
@@ -39,7 +40,7 @@ class Creator
 
   def success
     {
-      object: obj, record: obj,
+      redirect_object: obj, record: obj,
       msg: { success: "#{obj.send(name_method)} created." }
     }
   end
@@ -47,7 +48,7 @@ class Creator
   def error(object = obj)
     errors = object.errors.full_messages
     {
-      object: nil, record: obj,
+      redirect_object: nil, record: obj,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
     }
   end

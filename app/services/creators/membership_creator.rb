@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to create memberships.
 class MembershipCreator < Creator
@@ -20,7 +21,7 @@ class MembershipCreator < Creator
   private
 
   def success
-    { object: [obj.group.draw, obj.group], membership: obj,
+    { redirect_object: [obj.group.draw, obj.group], membership: obj,
       msg: { success: "Membership in #{obj.group.name} created for "\
         "#{obj.user.name}." } }
   end
@@ -28,7 +29,7 @@ class MembershipCreator < Creator
   def error
     errors = obj.errors.full_messages
     {
-      object: nil, membership: obj,
+      redirect_object: nil, membership: obj,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" },
       errors: errors,
       params: params

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GroupCreator do
@@ -12,21 +13,21 @@ RSpec.describe GroupCreator do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
       expect(described_class.new(params).create![:msg]).to have_key(:success)
     end
-    it 'sets :object to the draw and the new group' do
+    it 'sets :redirect_object to the draw and the new group' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
-      expect(described_class.new(params).create![:object].map(&:class)).to \
-        eq([Draw, Group])
+      result = described_class.new(params).create![:redirect_object]
+      expect(result.map(&:class)).to eq([Draw, Group])
     end
     it 'ignores the :remove_ids parameter' do
       params = instance_spy('ActionController::Parameters',
                             to_h: params_hash.merge('remove_ids' => ['1']))
-      expect(described_class.new(params).create![:object]).to be_truthy
+      expect(described_class.new(params).create![:redirect_object]).to be_truthy
     end
   end
 
   it 'does not create when given invalid params' do
     params = instance_spy('ActionController::Parameters', to_h: {})
-    expect(described_class.new(params).create![:object]).to be_nil
+    expect(described_class.new(params).create![:redirect_object]).to be_nil
   end
   it 'returns the group even if invalid' do
     params = instance_spy('ActionController::Parameters', to_h: {})

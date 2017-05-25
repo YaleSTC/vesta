@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe UserCreator do
@@ -17,7 +18,7 @@ RSpec.describe UserCreator do
         params = instance_spy('ActionController::Parameters',
                               to_h: valid_params)
         result = described_class.create!(params)
-        expect(result[:object]).to be_instance_of(User)
+        expect(result[:redirect_object]).to be_instance_of(User)
       end
       it 'returns the user object' do
         params = instance_spy('ActionController::Parameters',
@@ -45,7 +46,7 @@ RSpec.describe UserCreator do
           params = instance_spy('ActionController::Parameters',
                                 to_h: valid_params)
           result = described_class.create!(params)
-          expect(result[:object].password).not_to be_empty
+          expect(result[:redirect_object].password).not_to be_empty
         end
       end
       # 2017/01/29: this test currently fails because stubbing out
@@ -60,16 +61,16 @@ RSpec.describe UserCreator do
           params = instance_spy('ActionController::Parameters',
                                 to_h: valid_params)
           result = described_class.create!(params)
-          expect(result[:object].password).to be_empty
+          expect(result[:redirect_object].password).to be_empty
         end
       end
     end
 
     context 'failure' do
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         params = instance_spy('ActionController::Parameters', to_h: {})
         result = described_class.create!(params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'returns the invalid user' do
         params = instance_spy('ActionController::Parameters', to_h: {})

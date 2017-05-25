@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to update special (drawless) groups
 class DrawlessGroupUpdater < GroupUpdater
@@ -8,7 +9,9 @@ class DrawlessGroupUpdater < GroupUpdater
   def remove_users # rubocop:disable Metrics/AbcSize
     ids = pending_users[:remove].map(&:id)
     group.memberships.where(user_id: ids).delete_all
+    # rubocop:disable Rails/SkipsModelValidations
     group.decrement!(:memberships_count, ids.size)
+    # rubocop:enable Rails/SkipsModelValidations
     group.update_status!
     pending_users[:remove].each { |user| user.restore_draw.save! }
   end
@@ -20,14 +23,14 @@ class DrawlessGroupUpdater < GroupUpdater
 
   def success
     {
-      object: group, record: group,
+      redirect_object: group, record: group,
       msg: { success: 'Group successfully updated!' }
     }
   end
 
   def error(error)
     {
-      object: nil, record: group,
+      redirect_object: nil, record: group,
       msg: { error: "Group update failed: #{error}" }
     }
   end

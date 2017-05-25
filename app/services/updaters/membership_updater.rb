@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to update memberships
 class MembershipUpdater < Updater
@@ -21,7 +22,7 @@ class MembershipUpdater < Updater
   private
 
   def success
-    { object: [object.group.draw, object.group],
+    { redirect_object: [object.group.draw, object.group],
       msg: { success: "#{object.user.full_name} joined group "\
              "#{object.group.name}." } }
   end

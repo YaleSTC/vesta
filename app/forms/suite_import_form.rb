@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Form Object for Suite Importing
 class SuiteImportForm
@@ -77,7 +78,7 @@ class SuiteImportForm
   end
 
   def result
-    { object: nil, msg: build_flash }
+    { redirect_object: nil, msg: build_flash }
   end
 
   def build_flash
@@ -101,7 +102,7 @@ class SuiteImportForm
   end
 
   def error(msg)
-    { object: nil, msg: { error: msg } }
+    { redirect_object: nil, msg: { error: msg } }
   end
 
   def correct_header?

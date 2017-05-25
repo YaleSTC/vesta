@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Base class for updater service objects.
 # Handles param conversion, perisistance, and provides default messages.
@@ -34,7 +35,7 @@ class Updater
 
   def success
     {
-      object: object, record: object,
+      redirect_object: object, record: object,
       msg: { notice: "#{object.send(name_method)} updated." }
     }
   end
@@ -42,7 +43,7 @@ class Updater
   def error
     errors = object.errors.full_messages
     {
-      object: nil, record: object,
+      redirect_object: nil, record: object,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
     }
   end

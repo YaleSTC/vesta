@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to toggle whether or not a group size is locked for a given
 # draw. Validates that the size is one for which there are currently available
@@ -53,11 +54,11 @@ class DrawSizeLockToggler
   end
 
   def success
-    { object: nil, msg: { success: success_msg } }
+    { redirect_object: nil, msg: { success: success_msg } }
   end
 
   def error(errors)
-    { object: nil, msg: { error: "Draw update failed: #{errors}" } }
+    { redirect_object: nil, msg: { error: "Draw update failed: #{errors}" } }
   end
 
   def success_msg

@@ -62,8 +62,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def bulk_on_campus
     result = BulkOnCampusUpdater.update(draw: @draw)
     # note that BulkOnCampusUpdater.update always returns a success hash with
-    # :object set to @draw, so we don't need to handle a fallback case via
-    # handle_action
+    # :redirect_object set to @draw, so we don't need to handle a fallback case
+    # via handle_action
     handle_action(**result)
   end
 
@@ -101,7 +101,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                process_student_assignment
              else
                prepare_students_edit_data
-               { object: nil, action: 'student_summary',
+               { redirect_object: nil, action: 'student_summary',
                  msg: { error: 'Invalid update submission' } }
              end
     handle_action(**result)
@@ -138,7 +138,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                  errors = @draw.errors.full_messages.join(', ')
                  { error: "Size locking failed: #{errors}" }
                end
-    handle_action(object: nil, path: params[:redirect_path], msg: msg_hash)
+    handle_action(redirect_object: nil, path: params[:redirect_path],
+                  msg: msg_hash)
   end
 
   def start_selection

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to set all undeclared students in a draw to on_campus intent
 class BulkOnCampusUpdater
@@ -17,7 +18,7 @@ class BulkOnCampusUpdater
   # Perform the bulk intent update
   #
   # @return [Hash{Symbol=>Draw,Hash}] a results hash with the draw assigned to
-  #   :object and a success flash message
+  #   :redirect_object and a success flash message
   def update
     put_all_undeclared_students_on_campus
     success
@@ -28,11 +29,12 @@ class BulkOnCampusUpdater
   attr_reader :draw
 
   def put_all_undeclared_students_on_campus
-    draw.students.where(intent: 'undeclared').update_all(intent: 'on_campus')
+    draw.students.where(intent: 'undeclared')
+        .map { |u| u.update(intent: 'on_campus') }
   end
 
   def success
-    { object: draw,
+    { redirect_object: draw,
       msg: { success: 'All undeclared students set to live on-campus' } }
   end
 end

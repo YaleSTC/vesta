@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to create users.
 class UserCreator
@@ -23,7 +24,7 @@ class UserCreator
   #
   # @return [Hash{Symbol=>User,Hash}] a results hash with a message to set in
   #   the flash, the user record (persisted or not), and either nil or the
-  #   record as the :object value
+  #   record as the :redirect_object value
   def create!
     return error unless user.save
     mailer.new_user_confirmation(user: user, password: password).deliver_later
@@ -47,7 +48,7 @@ class UserCreator
 
   def success
     {
-      object: user, user: user,
+      redirect_object: user, user: user,
       msg: { success: "User #{user.full_name} created." }
     }
   end
@@ -55,7 +56,7 @@ class UserCreator
   def error
     errors = user.errors.full_messages
     {
-      object: nil, user: user,
+      redirect_object: nil, user: user,
       msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
     }
   end

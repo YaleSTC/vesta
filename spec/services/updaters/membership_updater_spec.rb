@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe MembershipUpdater do
@@ -19,7 +20,7 @@ RSpec.describe MembershipUpdater do
                               user: instance_spy('User', full_name: 'Name'))
     params = instance_spy('ActionController::Parameters', to_h: {})
     updater = described_class.new(membership: membership, params: params)
-    expect(updater.update[:object]).to eq([group.draw, group])
+    expect(updater.update[:redirect_object]).to eq([group.draw, group])
   end
   # rubocop:enable RSpec/ExampleLength
 

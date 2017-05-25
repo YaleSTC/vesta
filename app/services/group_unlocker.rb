@@ -40,12 +40,13 @@ class GroupUnlocker
   end
 
   def success
-    { object: [group.draw, group], record: group,
+    { redirect_object: [group.draw, group], record: group,
       msg: { success: "#{group.name} is unlocked." } }
   end
 
   def error(errors)
-    { object: [group.draw, group], record: group, msg: { error: errors } }
+    { redirect_object: [group.draw, group], record: group,
+      msg: { error: errors } }
   end
 
   def error_messages(errors)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to finalize groups
 class GroupFinalizer
@@ -55,12 +56,12 @@ class GroupFinalizer
   end
 
   def error
-    { object: [group.draw, group], record: group,
+    { redirect_object: [group.draw, group], record: group,
       msg: { error: errors.join(', ') } }
   end
 
   def success
-    { object: [group.draw, group], record: group,
+    { redirect_object: [group.draw, group], record: group,
       msg: { success: "#{group.name} is being finalized." } }
   end
 

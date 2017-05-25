@@ -1,23 +1,24 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawlessGroupCreator do
   context 'success' do
     it 'successfully creates a group' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
-      expect(described_class.new(params).create![:object]).to \
+      expect(described_class.new(params).create![:redirect_object]).to \
         be_instance_of(Group)
     end
     it 'removes leaders and members from existing draws if necessary' do
       params = instance_spy('ActionController::Parameters',
                             to_h: params_hash_with_draw_students)
-      expect(described_class.new(params).create![:object]).to \
+      expect(described_class.new(params).create![:redirect_object]).to \
         be_instance_of(Group)
     end
     it 'assigns the :old_draw_id of the students to their original draws' do
       params = instance_spy('ActionController::Parameters',
                             to_h: params_hash_with_draw_students)
-      leader = described_class.new(params).create![:object].leader
+      leader = described_class.new(params).create![:redirect_object].leader
       # rubocop:disable RSpec/InstanceVariable
       # Note the use of @leader to access the original object
       expect(leader.old_draw_id).to eq(@leader.draw_id)
@@ -26,7 +27,7 @@ RSpec.describe DrawlessGroupCreator do
     it 'automatically sets the intents of members if necessary' do
       params = instance_spy('ActionController::Parameters',
                             to_h: params_hash_with_undeclared_intent_student)
-      expect(described_class.new(params).create![:object]).to \
+      expect(described_class.new(params).create![:redirect_object]).to \
         be_instance_of(Group)
     end
     it 'returns the group object' do
@@ -42,13 +43,13 @@ RSpec.describe DrawlessGroupCreator do
     it 'ignores the :remove_ids parameter' do
       params = instance_spy('ActionController::Parameters',
                             to_h: params_hash.merge('remove_ids' => ['1']))
-      expect(described_class.new(params).create![:object]).to be_truthy
+      expect(described_class.new(params).create![:redirect_object]).to be_truthy
     end
   end
 
   it 'does not create when given invalid params' do
     params = instance_spy('ActionController::Parameters', to_h: {})
-    expect(described_class.new(params).create![:object]).to be_nil
+    expect(described_class.new(params).create![:redirect_object]).to be_nil
   end
   it 'returns the group object even if invalid' do
     params = instance_spy('ActionController::Parameters', to_h: {})

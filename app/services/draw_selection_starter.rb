@@ -61,12 +61,12 @@ class DrawSelectionStarter
   end
 
   def success
-    { object: draw, msg: { success: 'Suite selection started' } }
+    { redirect_object: draw, msg: { success: 'Suite selection started' } }
   end
 
   def error
     msg = "There was a problem starting suite selection:\n#{error_msgs}"
-    { object: nil, msg: { error: msg } }
+    { redirect_object: nil, msg: { error: msg } }
   end
 
   def error_msgs

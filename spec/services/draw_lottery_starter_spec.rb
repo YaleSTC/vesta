@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawLotteryStarter do
@@ -14,59 +15,64 @@ RSpec.describe DrawLotteryStarter do
   end
 
   describe '#start' do
-    it 'checks to make sure that the draw is in pre-lottery' do
-      draw = instance_spy('draw', pre_lottery?: false, present?: true)
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to include('in the pre-lottery phase')
-    end
+    context 'validations' do
+      it 'draw is in pre-lottery' do
+        draw = instance_spy('draw', pre_lottery?: false, present?: true)
+        result = described_class.start(draw: draw)
+        expect(result[:msg][:error]).to include('in the pre-lottery phase')
+      end
 
-    it 'checks to make sure that the draw has at least one group' do
-      draw = instance_spy('draw', groups?: false, present?: true)
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to \
-        include('must have at least one group')
-    end
+      it 'the draw has at least one group' do
+        draw = instance_spy('draw', groups?: false, present?: true)
+        result = described_class.start(draw: draw)
+        expect(result[:msg][:error]).to \
+          include('must have at least one group')
+      end
 
-    it 'checks to make sure that the draw has all locked groups' do
-      draw = instance_spy('draw', all_groups_locked?: false, present?: true)
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to include('cannot have any unlocked groups')
-    end
+      it 'the draw has no ungrouped students' do
+        draw = instance_spy('draw', all_students_grouped?: false,
+                                    present?: true)
+        result = described_class.start(draw: draw)
+        expect(result[:msg][:error]).to \
+          include('cannot have any students not in groups')
+      end
 
-    it 'checks to make sure that the draw has no ungrouped students' do
-      draw = instance_spy('draw', all_students_grouped?: false, present?: true)
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to \
-        include('cannot have any students not in groups')
-    end
+      it 'the draw has no undeclared students' do
+        draw = instance_spy('draw', all_intents_declared?: false,
+                                    present?: true)
+        result = described_class.start(draw: draw)
+        expect(result[:msg][:error]).to \
+          include('cannot have any students who did not declare intent')
+      end
 
-    it 'checks to make sure that the draw has no undeclared students' do
-      draw = instance_spy('draw', all_intents_declared?: false, present?: true)
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to \
-        include('cannot have any students who did not declare intent')
-    end
+      it 'there are enough beds for students' do
+        draw = instance_spy('draw', enough_beds?: false, present?: true)
+        result = described_class.start(draw: draw)
+        expect(result[:msg][:error]).to \
+          include('Draw must have at least one bed per student')
+      end
 
-    it 'checks to make sure that there are enough beds for students' do
-      draw = instance_spy('draw', enough_beds?: false, present?: true)
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to \
-        include('Draw must have at least one bed per student')
-    end
+      it 'there are no contested suites' do
+        draw = instance_spy('draw', no_contested_suites?: false, present?: true)
+        result = described_class.start(draw: draw)
+        expect(result[:msg][:error]).to \
+          include('any suites in other draws that are in the lottery')
+      end
 
-    it 'checks to make sure that there are no contested suites' do
-      draw = instance_spy('draw', no_contested_suites?: false, present?: true)
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to \
-        include('any suites in other draws that are in the lottery')
-    end
+      it 'all sizes are still available' do
+        draw = instance_spy('draw', present?: true, suite_sizes: [1],
+                                    group_sizes: [1, 2])
+        result = described_class.start(draw: draw)
+        expect(result[:msg][:error]).to \
+          include('all groups must be the size of an available suite')
+      end
 
-    it 'checks to make sure that all sizes are still available' do
-      draw = instance_spy('draw', present?: true, suite_sizes: [1],
-                                  group_sizes: [1, 2])
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to \
-        include('all groups must be the size of an available suite')
+      it 'all groups are locked' do
+        draw = instance_spy('draw', all_groups_locked?: false, present?: true)
+        result = described_class.start(draw: draw)
+        expect(result[:msg][:error]).to \
+          include('cannot have any unlocked groups')
+      end
     end
 
     # rubocop:disable RSpec/ExampleLength
@@ -78,16 +84,7 @@ RSpec.describe DrawLotteryStarter do
       described_class.start(draw: draw)
       expect(groups).to have_received(:destroy_all)
     end
-    # rubocop:enable RSpec/ExampleLength
 
-    it 'checks to make sure that all groups are locked' do
-      draw = instance_spy('draw', all_groups_locked?: false, present?: true)
-      result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to \
-        include('cannot have any unlocked groups')
-    end
-
-    # rubocop:disable RSpec/ExampleLength
     it 'updates the status of the draw to lottery' do
       draw = instance_spy('draw', validity_stubs(valid: true))
       allow(draw).to receive(:update)
@@ -108,13 +105,13 @@ RSpec.describe DrawLotteryStarter do
     it 'returns the updated draw on success' do
       draw = instance_spy('draw', validity_stubs(valid: true))
       result = described_class.start(draw: draw)
-      expect(result[:object]).to eq(draw)
+      expect(result[:redirect_object]).to eq(draw)
     end
 
     it 'sets the object key to nil in the hash on failure' do
       draw = instance_spy('draw', validity_stubs(valid: false))
       result = described_class.start(draw: draw)
-      expect(result[:object]).to be_nil
+      expect(result[:redirect_object]).to be_nil
     end
   end
 

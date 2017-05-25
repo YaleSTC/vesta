@@ -61,12 +61,12 @@ class DrawActivator
   end
 
   def success
-    { object: draw, msg: { notice: 'Draw successfully initiated.' } }
+    { redirect_object: draw, msg: { notice: 'Draw successfully initiated.' } }
   end
 
   def error
     {
-      object: nil,
+      redirect_object: nil,
       msg: { error: "There was a problem initiating the draft:\n#{error_msgs}" }
     }
   end

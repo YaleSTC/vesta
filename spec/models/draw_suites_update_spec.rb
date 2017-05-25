@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawSuitesUpdate do
@@ -43,11 +44,11 @@ RSpec.describe DrawSuitesUpdate do
           change { draw.suites.count }.by(2)
       end
       # rubocop:enable RSpec/ExampleLength
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
         params = mock_params(suite_ids_1: [])
         result = described_class.update(draw: draw, params: params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to nil' do
         draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
@@ -64,10 +65,10 @@ RSpec.describe DrawSuitesUpdate do
     end
 
     context 'warning' do
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         draw = FactoryGirl.create(:draw)
         result = described_class.update(draw: draw, params: mock_params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to the update object' do
         draw = FactoryGirl.create(:draw)
@@ -84,15 +85,16 @@ RSpec.describe DrawSuitesUpdate do
     context 'error' do
       let(:draw) { FactoryGirl.create(:draw_with_members, suites_count: 1) }
       let(:params) { mock_params(suite_ids_1: []) }
+
       before do
         # necessary to prevent spy error due to available not being implemented
         draw.suites.available
         allow(draw).to receive(:suites).and_return(broken_suites)
       end
 
-      it 'sets :object to nil' do
+      it 'sets :redirect_object to nil' do
         result = described_class.update(draw: draw, params: params)
-        expect(result[:object]).to be_nil
+        expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to the update object' do
         update_object = described_class.new(draw: draw, params: params)

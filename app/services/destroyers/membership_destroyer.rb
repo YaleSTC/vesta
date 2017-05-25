@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Class to destroy memberships
 class MembershipDestroyer < Destroyer
@@ -13,10 +14,10 @@ class MembershipDestroyer < Destroyer
   private
 
   def success
-    { object: nil, msg: { notice: "#{name} deleted." } }
+    { redirect_object: nil, msg: { notice: "#{name} deleted." } }
   end
 
   def error
-    { object: nil, msg: { error: "#{name} couldn't be deleted." } }
+    { redirect_object: nil, msg: { error: "#{name} couldn't be deleted." } }
   end
 end
