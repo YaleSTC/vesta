@@ -9,7 +9,7 @@ class SuiteGenerator
   end
 
   def generate
-    SuiteCreator.new(params).create![:redirect_object]
+    SuiteCreator.new(params).create![:record]
   end
 
   make_callable :generate

@@ -127,8 +127,8 @@ class SuiteMergerForm
 
   def success
     {
-      redirect_object: new_suite, form_object: nil,
-      msg: { success: 'Suites successfully merged' }
+      redirect_object: [new_suite.building, new_suite], record: new_suite,
+      form_object: nil, msg: { success: 'Suites successfully merged' }
     }
   end
 

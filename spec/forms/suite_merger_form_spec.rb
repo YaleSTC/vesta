@@ -70,24 +70,27 @@ RSpec.describe SuiteMergerForm, type: :model do
         mock_params(other_suite_number: other.number, number: 'foo')
       end
 
+      it 'returns the new suite and building in :redirect_object' do
+        result = described_class.submit(suite: suite, params: params)
+        expect(result[:redirect_object].map(&:class)).to eq([Building, Suite])
+      end
       it 'creates a new suite of the combined size' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:redirect_object].size).to \
-          eq(suite.size + other_suite.size)
+        expect(result[:record].size).to eq(suite.size + other_suite.size)
       end
       it 'creates a new suite with the defined number' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:redirect_object].number).to eq('foo')
+        expect(result[:record].number).to eq('foo')
       end
       it 'creates a new suite with the correct building' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:redirect_object].building).to eq(suite.building)
+        expect(result[:record].building).to eq(suite.building)
       end
       it 'creates a new suite with the correct draw' do
         draw = FactoryGirl.create(:draw)
         draw.suites << suite
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:redirect_object].draws.map(&:id)).to include(draw.id)
+        expect(result[:record].draws.map(&:id)).to include(draw.id)
       end
       it 'returns nil for :form_object' do
         result = described_class.submit(suite: suite, params: params)

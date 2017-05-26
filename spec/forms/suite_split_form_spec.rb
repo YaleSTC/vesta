@@ -53,7 +53,7 @@ RSpec.describe SuiteSplitForm, type: :model do
       it 'assigns the rooms to the correct suite' do
         room = suite.rooms.first
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:suites].first.rooms).to eq([room])
+        expect(result[:suites].first.rooms).to match_array([room])
       end
       it 'sets :redirect_object to nil' do
         result = described_class.submit(suite: suite, params: params)

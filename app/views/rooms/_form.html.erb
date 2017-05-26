@@ -1,4 +1,4 @@
-<%= simple_form_for @room do |f| %>
+<%= simple_form_for [@building, @suite, @room] do |f| %>
   <%= f.input :number %>
   <%= f.input :beds %>
   <%= f.input :suite_id, as: :select, collection: Suite.all, label_method: :name %>

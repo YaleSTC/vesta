@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Service object to create Suites.
 class SuiteCreator < Creator
@@ -8,5 +9,15 @@ class SuiteCreator < Creator
   #   the SuitesController.
   def initialize(params)
     super(klass: Suite, name_method: :number, params: params)
+  end
+
+  private
+
+  def success
+    {
+      redirect_object: [obj.building, obj],
+      record: obj,
+      msg: { success: "#{obj.send(name_method)} created." }
+    }
   end
 end

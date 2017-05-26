@@ -1,4 +1,4 @@
-<%= simple_form_for @suite do |f| %>
+<%= simple_form_for [@building, @suite] do |f| %>
   <%= f.input :number %>
   <%= f.association :building %>
   <%= f.input :medical, label: 'Medical suite' %>

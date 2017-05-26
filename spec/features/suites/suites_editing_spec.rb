@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Suite editing' do
@@ -7,13 +8,13 @@ RSpec.feature 'Suite editing' do
 
   it 'succeeds' do
     new_number = 'F32'
-    visit edit_suite_path(suite)
+    visit edit_building_suite_path(suite.building, suite)
     update_suite_number(new_number)
     expect(page).to have_css('.suite-number', text: new_number)
   end
 
   it 'redirects to /edit on failure' do
-    visit edit_suite_path(suite)
+    visit edit_building_suite_path(suite.building, suite)
     update_suite_number('')
     expect(page).to have_content('Edit Suite')
   end

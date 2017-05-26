@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable BlockLength
 Rails.application.routes.draw do
   devise_for :users
@@ -6,18 +7,22 @@ Rails.application.routes.draw do
     root to: 'high_voltage/pages#show', id: 'home', as: 'landing_page'
   end
   root to: 'dashboards#show'
+
   resources :colleges, only: %i(new create show edit update)
-  resources :buildings
-  post 'suite_import/import', to: 'suite_imports#import', as: 'suite_import'
-  resources :suites, except: :index do
-    member do
-      get 'merge'
-      post 'merge', to: 'suites#perform_merge'
-      get 'split'
-      post 'split', to: 'suites#perform_split'
+
+  resources :buildings do
+    resources :suites, except: :index do
+      resources :rooms, except: :index
+      member do
+        get 'merge'
+        post 'merge', to: 'suites#perform_merge'
+        get 'split'
+        post 'split', to: 'suites#perform_split'
+      end
     end
   end
-  resources :rooms, except: :index
+
+  post 'suite_import/import', to: 'suite_imports#import', as: 'suite_import'
 
   resources :users do
     member do

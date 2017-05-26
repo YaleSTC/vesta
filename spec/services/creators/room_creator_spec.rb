@@ -6,8 +6,8 @@ RSpec.describe RoomCreator do
   context 'success' do
     it 'sucessfully creates a room' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
-      expect(described_class.new(params).create![:redirect_object]).to \
-        be_instance_of(Room)
+      redirect_obj = described_class.new(params).create![:redirect_object]
+      expect(redirect_obj.map(&:class)).to eq([Building, Suite, Room])
     end
     it 'returns the room object even with invalid params' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)

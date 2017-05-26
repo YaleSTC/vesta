@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Suite splitting' do
   let(:suite) { FactoryGirl.create(:suite_with_rooms, rooms_count: 2) }
+
   before { log_in FactoryGirl.create(:admin) }
 
   it 'can be performed' do
@@ -12,7 +14,7 @@ RSpec.feature 'Suite splitting' do
   end
 
   def initiate_suite_split
-    visit suite_path(suite)
+    visit building_suite_path(suite.building, suite)
     click_on 'Split suite'
   end
 

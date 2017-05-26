@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Suite deletion' do
@@ -7,7 +8,7 @@ RSpec.feature 'Suite deletion' do
 
   it 'succeeds' do
     msg = "Suite #{suite.number} deleted."
-    visit suite_path(suite)
+    visit building_suite_path(suite.building, suite)
     click_on 'Delete'
     expect(page).to have_content(msg)
   end

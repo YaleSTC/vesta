@@ -7,18 +7,19 @@
   <%= render 'suites/summary', sizes: @suites.keys.sort, suites: @suites, label_method: :number_with_medical %>
 <% end %>
 <hr />
-<p><%= link_to 'New Suite', new_suite_path, class: 'button secondary' if policy(Suite).new? %></p>
+<p><%= link_to 'New Suite', new_building_suite_path(@building), class: 'button secondary' if policy(Suite).new? %></p>
 <% if policy(SuiteImportForm).import? %>
-<h3>Import Suites</h3>
-<p>Add many suites at once by uploading a CSV file with the building information.
-The CSV must have the format "Number, Singles, Doubles" where Number is the 
-identifier of the suite, Singles is the number of single bedrooms in the suite,
-and Doubles is the number of double bedrooms in the suite.</p>
-<p>
-<%= simple_form_for @suite_importer, url: suite_import_path do |f| %>
-  <%= f.hidden_field :building_id, value: @building.id %>
-  <%= f.input :file, label: 'Upload a CSV', as: :file %>
-  <%= f.submit 'Import' %>
+  <h3>Import Suites</h3>
+  <p>Add many suites at once by uploading a CSV file with the building information.
+  The CSV must have the format "Number, Singles, Doubles" where Number is the 
+  identifier of the suite, Singles is the number of single bedrooms in the suite,
+  and Doubles is the number of double bedrooms in the suite.</p>
+  <p>
+  <%= simple_form_for @suite_importer, url: suite_import_path do |f| %>
+    <%= f.hidden_field :building_id, value: @building.id %>
+    <%= f.input :file, label: 'Upload a CSV', as: :file %>
+    <%= f.submit 'Import' %>
+  <% end %>
 <% end %>
 </p>
 <hr />
@@ -30,5 +31,4 @@ and Doubles is the number of double bedrooms in the suite.</p>
     <%= link_to 'Delete', building_path(@building), method: :delete, data: { confirm: 'Are you sure you want to delete this building?' }, class: 'button alert' %>
   <% end %>
 </div>
-<% end %>
 <%= link_to 'View all buildings', buildings_path %>

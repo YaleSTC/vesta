@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 # Controller for Rooms
 class RoomsController < ApplicationController
   prepend_before_action :set_room, only: %i(show edit update destroy)
+  prepend_before_action :set_parents
 
-  def show
-  end
+  def show; end
 
   def new
     @room = Room.new
@@ -16,12 +17,10 @@ class RoomsController < ApplicationController
     handle_action(action: 'new', **result)
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
-    result = Updater.new(object: @room, name_method: :number,
-                         params: room_params).update
+    result = RoomUpdater.new(room: @room, params: room_params).update
     @room = result[:record]
     handle_action(action: 'edit', **result)
   end
@@ -29,9 +28,9 @@ class RoomsController < ApplicationController
   def destroy
     result = Destroyer.new(object: @room, name_method: :number).destroy
     path = if @room.suite
-             suite_path(@room.suite)
+             building_suite_path(@building, @room.suite)
            else
-             buildings_path
+             buildings_path(@building)
            end
     handle_action(path: path, **result)
   end
@@ -52,5 +51,10 @@ class RoomsController < ApplicationController
 
   def set_room
     @room = Room.find(params[:id])
+  end
+
+  def set_parents
+    @suite = Suite.find(params[:suite_id])
+    @building = Building.find(params[:building_id])
   end
 end

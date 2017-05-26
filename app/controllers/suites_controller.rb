@@ -1,7 +1,9 @@
 # frozen_string_literal: true
+
 # Controller for Suites
 class SuitesController < ApplicationController
   prepend_before_action :set_suite, except: %i(new create index)
+  before_action :set_building
 
   def show
     @rooms = @suite.rooms.order(:number)
@@ -21,12 +23,10 @@ class SuitesController < ApplicationController
     handle_action(action: 'new', **result)
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
-    result = Updater.new(object: @suite, name_method: :number,
-                         params: suite_params).update
+    result = SuiteUpdater.new(suite: @suite, params: suite_params).update
     @suite = result[:record]
     handle_action(action: 'edit', **result)
   end
@@ -89,6 +89,10 @@ class SuitesController < ApplicationController
 
   def set_suite
     @suite = Suite.includes(:rooms).find(params[:id])
+  end
+
+  def set_building
+    @building = Building.find(params[:building_id])
   end
 
   def find_merger_rooms

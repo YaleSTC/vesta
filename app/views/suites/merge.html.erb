@@ -1,6 +1,6 @@
 <% provide(:title, "Merge Suites #{@suite.number} and #{@other_suite.number}") %>
 <h1>Merge Suites <%= @suite.number %> and <%= @other_suite.number %></h1>
-<%= simple_form_for @merger_form, url: merge_suite_path(@suite), method: :post do |f| %>
+<%= simple_form_for @merger_form, url: merge_building_suite_path(@suite.building, @suite), method: :post do |f| %>
   <%= f.input :number %>
   <%= f.input :other_suite_number, as: :hidden  %>
   <p>The new suite will contain the following rooms:</p>
@@ -11,4 +11,4 @@
   </ul>
   <%= f.submit 'Merge' %>
 <% end %>
-<%= link_to 'Cancel', suite_path(@suite) %>
+<%= link_to 'Cancel', building_suite_path(@suite.building, @suite) %>

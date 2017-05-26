@@ -3,10 +3,10 @@
 <p><%= pluralize(@room.beds, 'bed') %></p>
 <div>
   <% if policy(@room).edit? %>
-    <%= link_to 'Edit', edit_room_path(@room), class: 'button secondary' %>
+    <%= link_to 'Edit', edit_building_suite_room_path(@room.suite.building, @room.suite, @room), class: 'button secondary' %>
   <% end %>
   <% if policy(@room).destroy? %>
-    <%= link_to 'Delete', room_path(@room), method: :delete, data: { confirm: 'Are you sure you want to delete this room?' }, class: 'button alert' %>
+    <%= link_to 'Delete', building_suite_room_path(@room.suite.building, @room.suite, @room), method: :delete, data: { confirm: 'Are you sure you want to delete this room?' }, class: 'button alert' %>
   <% end %>
 </div>
-<%= link_to 'Return to suite', suite_path(@room.suite) %>
+<%= link_to 'Return to suite', building_suite_path(@room.suite.building, @room.suite) %>

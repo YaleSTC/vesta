@@ -6,8 +6,8 @@ RSpec.describe SuiteCreator do
   context 'success' do
     it 'sucessfully creates a suite' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
-      expect(described_class.new(params).create![:redirect_object]).to \
-        be_instance_of(Suite)
+      redirect_obj = described_class.new(params).create![:redirect_object]
+      expect(redirect_obj.map(&:class)).to eq([Building, Suite])
     end
     it 'returns the suite object' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)

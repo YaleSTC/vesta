@@ -1,17 +1,18 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Suite Creation' do
   before { log_in FactoryGirl.create(:admin) }
   it 'succeeds' do
     attrs = { building: FactoryGirl.create(:building), suite_number: 'L01' }
-    visit 'suites/new'
+    visit new_building_suite_path(attrs[:building])
     fill_in_suite_info(**attrs)
     click_on 'Create'
     expect(page).to have_content(attrs[:suite_number])
   end
   it 'redirects to /new on failure' do
-    visit 'suites/new'
+    visit new_building_suite_path(FactoryGirl.create(:building))
     click_on 'Create'
     expect(page).to have_content('errors')
   end

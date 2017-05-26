@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Suite merging' do
@@ -6,6 +7,7 @@ RSpec.feature 'Suite merging' do
   let!(:other_suite) do
     FactoryGirl.create(:suite_with_rooms, building: suite.building)
   end
+
   before { log_in FactoryGirl.create(:admin) }
 
   it 'can be performed' do
@@ -23,7 +25,7 @@ RSpec.feature 'Suite merging' do
   end
 
   def initiate_suite_merger
-    visit suite_path(suite)
+    visit building_suite_path(suite.building, suite)
     fill_in 'suite_merger_form_other_suite_number', with: other_suite.number
     click_on 'Merge'
   end
