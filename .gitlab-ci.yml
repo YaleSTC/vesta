@@ -18,6 +18,8 @@ test:
     - cp config/database.yml.gitlab config/database.yml
     - bundle exec rake check_style 'git diff origin/master --name-status'
     - xvfb-run -a bundle exec rake
+  after_script:
+    - bundle exec codeclimate-test-reporter
   cache:
     paths:
       - vendor/bundle
