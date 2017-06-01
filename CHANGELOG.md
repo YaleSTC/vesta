@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Re-enable student suite selection ([#502](https://github.com/YaleSTC/vesta/issues/502)).
 * Update to Ruby v2.4.1 ([#607](https://yale.githost.io/sdmp/rails/vesta/issues/607)).
+* Fix intent reminder emails so they only go to students who haven't set intent ([#588](https://yale.githost.io/sdmp/rails/vesta/merge_requests/599)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed
