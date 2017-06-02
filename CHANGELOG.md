@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 * Fix intent reminder emails so they only go to students who haven't set intent ([#588](https://yale.githost.io/sdmp/rails/vesta/merge_requests/599)).
 * Rename :object key to :redirect_object in service object return hash ([#176](https://yale.githost.io/sdmp/rails/vesta/issues/176)).
 * Modularize service object class methods ([#140](https://yale.githost.io/sdmp/rails/vesta/issues/140)).
+* Update to Rails 5.1 ([#608](https://yale.githost.io/sdmp/rails/vesta/issues/608)).
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).

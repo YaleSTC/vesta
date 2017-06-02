@@ -51,24 +51,24 @@ class Room < ApplicationRecord
   end
 
   def update_suite_size
-    return unless beds_changed? || suite_id_changed?
-    update_suite_size_based_on_beds if beds_changed?
-    update_suite_size_based_on_assignment if suite_id_changed?
+    return unless saved_change_to_beds || saved_change_to_suite_id
+    update_suite_size_based_on_beds if saved_change_to_beds
+    update_suite_size_based_on_assignment if saved_change_to_suite_id
   end
 
   # rubocop:disable Rails/SkipsModelValidations
   def update_suite_size_based_on_beds
-    delta = beds - beds_was
+    delta = beds - beds_before_last_save
     suite.increment!(:size, delta)
   end
 
   def update_suite_size_based_on_assignment
     # prevent double increment on creation
-    return unless suite_id_was
+    return unless suite_id_before_last_save
     # use find_by in case of deletion / nullify callback
-    old_suite = Suite.find_by(id: suite_id_was)
+    old_suite = Suite.find_by(id: suite_id_before_last_save)
     new_suite = Suite.find_by(id: suite_id)
-    old_suite&.decrement!(:size, beds_was)
+    old_suite&.decrement!(:size, beds_before_last_save)
     new_suite&.increment!(:size, beds)
   end
 

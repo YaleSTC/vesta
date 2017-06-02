@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Model for Housing Groups
 #
@@ -33,12 +34,13 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
                                         only_integer: true }
   validates :lottery_number, numericality: { allow_nil: true }
 
-  validate :validate_suite_size_inclusion, if: ->() { size_changed? }
+  validate :validate_suite_size_inclusion,
+           if: ->() { will_save_change_to_size? }
   validate :validate_members_count, if: ->(g) { g.size.present? }
   validate :validate_status, if: ->(g) { g.size.present? }
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
-  after_save :update_status!, if: ->(g) { g.transfers_changed? }
+  after_save :update_status!, if: ->() { saved_change_to_transfers }
   before_destroy :remove_member_rooms
   after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
   after_destroy :notify_members_of_disband
@@ -58,8 +60,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   # SystemStackError under certain circumstances (skips callbacks).
   def update_status!
     assign_new_status
-    return unless  status && valid?
-    update_columns(status: status)
+    return unless status && valid?
+    update_columns(status: status) # rubocop:disable Rails/SkipsModelValidations
     send_locked_email if locked?
   end
 
@@ -158,7 +160,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   end
 
   def validate_status
-    return unless status_changed?
+    return unless will_save_change_to_status?
     case status
     when 'open'
       validate_open

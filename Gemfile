@@ -3,8 +3,8 @@ source "https://rubygems.org"
 ruby "2.4.1"
 
 gem "autoprefixer-rails", "~> 6.7.7"
-gem "delayed_job_active_record", "~> 4.1.1"
-gem 'devise', '~> 4.2.0'
+gem "delayed_job_active_record", "~> 4.1.2"
+gem 'devise', '~> 4.3.0'
 gem 'devise_cas_authenticatable', '~> 1.9.2'
 gem "flutie"
 gem "honeybadger", "~> 3.1.0"
@@ -15,10 +15,10 @@ gem "pg", "~> 0.20.0"
 gem "puma", "~> 3.8.2"
 gem "pundit", "~> 1.1.0"
 gem "rack-canonical-host"
-gem "rails", "~> 5.0.0"
+gem "rails", "~> 5.1.0"
 gem "recipient_interceptor"
 gem "sass-rails", "~> 5.0"
-gem "simple_form", "~> 3.4.0"
+gem "simple_form", "~> 3.5.0"
 gem "skylight", "~> 1.1.0"
 gem "sprockets", ">= 3.0.0"
 gem "sprockets-es6"

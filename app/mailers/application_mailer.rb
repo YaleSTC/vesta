@@ -1,8 +1,9 @@
 # frozen_string_literal: true
+
 #
 # Base Mailer class
 class ApplicationMailer < ActionMailer::Base
-  default from: ->(_) { vesta_sender }
+  default from: ->() { vesta_sender }
   default reply_to: College&.first&.admin_email
   layout 'mailer'
 

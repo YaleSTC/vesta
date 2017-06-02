@@ -41,13 +41,14 @@ class Membership < ApplicationRecord
   after_save :update_group_status
   after_destroy :update_group_status, if: ->(m) { m.group.present? }
 
-  after_save :send_joined_email, if: ->() { status_changed? && accepted? }
+  after_save :send_joined_email,
+             if: ->() { saved_change_to_status && accepted? }
   after_destroy :send_left_email, if: ->() { accepted? }
 
   after_save :destroy_pending, if: ->() { accepted? }
 
   def readonly?
-    if locked_changed?
+    if will_save_change_to_locked?
       # we need to allow the membership to be locked
       false
     else
@@ -67,12 +68,13 @@ class Membership < ApplicationRecord
   end
 
   def freeze_group_and_user
-    return unless group_id_changed? || user_id_changed?
+    return unless will_save_change_to_group_id? || will_save_change_to_user_id?
     throw(:abort)
   end
 
   def freeze_accepted_status
-    return unless status_changed? && status_was == 'accepted'
+    return unless will_save_change_to_status? &&
+                  status_in_database == 'accepted'
     throw(:abort)
   end
 
@@ -82,7 +84,7 @@ class Membership < ApplicationRecord
   end
 
   def group_is_open
-    return unless !persisted? || status_changed?
+    return unless !persisted? || will_save_change_to_status?
     errors.add :group, 'cannot accept additional members' unless group.open?
   end
 
@@ -92,7 +94,7 @@ class Membership < ApplicationRecord
   end
 
   def lockable?
-    return unless locked_changed? && locked
+    return unless will_save_change_to_locked? && locked
     errors.add :locked, 'must be an accepted membership' unless accepted?
     errors.add :locked, 'must be a finalizing group' unless group.finalizing?
   end
@@ -108,12 +110,12 @@ class Membership < ApplicationRecord
   end
 
   def destroy_pending
-    return unless status_changed? || id_changed?
+    return unless saved_change_to_status || saved_change_to_id
     user.memberships.where.not(id: id).destroy_all
   end
 
   def update_counter_cache
-    return unless status_changed?
+    return unless saved_change_to_status
     increment_counter_cache
   end
 
