@@ -16,8 +16,8 @@ test:
   script:
     - bundle check --path vendor/bundle || bundle install --path vendor/bundle
     - cp config/database.yml.gitlab config/database.yml
-    - bundle exec rake check_style 'git diff origin/master --name-status'
     - xvfb-run -a bundle exec rake
+    - bundle exec rake check_style 'git diff origin/master --name-status'
   after_script:
     - bundle exec codeclimate-test-reporter
   cache:
