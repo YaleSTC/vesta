@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 * Update to Rails 5.1 ([#608](https://yale.githost.io/sdmp/rails/vesta/issues/608)).
 * Make suites and rooms nested resources ([#431](https://yale.githost.io/sdmp/rails/vesta/issues/431)).
 * DrawsController#lock_all_sizes should use Updater ([#610](https://yale.githost.io/sdmp/rails/vesta/issues/610))
+* Remove students and suites from Draw strong params ([#282](https://yale.githost.io/sdmp/rails/vesta/issues/282)).
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
