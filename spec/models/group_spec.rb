@@ -200,6 +200,28 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#remove_members!' do
+    it 'removes members except leader' do
+      group = FactoryGirl.create(:full_group, size: 3)
+      ids = group.members.map(&:id)
+      expect { group.remove_members!(ids: ids) }.to \
+        change { group.memberships_count }.from(3).to(1)
+    end
+    it 'changes the group status from full to open' do
+      group = FactoryGirl.create(:full_group, size: 2)
+      ids = group.members.map(&:id)
+      expect { group.remove_members!(ids: ids) }.to \
+        change { group.status }.from('full').to('open')
+    end
+    it 'deletes membership object' do
+      group = FactoryGirl.create(:full_group, size: 2)
+      last_membership_id = group.memberships.last.id
+      group.remove_members!(ids: [group.members.last.id])
+      expect { Membership.find(last_membership_id) }.to \
+        raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe '#destroy' do
     it 'restores members to their original draws if drawless' do
       group = FactoryGirl.create(:drawless_group)

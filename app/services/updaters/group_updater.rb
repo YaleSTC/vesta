@@ -71,11 +71,7 @@ class GroupUpdater
 
   def remove_users
     ids = pending_users[:remove].map(&:id)
-    group.memberships.where(user_id: ids).delete_all
-    # rubocop:disable Rails/SkipsModelValidations
-    group.decrement!(:memberships_count, ids.size)
-    # rubocop:enable Rails/SkipsModelValidations
-    group.update_status!
+    group.remove_members!(ids: ids)
   end
 
   # Note that this occurs within the transaction

@@ -87,10 +87,23 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
 
   # Get the group's members that can be removed
   #
-  # @return[Array<User>] the members of the group with the exception of the
+  # @return [Array<User>] the members of the group with the exception of the
   #   group leader
   def removable_members
     members.reject { |u| u.id == leader_id }
+  end
+
+  # Remove specified members
+  #
+  # @param ids [Array<User>] members of the group
+  # @return [Array<User>] the remaining members of the group after deletion
+  def remove_members!(ids:)
+    ids.delete_if { |u| u == leader_id }
+    memberships.where(user_id: ids).delete_all
+    # rubocop:disable Rails/SkipsModelValidations
+    decrement!(:memberships_count, ids.size)
+    # rubocop:enable Rails/SkipsModelValidations
+    update_status!
   end
 
   # Get the group's locked/finalized members
