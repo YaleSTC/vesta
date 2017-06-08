@@ -9,9 +9,11 @@ All notable changes to this project will be documented in this file.
 * Rename :object key to :redirect_object in service object return hash ([#176](https://yale.githost.io/sdmp/rails/vesta/issues/176)).
 * Modularize service object class methods ([#140](https://yale.githost.io/sdmp/rails/vesta/issues/140)).
 * Update to Rails 5.1 ([#608](https://yale.githost.io/sdmp/rails/vesta/issues/608)).
+* Make suites and rooms nested resources ([#431](https://yale.githost.io/sdmp/rails/vesta/issues/431)).
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
+* Pass overrides properly in seed script generators ([#616](https://yale.githost.io/sdmp/rails/vesta/issues/616)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed

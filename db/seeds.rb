@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Rails/Output
 
 puts 'Generating seed data....'
@@ -16,6 +17,7 @@ Generator.generate(model: 'suite', count: 15)
 
 # generate bedrooms
 Generator.generate(model: 'room', count: 30)
+
 # generate common rooms
 Generator.generate(model: 'room', count: 10, beds: 0)
 

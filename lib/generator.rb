@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Seed script data factory
 module Generator
   require 'ffaker'
@@ -14,7 +15,7 @@ module Generator
     # puts "Generating #{count} #{model.camelize}...\n"
     # progress = ProgressBar.create(format: PROGRESS_STR, total: count)
     count.times do
-      GENERATORS[model.downcase.to_sym].generate(**overrides)
+      GENERATORS[model.downcase.to_sym].generate(overrides: overrides)
       # progress.increment
     end
   end
