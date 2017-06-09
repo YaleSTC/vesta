@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query object to retrieve all other suites in the same building as a passed
 # suite. Can be passed a relation in the initializer to scope the query.
 class OtherSuitesInBuildingQuery

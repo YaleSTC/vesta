@@ -41,7 +41,7 @@ RSpec.describe Draw, type: :model do
     it 'returns an array of all the available suite sizes in the draw' do
       instance_spy('SuiteSizesQuery', call: [1, 2]).tap do |q|
         allow(SuiteSizesQuery).to receive(:new).with(draw.suites.available)
-          .and_return(q)
+                                               .and_return(q)
       end
       expect(draw.suite_sizes).to match_array([1, 2])
     end
@@ -53,7 +53,7 @@ RSpec.describe Draw, type: :model do
     it 'returns an array of group sizes in the draw' do
       instance_spy('group_sizes_query', call: [1, 2]).tap do |q|
         allow(GroupSizesQuery).to receive(:new).with(draw.suites.available)
-          .and_return(q)
+                                               .and_return(q)
       end
       expect(draw.group_sizes).to match_array([1, 2])
     end

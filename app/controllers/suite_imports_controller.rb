@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Controller for Importing Suites
 class SuiteImportsController < ApplicationController
   def import

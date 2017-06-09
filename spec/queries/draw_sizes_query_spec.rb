@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawSizesQuery do
@@ -31,10 +32,11 @@ RSpec.describe DrawSizesQuery do
   def create_groups(sizes, draw = nil)
     sizes.each do |size|
       group = FactoryGirl.create(:full_group, size: size)
-      if draw
-        group.members.each { |u| u.update(draw_id: draw.id) }
-        group.update_column(:draw_id, draw.id)
-      end
+      next unless draw
+      group.members.each { |u| u.update(draw_id: draw.id) }
+      # rubocop:disable Rails/SkipsModelValidations
+      group.update_column(:draw_id, draw.id)
+      # rubocop:enable Rails/SkipsModelValidations
     end
   end
 

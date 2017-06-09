@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'User Editing' do
   let(:user) { FactoryGirl.create(:student) }
+
   before { log_in FactoryGirl.create(:admin) }
   it 'can update role' do
     visit_edit_form(user)

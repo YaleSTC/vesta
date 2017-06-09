@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Delegator class to allow for different permissions through Pundit for the
 # DashboardsController.
 class Dashboard < SimpleDelegator

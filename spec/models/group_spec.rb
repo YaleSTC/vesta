@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Group, type: :model do
   describe 'basic validations' do
     subject { FactoryGirl.build(:group) }
+
     it { is_expected.to validate_presence_of(:size) }
     it { is_expected.to allow_value(1).for(:size) }
     it { is_expected.not_to allow_value(0).for(:size) }
@@ -163,6 +165,7 @@ RSpec.describe Group, type: :model do
 
   describe '#pending_memberships' do
     let(:group) { FactoryGirl.create(:open_group) }
+
     it 'returns invitations but not accepted memberships' do
       user = FactoryGirl.create(:student, draw: group.draw, intent: 'on_campus')
       m = Membership.create(group: group, user: user, status: 'invited')
@@ -250,6 +253,7 @@ RSpec.describe Group, type: :model do
 
   context 'on disbanding' do
     let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
+
     it 'notifies members' do
       group = FactoryGirl.create(:full_group)
       allow(StudentMailer).to receive(:disband_notification).and_return(msg)
@@ -261,6 +265,7 @@ RSpec.describe Group, type: :model do
 
   context 'on locking' do
     let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
+
     it 'notifies members' do
       group = FactoryGirl.create(:finalizing_group, size: 2)
       allow(StudentMailer).to receive(:group_locked).and_return(msg)

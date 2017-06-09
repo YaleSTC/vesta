@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query object to return all suites that have rooms assigned
 class SuitesWithRoomsAssignedQuery
   # See IntentMetricsQuery for explanation.

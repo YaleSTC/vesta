@@ -30,7 +30,7 @@ RSpec.describe GroupsHelper, type: :helper do
       instance_spy('group').tap do |group|
         allow(group).to receive(:memberships).and_return(group)
         allow(group).to receive(:find_by).with(user_id: member.id)
-          .and_return(membership)
+                                         .and_return(membership)
       end
     end
   end

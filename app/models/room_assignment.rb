@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-#
 # Model / form object for room assignment. Ensures that all students in a group
 # are assigned rooms, that all rooms belong to the group's suite, and that no
 # room is assigned more students than beds.

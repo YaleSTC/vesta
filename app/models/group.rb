@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-#
 # Model for Housing Groups
 #
 # @attr size [Integer] The room size that the Group wants.

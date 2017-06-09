@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Helper methods for the Users views
 module UsersHelper
   # Generate a form field for a profile attribute. Should be disabled if the

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe EmailExport do
@@ -6,12 +7,15 @@ RSpec.describe EmailExport do
     subject { described_class.new }
 
     it do
-      is_expected.to validate_numericality_of(:draw_id).only_integer
-        .is_greater_than_or_equal_to(0).allow_nil
+      is_expected.to \
+        validate_numericality_of(:draw_id).only_integer
+                                          .is_greater_than_or_equal_to(0)
+                                          .allow_nil
     end
     it do
       is_expected.to validate_numericality_of(:size).only_integer
-        .is_greater_than(0).allow_nil
+                                                    .is_greater_than(0)
+                                                    .allow_nil
     end
   end
 

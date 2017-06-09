@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Draw activation' do
   let(:draw) { FactoryGirl.create(:draw_with_members, status: 'draft') }
+
   context 'as admin' do
     before do
       FactoryGirl.create(:college)

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/fake_profile_querier'
 require 'rack-timeout'

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Service / form object for email exports
 #
 # @attr draw_id [Integer] the draw_id to scope to, if any; set to zero for

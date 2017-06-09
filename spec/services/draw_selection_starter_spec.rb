@@ -20,7 +20,7 @@ RSpec.describe DrawSelectionStarter do
     it 'updates the status of the draw to suite_selection' do
       draw = instance_spy('draw', validity_stubs(valid: true))
       allow(draw).to receive(:update).with(status: 'suite_selection')
-        .and_return(true)
+                                     .and_return(true)
       described_class.start(draw: draw)
       expect(draw).to have_received(:update).with(status: 'suite_selection')
     end
@@ -54,7 +54,7 @@ RSpec.describe DrawSelectionStarter do
   def mock_draw_selection_starter(param_hash)
     instance_spy('draw_selection_starter').tap do |draw_selection_starter|
       allow(described_class).to receive(:new).with(param_hash)
-        .and_return(draw_selection_starter)
+                                             .and_return(draw_selection_starter)
     end
   end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe LockingReminderJob, type: :job do
@@ -10,6 +11,7 @@ RSpec.describe LockingReminderJob, type: :job do
         .with(intent: %w(on_campus undeclared)).and_return([u])
     end
   end
+
   it 'sends locking reminders to on_campus/undeclared users in the draw' do
     allow(StudentMailer).to receive(:locking_reminder)
       .with(user: user).and_return(msg)

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Controller for room assignments
 class RoomAssignmentsController < ApplicationController
   prepend_before_action :set_room_assignment

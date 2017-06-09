@@ -239,7 +239,7 @@ RSpec.describe GroupPolicy do
         before do
           draw = instance_spy('Draw', student_selection?: true)
           allow(draw).to receive(:next_group?).with(other_group)
-            .and_return(true)
+                                              .and_return(true)
           allow(other_group).to receive(:draw).and_return(draw)
         end
         it { is_expected.not_to permit(user, other_group) }

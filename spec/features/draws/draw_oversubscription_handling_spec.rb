@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Draw oversubscription handling' do
@@ -9,6 +10,7 @@ RSpec.feature 'Draw oversubscription handling' do
   let!(:group) do
     FactoryGirl.create(:locked_group, leader: draw.students.first, size: 1)
   end
+
   before do
     FactoryGirl.create(:locked_group, leader: draw.students.last, size: 1)
     draw.suites.delete_all

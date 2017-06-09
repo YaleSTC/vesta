@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Job to send group locking deadline reminders
 class LockingReminderJob < ApplicationJob
   queue_as :default

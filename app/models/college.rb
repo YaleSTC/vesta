@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Model for site configuration / individual colleges. Will be used for
 # multi-tenancy in the future.
 #

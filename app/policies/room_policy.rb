@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class for Room permissions
 class RoomPolicy < ApplicationPolicy
   def show?

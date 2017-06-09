@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 require 'csv'
-#
+
 # Controller for housing results
 class ResultsController < ApplicationController
   EXPORT_HEADERS = %i(last_name first_name username suite room).freeze

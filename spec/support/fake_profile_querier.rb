@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class FakeProfileQuerier
   attr_reader :id
 

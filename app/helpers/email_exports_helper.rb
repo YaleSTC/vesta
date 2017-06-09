@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Helper methods for email exports
 module EmailExportsHelper
   # Return draw scoping header string

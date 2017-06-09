@@ -48,7 +48,7 @@ RSpec.describe SuiteSelector do
         expect(result[:redirect_object]).to be_nil
       end
     end
-    context' success' do
+    context ' success' do
       it 'sets the object to the group' do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123)
@@ -73,7 +73,7 @@ RSpec.describe SuiteSelector do
   def mock_suite_selector(params)
     instance_spy('suite_selector').tap do |suite_selector|
       allow(SuiteSelector).to receive(:new).with(params)
-        .and_return(suite_selector)
+                                           .and_return(suite_selector)
     end
   end
 

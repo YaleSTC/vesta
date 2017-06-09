@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Controller for College resources
 class CollegesController < ApplicationController

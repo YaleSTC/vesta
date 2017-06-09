@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe 'basic validations' do
     subject { FactoryGirl.build(:user) }
+
     it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
     it { is_expected.to validate_presence_of(:role) }
     it { is_expected.to validate_presence_of(:first_name) }
@@ -23,6 +25,7 @@ RSpec.describe User, type: :model do
   describe 'CAS username' do
     context 'when CAS is used' do
       subject(:user) { FactoryGirl.build(:user, username: 'foo') }
+
       before { allow(User).to receive(:cas_auth?).and_return(true) }
       it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
       it { is_expected.to validate_presence_of(:username) }
@@ -35,6 +38,7 @@ RSpec.describe User, type: :model do
 
     context 'when CAS is not used' do
       subject { FactoryGirl.build(:user) }
+
       it { is_expected.not_to validate_presence_of(:username) }
     end
   end

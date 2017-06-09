@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class for Suite permissions
 class SuitePolicy < ApplicationPolicy
   def show?

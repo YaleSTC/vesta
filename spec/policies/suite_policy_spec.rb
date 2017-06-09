@@ -1,12 +1,15 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SuitePolicy do
   subject { described_class }
+
   let(:suite) { FactoryGirl.build_stubbed(:suite) }
 
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+
     permissions :show? do
       context 'non-medical suite' do
         before { allow(suite).to receive(:medical).and_return(false) }
@@ -28,6 +31,7 @@ RSpec.describe SuitePolicy do
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+
     permissions :show? do
       context 'non-medical suite' do
         before { allow(suite).to receive(:medical).and_return(false) }
@@ -49,6 +53,7 @@ RSpec.describe SuitePolicy do
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+
     permissions :show?, :edit?, :update?, :destroy?, :merge?, :perform_merge?,
                 :medical? do
       it { is_expected.to permit(user, suite) }

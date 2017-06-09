@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-#
 # Users Controller class
 class UsersController < ApplicationController
   prepend_before_action :set_user, except: %i(index new build create)

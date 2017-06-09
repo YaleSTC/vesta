@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'support/fake_profile_querier'
 require 'rack-timeout'
@@ -16,7 +17,7 @@ RSpec.feature 'Admin creation' do
     before do
       allow(ENV).to receive(:[]).and_return(nil)
       allow(ENV).to receive(:[]).with('QUERIER')
-        .and_return('FakeProfileQuerier')
+                                .and_return('FakeProfileQuerier')
       # rubocop:disable RSpec/AnyInstance
       allow_any_instance_of(FakeProfileQuerier).to receive(:query)
         .and_raise(Rack::Timeout::RequestTimeoutException.new({}))

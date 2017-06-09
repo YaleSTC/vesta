@@ -107,7 +107,7 @@ RSpec.describe DrawLotteryStarter do
   def mock_draw_lottery_starter(param_hash)
     instance_spy('draw_lottery_starter').tap do |draw_lottery_starter|
       allow(described_class).to receive(:new).with(param_hash)
-        .and_return(draw_lottery_starter)
+                                             .and_return(draw_lottery_starter)
     end
   end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe EmailExportPolicy do
@@ -6,6 +7,7 @@ RSpec.describe EmailExportPolicy do
 
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, EmailExport) }
     end
@@ -13,6 +15,7 @@ RSpec.describe EmailExportPolicy do
 
   context 'rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+
     permissions :new?, :create? do
       it { is_expected.to permit(user, EmailExport) }
     end
@@ -20,6 +23,7 @@ RSpec.describe EmailExportPolicy do
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+
     permissions :new?, :create? do
       it { is_expected.to permit(user, EmailExport) }
     end

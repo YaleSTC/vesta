@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ENV['RACK_ENV'] = 'test'
 
 require File.expand_path('../../config/environment', __FILE__)
@@ -9,7 +10,9 @@ require 'capybara/rspec'
 require 'capybara/rails'
 require 'pundit/rspec'
 
-Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |file| require file }
+SUPPORT_PATH = %w(spec support ** *.rb).freeze
+
+Dir[Rails.root.join(*SUPPORT_PATH)].sort.each { |file| require file }
 
 module Features
   # Extend this module in spec/support/features/*.rb

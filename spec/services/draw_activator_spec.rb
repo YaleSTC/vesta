@@ -61,7 +61,7 @@ RSpec.describe DrawActivator do
   def mock_draw_activator(param_hash)
     instance_spy('draw_activator').tap do |draw_activator|
       allow(described_class).to receive(:new).with(param_hash)
-        .and_return(draw_activator)
+                                             .and_return(draw_activator)
     end
   end
 

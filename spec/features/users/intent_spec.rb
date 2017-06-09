@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Housing Intent' do
@@ -20,6 +21,7 @@ RSpec.feature 'Housing Intent' do
 
   context 'admin' do
     let!(:draw) { FactoryGirl.create(:draw, status: 'pre_lottery') }
+
     it 'can lock intent changes on a per draw basis' do
       student = FactoryGirl.create(:student, draw: draw)
       lock_intent(draw)

@@ -22,8 +22,8 @@ RSpec.describe Callable do
         def foo; end
       end
       it 'defines a method on self to call method on new instance' do
-        allow(Klass).to receive(:new).with(attr: 'foo')
-          .and_return(instance_spy('Klass', foo: true))
+        klass_spy = instance_spy('Klass', foo: true)
+        allow(Klass).to receive(:new).with(attr: 'foo').and_return(klass_spy)
         Klass.make_callable(:foo)
         expect(Klass.foo(attr: 'foo')).to eq(true)
       end

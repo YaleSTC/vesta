@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 def log_in(user)
   visit '/users/sign_in'
   fill_in 'user_email', with: user.email

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Helper module for Suites
 module SuitesHelper
   # Returns the button string for the medical suite "form"

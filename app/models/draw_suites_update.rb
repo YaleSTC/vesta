@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-#
 # Form / service object to handle the updating of draw suites
 class DrawSuitesUpdate
   include ActiveModel::Model

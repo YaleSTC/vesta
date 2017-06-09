@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe EnrollmentPolicy do
@@ -6,6 +7,7 @@ RSpec.describe EnrollmentPolicy do
 
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+
     permissions :new? do
       it { is_expected.not_to permit(user, described_class) }
     end
@@ -13,6 +15,7 @@ RSpec.describe EnrollmentPolicy do
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+
     permissions :new? do
       it { is_expected.not_to permit(user, described_class) }
     end
@@ -20,6 +23,7 @@ RSpec.describe EnrollmentPolicy do
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+
     permissions :new? do
       it { is_expected.to permit(user, described_class) }
     end

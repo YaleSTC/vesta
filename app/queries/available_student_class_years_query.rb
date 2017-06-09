@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return the class years of all students who are both not in a draw and
 # not in a group. This can be passed an existing relation for a subset of
 # students.

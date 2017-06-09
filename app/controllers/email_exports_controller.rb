@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Controller for email exports
 class EmailExportsController < ApplicationController
   before_action :prepare_form_data
@@ -26,7 +26,7 @@ class EmailExportsController < ApplicationController
 
   def email_export_params
     p = params.require(:email_export).permit(%i(draw_id size locked))
-    p.select { |_k, v| !v.empty? }
+    p.reject { |_k, v| v.empty? }
   end
 
   def prepare_form_data

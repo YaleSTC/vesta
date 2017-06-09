@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # General view helper module
 module ApplicationHelper
   delegate :size_str, to: Suite

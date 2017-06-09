@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class for Dashboard permissions.
 class DashboardPolicy < ApplicationPolicy
   def show?

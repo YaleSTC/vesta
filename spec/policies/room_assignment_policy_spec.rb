@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe RoomAssignmentPolicy do
   subject { described_class }
+
   let(:user) { instance_spy('user') }
   let(:group) { instance_spy('group') }
   let(:room_assignment) { instance_spy('room_assignment', group: group) }

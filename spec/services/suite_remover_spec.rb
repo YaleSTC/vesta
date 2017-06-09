@@ -23,7 +23,7 @@ RSpec.describe SuiteRemover do
         expect(result[:msg].keys).to eq([:error])
       end
     end
-    context' success' do
+    context ' success' do
       it 'sets the object to the group' do
         suite = mock_suite(id: 123)
         group = instance_spy('group', suite: suite)
@@ -48,7 +48,7 @@ RSpec.describe SuiteRemover do
   def mock_suite_remover(params)
     instance_spy('suite_remover').tap do |suite_remover|
       allow(SuiteRemover).to receive(:new).with(params)
-        .and_return(suite_remover)
+                                          .and_return(suite_remover)
     end
   end
 

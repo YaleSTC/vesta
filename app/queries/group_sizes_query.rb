@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return all of the group sizes in the database.
 class GroupSizesQuery
   # See IntentMetricsQuery for explanation.

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Group editing' do
@@ -20,6 +21,7 @@ RSpec.feature 'Group editing' do
     let(:new_leader) do
       FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
     end
+
     before do
       FactoryGirl.create(:suite_with_rooms, rooms_count: 2, draws: [group.draw])
       group.update(size: 2)

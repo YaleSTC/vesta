@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return the suites that don't belong to any draw. This can be passed
 # an existing relation for a subset of all Suites.
 class DrawlessSuitesQuery

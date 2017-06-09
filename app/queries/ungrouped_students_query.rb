@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return the students who do not currently belong to any group, i.e. do
 # belong to a membership. This can be passed an existing relation for a subset
 # of all students.

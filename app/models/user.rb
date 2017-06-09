@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # User model class for all user types. Optionally loads in sets of Devise
 # modules for authentication. Validates presence of required profile fields
 # (noted below).

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Housing Group Creation' do
@@ -30,6 +31,7 @@ RSpec.feature 'Housing Group Creation' do
     let!(:suite) do
       FactoryGirl.create(:suite_with_rooms, rooms_count: 2, draws: [draw])
     end
+
     before { log_in FactoryGirl.create(:user, role: 'rep') }
 
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength
@@ -51,6 +53,7 @@ RSpec.feature 'Housing Group Creation' do
     let!(:suite) do
       FactoryGirl.create(:suite_with_rooms, rooms_count: 2, draws: [draw])
     end
+
     before { log_in FactoryGirl.create :admin }
 
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength

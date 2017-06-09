@@ -53,7 +53,7 @@ RSpec.describe IDRProfileQuerier do
   def mock_profile_querier(**params)
     instance_spy('IDRProfileQuerier').tap do |profile_querier|
       allow(IDRProfileQuerier).to receive(:new).with(**params)
-        .and_return(profile_querier)
+                                               .and_return(profile_querier)
     end
   end
 

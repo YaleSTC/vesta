@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Helper module for Draws
 module DrawsHelper
   def intent_deadline_str(draw)

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Mailer class for general user e-mails
 class UserMailer < ApplicationMailer
   # Send new account confirmation e-mail. Takes an auto-generated password as an

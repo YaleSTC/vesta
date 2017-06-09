@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class for Building permissions.
 class BuildingPolicy < ApplicationPolicy
   def show?

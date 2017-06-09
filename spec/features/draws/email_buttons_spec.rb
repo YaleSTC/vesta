@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Draw email buttons' do
@@ -13,6 +14,7 @@ RSpec.feature 'Draw email buttons' do
                          status: 'pre_lottery',
                          intent_deadline: Time.zone.tomorrow)
     end
+
     it 'sends intent reminders' do
       time = Time.zone.now.strftime('%B %e, %l:%M %P')
       visit draw_path(draw)
@@ -28,6 +30,7 @@ RSpec.feature 'Draw email buttons' do
                          intent_deadline: Time.zone.yesterday,
                          locking_deadline: Time.zone.tomorrow)
     end
+
     it 'sends locking reminders' do
       time = Time.zone.now.strftime('%B %e, %l:%M %P')
       visit draw_path(draw)

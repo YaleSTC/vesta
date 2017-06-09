@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Form object for filtering intent reports; will likely be abstracted into a
 # generalized report filter at some point.
 class IntentReportFilter

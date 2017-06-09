@@ -20,7 +20,7 @@ RSpec.describe GroupSuiteSelector do
         expect(result[:msg].keys).to include(:error)
       end
     end
-    context' success' do
+    context ' success' do
       # rubocop:disable RSpec/ExampleLength
       it 'sends emails to the next groups' do
         next_group = instance_spy('group', lottery_number: 12)

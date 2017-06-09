@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Helper module for drawless groups
 module DrawlessGroupsHelper
   def suite_str(group)

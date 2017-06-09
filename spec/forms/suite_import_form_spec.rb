@@ -75,7 +75,7 @@ RSpec.describe SuiteImportForm do
       allow(Suite).to receive(:create!)
         .and_return(instance_spy('Suite', number: 'L01'))
       allow(Suite).to receive(:create!).with(building: building, number: 'H42')
-        .and_raise('ERROR')
+                                       .and_raise('ERROR')
       allow(Room).to receive(:create!)
     end
   end

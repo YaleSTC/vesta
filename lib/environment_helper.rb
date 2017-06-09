@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Helper methods for dealing with environment variables.
 module EnvironmentHelper
   FALSE = [0, '0', false, 'false', nil, ''].freeze

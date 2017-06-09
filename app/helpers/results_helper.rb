@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Helper module for results
 module ResultsHelper
   # Return a string describing the occupants of a room

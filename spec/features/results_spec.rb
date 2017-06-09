@@ -1,8 +1,10 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Results' do
   let!(:data) { create_data }
+
   before do
     create_data
     log_in FactoryGirl.create(:admin)

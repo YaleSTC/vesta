@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class for SuiteImport permissions.
 class SuiteImportFormPolicy < ApplicationPolicy
   def import?

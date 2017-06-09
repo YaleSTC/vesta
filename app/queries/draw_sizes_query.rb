@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return all of the group and available suite sizes for a given draw.
 # Defaults to drawless groups if no draw passed.
 class DrawSizesQuery

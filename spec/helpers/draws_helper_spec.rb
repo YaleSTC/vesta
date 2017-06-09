@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe DrawsHelper, type: :helper do
@@ -56,6 +57,7 @@ RSpec.describe DrawsHelper, type: :helper do
 
   describe '#toggle_size_lock_btn' do
     let(:draw) { instance_spy('draw') }
+
     it 'returns a lock button if the draw size is unlocked' do
       allow(draw).to receive(:size_locked?).and_return(false)
       btn = helper.toggle_size_lock_btn(draw: draw, size: 1, path: '')
@@ -70,6 +72,7 @@ RSpec.describe DrawsHelper, type: :helper do
 
   describe '#start_lottery_btn_class' do
     let(:draw) { instance_spy('draw') }
+
     it 'returns a red button for oversubscription' do
       allow(draw).to receive(:oversubscribed?).and_return(true)
       expect(helper.start_lottery_btn_class(draw)).to eq('button alert')

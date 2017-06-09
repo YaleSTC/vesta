@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return all of the suite sizes in the database.
 class SuiteSizesQuery
   # See IntentMetricsQuery for explanation.

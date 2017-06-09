@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Controller for user enrollments (bulk-adding)
 class EnrollmentsController < ApplicationController
   def new

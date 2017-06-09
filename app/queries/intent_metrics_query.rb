@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return the metrics on the intent selections of the students in a
 # specific draw.
 class IntentMetricsQuery

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return the suites that belong to at least one draw, with the
 # exclusion of those that belong to the passed draw.
 class SuitesInOtherDrawsQuery

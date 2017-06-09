@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Policy for assigning rooms
 class RoomAssignmentPolicy < ApplicationPolicy
   def create?

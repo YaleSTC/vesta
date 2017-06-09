@@ -8,7 +8,7 @@ RSpec.describe IntentReminderJob, type: :job do
   let(:draw) do
     instance_spy('draw', intent_deadline: 'date').tap do |d|
       allow(d.students).to receive(:where).with(intent: %w(undeclared))
-        .and_return([user])
+                                          .and_return([user])
     end
   end
 

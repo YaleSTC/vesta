@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Overrides checkbox input to include inline styling
 class CollectionCheckBoxesInput < SimpleForm::Inputs::CollectionCheckBoxesInput

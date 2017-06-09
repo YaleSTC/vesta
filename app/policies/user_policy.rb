@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Class for User permissions
 class UserPolicy < ApplicationPolicy
   def show?

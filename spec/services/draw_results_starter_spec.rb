@@ -75,7 +75,7 @@ RSpec.describe DrawResultsStarter do
   def mock_draw_results_starter(param_hash)
     instance_spy('draw_results_starter').tap do |draw_results_starter|
       allow(described_class).to receive(:new).with(param_hash)
-        .and_return(draw_results_starter)
+                                             .and_return(draw_results_starter)
     end
   end
 

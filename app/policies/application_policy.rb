@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Base class for permissions. Defaults to only Admin access.
 class ApplicationPolicy
   attr_reader :user, :record

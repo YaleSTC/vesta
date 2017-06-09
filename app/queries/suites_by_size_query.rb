@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 # Query to return all suites, collected by suite size, for a passed relation.
 # Defaults to all suites.
 class SuitesBySizeQuery
