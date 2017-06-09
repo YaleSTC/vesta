@@ -43,7 +43,7 @@ group :development, :test do
   gem "awesome_print"
   gem "bullet", "~> 5.5.1"
   gem "bundler-audit", ">= 0.5.0", require: false
-  gem "dotenv-rails", "~> 2.2.0"
+  gem "dotenv-rails", "~> 2.2.1"
   gem "factory_girl_rails", "~> 4.8.0"
   gem "pry-byebug", "~> 3.4.2"
   gem "pry-rails", "~> 0.3.6"
