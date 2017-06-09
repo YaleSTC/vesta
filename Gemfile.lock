@@ -364,7 +364,7 @@ DEPENDENCIES
   uglifier (~> 3.2.0)
   web-console (~> 3.5.0)
   webmock
-  yard (~> 0.9.8)
+  yard (~> 0.9.9)
 
 RUBY VERSION
    ruby 2.4.1p111
