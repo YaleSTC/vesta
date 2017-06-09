@@ -48,7 +48,7 @@ group :development, :test do
   gem "pry-byebug", "~> 3.4.2"
   gem "pry-rails", "~> 0.3.6"
   gem "rspec-rails", "~> 3.6.0.beta2"
-  gem "rubocop", "~> 0.48.0", require: false
+  gem "rubocop", "~> 0.49.0", require: false
   gem "rubocop-rspec", "~> 1.15.0", require: false
   # gem 'ruby-progressbar', '~> 1.8.0'
 end
