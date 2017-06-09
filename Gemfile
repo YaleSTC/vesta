@@ -54,7 +54,7 @@ group :development, :test do
 end
 
 group :development, :staging do
-  gem "rack-mini-profiler", "~> 0.10.2", require: false
+  gem "rack-mini-profiler", "~> 0.10.5", require: false
 end
 
 group :test do
