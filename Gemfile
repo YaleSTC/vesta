@@ -23,7 +23,7 @@ gem "skylight", "~> 1.3.1"
 gem "sprockets", ">= 3.0.0"
 gem "sprockets-es6"
 gem "title"
-gem "uglifier", "~> 3.1.11"
+gem "uglifier", "~> 3.2.0"
 
 # for UserGenerator
 gem 'ffaker', '~> 2.4.0'

@@ -286,7 +286,7 @@ GEM
       rails (>= 3.1)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
-    uglifier (3.1.13)
+    uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.2.1)
     uniform_notifier (1.10.0)
@@ -361,7 +361,7 @@ DEPENDENCIES
   sprockets-es6
   timecop
   title
-  uglifier (~> 3.1.11)
+  uglifier (~> 3.2.0)
   web-console (~> 3.4.0)
   webmock
   yard (~> 0.9.8)
