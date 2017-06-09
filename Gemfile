@@ -5,7 +5,7 @@ ruby "2.4.1"
 gem "autoprefixer-rails", "~> 7.1.1"
 gem "delayed_job_active_record", "~> 4.1.2"
 gem 'devise', '~> 4.3.0'
-gem 'devise_cas_authenticatable', '~> 1.9.2'
+gem 'devise_cas_authenticatable', '~> 1.10.0'
 gem "flutie"
 gem "honeybadger", "~> 3.1.0"
 gem "jquery-rails", "~> 4.3.1"
