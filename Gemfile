@@ -35,7 +35,7 @@ group :development do
   gem "listen"
   gem "spring", "~> 2.0.1"
   gem "spring-commands-rspec"
-  gem "web-console", "~> 3.4.0"
+  gem "web-console", "~> 3.5.0"
   gem "yard", "~> 0.9.8"
 end
 
