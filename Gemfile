@@ -26,7 +26,7 @@ gem "title"
 gem "uglifier", "~> 3.2.0"
 
 # for UserGenerator
-gem 'ffaker', '~> 2.4.0'
+gem 'ffaker', '~> 2.5.0'
 
 # Front-End Styling
 gem 'foundation-rails', '~> 6.3.0.0'

@@ -104,7 +104,7 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
-    ffaker (2.4.0)
+    ffaker (2.5.0)
     ffi (1.9.18)
     flutie (2.0.0)
     formulaic (0.4.0)
@@ -325,7 +325,7 @@ DEPENDENCIES
   devise_cas_authenticatable (~> 1.10.0)
   dotenv-rails (~> 2.2.0)
   factory_girl_rails (~> 4.8.0)
-  ffaker (~> 2.4.0)
+  ffaker (~> 2.5.0)
   flutie
   formulaic (~> 0.4.0)
   foundation-rails (~> 6.3.0.0)
