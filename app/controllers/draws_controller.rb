@@ -69,7 +69,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def suite_summary
-    suites = @draw.suites.available.where(medical: false)
+    suites = @draw.suites.includes(:rooms).available.where(medical: false)
     @all_sizes = SuiteSizesQuery.new(suites).call
     @suites_by_size = SuitesBySizeQuery.new(suites).call
     @suites_by_size.default = []

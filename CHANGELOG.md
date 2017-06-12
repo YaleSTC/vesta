@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
 * Pass overrides properly in seed script generators ([#616](https://yale.githost.io/sdmp/rails/vesta/issues/616)).
 * Fixed definition inconsistencies in policy files ([#216](https://yale.githost.io/sdmp/rails/vesta/issues/216)). 
+* Fix n+3 query in suites summary partial ([#567](https://yale.githost.io/sdmp/rails/vesta/issues/567)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed

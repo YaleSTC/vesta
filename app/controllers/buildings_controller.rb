@@ -6,7 +6,7 @@ class BuildingsController < ApplicationController
 
   def show
     @suite_importer = SuiteImportForm.new(building: @building)
-    @suites = SuitesBySizeQuery.new(@building.suites).call
+    @suites = SuitesBySizeQuery.new(@building.suites.includes(:rooms)).call
   end
 
   def new
