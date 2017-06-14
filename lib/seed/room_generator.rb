@@ -5,20 +5,20 @@ class RoomGenerator
   include Callable
 
   def initialize(overrides: {})
-    gen_params(overrides: overrides)
+    @overrides = overrides
   end
 
   def generate
-    RoomCreator.new(params).create![:redirect_object]
+    RoomCreator.new(gen_params).create![:redirect_object]
   end
 
   make_callable :generate
 
   private
 
-  attr_reader :params
+  attr_reader :params, :overrides
 
-  def gen_params(overrides: {})
+  def gen_params
     @params ||= { suite: Suite.all.sample || SuiteGenerator.generate,
                   beds: rand(1..2),
                   number: FFaker::Address.building_number }.merge(overrides)

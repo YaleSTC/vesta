@@ -5,20 +5,20 @@ class SuiteGenerator
   include Callable
 
   def initialize(overrides: {})
-    gen_params(overrides: overrides)
+    @overrides = overrides
   end
 
   def generate
-    SuiteCreator.new(params).create![:record]
+    SuiteCreator.new(gen_params).create![:record]
   end
 
   make_callable :generate
 
   private
 
-  attr_reader :params
+  attr_reader :params, :overrides
 
-  def gen_params(overrides: {})
+  def gen_params
     @params ||= { building: Building.all.sample || BuildingGenerator.generate,
                   number: FFaker::Address.building_number }.merge(overrides)
   end

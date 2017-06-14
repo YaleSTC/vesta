@@ -1,32 +1,58 @@
 # frozen_string_literal: true
 
-# Seed script generator for Draws
+# Base class for all draw generators
 class DrawGenerator
   include Callable
 
-  def initialize(overrides: {})
-    gen_params(overrides: overrides)
+  def initialize(overrides: {}, group_overrides: {}, group_count: rand(3..7))
+    @overrides = overrides
+    @group_overrides = group_overrides
+    @group_count = group_count
   end
 
   def generate
-    Creator.create!(params: params, klass: Draw, name_method: :name)[:object]
+    create_draw
+    add_members
+    update_status
+    draw
   end
 
   make_callable :generate
 
   private
 
-  attr_reader :params
+  attr_reader :params, :suites, :overrides,
+              :group_overrides, :group_count, :draw
 
-  def gen_params(overrides: {})
-    check_member_existence
-    @params ||= { suites: Suite.all.sample(3),
-                  students: User.where(role: 'student', draw_id: nil).sample(5),
-                  name: "#{FFaker::Music.artist} Draw" }.merge(overrides)
+  def create_draw
+    @draw ||= Draw.create!(gen_params)
   end
 
-  def check_member_existence
-    5.times { SuiteGenerator.generate } unless Suite.all.count >= 5
-    8.times { UserGenerator.generate } unless User.all.count >= 8
+  def gen_params
+    add_suites
+    @params ||= { suites: suites,
+                  name: "#{FFaker::Music.artist} Draw" }.merge!(overrides)
+  end
+
+  def add_suites
+    @suites ||= Array.new(group_count + 1) do
+      SuiteGenerator.generate.tap do |s|
+        rand(1..3).times { RoomGenerator.generate(overrides: { suite: s }) }
+      end
+    end
+  end
+
+  def add_members
+    group_count.times do
+      GroupGenerator.generate(draw: draw, overrides: group_overrides)
+    end
+  end
+
+  def update_status
+    draw.update(status: status)
+  end
+
+  def status
+    'draft'
   end
 end

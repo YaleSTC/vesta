@@ -26,6 +26,8 @@ Generator.generate(model: 'user', count: 15)
 # fix this eventually so that we never generate empty suites
 Suite.where(size: 0).destroy_all
 
-Generator.generate(model: 'draw', count: 3)
+Generator.generate(model: 'pre_lottery_draw')
+Generator.generate(model: 'lottery_draw')
+Generator.generate(model: 'suite_selection_draw')
 
 puts 'Finished!'
