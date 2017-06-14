@@ -58,8 +58,6 @@ Rails.application.routes.draw do
       patch 'lock_all_sizes'
       get 'lottery'
       patch 'start_selection'
-      get 'select_suites'
-      patch 'assign_suites'
       get 'results'
     end
 
@@ -78,8 +76,9 @@ Rails.application.routes.draw do
         put 'unlock'
         delete 'leave'
         patch 'make_drawless'
-        get 'select_suite'
-        patch 'assign_suite'
+      end
+      collection do
+        resource :suite_assignment, only: %i(new create destroy)
       end
     end
   end
@@ -88,8 +87,8 @@ Rails.application.routes.draw do
     member do
       put 'lock'
       put 'unlock'
-      patch 'select_suite'
     end
+    resource :suite_assignment, only: %i(new create destroy)
     resource :room_assignment, only: %i(new create edit) do
       collection do
         get 'confirm'

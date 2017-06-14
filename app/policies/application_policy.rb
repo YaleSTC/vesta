@@ -54,4 +54,10 @@ class ApplicationPolicy
       scope
     end
   end
+
+  private
+
+  def user_has_uber_permission?
+    user.rep? || user.admin?
+  end
 end

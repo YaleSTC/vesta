@@ -4,7 +4,7 @@ RUBY = /\.(rb)|(rake)$/
 RUBY_PASS = %w(true no\ offenses files\ found).freeze
 
 EXISTING_FILES = /^[^D].*/
-FILE = /^[A-Z]\t(.*)$/
+FILE = /^[A-Z].*\t(.*)$/
 
 DIFF_CMD = 'git diff master --name-status'
 

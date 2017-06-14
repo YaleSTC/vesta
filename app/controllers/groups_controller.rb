@@ -128,20 +128,6 @@ class GroupsController < ApplicationController
     handle_action(action: 'show', **result)
   end
 
-  def select_suite
-    @suites = @draw.suites.available.where(size: @group.size)
-  end
-
-  def assign_suite
-    suite_id = group_params['suite']
-    result = if suite_id.empty? || policy(@draw).select_suites?
-               SuiteRemover.remove(group: @group)
-             else
-               GroupSuiteSelector.select(group: @group, suite_id: suite_id)
-             end
-    handle_action(action: 'select_suite', **result)
-  end
-
   private
 
   def authorize!

@@ -46,7 +46,7 @@
   <%= link_to 'Finalize Membership', finalize_membership_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize_membership? %>
   <%= link_to 'Lock Group', lock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
   <%= link_to 'Unlock All Members', unlock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).unlock? %>
-  <% if @group.suite.present? && policy(@draw).select_suites? %>
+  <% if @group.suite.present? && policy(SuiteAssignment.new(groups: [@group], draw: @group.draw)).new? %>
     <%= simple_form_for @group, url: assign_suite_draw_group_path(@draw, @group), method: :patch, html: { class: 'hidden-form' } do |f| %>
       <%= f.input :suite, as: :hidden, input_html: { value: '' } %>
       <%= f.submit 'Remove suite' %>

@@ -47,6 +47,14 @@ class Suite < ApplicationRecord
     "#{building.name} #{number}"
   end
 
+  # Return the building name with the suite number and the medical status
+  #
+  # @return [String] the building name with the suite number and medical status
+  def name_with_medical
+    return name unless medical
+    "#{name} (medical)"
+  end
+
   # Return the name of the suite with the names of any draws it belongs to.
   # Optionally excludes a single draw passed in.
   #

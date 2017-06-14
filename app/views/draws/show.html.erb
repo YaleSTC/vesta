@@ -7,8 +7,8 @@
         <% if policy(@draw).results? %>
           <li><%= link_to 'View results', results_draw_path(@draw), class: 'button' %></li>
         <% end %>
-        <% if policy(@draw).select_suites? %>
-          <li><%= link_to 'Select suites', select_suites_draw_path(@draw), class: 'button' %></li>
+        <% if policy(SuiteAssignment.new(draw: @draw, groups: [])).new? %>
+          <li><%= link_to 'Select suites', new_draw_suite_assignment_path(@draw), class: 'button' %></li>
         <% end %>
         <% if policy(@draw).lottery? %>
           <li><%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button' %></li>

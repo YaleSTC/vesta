@@ -10,7 +10,7 @@ class SuiteRemover
   # @param group [Group] the group to remove the suite from
   def initialize(group:)
     @group = group
-    @suite = group.suite
+    @suite = group.suite if group
     @errors = []
   end
 

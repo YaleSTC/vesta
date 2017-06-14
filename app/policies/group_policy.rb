@@ -11,7 +11,7 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def create?
-    student_can_create_group(user) || user_has_uber_permission?(user)
+    student_can_create_group(user) || user_has_uber_permission?
   end
 
   def edit?
@@ -19,7 +19,7 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def advanced_edit?
-    user_has_uber_permission?(user)
+    user_has_uber_permission?
   end
 
   def destroy?
@@ -28,7 +28,7 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
 
   def update?
     (record.leader == user && group_can_be_edited_by_leader?(record)) ||
-      user_has_uber_permission?(user)
+      user_has_uber_permission?
   end
 
   def request_to_join?
@@ -44,7 +44,7 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def invite?
-    (record.leader == user || user_has_uber_permission?(user)) && record.open?
+    (record.leader == user || user_has_uber_permission?) && record.open?
   end
 
   def reject_pending?
@@ -69,11 +69,11 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def lock?
-    user_has_uber_permission?(user) && !record.open? && !record.locked?
+    user_has_uber_permission? && !record.open? && !record.locked?
   end
 
   def unlock?
-    user_has_uber_permission?(user) && record.unlockable?
+    user_has_uber_permission? && record.unlockable?
   end
 
   def assign_lottery?
@@ -101,7 +101,7 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def select_suite?
-    user_has_uber_permission?(user) ||
+    user_has_uber_permission? ||
       student_can_select_suite?
   end
 
@@ -122,10 +122,6 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
     user.leader_of?(record) && record.draw.next_group?(record)
   end
 
-  def user_has_uber_permission?(user)
-    user.rep? || user.admin?
-  end
-
   def group_can_be_edited_by_leader?(group)
     !group.finalizing? && !group.locked?
   end
@@ -135,7 +131,7 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def user_can_assign_rooms?(user, group)
-    user_has_uber_permission?(user) ||
+    user_has_uber_permission? ||
       (user.group == group && group.leader == user)
   end
 

@@ -2,7 +2,17 @@
 
 require 'rails_helper'
 
-RSpec.describe BulkSuiteSelectionForm do
+RSpec.describe SuiteAssignment do
+  describe '#remove' do
+    it 'delegates to an instance of SuiteRemover' do
+      gs = [instance_spy('group', id: 1)]
+      s_r = instance_spy('SuiteRemover', remove: true)
+      allow(SuiteRemover).to receive(:new).with(group: gs.first).and_return(s_r)
+      described_class.new(groups: gs).remove
+      expect(s_r).to have_received(:remove)
+    end
+  end
+
   describe '#prepare' do
     it 'sets the relevant instance variables' do
       gs = [instance_spy('group', id: 1)]
@@ -24,7 +34,7 @@ RSpec.describe BulkSuiteSelectionForm do
     end
   end
 
-  describe '#submit' do
+  describe '#assign' do
     context 'success' do
       let(:groups) do
         Array.new(2) { |i| instance_spy('group', id: i + 1, draw: nil) }
@@ -36,19 +46,19 @@ RSpec.describe BulkSuiteSelectionForm do
       end
 
       it 'returns a null object' do
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:redirect_object]).to be_nil
       end
       it 'returns a null service object' do
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:service_object]).to be_nil
       end
       it 'returns a success message' do
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:msg].keys).to eq([:success])
       end
       it 'calls select on all suite selectors generated' do
-        bulk_selector.submit
+        bulk_selector.assign
         expect(selectors).to all(have_received(:select))
       end
     end
@@ -63,27 +73,27 @@ RSpec.describe BulkSuiteSelectionForm do
       it 'all groups to have been passed' do
         ps = mock_params(1 => 1)
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:msg][:error]).to include('select a suite for all groups')
       end
       it 'duplicate suites' do
         ps = mock_params(1 => 1, 2 => 1)
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:msg][:error]).to include('select different suites')
       end
       it 'returns errors from all SuiteSelectors' do
         ps = mock_params(1 => 1, 2 => 2)
         mock_failing_selectors
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:msg][:error]).to include('Foo1 - 1; Foo2 - 2')
       end
       it 'a draw mismatch' do
         groups = prepare_draw_mismatch_data
         ps = mock_params(1 => 1)
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:msg][:error]).to include('to suites in the same draw')
       end
     end
@@ -98,19 +108,19 @@ RSpec.describe BulkSuiteSelectionForm do
       it 'sets a nil object' do
         ps = mock_params(1 => 1)
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:redirect_object]).to be_nil
       end
       it 'sets the service object' do
         ps = mock_params(1 => 1)
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:service_object]).to eq(bulk_selector)
       end
       it 'sets an error message' do
         ps = mock_params(1 => 1)
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
-        result = bulk_selector.submit
+        result = bulk_selector.assign
         expect(result[:msg].keys).to eq([:error])
       end
     end

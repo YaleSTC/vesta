@@ -43,16 +43,6 @@ class DrawlessGroupsController < ApplicationController
     handle_action(path: groups_path, **result)
   end
 
-  def select_suite
-    suite_id = drawless_group_params['suite']
-    result = if suite_id.present?
-               SuiteSelector.select(group: @group, suite_id: suite_id)
-             else
-               SuiteRemover.remove(group: @group)
-             end
-    handle_action(action: 'show', **result)
-  end
-
   def lock
     result = GroupLocker.lock(group: @group)
     handle_action(path: group_path(@group), **result)
@@ -70,7 +60,7 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def drawless_group_params
-    p = params.require(:group).permit(:size, :leader_id, :suite, :transfers,
+    p = params.require(:group).permit(:size, :leader_id, :transfers,
                                       member_ids: [], remove_ids: [])
     return p if @group
     p.reject! { |k, _v| k == 'transfers' }
@@ -88,6 +78,7 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def generate_suites_data
+    # TODO: make this a query object
     @compatible_suites = Suite.available.where(size: @group.size)
                               .includes(:building, :rooms, :draws)
                               .order(:number)

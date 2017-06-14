@@ -20,7 +20,7 @@
         <li><%= link_to 'Assign Rooms', new_group_room_assignment_path(current_user.group) %></li>
       <% end %>
       <% if policy(current_user.group).select_suite? %>
-        <li><%= link_to 'Select Suite', select_suite_draw_group_path(current_user.draw, current_user.group) %></li>
+        <li><%= link_to 'Select Suite', new_group_suite_assignment_path(current_user.group) %></li>
       <% end %>
     <% else %>
       <li><%= link_to 'My Group', group_path(current_user.group) %></li>

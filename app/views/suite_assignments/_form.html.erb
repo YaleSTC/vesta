@@ -1,0 +1,21 @@
+<%= simple_form_for @suite_assignment, url: @url, method: :post do |f| %>
+  <% @groups.each do |group| %>
+    <div id="group-fields-<%= group.id %>" class="actions">
+      <h3><%= group.name %></h3>
+      <% if @suites_by_size[group.size] %>
+        <%= f.label "suite_id_for_#{group.id}".to_sym, text: group.name, style: 'display: none;' %>
+        <% if policy(Suite).medical? %>
+          <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size], label_method: :name_with_medical %>
+        <% else %>
+          <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size], label_method: :name %>
+        <% end %>
+      <% elsif @draw %>
+        <p>There are no more suites of size <%= group.size %> available. You must disband this group to proceed and its members will have to regroup following this draw.</p>
+        <%= link_to 'Disband', draw_group_path(@draw, group, redirect_path: new_draw_suite_assignment_path(@draw)),
+          method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert small' %>
+      <% end %>
+    </div>
+    <hr />
+  <% end %>
+  <%= f.submit 'Assign suites', data: { confirm: "Are you sure that you want to assign #{pluralize(@groups.size, 'this')} #{pluralize(@groups.size, 'suite')} to these groups?" } %>
+<% end %>

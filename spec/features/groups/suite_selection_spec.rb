@@ -15,14 +15,14 @@ RSpec.feature 'Suite Selection' do
     it 'can be performed by group leaders' do
       suite = leader.draw.suites.where(size: leader.group.size).first
       log_in leader
-      select_suite(suite.number)
-      expect(page).to have_content("#{suite.number} assigned")
+      select_suite(suite.number, leader.group.id)
+      expect(page).to have_content('Suite assignment successful')
     end
 
-    def select_suite(number)
+    def select_suite(number, group_id)
       click_on 'Select Suite'
-      choose number
-      click_on 'Submit Selection'
+      select number, from: "suite_assignment_suite_id_for_#{group_id}"
+      click_on 'Assign suites'
     end
   end
 
@@ -41,7 +41,7 @@ RSpec.feature 'Suite Selection' do
 
     it 'cannot reach page' do
       log_in leader
-      visit select_suite_draw_group_path(leader.draw, leader.group)
+      visit new_group_suite_assignment_path(leader.group)
       expect(page).to have_content("don't have permission")
     end
   end
@@ -62,12 +62,13 @@ RSpec.feature 'Suite Selection' do
 
     it 'cannot reach page' do
       log_in leader
-      visit select_suite_draw_group_path(leader.draw, leader.group)
+      visit new_group_suite_assignment_path(leader.group)
       expect(page).to have_content("don't have permission")
     end
   end
 
   context 'not next group' do
+    # TODO: fix this
     xit 'WRITE'
   end
 end

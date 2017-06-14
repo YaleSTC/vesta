@@ -3,15 +3,9 @@
 <% if policy(DrawlessGroup.new(@group)).select_suite? %>
   <h3><%= suite_str(@group) %></h3>
   <% if @group.suite.present? %>
-    <%= simple_form_for @group, url: select_suite_group_path(@group), method: :patch do |f| %>
-      <%= f.input :suite, as: :hidden, input_html: { value: '' } %>
-      <%= f.submit 'Remove suite' %>
-    <% end %>
+    <%= link_to 'Remove suite', group_suite_assignment_path(@group), method: :delete, class: 'button alert' %>
   <% else %>
-    <%= simple_form_for @group, url: select_suite_group_path(@group), method: :patch do |f| %>
-      <%= f.input :suite, collection: @compatible_suites, label_method: :number_with_medical, selected: @group.suite.try(:id) %>
-      <%= f.submit 'Assign suite' %>
-    <% end %>
+    <%= link_to 'Assign suite', new_group_suite_assignment_path(@group), class: 'button' %>
   <% end %>
 <% elsif @group.suite.present? %>
   <h3>Suite: <%= @group.suite.name %></h3>

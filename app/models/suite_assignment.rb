@@ -1,27 +1,33 @@
 # frozen_string_literal: true
 
-#
-# Service object to handle the bulk assignment of suites to groups. Ensures that
-# suites are available, groups don't have suites assigned, and optionally that
-# suites belong to the appropriate draw.
-class BulkSuiteSelectionForm
+# Class to handle assigning suites to groups and removing suites from groups
+class SuiteAssignment
   include ActiveModel::Model
+  extend Forwardable
 
   validate :all_groups_selected
   validate :no_duplicate_selections
   validate :suites_in_correct_draw
 
-  # Initialize a new BulkSuiteSelectionForm.
+  attr_reader :groups, :draw, :remover_form
+
+  # Initialize a new SuiteAssignment
   #
-  # @param groups [Array<Group>] the groups to assign suites to
-  def initialize(groups:)
+  # @param groups [Array<Group>] The group(s) whose suite assignment is changing
+  # @param draw [Draw] (Optional, used for policies) The groups' draw
+  def initialize(groups:, draw: nil)
     @groups = groups
+    @draw = draw || groups.first.draw
+    @remover_form = SuiteRemover.new(group: groups.first)
+    @single = (groups.size == 1)
   end
 
-  # Prepare the BulkSuiteSelectionForm by processing form submission params
+  def_delegators :@remover_form, :remove
+
+  # Prepare the SuiteAssignment by processing form submission params
   #
   # @param params [#to_h] the controller params
-  # @return [BulkSuiteSelectionForm] the service object
+  # @return [SuiteAssignment] the service object
   def prepare(params:)
     @params = params.to_h.transform_keys(&:to_sym)
     @params.each do |k, v|
@@ -33,12 +39,10 @@ class BulkSuiteSelectionForm
 
   # Process the suite selections
   #
-  # @return [Hash{Symbol=>Nil,BulkSuiteSelectionForm,Hash}] the results hash
-  def submit
+  # @return [Hash{Symbol=>Nil,SuiteAssignment,Hash}] the results hash
+  def assign
     return error(errors.full_messages.join(', ')) unless valid?
-    ActiveRecord::Base.transaction do
-      process_all_suite_selections
-    end
+    ActiveRecord::Base.transaction { process_all_suite_selections }
     success
   rescue ActiveRecord::ActiveRecordError => e
     error(e.to_s)
@@ -54,7 +58,10 @@ class BulkSuiteSelectionForm
 
   private
 
-  attr_reader :groups, :params
+  attr_reader :params, :single
+
+  SINGLE_SUCCESS_MSG = 'Suite assignment successful'
+  SUCCESS_MSG = 'Suites successfully assigned, please handle the next groups.'
 
   # note that this occurs in a transaction
   def process_all_suite_selections
@@ -66,8 +73,7 @@ class BulkSuiteSelectionForm
   end
 
   def process_suite_selection(g)
-    suite_id = send(param_for(g))
-    selector = SuiteSelector.new(group: g, suite_id: suite_id)
+    selector = SuiteSelector.new(group: g, suite_id: send(param_for(g)))
     selector.select
     selector.errors
   end
@@ -91,8 +97,7 @@ class BulkSuiteSelectionForm
     return unless groups.any? do |g|
       next false unless g.draw
       suite = Suite.find_by(id: send(param_for(g)))
-      next false if g.draw.suites.available.include? suite
-      true
+      !g.draw.suites.available.include? suite
     end
     errors.add(:base, 'All groups in draws must be assigned to suites in '\
       'the same draw')
@@ -106,7 +111,7 @@ class BulkSuiteSelectionForm
   end
 
   def success
-    msg = 'Suites successfully assigned, please handle the next groups.'
+    msg = single ? SINGLE_SUCCESS_MSG : SUCCESS_MSG
     { redirect_object: nil, service_object: nil, msg: { success: msg } }
   end
 

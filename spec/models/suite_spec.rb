@@ -212,4 +212,19 @@ RSpec.describe Suite, type: :model do
       expect(suite.name).to eq(expected)
     end
   end
+
+  describe '#name_with_medical' do
+    let(:suite) { FactoryGirl.build_stubbed(:suite) }
+    let(:building) { suite.building }
+
+    it 'returns the building name and suite number' do
+      allow(suite).to receive(:medical).and_return(true)
+      expected = "#{building.name} #{suite.number} (medical)"
+      expect(suite.name_with_medical).to eq(expected)
+    end
+    it 'returns the name if not a medical suite' do
+      allow(suite).to receive(:medical).and_return(false)
+      expect(suite.name_with_medical).to eq(suite.name)
+    end
+  end
 end

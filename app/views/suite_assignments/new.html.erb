@@ -1,0 +1,14 @@
+<% if @draw %>
+  <% provide(:title, "#{@draw.name} - Suite Selection") %>
+  <h1><%= @draw.name %> - Suite Selection</h1>
+  <p>Please select suites for each of the following groups, which have been assigned the lottery number <%= @groups.first.lottery_number %>. If there are insufficient suites available for the given size you may disband the groups of that size before proceeding.</p>
+<% else %>
+  <% provide(:title, "#{@group.name} - Suite Selection") %>
+  <h1>Selecting suite for <%= @group.name %></h1>
+<% end %>
+
+<%= render 'form' %>
+
+<% if @draw %>
+  <%= link_to 'Back to draw', draw_path(@draw) %>
+<% end %>
