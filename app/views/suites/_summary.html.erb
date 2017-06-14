@@ -19,7 +19,7 @@
           <% suites[size].each do |suite| %>
             <% next if suite.medical && !policy(suite).medical? %>
             <tr id="suite-<%= suite.id %>">
-              <td data-role="suite-number"><%= link_to suite.send(label_method), building_suite_path(suite.building, suite) %></td>
+              <td data-role="suite-number"><%= link_to suite.send(label_method), suite_path(suite) %></td>
               <td data-role="suite-singles"><%= suite.singles.count %></td>
               <td data-role="suite-doubles"><%= suite.doubles.count %></td>
               <td data-role="suite-common"><%= suite.common_rooms.count %></td>
@@ -27,12 +27,12 @@
                 <%= render partial: 'suites/draw_link', collection: suite.draws, spacer_template: 'shared/comma' %>
               </td>
               <td class="actions" data-role="suite-actions">
-                <%= link_to 'View', building_suite_path(suite.building, suite), class: 'button' %>
+                <%= link_to 'View', suite_path(suite), class: 'button' %>
                 <% if policy(suite).edit? %>
-                  <%= link_to 'Edit', edit_building_suite_path(suite.building, suite), class: 'button' %>
+                  <%= link_to 'Edit', edit_suite_path(suite), class: 'button' %>
                 <% end %>
                 <% if policy(suite).destroy? %>
-                  <%= link_to 'Delete', building_suite_path(suite.building, suite), method: :delete, data: { confirm: 'Are you sure you want to delete this suite?' }, class: 'button alert' %>
+                  <%= link_to 'Delete', suite_path(suite), method: :delete, data: { confirm: 'Are you sure you want to delete this suite?' }, class: 'button alert' %>
                 <% end %>
               </td>
             </tr>

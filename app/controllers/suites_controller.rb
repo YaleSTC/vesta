@@ -3,7 +3,7 @@
 # Controller for Suites
 class SuitesController < ApplicationController
   prepend_before_action :set_suite, except: %i(new create index)
-  before_action :set_building
+  prepend_before_action :set_building, only: %i(new create)
 
   def show
     @rooms = @suite.rooms.order(:number)
@@ -18,7 +18,8 @@ class SuitesController < ApplicationController
   end
 
   def create
-    result = SuiteCreator.new(suite_params).create!
+    result = Creator.create!(klass: Suite, params: suite_params,
+                             name_method: :number)
     @suite = result[:record]
     handle_action(action: 'new', **result)
   end
@@ -26,7 +27,8 @@ class SuitesController < ApplicationController
   def edit; end
 
   def update
-    result = SuiteUpdater.new(suite: @suite, params: suite_params).update
+    result = Updater.update(object: @suite, params: suite_params,
+                            name_method: :number)
     @suite = result[:record]
     handle_action(action: 'edit', **result)
   end

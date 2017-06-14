@@ -65,6 +65,7 @@ RSpec.describe SuiteMergerForm, type: :model do
       let(:other_suite) do
         FactoryGirl.create(:suite_with_rooms, building: suite.building)
       end
+
       let(:params) do
         other = FactoryGirl.create(:suite_with_rooms, building: suite.building)
         mock_params(other_suite_number: other.number, number: 'foo')
@@ -72,7 +73,7 @@ RSpec.describe SuiteMergerForm, type: :model do
 
       it 'returns the new suite and building in :redirect_object' do
         result = described_class.submit(suite: suite, params: params)
-        expect(result[:redirect_object].map(&:class)).to eq([Building, Suite])
+        expect(result[:redirect_object].class).to eq(Suite)
       end
       it 'creates a new suite of the combined size' do
         result = described_class.submit(suite: suite, params: params)

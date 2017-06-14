@@ -12,7 +12,7 @@
     <tbody>
       <% suites_array.each do |suite| %>
         <tr>
-          <td><%= link_to suite.number, building_suite_path(building, suite) %></td>
+          <td><%= link_to suite.number, suite_path(suite) %></td>
           <td><%= suite.singles.count %></td>
           <td><%= suite.doubles.count %></td>
           <td><%= suite.common_rooms.count %></td>

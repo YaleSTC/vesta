@@ -10,15 +10,17 @@ Rails.application.routes.draw do
 
   resources :colleges, only: %i(new create show edit update)
 
-  resources :buildings do
-    resources :suites, except: :index do
-      resources :rooms, except: :index
-      member do
-        get 'merge'
-        post 'merge', to: 'suites#perform_merge'
-        get 'split'
-        post 'split', to: 'suites#perform_split'
-        post 'unmerge'
+  shallow do
+    resources :buildings do
+      resources :suites, except: :index do
+        member do
+          get 'merge'
+          post 'merge', to: 'suites#perform_merge'
+          get 'split'
+          post 'split', to: 'suites#perform_split'
+          post 'unmerge'
+        end
+        resources :rooms, except: :index
       end
     end
   end

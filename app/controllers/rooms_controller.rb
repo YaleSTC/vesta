@@ -3,7 +3,7 @@
 # Controller for Rooms
 class RoomsController < ApplicationController
   prepend_before_action :set_room, only: %i(show edit update destroy)
-  prepend_before_action :set_parents
+  prepend_before_action :set_suite, only: %i(new create)
 
   def show; end
 
@@ -12,7 +12,8 @@ class RoomsController < ApplicationController
   end
 
   def create
-    result = RoomCreator.new(room_params).create!
+    result = Creator.new(klass: Room, params: room_params,
+                         name_method: :number).create!
     @room = result[:record]
     handle_action(action: 'new', **result)
   end
@@ -20,7 +21,8 @@ class RoomsController < ApplicationController
   def edit; end
 
   def update
-    result = RoomUpdater.new(room: @room, params: room_params).update
+    result = Updater.new(object: @room, params: room_params,
+                         name_method: :number).update
     @room = result[:record]
     handle_action(action: 'edit', **result)
   end
@@ -28,7 +30,7 @@ class RoomsController < ApplicationController
   def destroy
     result = Destroyer.new(object: @room, name_method: :number).destroy
     path = if @room.suite
-             building_suite_path(@building, @room.suite)
+             suite_path(@room.suite)
            else
              buildings_path(@building)
            end
@@ -53,8 +55,7 @@ class RoomsController < ApplicationController
     @room = Room.find(params[:id])
   end
 
-  def set_parents
+  def set_suite
     @suite = Suite.find(params[:suite_id])
-    @building = Building.find(params[:building_id])
   end
 end

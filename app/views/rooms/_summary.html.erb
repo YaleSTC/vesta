@@ -9,15 +9,15 @@
   <tbody>
     <% rooms.each do |room| %>
       <tr id="room-<%= room.id %>">
-        <td data-role="room-number"><%= link_to room.number, building_suite_room_path(room.suite.building, room.suite, room) %></td>
+        <td data-role="room-number"><%= link_to room.number, room_path(room) %></td>
         <td data-role="room-type"><%= room.type.capitalize %></td>
         <td class="actions" data-role="room-actions">
-          <%= link_to 'View', building_suite_room_path(room.suite.building, room.suite, room), class: 'button' %>
+          <%= link_to 'View', room_path(room), class: 'button' %>
           <% if policy(room).edit? %>
-            <%= link_to 'Edit', edit_building_suite_room_path(room.suite.building, room.suite, room), class: 'button' %>
+            <%= link_to 'Edit', edit_room_path(room), class: 'button' %>
           <% end %>
           <% if policy(room).destroy? %>
-            <%= link_to 'Delete', building_suite_room_path(room.suite.building, room.suite, room), method: :delete, data: { confirm: 'Are you sure you want to delete that room?' },
+            <%= link_to 'Delete', room_path(room), method: :delete, data: { confirm: 'Are you sure you want to delete that room?' },
                         class: 'button alert' %>
           <% end %>
         </td>

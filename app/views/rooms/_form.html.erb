@@ -1,6 +1,10 @@
-<%= simple_form_for [@building, @suite, @room] do |f| %>
+<%= simple_form_for [@suite, @room] do |f| %>
   <%= f.input :number %>
   <%= f.input :beds %>
-  <%= f.input :suite_id, as: :select, collection: Suite.all, label_method: :name %>
+  <% if @suite %>
+    <%= f.hidden_field :suite_id, :value => @suite.id =%>
+  <% else %>
+    <%= f.input :suite_id, as: :select, collection: Suite.all, label_method: :name %>
+  <% end %>
   <%= f.submit %>
 <% end %>

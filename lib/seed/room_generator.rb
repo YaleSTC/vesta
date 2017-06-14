@@ -9,7 +9,9 @@ class RoomGenerator
   end
 
   def generate
-    RoomCreator.new(gen_params).create![:redirect_object]
+    gen_params
+    Creator.new(klass: Room, params: params, name_method: :number)
+           .create![:redirect_object]
   end
 
   make_callable :generate

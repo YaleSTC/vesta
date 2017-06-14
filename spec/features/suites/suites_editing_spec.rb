@@ -8,13 +8,13 @@ RSpec.feature 'Suite editing' do
 
   it 'succeeds' do
     new_number = 'F32'
-    visit edit_building_suite_path(suite.building, suite)
+    visit edit_suite_path(suite)
     update_suite_number(new_number)
     expect(page).to have_css('.suite-number', text: new_number)
   end
 
   it 'redirects to /edit on failure' do
-    visit edit_building_suite_path(suite.building, suite)
+    visit edit_suite_path(suite)
     update_suite_number('')
     expect(page).to have_content('Edit Suite')
   end

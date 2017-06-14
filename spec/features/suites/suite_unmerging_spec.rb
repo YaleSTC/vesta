@@ -14,7 +14,7 @@ RSpec.feature 'Suite unmerging' do
   before { log_in FactoryGirl.create(:admin) }
 
   it 'can be performed' do
-    visit building_suite_path(suite.building, suite)
+    visit suite_path(suite)
     click_on 'Unmerge suite'
     expect(page).to have_content('Suite successfully split')
   end

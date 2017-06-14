@@ -9,7 +9,9 @@ class SuiteGenerator
   end
 
   def generate
-    SuiteCreator.new(gen_params).create![:record]
+    gen_params
+    Creator.new(klass: Suite, params: params, name_method: :number)\
+           .create![:record]
   end
 
   make_callable :generate

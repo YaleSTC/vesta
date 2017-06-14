@@ -8,13 +8,13 @@ RSpec.feature 'Room editing' do
 
   it 'succeeds' do
     new_number = 'L01B'
-    visit edit_building_suite_room_path(room.suite.building, room.suite, room)
+    visit edit_room_path(room)
     update_room_number(new_number)
     expect(page).to have_css('.room-number', text: new_number)
   end
 
   it 'redirects to /edit on failure' do
-    visit edit_building_suite_room_path(room.suite.building, room.suite, room)
+    visit edit_room_path(room)
     update_room_number('')
     expect(page).to have_content('Edit Room')
   end

@@ -8,7 +8,7 @@ RSpec.feature 'Suite deletion' do
 
   it 'succeeds' do
     msg = "Suite #{suite.number} deleted."
-    visit building_suite_path(suite.building, suite)
+    visit suite_path(suite)
     click_on 'Delete'
     expect(page).to have_content(msg)
   end

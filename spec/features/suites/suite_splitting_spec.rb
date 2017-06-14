@@ -14,7 +14,7 @@ RSpec.feature 'Suite splitting' do
   end
 
   def initiate_suite_split
-    visit building_suite_path(suite.building, suite)
+    visit suite_path(suite)
     click_on 'Split suite'
   end
 

@@ -44,7 +44,7 @@
   <% if @suite.present? %>
     <div class="card">
       <div class="card-divider">
-        <h4>Your suite: <%= link_to @suite.number, building_suite_path(@suite.building, @suite) %></h4>
+        <h4>Your suite: <%= link_to @suite.number, suite_path(@suite) %></h4>
       </div>
       <div class="card-section">
         <% if @room.present? %>

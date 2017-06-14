@@ -25,7 +25,7 @@ RSpec.feature 'Suite merging' do
   end
 
   def initiate_suite_merger
-    visit building_suite_path(suite.building, suite)
+    visit suite_path(suite)
     fill_in 'suite_merger_form_other_suite_number', with: other_suite.number
     click_on 'Merge'
   end
