@@ -25,7 +25,7 @@ RSpec.feature 'Draw suite size locking' do
     it 'can can be done from the draw page' do
       visit draw_path(draw)
       click_on 'Lock all sizes'
-      expect(page).to have_css('.flash-success', text: 'All group sizes locked')
+      expect(page).to have_css('.flash-notice', text: "#{draw.name} updated")
     end
 
     it 'works' do

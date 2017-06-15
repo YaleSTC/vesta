@@ -132,15 +132,11 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def lock_all_sizes
-    @draw.locked_sizes = @draw.suite_sizes
-    msg_hash = if @draw.save
-                 { success: 'All group sizes locked.' }
-               else
-                 errors = @draw.errors.full_messages.join(', ')
-                 { error: "Size locking failed: #{errors}" }
-               end
-    handle_action(redirect_object: nil, path: params[:redirect_path],
-                  msg: msg_hash)
+    result = Updater.update(object: @draw, name_method: :name,
+                            params: { locked_sizes: @draw.suite_sizes })
+
+    handle_action(**result.merge!(redirect_object: nil,
+                                  path: params[:redirect_path]))
   end
 
   def start_selection
