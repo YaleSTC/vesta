@@ -27,11 +27,11 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def suites_edit?
-    edit? || user.rep?
+    suites_update?
   end
 
   def suites_update?
-    suites_edit?
+    update? || user.rep?
   end
 
   def student_summary?

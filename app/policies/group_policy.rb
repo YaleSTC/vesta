@@ -15,8 +15,7 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def edit?
-    (record.leader == user && group_can_be_edited_by_leader?(record)) ||
-      user_has_uber_permission?(user)
+    update?
   end
 
   def advanced_edit?
@@ -28,7 +27,8 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
   end
 
   def update?
-    edit?
+    (record.leader == user && group_can_be_edited_by_leader?(record)) ||
+      user_has_uber_permission?(user)
   end
 
   def request_to_join?

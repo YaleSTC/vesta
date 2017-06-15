@@ -7,12 +7,12 @@ class UserPolicy < ApplicationPolicy
   end
 
   def edit_intent?
-    user.admin? || user.rep? ||
-      (user == record && !user.group && draw_intent_state)
+    update_intent?
   end
 
   def update_intent?
-    edit_intent?
+    user.admin? || user.rep? ||
+      (user == record && !user.group && draw_intent_state)
   end
 
   def build?
