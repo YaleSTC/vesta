@@ -31,7 +31,8 @@ RSpec.describe SuiteSelector do
       end
       it 'fails if the update fails' do
         group = instance_spy('group', suite: nil)
-        suite = mock_suite(id: 123, update: false)
+        suite = mock_suite(id: 123)
+        allow(suite).to receive(:update!).and_raise(error)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
         expect(result[:redirect_object]).to be_nil
       end
@@ -59,7 +60,7 @@ RSpec.describe SuiteSelector do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123)
         described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(suite).to have_received(:update).with(group: group)
+        expect(suite).to have_received(:update!).with(group: group)
       end
       it 'sets a success message in the flash' do
         group = instance_spy('group', suite: nil)
@@ -83,8 +84,12 @@ RSpec.describe SuiteSelector do
       presence = present ? suite : nil
       allow(Suite).to receive(:find_by).with(id: id).and_return(presence)
       allow(suite).to receive(:group_id).and_return(123) if has_group
-      allow(suite).to receive(:update).and_return(update)
+      allow(suite).to receive(:update!).and_return(update)
     end
   end
   # rubocop:enable AbcSize
+
+  def error
+    ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:suite))
+  end
 end

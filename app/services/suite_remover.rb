@@ -3,7 +3,12 @@
 #
 # Service object to remove the suite from a given group.
 class SuiteRemover
+  include ActiveModel::Model
   include Callable
+
+  # Validate if the suite exists on `valid?`
+  # Returns message if it doesn't exist
+  validates :suite, presence: { message: 'Group has no suite assigned.' }
 
   # Initialize a new SuiteRemover
   #
@@ -11,7 +16,6 @@ class SuiteRemover
   def initialize(group:)
     @group = group
     @suite = group.suite if group
-    @errors = []
   end
 
   # Remove a suite from a group. Checks to make sure that the group currently
@@ -21,34 +25,25 @@ class SuiteRemover
   #   the flash, nil or the group as the :redirect_object,
   #   and an action to render.
   def remove
-    if remove_suite_from_group
-      success
-    else
-      error
-    end
+    return error(self) unless valid?
+    suite.update!(group: nil)
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :remove
 
   private
 
-  attr_accessor :errors
   attr_reader :group, :suite
 
-  def valid?
-    errors << 'Group has no suite assigned.' if group_has_no_suite?
-    errors.empty?
-  end
-
-  def group_has_no_suite?
-    suite.nil?
-  end
-
   def remove_suite_from_group
-    return false unless valid?
-    return true if suite.update(group: nil)
-    errors << suite.errors.full_messages.join("\n")
-    false
+    return error(self) unless valid?
+    suite.update!(group: nil)
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   def success
@@ -58,10 +53,11 @@ class SuiteRemover
     }
   end
 
-  def error
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     {
       redirect_object: nil,
-      msg: { error: "Oops, there was a problem:\n#{errors.join("\n")}" }
+      msg: { error: "Oops, there was a problem: #{msg}" }
     }
   end
 end

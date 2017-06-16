@@ -19,17 +19,18 @@ RSpec.describe DrawSelectionStarter do
 
     it 'updates the status of the draw to suite_selection' do
       draw = instance_spy('draw', validity_stubs(valid: true))
-      allow(draw).to receive(:update).with(status: 'suite_selection')
-                                     .and_return(true)
+      allow(draw).to receive(:update!).with(status: 'suite_selection')
+                                      .and_return(true)
       described_class.start(draw: draw)
-      expect(draw).to have_received(:update).with(status: 'suite_selection')
+      expect(draw).to have_received(:update!).with(status: 'suite_selection')
     end
 
     it 'checks to see if the update works' do
       draw = instance_spy('draw', validity_stubs(valid: true))
-      allow(draw).to receive(:update).and_return(false)
+      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
+      allow(draw).to receive(:update!).and_raise(error)
       result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to include('Draw update failed')
+      expect(result[:msg][:error]).to include('There was a problem')
     end
 
     it 'returns the updated draw on success' do

@@ -23,9 +23,11 @@ class UserCreator
   #   the flash, the user record (persisted or not), and either nil or the
   #   record as the :redirect_object value
   def create!
-    return error unless user.save
+    user.save!
     mailer.new_user_confirmation(user: user, password: password).deliver_later
     success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :create!
@@ -52,8 +54,8 @@ class UserCreator
     }
   end
 
-  def error
-    msg = ErrorHandler.format(error_object: user)
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     {
       redirect_object: nil, user: user,
       msg: { error: "Please review the errors below:\n#{msg}" }

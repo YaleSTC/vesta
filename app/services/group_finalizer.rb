@@ -3,21 +3,24 @@
 #
 # Service object to finalize groups
 class GroupFinalizer
+  include ActiveModel::Model
   include Callable
+
+  validate :group_full
+  validate :suite_size_open
 
   # Initialize a GroupFinalizer
   #
   # @param group [Group] The group object to be updated
   def initialize(group:)
     @group = group
-    @errors = []
   end
 
   # Finalize a group
   #
   # @return [Hash{Symbol=>Array, Group, Hash}] The result of the finalizing
   def finalize # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    return error(errors.join(', ')) unless valid?
+    return error(self) unless valid?
     ActiveRecord::Base.transaction do
       group.finalizing!
       unless group.leader.membership.locked
@@ -27,34 +30,26 @@ class GroupFinalizer
     notify_members
     success
   rescue ActiveRecord::RecordInvalid => e
-    # TODO: include ActiveModel::Model here, make the error handling consistent
-    error(ErrorHandler.format(error_object: e))
+    error(e)
   end
 
   make_callable :finalize
 
   private
 
-  attr_accessor :errors
   attr_reader :group
 
-  def valid?
-    group_full?
-    suite_size_open?
-    errors.empty?
+  def group_full
+    errors.add(:group, 'must be full') unless group.full?
   end
 
-  def group_full?
-    return if group.full?
-    @errors << 'Group must be full'
-  end
-
-  def suite_size_open?
+  def suite_size_open
     return if group.draw.open_suite_sizes.include? group.size
-    @errors << 'Suite size must be open'
+    errors.add(:group, 'size must be open')
   end
 
-  def error(msg)
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     { redirect_object: [group.draw, group], record: group,
       msg: { error: "Error: #{msg}" } }
   end

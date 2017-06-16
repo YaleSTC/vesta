@@ -30,10 +30,11 @@ class DrawLotteryStarter
   # @return [Hash{Symbol=>ApplicationRecord,Hash}] A results hash with the
   #   message to set in the flash and either `nil` or the modified object.
   def start
-    return error unless valid?
-    return success if draw.update(status: 'lottery', intent_locked: true)
-    errors.add(:base, 'Draw update failed')
-    error
+    return error(self) unless valid?
+    draw.update!(status: 'lottery', intent_locked: true)
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :start
@@ -92,8 +93,8 @@ class DrawLotteryStarter
       msg: { success: 'You can now assign lottery numbers' } }
   end
 
-  def error
-    error_msgs = ErrorHandler.format(error_object: self)
+  def error(error_obj)
+    error_msgs = ErrorHandler.format(error_object: error_obj)
     msg = "There was a problem proceeding to the lottery phase:\n#{error_msgs}"
     { redirect_object: nil, msg: { error: msg } }
   end

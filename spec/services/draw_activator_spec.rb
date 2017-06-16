@@ -20,14 +20,14 @@ RSpec.describe DrawActivator do
     it 'updates the status of the draw to pre_lottery' do
       draw = instance_spy('draw', validity_stubs(valid: true))
       described_class.activate(draw: draw)
-      expect(draw).to have_received(:update).with(status: 'pre_lottery')
+      expect(draw).to have_received(:update!).with(status: 'pre_lottery')
     end
 
     it 'checks to see if the update works' do
       draw = instance_spy('draw', validity_stubs(valid: true))
-      allow(draw).to receive(:update).and_return(false)
+      allow(draw).to receive(:update!).and_raise(error)
       result = described_class.activate(draw: draw)
-      expect(result[:msg][:error]).to include('Draw update failed.')
+      expect(result[:msg][:error]).to include('There was a problem')
     end
 
     it 'sends invitations to the students in the draw' do
@@ -39,7 +39,7 @@ RSpec.describe DrawActivator do
 
     it 'does not send emails if updating fails' do
       draw = valid_mock_draw_with_students
-      allow(draw).to receive(:update).and_return(false)
+      allow(draw).to receive(:update!).and_raise(error)
       mailer = instance_spy('student_mailer')
       described_class.new(draw: draw, mailer: mailer).activate
       expect(mailer).not_to have_received(:draw_invitation)
@@ -72,5 +72,9 @@ RSpec.describe DrawActivator do
 
   def validity_stubs(valid:, **attrs)
     { draft?: valid, students?: valid, enough_beds?: valid }.merge(attrs)
+  end
+
+  def error
+    ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
   end
 end

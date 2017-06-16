@@ -25,15 +25,14 @@ class SuiteUnmerger
   #
   # @return [Hash] The redirect object and flash message
   def unmerge
-    return error unless valid?
+    return error(self) unless valid?
     ActiveRecord::Base.transaction do
       create_new_suites!
       suite.destroy!
     end
     success
   rescue ActiveRecord::RecordInvalid => e
-    errors.add(:base, "Error: #{e.message}")
-    error
+    error(e)
   end
 
   make_callable :unmerge
@@ -61,8 +60,8 @@ class SuiteUnmerger
     }
   end
 
-  def error
-    msg = ErrorHandler.format(error_object: self)
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     {
       redirect_object: [building, suite],
       msg: { error: 'Restoring original suites failed: '\

@@ -22,12 +22,12 @@ class GroupSuiteSelector < SuiteSelector
   #   the flash, nil or the group as the :redirect_object,
   #   and an action to render.
   def select
-    if assign_suite_to_group
-      notify_next_groups
-      success
-    else
-      error
-    end
+    return error(self) unless valid?
+    suite.update!(group: group)
+    notify_next_groups
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :select

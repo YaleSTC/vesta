@@ -19,15 +19,12 @@ RSpec.describe DrawResultsStarter do
       described_class.start(draw: draw)
       expect(draw).to have_received(:update!).with(status: 'results')
     end
-    it 'rescues update! exceptions' do # rubocop:disable RSpec/ExampleLength
-      draw = FactoryGirl.build_stubbed(:draw)
-      validity_stubs(valid: true).each do |method, val|
-        allow(draw).to receive(method).and_return(val)
-      end
-      error = ActiveRecord::RecordInvalid.new(draw)
+    it 'rescues update! exceptions' do
+      draw = instance_spy('draw', validity_stubs(valid: true))
+      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
       allow(draw).to receive(:update!).and_raise(error)
       result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to include('Draw update failed')
+      expect(result[:msg][:error]).to include('There was a problem')
     end
     it 'returns the updated draw on success' do
       draw = instance_spy('draw', validity_stubs(valid: true,

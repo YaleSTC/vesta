@@ -11,14 +11,16 @@ RSpec.describe SuiteRemover do
         expect(result[:redirect_object]).to be_nil
       end
       it 'returns a nil redirect_object if the update fails' do
-        suite = mock_suite(id: 123, update: false)
+        suite = mock_suite(id: 123)
+        allow(suite).to receive(:update!).and_raise(error)
         group = instance_spy('group', suite: suite)
         result = described_class.remove(group: group)
         expect(result[:redirect_object]).to be_nil
       end
       it 'returns an error flash if the update fails' do
-        suite = mock_suite(id: 123, update: false)
+        suite = mock_suite(id: 123)
         group = instance_spy('group', suite: suite)
+        allow(suite).to receive(:update!).and_raise(error)
         result = described_class.remove(group: group)
         expect(result[:msg].keys).to eq([:error])
       end
@@ -34,7 +36,7 @@ RSpec.describe SuiteRemover do
         suite = mock_suite(id: 123)
         group = instance_spy('group', suite: suite)
         described_class.remove(group: group)
-        expect(suite).to have_received(:update).with(group: nil)
+        expect(suite).to have_received(:update!).with(group: nil)
       end
       it 'sets a success message in the flash' do
         suite = mock_suite(id: 123)
@@ -58,8 +60,13 @@ RSpec.describe SuiteRemover do
       presence = present ? suite : nil
       allow(Suite).to receive(:find_by).with(id).and_return(presence)
       allow(suite).to receive(:group_id).and_return(123) if has_group
-      allow(suite).to receive(:update).and_return(update)
+      allow(suite).to receive(:update!).and_return(update)
+      allow(suite).to receive(:blank?).and_return(false)
     end
   end
   # rubocop:enable AbcSize
+
+  def error
+    ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:suite))
+  end
 end

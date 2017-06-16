@@ -4,7 +4,11 @@
 # draw has the correct status, updates the status, and sends e-mail invitations
 # to students in the draw.
 class DrawActivator
+  include ActiveModel::Model
   include Callable
+
+  validate :draw_in_a_draft
+  validate :draw_has_students
 
   # Initialize a new DrawActivator
   #
@@ -13,7 +17,6 @@ class DrawActivator
   #   e-mails
   def initialize(draw:, mailer: StudentMailer)
     @draw = draw
-    @errors = []
     @mailer = mailer
     @college = College.first
   end
@@ -23,31 +26,29 @@ class DrawActivator
   # @return [Hash{Symbol=>ApplicationRecord,Hash}] A results hash with the
   #   message to set in the flash and either `nil` or the created object.
   def activate
-    validate
-    activate_draw if currently_valid?
-    send_emails if currently_valid?
-    currently_valid? ? success : error
+    return error(self) unless valid?
+    draw.update!(status: 'pre_lottery')
+    send_emails
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :activate
 
   private
 
-  attr_accessor :draw, :errors
+  attr_accessor :draw
   attr_reader :college, :mailer
 
-  def validate
-    errors << 'Draw must be a draft.' unless draw.draft?
-    errors << 'Draw must have at least one student.' unless draw.students?
+  def draw_in_a_draft
+    return if draw.draft?
+    errors.add(:draw, 'must be a draft.')
   end
 
-  def currently_valid?
-    errors.empty?
-  end
-
-  def activate_draw
-    return if draw.update(status: 'pre_lottery')
-    errors << 'Draw update failed.'
+  def draw_has_students
+    return if draw.students?
+    errors.add(:draw, 'must have at least one student.')
   end
 
   def send_emails
@@ -60,14 +61,9 @@ class DrawActivator
     { redirect_object: draw, msg: { notice: 'Draw successfully initiated.' } }
   end
 
-  def error
-    {
-      redirect_object: nil,
-      msg: { error: "There was a problem initiating the draft:\n#{error_msgs}" }
-    }
-  end
-
-  def error_msgs
-    errors.join("\n")
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
+    { redirect_object: nil,
+      msg: { error: "There was a problem initiating the draw:\n#{msg}" } }
   end
 end

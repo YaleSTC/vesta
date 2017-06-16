@@ -3,7 +3,10 @@
 #
 # Class to enqueue reminder email jobs
 class ReminderQueuer
+  include ActiveModel::Model
   include Callable
+
+  validate :correct_reminder_type
 
   # Initialize a new ReminderQueuer
   #
@@ -16,14 +19,12 @@ class ReminderQueuer
 
   # Queue the email job
   def queue
+    return error(self) unless valid?
     draw.update!(email_type: type, last_email_sent: Time.zone.now)
     queue_job
     success
   rescue ActiveRecord::RecordInvalid => e
-    error(ErrorHandler.format(error_object: e))
-  rescue ArgumentError => e
-    # TODO: implement ActiveModel::Model, make this a validation
-    error(e.message)
+    error(e)
   end
 
   make_callable :queue
@@ -39,9 +40,12 @@ class ReminderQueuer
       IntentReminderJob.perform_later(draw: draw)
     when 'locking'
       LockingReminderJob.perform_later(draw: draw)
-    else
-      raise ArgumentError, 'Invalid reminder type'
     end
+  end
+
+  def correct_reminder_type
+    return if %w(intent locking).include?(type)
+    errors.add(:base, "Invalid reminder type: #{type}")
   end
 
   def success
@@ -51,10 +55,11 @@ class ReminderQueuer
     }
   end
 
-  def error(error)
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     {
       redirect_object: @draw,
-      msg: { error: "Error sending #{type} reminders: #{error}." }
+      msg: { error: "Error: #{msg}" }
     }
   end
 end

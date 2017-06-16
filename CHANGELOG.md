@@ -16,11 +16,13 @@ All notable changes to this project will be documented in this file.
 * Extract Group#remove_members ([#280](https://yale.githost.io/sdmp/rails/vesta/isses/280))
 * Refactor Draw reporting ([#619](https://yale.githost.io/sdmp/rails/vesta/isses/619))
 * Fix error handling in service objects ([#241](https://yale.githost.io/sdmp/rails/vesta/issues/241))
+* Make error handling more consistent across service objects ([#602](https://yale.githost.io/sdmp/rails/vesta/issues/602))
+
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
 * Pass overrides properly in seed script generators ([#616](https://yale.githost.io/sdmp/rails/vesta/issues/616)).
-* Fixed definition inconsistencies in policy files ([#216](https://yale.githost.io/sdmp/rails/vesta/issues/216)). 
+* Fixed definition inconsistencies in policy files ([#216](https://yale.githost.io/sdmp/rails/vesta/issues/216)).
 * Fix n+3 query in suites summary partial ([#567](https://yale.githost.io/sdmp/rails/vesta/issues/567)).
 * Fix intermittent test failure in lottery number removal ([#532](https://yale.githost.io/sdmp/rails/vesta/issues/532)).
 

@@ -93,8 +93,8 @@ class GroupUpdater
     }
   end
 
-  def error(e)
-    msg = ErrorHandler.format(error_object: e)
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     {
       redirect_object: nil, record: group,
       msg: { error: "Group update failed: #{msg}" }

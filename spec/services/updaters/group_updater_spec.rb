@@ -50,7 +50,7 @@ RSpec.describe GroupUpdater do
           change(Membership, :count)
       end
     end
-
+    # rubocop:enable RSpec/ExampleLength
     context 'success' do
       it 'sets to the :redirect_object to the group and draw' do
         group = instance_spy('group', update!: true)

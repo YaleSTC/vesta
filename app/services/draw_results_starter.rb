@@ -27,16 +27,14 @@ class DrawResultsStarter
   # @return [Hash{Symbol=>ApplicationRecord,Hash}] A results hash with the
   #   message to set in the flash and either `nil` or the modified object.
   def start
-    return error unless valid?
+    return error(self) unless valid?
     ActiveRecord::Base.transaction do
       draw.update!(status: 'results')
       @new_draw = draw.all_students_grouped? ? false : duplicate_draw!
     end
     success
-  rescue ActiveRecord::ActiveRecordError => e
-    errors.add(:base,
-               "Draw update failed: #{ErrorHandler.format(error_object: e)}")
-    error
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :start
@@ -80,8 +78,8 @@ class DrawResultsStarter
     { notice: 'A new draw has been created with all ungrouped students.' }
   end
 
-  def error
-    msg = ErrorHandler.format(error_object: self)
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     { redirect_object: nil,
       msg: { error: "There was a problem completing suite selection: #{msg}" } }
   end

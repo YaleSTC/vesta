@@ -4,8 +4,13 @@
 # Service object to select suites for a given group.
 class SuiteSelector
   include Callable
+  include ActiveModel::Model
 
-  attr_reader :errors
+  validate :group_does_not_have_a_suite
+  validate :suite_id_present
+  validate :suite_exists
+  validate :group_locked
+  validate :suite_not_already_assigned
 
   # Initialize a new SuiteSelector
   #
@@ -14,7 +19,6 @@ class SuiteSelector
   def initialize(group:, suite_id:)
     @group = group
     @suite_id = suite_id
-    @errors = []
   end
 
   # Select / assign a suite to a group. Checks to make sure that the group does
@@ -26,63 +30,41 @@ class SuiteSelector
   #   the flash, nil or the group as the :redirect_object,
   #   and an action to render.
   def select
-    if assign_suite_to_group
-      success
-    else
-      error
-    end
+    return error(self) unless valid?
+    suite.update!(group: group)
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :select
 
   private
 
-  attr_writer :errors
   attr_reader :group, :suite_id, :suite
 
-  def valid? # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    if group_already_has_suite
-      errors << 'Group already has a suite assigned.'
-    elsif suite_id_missing
-      errors << 'You must pass a suite id.'
-    elsif suite_does_not_exist
-      errors << 'Suite does not exist.'
-    elsif group_not_locked
-      errors << 'Group must be locked.'
-    elsif suite_already_assigned
-      errors << 'Suite is assigned to a different group'
-    end
-    errors.empty?
+  def group_does_not_have_a_suite
+    errors.add(:group, 'already has a suite assigned.') if group.suite.present?
   end
 
-  def group_already_has_suite
-    group.suite.present?
+  def suite_id_present
+    errors.add(:base, 'You must pass a suite id.') if suite_id.nil?
   end
 
-  def group_not_locked
-    !group.locked?
-  end
-
-  def suite_id_missing
-    suite_id.nil?
-  end
-
-  def suite_does_not_exist
+  def suite_exists
     return unless suite_id.present?
     @suite ||= Suite.find_by(id: suite_id.to_i)
-    suite.nil?
+    errors.add(:suite, 'does not exist.') if suite.nil?
   end
 
-  def suite_already_assigned
+  def group_locked
+    errors.add(:group, 'must be locked.') unless group.locked?
+  end
+
+  def suite_not_already_assigned
     return unless suite
-    suite.group_id.present?
-  end
-
-  def assign_suite_to_group
-    return false unless valid?
-    return true if suite.update(group: group)
-    errors << suite.errors.full_messages.join("\n")
-    false
+    return unless suite.group_id.present?
+    errors.add(:suite, 'is assigned to a different group')
   end
 
   def success
@@ -92,10 +74,11 @@ class SuiteSelector
     }
   end
 
-  def error
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     {
       redirect_object: nil,
-      msg: { error: "Oops, there was a problem:\n#{errors.join("\n")}" }
+      msg: { error: "Oops, there was a problem: #{msg}" }
     }
   end
 end

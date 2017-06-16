@@ -76,19 +76,20 @@ RSpec.describe DrawLotteryStarter do
 
     it 'updates the status of the draw to lottery' do
       draw = instance_spy('draw', validity_stubs(valid: true))
-      allow(draw).to receive(:update)
+      allow(draw).to receive(:update!)
         .with(status: 'lottery', intent_locked: true).and_return(true)
       described_class.start(draw: draw)
-      expect(draw).to have_received(:update)
+      expect(draw).to have_received(:update!)
         .with(status: 'lottery', intent_locked: true)
     end
     # rubocop:enable RSpec/ExampleLength
 
     it 'checks to see if the update works' do
       draw = instance_spy('draw', validity_stubs(valid: true))
-      allow(draw).to receive(:update).and_return(false)
+      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
+      allow(draw).to receive(:update!).and_raise(error)
       result = described_class.start(draw: draw)
-      expect(result[:msg][:error]).to include('Draw update failed')
+      expect(result[:msg][:error]).to include('There was a problem')
     end
 
     it 'returns the updated draw on success' do

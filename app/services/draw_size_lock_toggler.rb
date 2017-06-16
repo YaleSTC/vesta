@@ -5,23 +5,27 @@
 # draw. Validates that the size is one for which there are currently available
 # suites.
 class DrawSizeLockToggler
+  include ActiveModel::Model
   include Callable
+
+  validate :size_is_an_integer_string
 
   # Initialize a new DrawSizeLockToggler
   #
   # @param draw [Draw] the draw in question
-  # @param size_str [String] the size param passed in the request
+  # @param size [String] the size param passed in the request
   def initialize(draw:, size:)
     @draw = draw
-    @errors = []
-    @size = parse_size(size)
+    @size = size
   end
 
   def toggle
-    return error(errors.join(', ')) unless valid?
+    return error(self) unless valid?
     toggle_size_lock
-    return success if draw.save
-    error(ErrorHandler.format(error_object: draw))
+    draw.save!
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :toggle
@@ -29,19 +33,13 @@ class DrawSizeLockToggler
   private
 
   attr_reader :draw, :size
-  attr_accessor :errors
 
-  def parse_size(size)
-    errors << "Invalid size #{size}" unless integer_string?(size)
-    size.to_i
-  end
-
-  def integer_string?(size)
-    /^\d+$/.match(size)
-  end
-
-  def valid?
-    errors.empty?
+  def size_is_an_integer_string
+    if @size =~ /^\d+$/
+      @size = @size.to_i
+    else
+      errors.add(:size, "#{size} is invalid.")
+    end
   end
 
   def toggle_size_lock
@@ -56,8 +54,9 @@ class DrawSizeLockToggler
     { redirect_object: nil, msg: { success: success_msg } }
   end
 
-  def error(errors)
-    { redirect_object: nil, msg: { error: "Draw update failed: #{errors}" } }
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
+    { redirect_object: nil, msg: { error: "Draw update failed: #{msg}" } }
   end
 
   def success_msg

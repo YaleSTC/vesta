@@ -26,14 +26,12 @@ class DrawSelectionStarter
   # @return [Hash{Symbol=>ApplicationRecord,Hash}] A results hash with the
   #   message to set in the flash and either `nil` or the modified object.
   def start
-    return error unless valid?
-    if draw.update(status: 'suite_selection')
-      notify_first_groups
-      return success
-    else
-      errors.add(:base, 'Draw update failed')
-      error
-    end
+    return error(self) unless valid?
+    draw.update!(status: 'suite_selection')
+    notify_first_groups
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :start
@@ -61,12 +59,9 @@ class DrawSelectionStarter
     { redirect_object: draw, msg: { success: 'Suite selection started' } }
   end
 
-  def error
+  def error(error_obj)
+    error_msgs = ErrorHandler.format(error_object: error_obj)
     msg = "There was a problem starting suite selection:\n#{error_msgs}"
     { redirect_object: nil, msg: { error: msg } }
-  end
-
-  def error_msgs
-    errors.full_messages.join(', ')
   end
 end
