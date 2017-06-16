@@ -21,7 +21,7 @@ class DrawSizeLockToggler
     return error(errors.join(', ')) unless valid?
     toggle_size_lock
     return success if draw.save
-    error(draw.errors.full_messages.join(', '))
+    error(ErrorHandler.format(error_object: draw))
   end
 
   make_callable :toggle

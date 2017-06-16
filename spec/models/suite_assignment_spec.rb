@@ -87,7 +87,7 @@ RSpec.describe SuiteAssignment do
         mock_failing_selectors
         bulk_selector = described_class.new(groups: groups).prepare(params: ps)
         result = bulk_selector.assign
-        expect(result[:msg][:error]).to include('Foo1 - 1; Foo2 - 2')
+        expect(result[:msg][:error]).to include('Foo1 - 1, Foo2 - 2')
       end
       it 'a draw mismatch' do
         groups = prepare_draw_mismatch_data

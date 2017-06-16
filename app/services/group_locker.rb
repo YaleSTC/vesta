@@ -23,8 +23,8 @@ class GroupLocker
       end
     end
     success
-  rescue ActiveRecord::RecordInvalid => errors
-    error(errors.record.errors.full_messages)
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :lock
@@ -33,9 +33,10 @@ class GroupLocker
 
   attr_reader :group
 
-  def error(errors)
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     { redirect_object: [group.draw, group], record: group,
-      msg: { error: errors.join(', ') } }
+      msg: { error: "Error: #{msg}" } }
   end
 
   def success

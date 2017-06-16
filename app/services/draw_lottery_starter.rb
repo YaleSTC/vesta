@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-#
 # Service object to handle the starting of the lottery phase for a draw. Checks
 # to make sure that the draw has the correct status and has enough beds for
 # students, as well as no ungrouped students, and updates the status.
@@ -94,11 +93,8 @@ class DrawLotteryStarter
   end
 
   def error
+    error_msgs = ErrorHandler.format(error_object: self)
     msg = "There was a problem proceeding to the lottery phase:\n#{error_msgs}"
     { redirect_object: nil, msg: { error: msg } }
-  end
-
-  def error_msgs
-    errors.full_messages.join(', ')
   end
 end

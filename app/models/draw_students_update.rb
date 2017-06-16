@@ -27,11 +27,11 @@ class DrawStudentsUpdate
     ActiveRecord::Base.transaction do
       # update_all doesn't work since we have a left outer join in our ungrouped
       # students query
-      students_to_add.each { |s| s.update(draw: draw) }
+      students_to_add.each { |s| s.update!(draw: draw) }
     end
     success
-  rescue ActiveRecord::RecordInvalid => error
-    error(error)
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :update
@@ -83,10 +83,11 @@ class DrawStudentsUpdate
     }
   end
 
-  def error(error)
+  def error(e)
+    msg = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, update_object: self,
-      msg: { error: "Student assignment failed: #{error}" }
+      msg: { error: "Student assignment failed: #{msg}" }
     }
   end
 end

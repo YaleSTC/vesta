@@ -33,8 +33,8 @@ class DrawSuitesUpdate
       add_suites unless suites_to_add.empty?
     end
     success
-  rescue ActiveRecord::RecordInvalid => error
-    error(error)
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :update
@@ -108,10 +108,11 @@ class DrawSuitesUpdate
     }
   end
 
-  def error(error)
+  def error(e)
+    msg = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, update_object: self,
-      msg: { error: "Suites update failed: #{error}" }
+      msg: { error: "Suites update failed: #{msg}" }
     }
   end
 

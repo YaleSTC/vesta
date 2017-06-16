@@ -60,7 +60,6 @@ RSpec.describe DrawlessGroupUpdater do
           change(Membership, :count)
       end
     end
-    # rubocop:enable RSpec/ExampleLength
 
     context 'success' do
       it 'sets to the :redirect_object to the group' do
@@ -80,22 +79,6 @@ RSpec.describe DrawlessGroupUpdater do
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
         result = described_class.update(group: group, params: p)
         expect(result[:msg]).to have_key(:success)
-      end
-    end
-    context 'failure' do
-      it 'sets the :redirect_object to nil' do
-        group = instance_spy('group')
-        allow(group).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-        p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
-        result = described_class.update(group: group, params: p)
-        expect(result[:record]).to eq(group)
-      end
-      it 'sets an error message' do
-        group = instance_spy('group')
-        allow(group).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-        p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
-        result = described_class.update(group: group, params: p)
-        expect(result[:msg]).to have_key(:error)
       end
     end
   end

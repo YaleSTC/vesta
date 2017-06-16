@@ -50,7 +50,6 @@ RSpec.describe GroupUpdater do
           change(Membership, :count)
       end
     end
-    # rubocop:enable RSpec/ExampleLength
 
     context 'success' do
       it 'sets to the :redirect_object to the group and draw' do
@@ -73,16 +72,23 @@ RSpec.describe GroupUpdater do
       end
     end
     context 'failure' do
+      let!(:group) do
+        FactoryGirl.build_stubbed(:group).tap do |g|
+          memberships = instance_spy('ActiveRecord::CollectionProxy',
+                                     where: true)
+          allow(g).to receive(:memberships).and_return(memberships)
+          allow(g).to receive(:reload)
+          allow(g).to receive(:update!)
+            .and_raise(ActiveRecord::RecordInvalid.new(g))
+        end
+      end
+
       it 'sets the :redirect_object to nil' do
-        group = instance_spy('group')
-        allow(group).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
         result = described_class.update(group: group, params: p)
         expect(result[:redirect_object]).to be_nil
       end
       it 'sets an error message' do
-        group = instance_spy('group')
-        allow(group).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
         result = described_class.update(group: group, params: p)
         expect(result[:msg]).to have_key(:error)

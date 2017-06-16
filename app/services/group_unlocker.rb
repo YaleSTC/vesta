@@ -16,19 +16,22 @@ class GroupUnlocker
   #
   # @return [Hash{Symbol=>Array, Group, Hash}] The result of the finalizing
   def unlock
-    return error('Group has no locked memberships') unless group.unlockable?
+    # TODO: implement ActiveModel::Model, make this a validation
+    return error(CANNOT_BE_UNLOCKED_MSG) unless group.unlockable?
     ActiveRecord::Base.transaction do
       locked_memberships.each { |m| m.update!(locked: false) }
       update_group_status(group)
     end
     success
-  rescue ActiveRecord::RecordInvalid => errors
-    error(error_messages(errors))
+  rescue ActiveRecord::RecordInvalid => e
+    error(ErrorHandler.format(error_object: e))
   end
 
   make_callable :unlock
 
   private
+
+  CANNOT_BE_UNLOCKED_MSG = 'Group has no locked memberships'
 
   attr_reader :group, :locked_memberships
 
@@ -43,12 +46,8 @@ class GroupUnlocker
       msg: { success: "#{group.name} is unlocked." } }
   end
 
-  def error(errors)
+  def error(msg)
     { redirect_object: [group.draw, group], record: group,
-      msg: { error: errors } }
-  end
-
-  def error_messages(errors)
-    errors.record.errors.full_messages.join(', ')
+      msg: { error: "Error: #{msg}" } }
   end
 end

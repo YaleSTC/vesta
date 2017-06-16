@@ -37,12 +37,12 @@ RSpec.describe GroupDrawRemover do
     end
 
     context 'failure' do
-      let(:draw) { instance_spy('draw') }
-      let(:group) { instance_spy('group', draw: draw) }
+      let(:group) { FactoryGirl.build_stubbed(:group) }
+      let(:draw) { group.draw }
 
       before do
         allow(group).to receive(:update!)
-          .and_raise(ActiveRecord::RecordInvalid)
+          .and_raise(ActiveRecord::RecordInvalid.new(group))
       end
       it 'sets the :redirect_object to the draw and group' do
         result = described_class.remove(group: group)

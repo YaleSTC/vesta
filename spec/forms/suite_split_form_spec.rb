@@ -90,7 +90,8 @@ RSpec.describe SuiteSplitForm, type: :model do
       end
       it 'fails if any update fails' do
         params = valid_params(suite)
-        allow(Suite).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
+        allow(Suite).to receive(:create!)
+          .and_raise(ActiveRecord::RecordInvalid.new(suite))
         result = described_class.submit(suite: suite, params: params)
         expect(result[:msg]).to have_key(:error)
       end

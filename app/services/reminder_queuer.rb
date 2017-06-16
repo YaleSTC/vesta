@@ -20,8 +20,9 @@ class ReminderQueuer
     queue_job
     success
   rescue ActiveRecord::RecordInvalid => e
-    error(e)
+    error(ErrorHandler.format(error_object: e))
   rescue ArgumentError => e
+    # TODO: implement ActiveModel::Model, make this a validation
     error(e.message)
   end
 

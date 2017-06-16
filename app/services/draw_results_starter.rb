@@ -28,14 +28,14 @@ class DrawResultsStarter
   #   message to set in the flash and either `nil` or the modified object.
   def start
     return error unless valid?
-    @new_draw = ActiveRecord::Base.transaction do
+    ActiveRecord::Base.transaction do
       draw.update!(status: 'results')
-      next nil if draw.all_students_grouped?
-      duplicate_draw
+      @new_draw = draw.all_students_grouped? ? false : duplicate_draw!
     end
     success
   rescue ActiveRecord::ActiveRecordError => e
-    errors.add(:base, "Draw update failed: #{e.message}")
+    errors.add(:base,
+               "Draw update failed: #{ErrorHandler.format(error_object: e)}")
     error
   end
 
@@ -57,20 +57,18 @@ class DrawResultsStarter
   end
 
   # Note: this occurs in a transaction
-  def duplicate_draw # rubocop:disable AbcSize
+  def duplicate_draw! # rubocop:disable AbcSize
     d = Draw.create!(name: draw.name + ' (oversub)', status: 'pre_lottery')
     draw.ungrouped_students.each do |s|
       s.remove_draw.update!(draw_id: d.id, intent: 'on_campus')
     end
     d.suites << draw.suites.available
+    true
   end
 
   def success
-    msg = if new_draw
-            success_msg.merge(secondary_draw_warning)
-          else
-            success_msg
-          end
+    msg = success_msg
+    msg.merge!(secondary_draw_warning) if new_draw
     { redirect_object: draw, msg: msg }
   end
 
@@ -83,11 +81,8 @@ class DrawResultsStarter
   end
 
   def error
-    msg = "There was a problem completing suite selection:\n#{error_msgs}"
-    { redirect_object: nil, msg: { error: msg } }
-  end
-
-  def error_msgs
-    errors.full_messages.join(', ')
+    msg = ErrorHandler.format(error_object: self)
+    { redirect_object: nil,
+      msg: { error: "There was a problem completing suite selection: #{msg}" } }
   end
 end

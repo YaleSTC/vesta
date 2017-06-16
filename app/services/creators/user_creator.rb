@@ -53,10 +53,10 @@ class UserCreator
   end
 
   def error
-    errors = user.errors.full_messages
+    msg = ErrorHandler.format(error_object: user)
     {
       redirect_object: nil, user: user,
-      msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
+      msg: { error: "Please review the errors below:\n#{msg}" }
     }
   end
 end

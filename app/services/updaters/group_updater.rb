@@ -23,8 +23,8 @@ class GroupUpdater
       group.update_status!
     end
     success
-  rescue ActiveRecord::RecordInvalid => error
-    error(error)
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :update
@@ -93,10 +93,11 @@ class GroupUpdater
     }
   end
 
-  def error(error)
+  def error(e)
+    msg = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, record: group,
-      msg: { error: "Group update failed: #{error}" }
+      msg: { error: "Group update failed: #{msg}" }
     }
   end
 end

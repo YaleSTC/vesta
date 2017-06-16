@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 * Remove students and suites from Draw strong params ([#282](https://yale.githost.io/sdmp/rails/vesta/issues/282)).
 * Extract Group#remove_members ([#280](https://yale.githost.io/sdmp/rails/vesta/isses/280))
 * Refactor Draw reporting ([#619](https://yale.githost.io/sdmp/rails/vesta/isses/619))
+* Fix error handling in service objects ([#241](https://yale.githost.io/sdmp/rails/vesta/issues/241))
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).

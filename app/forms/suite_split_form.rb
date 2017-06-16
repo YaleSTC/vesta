@@ -31,14 +31,14 @@ class SuiteSplitForm
   #   the original suite, :form_object to nil if success or self if failure,
   #   and a flash message
   def submit
-    return error(errors.full_messages.join(', ')) unless valid?
+    return error(self) unless valid?
     @new_suites = ActiveRecord::Base.transaction do
       new_suites = destroy_and_create_suites
       new_suites.map(&:reload)
     end
     success
-  rescue ActiveRecord::RecordInvalid => error
-    error(error)
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :submit
@@ -107,10 +107,11 @@ class SuiteSplitForm
     }
   end
 
-  def error(errors)
+  def error(e)
+    msgs = ErrorHandler.format(error_object: e)
     {
       redirect_object: suite, form_object: self, suites: nil,
-      msg: { error: "Suite split failed: #{errors}" }
+      msg: { error: "Suite split failed: #{msgs}" }
     }
   end
 

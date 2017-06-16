@@ -23,12 +23,13 @@ RSpec.describe ReminderQueuer do
     end
   end
   context 'draw update failure' do
-    let(:draw) do
-      instance_spy('draw').tap do |d|
-        allow(d).to receive(:update!).and_raise(ActiveRecord::RecordInvalid)
-      end
-    end
+    let(:draw) { FactoryGirl.build_stubbed(:draw) }
     let(:type) { 'intent' }
+
+    before do
+      allow(draw).to receive(:update!)
+        .and_raise(ActiveRecord::RecordInvalid.new(draw))
+    end
 
     it 'returns an error' do
       results = described_class.queue(draw: draw, type: type)

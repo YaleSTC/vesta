@@ -67,7 +67,7 @@ class MembershipBatchCreator
   def failure_msg
     return if failures.empty?
     @failure_errors ||= failures.map do |f|
-      "#{f[:params][:user].full_name} (#{f[:errors].join(', ')})"
+      "#{f[:params][:user].full_name} (#{f[:errors]})"
     end
     @failure_msg ||= 'Failed to create memberships for '\
       "\n#{@failure_errors.join('\n')}"

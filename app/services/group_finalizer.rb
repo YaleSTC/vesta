@@ -17,7 +17,7 @@ class GroupFinalizer
   #
   # @return [Hash{Symbol=>Array, Group, Hash}] The result of the finalizing
   def finalize # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    return error unless valid?
+    return error(errors.join(', ')) unless valid?
     ActiveRecord::Base.transaction do
       group.finalizing!
       unless group.leader.membership.locked
@@ -26,9 +26,9 @@ class GroupFinalizer
     end
     notify_members
     success
-  rescue ActiveRecord::RecordInvalid => failures
-    @errors = failures
-    error
+  rescue ActiveRecord::RecordInvalid => e
+    # TODO: include ActiveModel::Model here, make the error handling consistent
+    error(ErrorHandler.format(error_object: e))
   end
 
   make_callable :finalize
@@ -54,9 +54,9 @@ class GroupFinalizer
     @errors << 'Suite size must be open'
   end
 
-  def error
+  def error(msg)
     { redirect_object: [group.draw, group], record: group,
-      msg: { error: errors.join(', ') } }
+      msg: { error: "Error: #{msg}" } }
   end
 
   def success

@@ -94,7 +94,8 @@ RSpec.describe DrawStudentsUpdate do
         FactoryGirl.create(:student, class_year: 2016).tap do |s|
           allow(UngroupedStudentsQuery).to receive(:call)
             .and_return(instance_spy(klass, where: [s]))
-          allow(s).to receive(:update).and_raise(ActiveRecord::RecordInvalid)
+          allow(s).to receive(:update!)
+            .and_raise(ActiveRecord::RecordInvalid.new(s))
         end
       end
     end

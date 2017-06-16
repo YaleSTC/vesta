@@ -27,13 +27,10 @@ class Creator
   #   or the created object.
   def create!
     @obj = klass.send(:new, **params)
-    if obj.save
-      success
-    else
-      error
-    end
+    obj.save!
+    success
   rescue ActiveRecord::RecordInvalid => e
-    error(e.record)
+    error(e)
   end
 
   make_callable :create!
@@ -49,11 +46,11 @@ class Creator
     }
   end
 
-  def error(object = obj)
-    errors = object.errors.full_messages
+  def error(e)
+    msg = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, record: obj,
-      msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
+      msg: { error: "Please review the errors below:\n#{msg}" }
     }
   end
 end

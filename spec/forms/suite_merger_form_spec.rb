@@ -128,13 +128,16 @@ RSpec.describe SuiteMergerForm, type: :model do
         result = described_class.submit(suite: suite, params: params)
         expect(result[:msg]).to have_key(:error)
       end
+      # rubocop:disable ExampleLength
       it 'fails if any update fails' do
         other_suite = FactoryGirl.create(:suite, building: suite.building)
         params = mock_params(other_suite_number: other_suite.number)
-        allow(Suite).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
+        allow(Suite).to receive(:create!)
+          .and_raise(ActiveRecord::RecordInvalid.new(other_suite))
         result = described_class.submit(suite: suite, params: params)
         expect(result[:msg]).to have_key(:error)
       end
+      # rubocop:enable ExampleLength
     end
   end
 

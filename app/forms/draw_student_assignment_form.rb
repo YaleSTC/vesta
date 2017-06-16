@@ -32,15 +32,11 @@ class DrawStudentAssignmentForm
   #   containing nil for the :redirect_object, the DrawStudentAssignmentForm
   #   set to :update_object if there were any failures, and a flash message
   def submit
-    return error(error_msgs) unless valid?
-    if adding?
-      student.remove_draw.update!(draw_id: draw.id)
-    else
-      student.restore_draw(save_current: true).save!
-    end
+    return error(self) unless valid?
+    update_students
     success
-  rescue ActiveRecord::RecordInvalid => error
-    error(error)
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :submit
@@ -48,6 +44,14 @@ class DrawStudentAssignmentForm
   private
 
   attr_reader :draw, :student
+
+  def update_students
+    if adding?
+      student.remove_draw.update!(draw_id: draw.id)
+    else
+      student.restore_draw(save_current: true).save!
+    end
+  end
 
   def process_params(params)
     @params = params.to_h.transform_keys(&:to_sym)
@@ -84,10 +88,6 @@ class DrawStudentAssignmentForm
                'must belong to a student in the draw when removing')
   end
 
-  def error_msgs
-    errors.full_messages.join(', ')
-  end
-
   def success
     verb = adding? ? 'added' : 'removed'
     {
@@ -96,10 +96,11 @@ class DrawStudentAssignmentForm
     }
   end
 
-  def error(error)
+  def error(e)
+    msgs = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, update_object: self,
-      msg: { error: "Student update failed: #{error}" }
+      msg: { error: "Student update failed: #{msgs}" }
     }
   end
 

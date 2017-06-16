@@ -27,11 +27,4 @@ class DrawlessGroupUpdater < GroupUpdater
       msg: { success: 'Group successfully updated!' }
     }
   end
-
-  def error(error)
-    {
-      redirect_object: nil, record: group,
-      msg: { error: "Group update failed: #{error}" }
-    }
-  end
 end

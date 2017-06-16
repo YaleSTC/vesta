@@ -41,11 +41,11 @@ class SuiteAssignment
   #
   # @return [Hash{Symbol=>Nil,SuiteAssignment,Hash}] the results hash
   def assign
-    return error(errors.full_messages.join(', ')) unless valid?
+    return error(self) unless valid?
     ActiveRecord::Base.transaction { process_all_suite_selections }
     success
-  rescue ActiveRecord::ActiveRecordError => e
-    error(e.to_s)
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   # Returns the valid form field ids for a given set of groups
@@ -69,7 +69,8 @@ class SuiteAssignment
       hash[g] = process_suite_selection(g)
     end
     return unless results.values.none?(&:empty?)
-    raise ActiveRecord::ActiveRecordError, errors_from_results(results)
+    errors_from_results(results)
+    raise ActiveRecord::RecordInvalid, self
   end
 
   def process_suite_selection(g)
@@ -104,10 +105,10 @@ class SuiteAssignment
   end
 
   def errors_from_results(results_hash)
-    results_hash.each_with_object([]) do |(group, results), array|
+    results_hash.each do |group, results|
       next if results.empty?
-      array << "#{group.name} - #{results.join(', ')}"
-    end.compact.join('; ')
+      errors.add(:base, "#{group.name} - #{results.join(', ')}")
+    end
   end
 
   def success
@@ -115,10 +116,11 @@ class SuiteAssignment
     { redirect_object: nil, service_object: nil, msg: { success: msg } }
   end
 
-  def error(error_msgs)
+  def error(e)
+    msg = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, service_object: self,
-      msg: { error: "There was a problem: #{error_msgs}" }
+      msg: { error: "There was a problem: #{msg}" }
     }
   end
 

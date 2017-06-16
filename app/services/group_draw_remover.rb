@@ -43,10 +43,11 @@ class GroupDrawRemover
     }
   end
 
-  def error(errors)
+  def error(error_obj)
+    msg = ErrorHandler.format(error_object: error_obj)
     {
-      redirect_object: [group.draw, group],
-      msg: { error: "Error converting group to a special group: #{errors}" }
+      redirect_object: [group.draw, group], record: group,
+      msg: { error: "Error converting group to a special group: #{msg}" }
     }
   end
 end

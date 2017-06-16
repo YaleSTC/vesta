@@ -5,6 +5,7 @@
 # room is assigned more students than beds.
 #
 # @param group [Group] the group in question
+# rubocop:disable ClassLength
 class RoomAssignment
   include ActiveModel::Model
 
@@ -30,7 +31,7 @@ class RoomAssignment
   # @return [Hash] the results hash, empty if valid
   def prepare(p)
     process_params(p)
-    @prep ||= valid? ? {} : error(errors.full_messages)
+    @prep ||= valid? ? {} : error(self)
   end
 
   # Execute / save the room assignment
@@ -39,14 +40,10 @@ class RoomAssignment
   # @return [Hash{Symbol=>Group,Array,Hash}] the results hash
   def assign(p)
     return prepare(p) unless prepare(p).empty?
-    ActiveRecord::Base.transaction do
-      params.each do |student_id, room_id|
-        User.find(student_id).update!(room_id: room_id)
-      end
-    end
+    update_student_room
     success
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
-    error(e.errors.full_messages)
+  rescue ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   # Returns the valid form field ids for a given group
@@ -133,8 +130,9 @@ class RoomAssignment
     { redirect_object: obj, msg: { notice: 'Successfully assigned rooms' } }
   end
 
-  def error(errors)
-    { redirect_object: nil, msg: { error: errors.join(', ') } }
+  def error(e)
+    msg = ErrorHandler.format(error_object: e)
+    { redirect_object: nil, msg: { error: msg } }
   end
 
   # creates dynamic attr_readers for user fields
@@ -153,5 +151,13 @@ class RoomAssignment
 
   def respond_to_missing?(method_name, include_all = false)
     valid_field_ids.include?(method_name) || super
+  end
+
+  def update_student_room
+    ActiveRecord::Base.transaction do
+      params.each do |student_id, room_id|
+        User.find(student_id).update!(room_id: room_id)
+      end
+    end
   end
 end

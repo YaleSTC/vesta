@@ -45,10 +45,10 @@ class Updater
   end
 
   def error
-    errors = object.errors.full_messages
+    msg = ErrorHandler.format(error_object: object)
     {
       redirect_object: nil, record: object,
-      msg: { error: "Please review the errors below:\n#{errors.join("\n")}" }
+      msg: { error: "Please review the errors below:\n#{msg}" }
     }
   end
 end

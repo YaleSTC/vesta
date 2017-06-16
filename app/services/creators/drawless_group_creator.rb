@@ -26,7 +26,7 @@ class DrawlessGroupCreator
     end
     success
   rescue ActiveRecord::RecordInvalid => e
-    error(e.record)
+    error(e)
   end
 
   make_callable :create
@@ -70,12 +70,12 @@ class DrawlessGroupCreator
     }
   end
 
-  def error(object = group)
-    errors = object.errors.full_messages
+  def error(e)
+    msg = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, record: group,
       msg: {
-        error: "There was a problem creating the group: #{errors.join(', ')}. "\
+        error: "There was a problem creating the group: #{msg}. "\
         'Please make sure you are not adding too many students.'
       }
     }

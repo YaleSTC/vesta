@@ -42,15 +42,15 @@ class SuiteMergerForm
   #   the original suite, :form_object to nil if success or self if failure,
   #   and a flash message
   def submit
-    return error(errors.full_messages.join(', ')) unless valid?
+    return error(self) unless valid?
     @new_suite = ActiveRecord::Base.transaction do
       rooms = find_combined_rooms
       draws = find_combined_draws
       destroy_and_create_suites(rooms: rooms, draws: draws)
     end
     success
-  rescue ActiveRecord::RecordInvalid => error
-    error(error)
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :submit
@@ -132,10 +132,11 @@ class SuiteMergerForm
     }
   end
 
-  def error(errors)
+  def error(e)
+    msgs = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, form_object: self,
-      msg: { error: "Suite merger failed: #{errors}" }
+      msg: { error: "Suite merger failed: #{msgs}" }
     }
   end
 end

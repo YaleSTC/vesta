@@ -21,12 +21,12 @@ class MembershipCreator < Creator
         "#{obj.user.name}." } }
   end
 
-  def error
-    errors = obj.errors.full_messages
+  def error(e)
+    msg = ErrorHandler.format(error_object: e)
     {
       redirect_object: nil, membership: obj,
-      msg: { error: "Please review the errors below:\n#{errors.join("\n")}" },
-      errors: errors,
+      msg: { error: "Please review the errors below:\n#{msg}" },
+      errors: msg,
       params: params
     }
   end
