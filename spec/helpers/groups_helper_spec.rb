@@ -49,4 +49,16 @@ RSpec.describe GroupsHelper, type: :helper do
         match_array([group3, group2, group4, group1])
     end
   end
+
+  context '#display_group_status' do
+    it 'returns the capitalization of a given status' do
+      group = instance_spy('group', closed?: false, status: 'open')
+      expect(helper.display_group_status(group)).to eq(group.status.capitalize)
+    end
+
+    it 'returns "Full" when status is "closed"' do
+      group = instance_spy('group', closed?: true)
+      expect(helper.display_group_status(group)).to eq('Full')
+    end
+  end
 end

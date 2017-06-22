@@ -26,7 +26,7 @@
             <% groups[size].each do |group| %>
               <tr id="group-<%= group.id %>">
                 <td data-role="group-leader"> <%= group.leader.full_name %> </td>
-                <td data-role="group-status"><%= group.status.capitalize %></td>
+                <td data-role="group-status"><%= display_group_status(group) %></td>
                 <% if current_user.admin? %>
                   <td data-role="group-transfers"><%= group.transfers %></td>
                 <% end %>

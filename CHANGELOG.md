@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 * Fix error handling in service objects ([#241](https://yale.githost.io/sdmp/rails/vesta/issues/241))
 * Make error handling more consistent across service objects ([#602](https://yale.githost.io/sdmp/rails/vesta/issues/602))
 * Clean up ReminderQueuer ([#625](https://yale.githost.io/sdmp/rails/vesta/issues/625))
-
+* Rename the 'full' status to 'closed' ([#240](https://yale.githost.io/sdmp/rails/vesta/issues/240))
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).

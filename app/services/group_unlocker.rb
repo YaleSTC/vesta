@@ -37,7 +37,7 @@ class GroupUnlocker
 
   # Note that this occurs in the transaction
   def update_group_status(group)
-    group.status = 'full' if group.finalizing?
+    group.status = 'closed' if group.full?
     group.update_status!
   end
 

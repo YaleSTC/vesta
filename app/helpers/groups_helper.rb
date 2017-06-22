@@ -29,4 +29,18 @@ module GroupsHelper
       end
     end
   end
+
+  # Displays the status of a group as the capitalization of its current
+  # status. In the case of 'closed' it returns Full to maintain the
+  # readability.
+  #
+  # @param [String] the group that's status will be displayed
+  # @return [String] the capitalization of the current status
+  def display_group_status(group)
+    if group.closed?
+      'Full'
+    else
+      group.status.capitalize
+    end
+  end
 end

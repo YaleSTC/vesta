@@ -61,7 +61,7 @@ RSpec.describe Group, type: :model do
     end
     it 'takes transfers into account' do
       group = FactoryGirl.create(:open_group, size: 2, transfers: 1)
-      expect(group).to be_full
+      expect(group).to be_closed
     end
   end
 
@@ -77,9 +77,9 @@ RSpec.describe Group, type: :model do
       group.status = 'locked'
       expect(group.valid?).to be_falsey
     end
-    it 'cannot be full when there are less members than the size' do
+    it 'cannot be closed when there are less members than the size' do
       group = FactoryGirl.build(:open_group)
-      group.status = 'full'
+      group.status = 'closed'
       expect(group.valid?).to be_falsey
     end
     it 'takes transfers into account' do
@@ -211,7 +211,7 @@ RSpec.describe Group, type: :model do
       group = FactoryGirl.create(:full_group, size: 2)
       ids = group.members.map(&:id)
       expect { group.remove_members!(ids: ids) }.to \
-        change { group.status }.from('full').to('open')
+        change { group.status }.from('closed').to('open')
     end
     it 'deletes membership object' do
       group = FactoryGirl.create(:full_group, size: 2)
@@ -258,7 +258,7 @@ RSpec.describe Group, type: :model do
   describe '#unlockable?' do
     it 'returns true when there are _any_ locked members and no suite' do
       group = FactoryGirl.create(:finalizing_group)
-      group.update!(status: 'full')
+      group.update!(status: 'closed')
       expect(group.reload).to be_unlockable
     end
     it 'returns false if the group has a suite assigned' do

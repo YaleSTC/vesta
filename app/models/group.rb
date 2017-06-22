@@ -21,7 +21,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
            class_name: 'Membership', inverse_of: :group
   has_many :members, through: :full_memberships, source: :user
 
-  enum status: %w(open full finalizing locked)
+  enum status: %w(open closed finalizing locked)
 
   # validates :draw, presence: true
   validates :status, presence: true
@@ -127,6 +127,14 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     !locked_members.empty? && suite.nil?
   end
 
+  # Check if the group is full
+  #
+  # @return [Boolean] true if the group's size equals the number of members
+  #   in it
+  def full?
+    members_count == size
+  end
+
   private
 
   def notify_members_of_disband
@@ -189,7 +197,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   end
 
   def validate_not_open
-    return unless members_count != size
+    return if full?
     errors.add :status, "can only be #{status} when members equal size"
   end
 
@@ -212,8 +220,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   def assign_new_status
     if members_count < size
       self.status = 'open'
-    elsif members_count == size
-      self.status = 'full' unless finalizing? || lockable?
+    elsif full?
+      self.status = 'closed' unless finalizing? || lockable?
       self.status = 'locked' if lockable?
     end
   end

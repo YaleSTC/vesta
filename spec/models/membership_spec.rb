@@ -84,12 +84,12 @@ RSpec.describe Membership, type: :model do
       draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: 2)
       group = FactoryGirl.create(:group, leader: draw.students.first, size: 2)
       expect { group.members << draw.students.last }.to \
-        change { group.status }.from('open').to('full')
+        change { group.status }.from('open').to('closed')
     end
     it 'updates to open on deletion' do
       group = FactoryGirl.create(:full_group, size: 2)
       expect { group.memberships.last.destroy }.to \
-        change { group.status }.from('full').to('open')
+        change { group.status }.from('closed').to('open')
     end
     it 'updates to locked when the last membership locks' do
       group = FactoryGirl.create(:full_group, size: 1)

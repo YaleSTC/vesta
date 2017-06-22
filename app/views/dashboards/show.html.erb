@@ -28,7 +28,7 @@
         <% end %>
         <% if @group.present? %>
           <p><%= link_to 'Your group', draw_group_path(@draw, @group) %>
-        (<%= size_str(@group.size).capitalize %>, <%= @group.status.humanize %>)</p>
+        (<%= size_str(@group.size).capitalize %>, <%= display_group_status(@group) %>)</p>
         <% elsif @pending.present? && !@pending.empty? %>
           <hr />
           <p>Your membership invitations and requests:</p>
