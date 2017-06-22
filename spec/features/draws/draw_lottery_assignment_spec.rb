@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw lottery assignment', js: true do
-  let(:draw) { FactoryGirl.create(:draw_in_lottery, groups_count: 2) }
-  let(:group) { draw.groups.first }
+  let!(:draw) { FactoryGirl.create(:draw_in_lottery, groups_count: 2) }
+  let!(:group) { draw.groups.first }
 
   context 'as admin' do
     before { log_in FactoryGirl.create(:admin) }
@@ -21,8 +21,6 @@ RSpec.feature 'Draw lottery assignment', js: true do
       group.update!(lottery_number: 2)
       visit lottery_draw_path(draw)
       assign_lottery_number(group, '')
-      reload
-      # expect(lottery_number_saved?(page, group, nil)).to be_truthy
       expect(group.reload.lottery_number).to be_nil
     end
 

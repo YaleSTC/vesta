@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 * Pass overrides properly in seed script generators ([#616](https://yale.githost.io/sdmp/rails/vesta/issues/616)).
 * Fixed definition inconsistencies in policy files ([#216](https://yale.githost.io/sdmp/rails/vesta/issues/216)). 
 * Fix n+3 query in suites summary partial ([#567](https://yale.githost.io/sdmp/rails/vesta/issues/567)).
+* Fix intermittent test failure in lottery number removal ([#532](https://yale.githost.io/sdmp/rails/vesta/issues/532)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed
