@@ -2,9 +2,9 @@
 <h3>Total Number of Students: <%= @draw.student_count %></h3>
 <h3>Available Suites</h3>
 <ul style="list-style-type: none;">
-  <% @suite_sizes.each do |size| %>
+  <% @draw.suite_sizes.each do |size| %>
     <li>
-      <%= "#{headerize_size(size)} - #{@suite_counts[size]}" %>
+      <%= "#{headerize_size(size)} - #{@draw.suite_counts[size]}" %>
     </li>
   <% end %>
 </ul>

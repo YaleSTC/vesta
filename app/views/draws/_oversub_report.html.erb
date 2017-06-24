@@ -12,15 +12,15 @@
       <% end %>
   </thead>
   <tbody>
-    <% @sizes.each do |size| %>
-      <tr class="<%= diff_class(@diff[size])%>">
+    <% @draw.sizes.each do |size| %>
+      <tr class="<%= diff_class(@draw.oversubscription[size])%>">
         <td data-role="suite-size"><%= size_str(size).capitalize.pluralize %></td>
-        <td data-role="suite-count"><%= @suite_counts[size] %></td>
-        <td data-role="group-count"><%= @group_counts[size] %></td>
-        <td data-role="locked-count"><%= @locked_counts[size] %></td>
-        <td data-role="oversubscription"><%= @diff[size] %></td>
-        <% if policy(draw).lock_all_sizes? %>
-          <td class="actions"><%= toggle_size_lock_btn(draw: draw, size: size, path: path) %></td>
+        <td data-role="suite-count"><%= @draw.suite_counts[size] %></td>
+        <td data-role="group-count"><%= @draw.group_counts[size] %></td>
+        <td data-role="locked-count"><%= @draw.locked_counts[size] %></td>
+        <td data-role="oversubscription"><%= @draw.oversubscription[size] %></td>
+        <% if policy(@draw).lock_all_sizes? %>
+          <td class="actions"><%= toggle_size_lock_btn(draw: @draw, size: size, path: path) %></td>
         <% end %>
       </tr>
     <% end %>

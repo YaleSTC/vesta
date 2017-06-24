@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Style/Documentation
 require_relative 'boot'
 require 'rails/all'
@@ -21,11 +22,11 @@ module Vesta
       "/app/services/#{s}"
     end
     forms_path = %w(/app/forms)
+    presenters_path = %w(/app/presenters)
     lib_paths = %w(seed).map { |s| "/lib/#{s}" }
-    config.autoload_paths +=
-      (services_paths + forms_path + lib_paths + %w(/lib/)).map do |s|
-        "#{config.root}#{s}"
-      end
+    paths = services_paths + forms_path + presenters_path +
+            lib_paths + %w(/lib/)
+    config.autoload_paths += paths.map { |s| "#{config.root}#{s}" }
     config.time_zone = ENV['RAILS_TIME_ZONE'] || 'UTC'
   end
 end

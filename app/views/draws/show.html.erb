@@ -60,7 +60,7 @@
             <ul class="menu vertical nested">
               <li><%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %></li>
               <% if policy(@draw).toggle_size_lock? %>
-                <% @suite_sizes.each do |size| %>
+                <% @draw.suite_sizes.each do |size| %>
                   <li><%= toggle_size_lock_btn(draw: @draw, size: size, path: draw_path(@draw)) %></li>
                 <% end %>
               <% end %>
@@ -72,7 +72,7 @@
             <a href="#">Export Leader Emails</a>
             <ul class="menu vertical nested">
               <li><%= render 'email_exports/hidden_form', draw: @draw, size: nil, btn_str: 'All' %></li>
-              <% @group_sizes.each do |size| %>
+              <% @draw.group_sizes.each do |size| %>
                 <li><%= render 'email_exports/hidden_form', draw: @draw, size: size, btn_str: headerize_size(size) %></li>
               <% end %>
             </ul>
@@ -142,7 +142,8 @@
   <% if policy(@draw).selection_metrics? %>
     <div>
       <%= render 'selection_metrics', draw: @draw, group: current_user.group,
-        without_suites: @without_suites, valid_suites: @valid_suites %>
+        without_suites: @draw.groups_without_suites_by_size[current_user.group.size],
+        valid_suites: @draw.valid_suites(size: current_user.group.size) %>
     </div>
     <hr />
   <% end %>
@@ -150,11 +151,11 @@
     <div class="group-report">
       <h3>Group Report</h3>
       <% if @draw.lottery_or_later? %>
-        <%= render 'groups/secondary_report', groups: @groups_by_size, path: draw_path(@draw),
+        <%= render 'groups/secondary_report', groups: @draw.groups_by_size, path: draw_path(@draw),
           actions_partial: 'groups/actions' %>
       <% elsif @draw.before_lottery? %>
-        <%= render 'group_report', sizes: @sizes, groups: @groups_by_size,
-          diff: @diff, group_counts: @group_counts, suite_counts: @suite_counts,
+        <%= render 'group_report', sizes: @draw.sizes, groups: @draw.groups_by_size,
+          diff: @diff, group_counts: @draw.group_counts, suite_counts: @draw.suite_counts,
           actions_partial: 'groups/actions', path: draw_path(@draw) %>
       <% end %>
     </div>

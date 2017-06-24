@@ -1,6 +1,6 @@
-<p><%= hash[:intent]['on_campus'] %> on campus students</p>
-<p><%= hash[:intent]['undeclared'] %> undeclared students</p>
-<p><%= hash[:intent]['off_campus'] %> off campus students</p>
+<p><%= draw.intent_metrics['on_campus'] %> on campus students</p>
+<p><%= draw.intent_metrics['undeclared'] %> undeclared students</p>
+<p><%= draw.intent_metrics['off_campus'] %> off campus students</p>
 
 <div class="oversub-report">
 <table>
@@ -13,13 +13,13 @@
       <td>Leftover Suites</td>
   </thead>
   <tbody>
-    <% hash[:sizes].each do |size| %>
-      <tr class="<%= diff_class(hash[:diff][size])%>"]>
+    <% draw.sizes.each do |size| %>
+      <tr class="<%= diff_class(draw.oversubscription[size])%>"]>
         <td data-role="suite-size"><%= size_str(size).capitalize.pluralize %></td>
-        <td data-role="suite-count"><%= hash[:suite_counts][size] %></td]>
-        <td data-role="group-count"><%= hash[:group_counts][size] %></td]>
-        <td data-role="locked-count"><%= hash[:locked_counts][size] %></td]>
-        <td data-role="oversubscription"><%= hash[:diff][size] %></td]>
+        <td data-role="suite-count"><%= draw.suite_counts[size] %></td]>
+        <td data-role="group-count"><%= draw.group_counts[size] %></td]>
+        <td data-role="locked-count"><%= draw.locked_counts[size] %></td]>
+        <td data-role="oversubscription"><%= draw.oversubscription[size] %></td]>
       </tr>
     <% end %>
   </tbody>

@@ -41,7 +41,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   #
   # @return [Array<Integer>] the available suite sizes
   def suite_sizes
-    SuiteSizesQuery.new(suites.available).call
+    @suite_sizes ||= SuiteSizesQuery.new(suites.available).call
   end
 
   # Finds the sizes that groups exist for within the draw

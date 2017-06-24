@@ -33,6 +33,7 @@ FactoryGirl.define do
           g.full_memberships.each { |m| m.update!(locked: true) }
           g.update(status: 'locked')
         end
+        factory :group_with_suite, traits: %i(with_suite)
       end
 
       trait :with_suite do

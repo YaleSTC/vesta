@@ -5,11 +5,10 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   prepend_before_action :set_draw, except: %i(index new create)
   before_action :calculate_metrics, only: %i(show activate start_lottery
                                              start_selection
-                                             lottery_confirmation)
+                                             lottery_confirmation
+                                             oversubscription)
 
-  def show
-    calculate_selection_metrics if policy(@draw).selection_metrics?
-  end
+  def show; end
 
   def index
     @draws = Draw.all.order(:name)
@@ -120,11 +119,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     @groups = @draw.groups.includes(:leader).order('users.last_name')
   end
 
-  def oversubscription
-    calculate_suite_metrics
-    calculate_group_metrics
-    calculate_oversub_metrics
-  end
+  def oversubscription; end
 
   def toggle_size_lock
     result = DrawSizeLockToggler.toggle(draw: @draw, size: params[:size])
@@ -191,56 +186,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def calculate_metrics
-    calculate_sizes
-    calculate_suite_metrics
-    calculate_group_metrics
-    calculate_oversub_metrics
-    calculate_ungrouped_students_metrics
-  end
-
-  def calculate_sizes
-    @suite_sizes ||= @draw.suite_sizes
-    @group_sizes ||= @draw.group_sizes
-    @sizes ||= (@suite_sizes + @group_sizes).uniq.sort
-  end
-
-  def calculate_suite_metrics
-    @suite_counts = @draw.suites.available.group(:size).count
-    @suite_counts.default = 0
-  end
-
-  def calculate_group_metrics
-    @groups = @draw.groups.includes(:leader)
-    @groups_by_size = @groups.sort_by { |g| Group.statuses[g.status] }
-                             .group_by(&:size)
-    @groups_by_size.default = []
-  end
-
-  def calculate_oversub_metrics
-    return unless policy(@draw).oversub_report?
-    calculate_sizes
-    @group_counts = @groups.group(:size).count
-    @group_counts.default = 0
-    @locked_counts = @groups.where(status: 'locked').group(:size).count
-    @locked_counts.default = 0
-    @diff = @sizes.map do |size|
-      [size, @suite_counts[size] - @group_counts[size]]
-    end.to_h
-  end
-
-  def calculate_ungrouped_students_metrics
-    @ungrouped_students = UngroupedStudentsQuery.new(@draw.students).call
-                                                .group_by(&:intent)
-    @ungrouped_students.delete('off_campus')
-  end
-
-  def calculate_selection_metrics
-    size = current_user.group.size
-    @without_suites = @draw.groups.includes(:suite)
-                           .where(size: size, suites: { group_id: nil })
-                           .order(:lottery_number)
-    @valid_suites = @draw.suites.includes(:building).available
-                         .where(medical: false, size: size).group_by(&:building)
+    @draw = DrawReport.new(@draw)
   end
 
   def prepare_suites_edit_data # rubocop:disable AbcSize, MethodLength

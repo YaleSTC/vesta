@@ -4,7 +4,9 @@ require 'rails_helper'
 
 # rubocop:disable RSpec/DescribeClass
 RSpec.describe 'draws/show.html.erb' do
-  let(:draw) { FactoryGirl.build(:draw, id: 1, status: 'pre_lottery') }
+  let(:draw) do
+    DrawReport.new(FactoryGirl.build(:draw, id: 1, status: 'pre_lottery'))
+  end
 
   before { mock_policy }
 

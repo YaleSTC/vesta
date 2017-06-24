@@ -1,8 +1,8 @@
-<% if hash[:next_groups] %>
-  <p>Groups currently picking suites: <%= hash[:next_groups].map(&:name).join(', ') %></p>
-  <p><%= hash[:no_suite_count] %> groups still have to select suites</p>
-  <p><%= hash[:with_suite_count] %> groups have selected suites</p>
+<% if draw.next_groups %>
+  <p>Groups currently picking suites: <%= draw.next_groups.map(&:name).join(', ') %></p>
+  <p><%= draw.groups_without_suites_count %> groups still have to select suites</p>
+  <p><%= draw.groups_with_suites_count %> groups have selected suites</p>
 <% else %>
   <p>All groups have selected suites.</p>
 <% end %>
-<p><%= hash[:no_room_count] %> groups with suites still have to select rooms</p>
+<p><%= draw.groups_without_rooms_count %> groups with suites still have to select rooms</p>

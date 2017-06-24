@@ -61,13 +61,13 @@
   <% if @draws.empty? %>
     <p>Welcome to Vesta! Use the navbar above to manage housing inventory and create draws!</p>
   <% else %>
-    <% @draw_hash.each do |draw, hash| %>
+    <% @draws.each do |draw| %>
       <div class="card">
         <div class="card-divider">
           <h4><%= link_to draw.name, draw_path(draw) %> (<%= draw.status.humanize %>)</h4>
         </div>
         <div class="card-section">
-          <%= render hash[:partial], draw: draw, hash: hash %>
+          <%= render draw.status, draw: draw %>
         </div>
       </div>
     <% end %>

@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 * DrawsController#lock_all_sizes should use Updater ([#610](https://yale.githost.io/sdmp/rails/vesta/issues/610))
 * Remove students and suites from Draw strong params ([#282](https://yale.githost.io/sdmp/rails/vesta/issues/282)).
 * Extract Group#remove_members ([#280](https://yale.githost.io/sdmp/rails/vesta/isses/280))
+* Refactor Draw reporting ([#619](https://yale.githost.io/sdmp/rails/vesta/isses/619))
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
