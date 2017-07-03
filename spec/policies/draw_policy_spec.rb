@@ -12,7 +12,7 @@ RSpec.describe DrawPolicy do
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
 
-    permissions :show?, :suite_summary? do
+    permissions :show? do
       context 'not draft' do
         before { allow(draw).to receive(:draft?).and_return(false) }
         it { is_expected.to permit(user, draw) }
@@ -23,8 +23,8 @@ RSpec.describe DrawPolicy do
       end
     end
     permissions :destroy?, :edit?, :update?, :activate?, :intent_report?,
-                :filter_intent_report?, :suites_edit?, :suites_update?,
-                :student_summary?, :students_update?, :oversubscription?,
+                :filter_intent_report?, :student_summary?, :students_update?,
+                :oversubscription?,
                 :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
                 :start_selection?, :bulk_on_campus?, :reminder?, :results?,
                 :intent_reminder?, :locking_reminder?, :lock_all_sizes? do
@@ -90,7 +90,7 @@ RSpec.describe DrawPolicy do
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
 
-    permissions :show?, :suite_summary?, :intent_report?,
+    permissions :show?, :intent_report?,
                 :filter_intent_report?, :toggle_size_lock? do
       it { is_expected.to permit(user, draw) }
     end
@@ -255,8 +255,7 @@ RSpec.describe DrawPolicy do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
 
     permissions :show?, :edit?, :update?, :destroy?, :intent_report?,
-                :filter_intent_report?, :suite_summary?, :suites_edit?,
-                :suites_update?, :student_summary?, :students_update?,
+                :filter_intent_report?, :student_summary?, :students_update?,
                 :toggle_size_lock?, :lock_all_sizes? do
       it { is_expected.to permit(user, draw) }
     end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# frozen_string_literal: true
 
 # Query to return all of the group and available suite sizes for a given draw.
 # Defaults to drawless groups if no draw passed.
@@ -11,7 +12,7 @@ class DrawSizesQuery
   # Initialize a new DrawSizesQuery, loads all arel tables as instance variables
   def initialize
     @draws = Draw.arel_table
-    @draws_suites = DrawsSuite.arel_table
+    @draw_suites = DrawSuite.arel_table
     @groups = Group.arel_table
     @suites = Suite.arel_table
   end
@@ -29,12 +30,12 @@ class DrawSizesQuery
 
   private
 
-  attr_reader :draws, :draws_suites, :groups, :suites
+  attr_reader :draws, :draw_suites, :groups, :suites
 
   def draw_suite_base(draw) # rubocop:disable AbcSize
-    suites.join(draws_suites)
-          .on(draws_suites[:suite_id].eq(suites[:id]))
-          .where(draws_suites[:draw_id].eq(draw.id))
+    suites.join(draw_suites)
+          .on(draw_suites[:suite_id].eq(suites[:id]))
+          .where(draw_suites[:draw_id].eq(draw.id))
           .where(available_suite)
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170415175000) do
+ActiveRecord::Schema.define(version: 20170923235715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,15 @@ ActiveRecord::Schema.define(version: 20170415175000) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "draw_suites", force: :cascade do |t|
+    t.bigint "draw_id", null: false
+    t.bigint "suite_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["draw_id"], name: "index_draw_suites_on_draw_id"
+    t.index ["suite_id"], name: "index_draw_suites_on_suite_id"
+  end
+
   create_table "draws", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -60,13 +69,6 @@ ActiveRecord::Schema.define(version: 20170415175000) do
     t.integer "email_type"
     t.date "locking_deadline"
     t.integer "suite_selection_mode", default: 0, null: false
-  end
-
-  create_table "draws_suites", id: false, force: :cascade do |t|
-    t.integer "draw_id", null: false
-    t.integer "suite_id", null: false
-    t.index ["draw_id"], name: "index_draws_suites_on_draw_id"
-    t.index ["suite_id"], name: "index_draws_suites_on_suite_id"
   end
 
   create_table "groups", force: :cascade do |t|

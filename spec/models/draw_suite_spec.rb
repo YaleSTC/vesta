@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DrawsSuite do
+RSpec.describe DrawSuite do
   describe 'associations' do
     subject { described_class.new }
 

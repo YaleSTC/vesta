@@ -7,7 +7,7 @@
         <% if policy(@draw).results? %>
           <li><%= link_to 'View results', results_draw_path(@draw), class: 'button' %></li>
         <% end %>
-        <% if policy(SuiteAssignment.new(draw: @draw, groups: [])).new? %>
+        <% if policy(SuiteAssignment.new(draw: @draw.__getobj__, groups: [])).new? %>
           <li><%= link_to 'Select suites', new_draw_suite_assignment_path(@draw), class: 'button' %></li>
         <% end %>
         <% if policy(@draw).lottery? %>
@@ -84,8 +84,8 @@
             <% if policy(@draw).student_summary? %>
               <li><%= link_to 'View students', student_summary_draw_path(@draw), class: 'button secondary' %></li>
             <% end %>
-            <% if policy(@draw).suite_summary? %>
-              <li><%= link_to 'View suites', suite_summary_draw_path(@draw), class: 'button secondary' %></li>
+            <% if policy(DrawSuite.new(draw: @draw.__getobj__)).index? %>
+              <li><%= link_to 'View suites', draw_suites_path(@draw, method: :get), class: 'button secondary' %></li>
             <% end %>
             <% if policy(Group).index? %>
               <li><%= link_to 'View groups', draw_groups_path(@draw), class: 'button secondary' %></li>
@@ -101,8 +101,8 @@
             <% if policy(@draw).student_summary? %>
               <li><%= link_to 'Edit students', student_summary_draw_path(@draw), class: 'button secondary' %></li>
             <% end %>
-            <% if policy(@draw).suites_edit? %>
-              <li><%= link_to 'Edit suites', suites_edit_draw_path(@draw), class: 'button secondary' %></li>
+            <% if policy(DrawSuite.new(draw: @draw.__getobj__)).edit_collection? %>
+              <li><%= link_to 'Edit suites', edit_collection_draw_suites_path(@draw), class: 'button secondary' %></li>
             <% end %>
             <% if policy(@draw).destroy? %>
               <li><%= link_to 'Delete', draw_path(@draw), method: :delete,
@@ -116,8 +116,8 @@
         <% if policy(Group).new? %>
           <li><%= link_to 'Create new housing group', new_draw_group_path(@draw), class: 'button secondary' %></li>
         <% end %>
-        <% if policy(@draw).suite_summary? %>
-          <li><%= link_to 'View suites', suite_summary_draw_path(@draw), class: 'button secondary' %></li>
+        <% if policy(DrawSuite.new(draw: @draw.__getobj__)).index?%>
+          <li><%= link_to 'View suites', draw_suites_path(@draw, method: :get), class: 'button secondary' %></li>
         <% end %>
         <% if policy(Group).index? %>
           <li><%= link_to 'View groups', draw_groups_path(@draw), class: 'button secondary' %></li>

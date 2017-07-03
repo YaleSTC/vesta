@@ -22,18 +22,6 @@ class DrawPolicy < ApplicationPolicy
     intent_report?
   end
 
-  def suite_summary?
-    show?
-  end
-
-  def suites_edit?
-    suites_update?
-  end
-
-  def suites_update?
-    update? || user.rep?
-  end
-
   def student_summary?
     edit?
   end

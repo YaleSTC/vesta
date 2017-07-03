@@ -21,8 +21,8 @@
 class Draw < ApplicationRecord # rubocop:disable ClassLength
   has_many :groups
   has_many :students, class_name: 'User', dependent: :nullify
-  has_many :draws_suites, dependent: :delete_all
-  has_many :suites, through: :draws_suites
+  has_many :draw_suites, dependent: :delete_all
+  has_many :suites, through: :draw_suites
 
   validates :name, presence: true
   validates :status, presence: true

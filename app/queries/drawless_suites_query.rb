@@ -17,11 +17,11 @@ class DrawlessSuitesQuery
   end
 
   # Execute the drawless suites query. Performs an left outer join with the
-  # draws_suites table. See http://stackoverflow.com/a/31524866 for more
+  # draw_suites table. See http://stackoverflow.com/a/31524866 for more
   # details.
   #
   # @return [Array<Suite>] the drawless suites in the relation
   def call
-    @relation.includes(:draws_suites).where(draws_suites: { suite_id: nil })
+    @relation.includes(:draw_suites).where(draw_suites: { suite_id: nil })
   end
 end

@@ -45,9 +45,6 @@ Rails.application.routes.draw do
       post 'intent_report', to: 'draws#filter_intent_report'
       post 'reminder'
       patch 'bulk_on_campus'
-      get 'suites', to: 'draws#suite_summary', as: 'suite_summary'
-      get 'suites/edit', to: 'draws#suites_edit', as: 'suites_edit'
-      patch 'suites', to: 'draws#suites_update', as: 'suites_update'
       get 'students', to: 'draws#student_summary', as: 'student_summary'
       patch 'students', to: 'draws#students_update', as: 'students_update'
       get 'lottery_confirmation'
@@ -59,6 +56,13 @@ Rails.application.routes.draw do
       get 'lottery'
       patch 'start_selection'
       get 'results'
+    end
+
+    resources :draw_suites, only: %i(index), as: :suites do
+      collection do
+        get 'edit_collection'
+        patch 'update_collection'
+      end
     end
 
     resources :groups do
