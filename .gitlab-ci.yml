@@ -12,7 +12,9 @@ test:
   before_script:
     - ruby -v
     - which ruby
+    - node -v
     - gem install bundler --no-ri --no-rdoc
+    - yarn install
   script:
     - bundle check --path vendor/bundle || bundle install --path vendor/bundle
     - cp config/database.yml.gitlab config/database.yml

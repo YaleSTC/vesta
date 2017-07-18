@@ -24,6 +24,8 @@ gem "sprockets", ">= 3.0.0"
 gem "sprockets-es6"
 gem "title"
 gem "uglifier", "~> 3.2.0"
+gem "webpacker", "~> 2.0"
+gem "react-rails", "~> 2.2.1"
 
 # for UserGenerator
 gem 'ffaker', '~> 2.5.0'
