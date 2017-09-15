@@ -85,7 +85,7 @@ module DrawsHelper
     link_to "Unlock #{headerize_size(size)}",
             toggle_size_lock_draw_path(draw, size, redirect_path: path),
             method: :patch, **with_tooltip(
-              text: "Allow studenst to form groups of size #{size}",
+              text: "Allow students to form groups of size #{size}",
               class_override: 'button expanded', id: "unlock-size-#{size}"
             )
   end

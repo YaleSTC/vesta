@@ -16,6 +16,21 @@ class DrawReport < SimpleDelegator
            :without_suites, :without_suites_count, :without_suites_by_size,
            to: :@groups_report, prefix: :groups, allow_nil: true
 
+  # Re-creates the object so memoized calculations can be repeated
+  # DOES NOT update the pointer to the current object in memory
+  #
+  # @example Proper use
+  #   draw_report = draw_report.refresh
+  #
+  # @example Unexpected use -- y will calcualate based on the old report object
+  #   x = draw_report.refresh.sizes
+  #   y = draw_report.sizes
+  #
+  # @return [DrawReport] a new DrawReport generated from the same base draw
+  def refresh
+    DrawReport.new(__getobj__)
+  end
+
   # Gets the draw's suite sizes and group sizes and sorts them
   #
   # @return [Array<Integer>] A sorted array of unique group and suite sizes in
@@ -55,6 +70,20 @@ class DrawReport < SimpleDelegator
   #   between the number of suites of that size and the number of groups
   def oversubscription
     @diff ||= sizes.map { |s| [s, suite_counts[s] - group_counts[s]] }.to_h
+  end
+
+  # Returns the group sizes that have more groups than available suites
+  #
+  # @return [Array<Integer>] The oversubscribed sizes
+  def oversubscribed_sizes
+    @oversub_sizes ||= oversubscription.select { |_, v| v.negative? }.keys
+  end
+
+  # Checks if the draw is oversubscribed
+  #
+  # @return [Boolean] True when oversubscribed, false otherwise
+  def oversubscribed?
+    oversubscribed_sizes.present?
   end
 
   # Calculates the number of suites by size

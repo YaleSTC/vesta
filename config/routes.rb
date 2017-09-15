@@ -68,6 +68,7 @@ Rails.application.routes.draw do
       patch 'size_lock/:size', to: 'draws#toggle_size_lock',
                                as: 'toggle_size_lock'
       patch 'lock_all_sizes'
+      delete 'prune_oversub/:prune_size', to: 'draws#prune', as: 'prune'
       patch 'start_selection'
       get 'results'
     end

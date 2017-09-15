@@ -6,7 +6,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   before_action :calculate_metrics, only: %i(show activate start_lottery
                                              start_selection
                                              lottery_confirmation
-                                             oversubscription)
+                                             oversubscription prune)
 
   def show; end
 
@@ -107,6 +107,16 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                                   path: params[:redirect_path]))
   end
 
+  def prune
+    sizes = if prune_params[:prune_size] == 'all'
+              @draw.oversubscribed_sizes
+            else
+              [prune_params[:prune_size].to_i]
+            end
+    result = OversubscriptionPruner.prune(draw_report: @draw, sizes: sizes)
+    handle_action(path: request.referer, **result)
+  end
+
   def start_selection
     result = DrawSelectionStarter.start(draw: @draw)
     handle_action(action: 'show', **result)
@@ -148,6 +158,10 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def filter_params
     params.fetch(:intent_report_filter, {}).permit(intents: [])
+  end
+
+  def prune_params
+    params.permit(:id, :prune_size)
   end
 
   def set_draw

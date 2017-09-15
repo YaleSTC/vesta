@@ -13,6 +13,22 @@
           <li><%= toggle_size_lock_btn(draw: @draw, size: size, path: draw_path(@draw)) %></li>
         <% end %>
       <% end %>
+      <% if policy(@draw).prune? %>
+        <li><%= link_to 'Resolve all', prune_draw_path(@draw, 'all'), 
+          method: :delete, class: 'button alert expanded',
+          data: { confirm: 'This will randomly disband groups so that there is '\
+                  'no more oversubscription. The disbanded groups cannot be restored. '\
+                  'Are you sure you want to continue?' } %></li>
+        <% @draw.oversubscribed_sizes.each do |size| %>
+          <li><%= link_to "Resolve #{headerize_size(size)}", prune_draw_path(@draw, size),
+                          method: :delete, class: 'button alert expanded',
+                          id: "fix-oversub-size-#{size}", data: {
+                            confirm: 'This will randomly disband groups so that '\
+                              "#{headerize_size(size).downcase} are no longer oversubscribed. "\
+                              'The disbanded groups cannot be restored. '\
+                              'Are you sure you want to continue?' } %></li>
+        <% end %>
+      <% end %>
     </ul>
   </div>
 </div>
@@ -22,6 +38,6 @@
       diff: @diff, group_counts: @draw.group_counts,
       suite_counts: @draw.suite_counts, actions_partial: 'groups/actions',
       path: oversub_draw_path(@draw) %>
-</div>
+  </div>
 </div>
 <%= link_to 'Return to draw', draw_path(@draw) %>

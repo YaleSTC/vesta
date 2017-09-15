@@ -27,7 +27,8 @@ RSpec.describe DrawPolicy do
                 :oversubscription?,
                 :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
                 :start_selection?, :bulk_on_campus?, :reminder?, :results?,
-                :intent_reminder?, :locking_reminder?, :lock_all_sizes? do
+                :intent_reminder?, :locking_reminder?, :lock_all_sizes?,
+                :prune? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -97,7 +98,7 @@ RSpec.describe DrawPolicy do
     permissions :edit?, :update?, :destroy?, :activate?, :student_summary?,
                 :students_update?, :oversubscription?, :start_lottery?,
                 :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
-                :lock_all_sizes? do
+                :lock_all_sizes?, :prune? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -285,6 +286,39 @@ RSpec.describe DrawPolicy do
       context 'when draw is not a draft' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :prune? do
+      context 'when prelottery and oversubscribed' do
+        let(:draw_report) do
+          allow(draw).to receive_messages(pre_lottery?: true)
+          DrawReport.new(draw).tap do |d|
+            allow(d).to receive_messages(oversubscribed?: true)
+          end
+        end
+
+        it { is_expected.to permit(user, draw_report) }
+      end
+      context 'when prelottery and not oversubscribed' do
+        let(:draw_report) do
+          allow(draw).to receive_messages(pre_lottery?: true)
+          DrawReport.new(draw).tap do |d|
+            allow(d).to receive_messages(oversubscribed?: false)
+          end
+        end
+
+        it { is_expected.not_to permit(user, draw_report) }
+      end
+      context 'when not prelottery and oversubscribed' do
+        let(:draw_report) do
+          allow(draw).to receive_messages(pre_lottery?: false)
+          DrawReport.new(draw).tap do |d|
+            allow(d).to receive_messages(oversubscribed?: true)
+          end
+        end
+
+        it { is_expected.not_to permit(user, draw_report) }
       end
     end
 

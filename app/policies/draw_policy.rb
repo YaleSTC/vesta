@@ -88,6 +88,12 @@ class DrawPolicy < ApplicationPolicy
     edit?
   end
 
+  def prune?
+    # the #oversubscribed? comes from the DrawReport -- this will fail
+    # if a plain draw object is passed
+    user.admin? && record.pre_lottery? && record.oversubscribed?
+  end
+
   def start_selection?
     edit? && record.lottery?
   end

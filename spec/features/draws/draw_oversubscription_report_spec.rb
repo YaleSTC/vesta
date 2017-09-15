@@ -17,7 +17,7 @@ RSpec.feature 'Draw oversubscription report' do
     it 'displays a table' do
       log_in FactoryGirl.create(:admin)
       visit draw_path(draw)
-      expect(page_has_oversubsription_report?(page)).to be_truthy
+      expect(page_has_oversubscription_report?(page)).to be_truthy
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.feature 'Draw oversubscription report' do
     end
   end
 
-  def page_has_oversubsription_report?(page)
+  def page_has_oversubscription_report?(page)
     page.assert_selector(:css, 'td[data-role="suite-count"]', text: '1') &&
       page.assert_selector(:css, 'td[data-role="group-count"]', text: '2') &&
       page.assert_selector(:css, 'td[data-role="locked-count"]', text: '1') &&

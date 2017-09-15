@@ -38,6 +38,23 @@ RSpec.feature 'Draw oversubscription handling' do
     expect(page).to have_css('.flash-success', text: /Singles locked/)
   end
 
+  it 'allows admins to resolve oversubscription in a single size' do
+    visit oversub_draw_path(draw)
+    click_link('Resolve Singles')
+    expect(page).to have_css('.flash-success', text: 'Singles disbanded: ')
+  end
+
+  # rubocop:disable RSpec/ExampleLength
+  it 'allows admins to resolve oversubscription in all sizes' do
+    2.times { create(:locked_group, :defined_by_draw, draw: draw, size: 2) }
+    draw.suites.delete_all
+    visit oversub_draw_path(draw)
+    click_link('Resolve all')
+    expect(page).to have_css('.flash-success',
+                             text: /Singles disbanded.+Doubles disbanded/)
+  end
+  # rubocop:enable RSpec/ExampleLength
+
   def disband_group(group)
     within("tr#group-#{group.id}") do
       click_on 'Disband'

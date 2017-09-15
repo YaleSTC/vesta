@@ -3,6 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe DrawReport do
+  describe '#refresh' do
+    it 'recreates the report object' do
+      draw = instance_spy('draw')
+      report = described_class.new(draw)
+      allow(described_class).to receive(:new).with(draw).and_return('stub')
+      expect(report.refresh).to eq('stub')
+    end
+  end
   describe '#sizes' do
     it 'returns a sorted list of suite sizes and group sizes' do
       suites = [1, 2, 3, 4]
@@ -44,6 +52,25 @@ RSpec.describe DrawReport do
       draw = FactoryGirl.create(:oversubscribed_draw)
       size = draw.groups.first.size
       expect(described_class.new(draw).oversubscription).to eq(size => -1)
+    end
+  end
+
+  describe '#oversubscribed_sizes' do
+    it 'returns an array of over subscribed sizes' do
+      draw = FactoryGirl.create(:oversubscribed_draw)
+      size = draw.groups.first.size
+      expect(described_class.new(draw).oversubscribed_sizes).to eq([size])
+    end
+  end
+
+  describe '#oversubscribed?' do
+    it 'returns true when > 0 oversubscribed sizes' do
+      draw = FactoryGirl.create(:oversubscribed_draw)
+      expect(described_class.new(draw).oversubscribed?).to be(true)
+    end
+    it 'returns false when no oversubscribed sizes' do
+      draw = FactoryGirl.create(:draw)
+      expect(described_class.new(draw).oversubscribed?).to be(false)
     end
   end
 
