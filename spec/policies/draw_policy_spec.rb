@@ -22,8 +22,7 @@ RSpec.describe DrawPolicy do
         it { is_expected.not_to permit(user, draw) }
       end
     end
-    permissions :destroy?, :edit?, :update?, :activate?, :student_summary?,
-                :students_update?, :oversubscription?,
+    permissions :destroy?, :edit?, :update?, :activate?, :oversubscription?,
                 :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
                 :start_selection?, :bulk_on_campus?, :reminder?, :results?,
                 :lock_all_sizes?, :prune? do
@@ -111,8 +110,8 @@ RSpec.describe DrawPolicy do
     permissions :show?, :toggle_size_lock?, :group_report? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :edit?, :update?, :destroy?, :activate?, :student_summary?,
-                :students_update?, :oversubscription?, :start_lottery?,
+    permissions :edit?, :update?, :destroy?, :activate?,
+                :oversubscription?, :start_lottery?,
                 :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
                 :lock_all_sizes?, :prune? do
       it { is_expected.not_to permit(user, draw) }
@@ -255,19 +254,9 @@ RSpec.describe DrawPolicy do
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
 
-    permissions :show?, :edit?, :update?, :destroy?, :student_summary?,
-                :toggle_size_lock?, :lock_all_sizes?, :group_report? do
+    permissions :show?, :edit?, :update?, :destroy?, :toggle_size_lock?,
+                :lock_all_sizes?, :group_report? do
       it { is_expected.to permit(user, draw) }
-    end
-    permissions :students_update? do
-      context 'draw not before lottery?' do
-        before { allow(draw).to receive(:before_lottery?).and_return(false) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-      context 'draw before lottery?' do
-        before { allow(draw).to receive(:before_lottery?).and_return(true) }
-        it { is_expected.to permit(user, draw) }
-      end
     end
     permissions :index?, :new?, :create? do
       it { is_expected.to permit(user, Draw) }

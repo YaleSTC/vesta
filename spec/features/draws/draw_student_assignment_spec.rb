@@ -17,6 +17,7 @@ RSpec.feature 'Draw student assignment' do
     end
 
     def bulk_assign_students(year)
+      visit edit_draw_students_path(draw)
       select year.to_s, from: 'draw_students_update_class_year'
       click_on 'Assign students'
     end
@@ -26,7 +27,7 @@ RSpec.feature 'Draw student assignment' do
     let!(:student) { FactoryGirl.create(:student, username: 'foo') }
 
     it 'can be performed' do
-      visit student_summary_draw_path(draw)
+      visit edit_draw_students_path(draw, student)
       fill_in 'draw_student_assignment_form_username', with: 'foo'
       click_on 'Process'
       message = "#{student.full_name} successfully added"
@@ -39,7 +40,7 @@ RSpec.feature 'Draw student assignment' do
 
     before { draw.students << student }
     it 'can be performed' do
-      visit student_summary_draw_path(draw)
+      visit edit_draw_students_path(draw, student)
       remove_user(username: 'foo')
       message = "#{student.full_name} successfully removed"
       expect(page).to have_css('.flash-success', text: message)

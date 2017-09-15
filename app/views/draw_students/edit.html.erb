@@ -1,6 +1,6 @@
 <% provide(:title, "#{@draw.name} - Students") %>
 <h1 class="draw-name"><%= @draw.name %> Students</h1>
-<% if policy(@draw).students_update? %>
+<% if policy(:draw_student).edit? %>
   <div class="student-assignment">
     <h2>Student actions</h2>
     <div class="bulk">
@@ -8,7 +8,7 @@
         <p>There are no students available to add to this draw.</p>
       <% else %>
         <h3>Add students by class year</h3>
-        <%= simple_form_for @students_update, url: students_update_draw_path(@draw), method: :patch do |f| %>
+        <%= simple_form_for @students_update, url: bulk_assign_draw_students_path(@draw), method: :patch do |f| %>
           <%= f.input :class_year, as: :select, collection: @class_years, required: true %>
           <%= f.submit 'Assign students', data: { confirm: 'This will assign ALL students of the selected class year to this draw and cannot be undone! Are you sure you want to proceed?' } %>
         <% end %>
@@ -16,7 +16,7 @@
     </div>
     <div class="single">
       <h3>Add/Remove by NetID</h3>
-      <%= simple_form_for @student_assignment_form, url: students_update_draw_path(@draw), method: :patch do |f| %>
+      <%= simple_form_for @student_assignment_form, url: draw_students_path(@draw), method: :patch do |f| %>
         <%= f.input :username %>
         <%= f.input :adding, label: 'Action', as: :select, collection: [['Add', true], ['Remove', false]], required: true %>
         <%= f.submit 'Process' %>

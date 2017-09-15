@@ -64,8 +64,6 @@ Rails.application.routes.draw do
       patch 'activate'
       post 'reminder'
       patch 'bulk_on_campus'
-      get 'students', to: 'draws#student_summary', as: 'student_summary'
-      patch 'students', to: 'draws#students_update', as: 'students_update'
       get 'lottery_confirmation'
       patch 'start_lottery'
       get 'oversubscription', to: 'draws#oversubscription', as: 'oversub'
@@ -88,6 +86,12 @@ Rails.application.routes.draw do
     resources :lottery_assignments, only: %i(update create index) do
       collection do
         post 'automatic'
+      end
+    end
+
+    resource :students, only: %i(edit update), controller: :draw_students do
+      collection do
+        patch 'bulk_assign'
       end
     end
 

@@ -1,8 +1,8 @@
 <div>
   <% if current_user.admin? || current_user.rep? %>
     <% if @draw.status == 'draft' %>
-      <% if policy(@draw).student_summary? %>
-        <%= link_to 'Add or edit students', student_summary_draw_path(@draw), class: 'button secondary' %>
+      <% if policy(:draw_student).edit? %>
+        <%= link_to 'Add or edit students', edit_draw_students_path(@draw), class: 'button secondary' %>
       <% end %>
       <% if policy(DrawSuite.new(draw: @draw.__getobj__)).edit_collection? %>
         <%= link_to 'Add or edit suites', edit_collection_draw_suites_path(@draw), class: 'button secondary' %>

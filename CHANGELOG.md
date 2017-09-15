@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 * Add LotteryAssignments and Clips to the superuser dashboard ([#768](https://gitlab.com/yale-sdmp/vesta/issues/768)).
 * Add separate RoomAssignments model ([#690](https://gitlab.com/yale-sdmp/vesta/issues/690)).
 * Add error messages to throw_abort ([#792](https://gitlab.com/yale-sdmp/vesta/issues/792)).
+* Add a new DrawStudentsController to handle actions that involve student enrollment in draws ([#620](https://gitlab.com/yale-sdmp/vesta/issues/620)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600))

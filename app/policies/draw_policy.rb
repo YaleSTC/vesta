@@ -14,14 +14,6 @@ class DrawPolicy < ApplicationPolicy
     edit? && record.draft?
   end
 
-  def student_summary?
-    edit?
-  end
-
-  def students_update?
-    student_summary? && record.before_lottery?
-  end
-
   def group_actions?
     (user.admin? && !record.draft?) || record.pre_lottery?
   end

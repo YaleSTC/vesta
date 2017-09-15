@@ -53,8 +53,8 @@
           <div class="ungrouped-report">
             <%= render 'ungrouped_report' %>
           </div>
-          <% if policy(@draw).student_summary? %>
-            <%= link_to 'View or edit students', student_summary_draw_path(@draw), class: 'button secondary' %>
+          <% if policy(:draw_student).edit? %>
+            <%= link_to 'View or edit students', edit_draw_students_path(@draw), class: 'button secondary' %>
           <% end %>
           <% if policy(Group).index? %>
             <%= link_to 'View printable group report', draw_groups_path(@draw), class: 'button secondary' %>

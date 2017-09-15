@@ -52,23 +52,6 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(**result)
   end
 
-  def student_summary
-    prepare_students_edit_data
-  end
-
-  def students_update
-    result = if !students_update_params.empty?
-               process_bulk_assignment
-             elsif !student_assignment_params.empty?
-               process_student_assignment
-             else
-               prepare_students_edit_data
-               { redirect_object: nil, action: 'student_summary',
-                 msg: { error: 'Invalid update submission' } }
-             end
-    handle_action(**result)
-  end
-
   def lottery_confirmation; end
 
   def start_lottery
@@ -142,14 +125,6 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                                  :allow_clipping, locked_sizes: [])
   end
 
-  def students_update_params
-    params.fetch(:draw_students_update, {}).permit(:class_year)
-  end
-
-  def student_assignment_params
-    params.fetch(:draw_student_assignment_form, {}).permit(%i(username adding))
-  end
-
   def prune_params
     {
       id: params.fetch(:id, ''),
@@ -165,40 +140,5 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def calculate_metrics
     @draw = DrawReport.new(@draw)
-  end
-
-  def prepare_students_edit_data
-    @students_update ||= DrawStudentsUpdate.new(draw: @draw)
-    @student_assignment_form ||= DrawStudentAssignmentForm.new(draw: @draw)
-    @class_years = AvailableStudentClassYearsQuery.call
-    @students = @draw.students.order(:last_name)
-    @available_students_count = UngroupedStudentsQuery.call.where(draw_id: nil)
-                                                      .count
-  end
-
-  def process_bulk_assignment
-    result = DrawStudentsUpdate.update(draw: @draw,
-                                       params: students_update_params)
-    @students_update = result[:update_object]
-    if @students_update
-      prepare_students_edit_data
-      result[:action] = 'student_summary'
-    else
-      result[:path] = student_summary_draw_path(@draw)
-    end
-    result
-  end
-
-  def process_student_assignment
-    result = DrawStudentAssignmentForm.submit(draw: @draw,
-                                              params: student_assignment_params)
-    @student_assignment_form = result[:update_object]
-    if @student_assignment_form
-      prepare_students_edit_data
-      result[:action] = 'student_summary'
-    else
-      result[:path] = student_summary_draw_path(@draw)
-    end
-    result
   end
 end
