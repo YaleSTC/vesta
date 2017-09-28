@@ -33,18 +33,17 @@ class ReminderQueuer
 
   attr_reader :draw, :type
 
+  REMINDER_JOBS = { 'intent' => IntentReminderJob,
+                    'locking' => LockingReminderJob }.freeze
+
   # NOTE: this happens in the transaction
   def queue_job
-    case type
-    when 'intent'
-      IntentReminderJob.perform_later(draw: draw)
-    when 'locking'
-      LockingReminderJob.perform_later(draw: draw)
-    end
+    extracted_job_class = REMINDER_JOBS.fetch(type)
+    extracted_job_class.perform_later(draw: draw)
   end
 
   def correct_reminder_type
-    return if %w(intent locking).include?(type)
+    return if REMINDER_JOBS.include?(type)
     errors.add(:base, "Invalid reminder type: #{type}")
   end
 

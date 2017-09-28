@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 * Refactor Draw reporting ([#619](https://yale.githost.io/sdmp/rails/vesta/isses/619))
 * Fix error handling in service objects ([#241](https://yale.githost.io/sdmp/rails/vesta/issues/241))
 * Make error handling more consistent across service objects ([#602](https://yale.githost.io/sdmp/rails/vesta/issues/602))
+* Clean up ReminderQueuer ([#625](https://yale.githost.io/sdmp/rails/vesta/issues/625))
 
 
 ### Fixed
