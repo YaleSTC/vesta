@@ -1,27 +1,39 @@
-image: yale.githost.io:4678/sdmp/rails/docker-rails-capybara/image:latest
+.test_template: &test_definition
+  image: yale.githost.io:4678/sdmp/rails/docker-rails-capybara/image:latest
 
-services:
-  - postgres:latest
+  services:
+    - postgres:latest
 
-variables:
-  POSTGRES_DB: gitlab_ci_test
-  POSTGRES_USER: runner
-  POSTGRES_PASSWORD: ""
+  variables:
+    POSTGRES_DB: gitlab_ci_test
+    POSTGRES_USER: runner
+    POSTGRES_PASSWORD: ""
 
-test:
+  stage: test
+
   before_script:
     - ruby -v
     - which ruby
     - node -v
     - gem install bundler --no-ri --no-rdoc
     - yarn install
+
+  cache:
+    paths:
+      - vendor/bundle
+
+spec:
+  <<: *test_definition
   script:
     - bundle check --path vendor/bundle || bundle install --path vendor/bundle
     - cp config/database.yml.gitlab config/database.yml
     - xvfb-run -a bundle exec rake
-    - bundle exec rake check_style 'git diff origin/master --name-status'
   after_script:
     - bundle exec codeclimate-test-reporter
-  cache:
-    paths:
-      - vendor/bundle
+
+style:
+  <<: *test_definition
+  script:
+    - bundle check --path vendor/bundle || bundle install --path vendor/bundle
+    - cp config/database.yml.gitlab config/database.yml
+    - bundle exec rake check_style 'git diff origin/master --name-status'
