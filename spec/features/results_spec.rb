@@ -56,7 +56,7 @@ RSpec.feature 'Results' do
   def page_is_valid_export(page) # rubocop:disable AbcSize
     headers = page.response_headers
     filename = "vesta_export_#{Time.zone.today.to_s(:number)}.csv"
-    csv_header_str = ResultsController::EXPORT_HEADERS.map(&:to_s).join(',')
+    csv_header_str = ResultsCSVGenerator::EXPORT_HEADERS.map(&:to_s).join(',')
     headers['Content-Disposition'] == "attachment; filename=\"#{filename}\"" &&
       headers['Content-Type'] == 'text/csv' &&
       page.body.include?(csv_header_str) &&
