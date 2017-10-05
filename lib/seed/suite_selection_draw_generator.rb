@@ -11,7 +11,7 @@ class SuiteSelectionDrawGenerator < LotteryDrawGenerator
 
   def assign_lottery_numbers
     draw.groups.each do |g|
-      g.lottery_number = (g.id / 2).round
+      g.update(lottery_number: (g.id / 2).round)
     end
   end
 
