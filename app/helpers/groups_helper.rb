@@ -39,6 +39,8 @@ module GroupsHelper
   def display_group_status(group)
     if group.closed?
       'Full'
+    elsif group.finalizing?
+      'Locking'
     else
       group.status.capitalize
     end

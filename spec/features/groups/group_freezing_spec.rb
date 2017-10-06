@@ -8,14 +8,14 @@ RSpec.feature 'Group locking' do
       group = FactoryGirl.create(:full_group, size: 2)
       log_in group.leader
       visit draw_group_path(group.draw, group)
-      click_on 'Finalize Group'
+      click_on 'Begin Locking Process for Group'
       expect(locks_leader_and_finalizes_group(group: group)).to be_truthy
     end
     it 'can be confirmed by a member' do
       group = FactoryGirl.create(:finalizing_group, size: 2)
       log_in group.members.last
       visit draw_group_path(group.draw, group)
-      click_on 'Finalize Membership'
+      click_on 'Lock Membership'
       expect(group.reload).to be_locked
     end
 
