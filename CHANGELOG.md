@@ -31,7 +31,9 @@ All notable changes to this project will be documented in this file.
 * Fix intermittent test failure in lottery number removal ([#532](https://yale.githost.io/sdmp/rails/vesta/issues/532)).
 * Fix seed script to persist lottery numbers ([#637](https://yale.githost.io/sdmp/rails/vesta/issues/637)).
 * Fix typo in confirmation message ([#630](https://yale.githost.io/sdmp/rails/vesta/issues/630)).
-* Fix broken draw suites migration([#638](https://yale.githost.io/sdmp/rails/vesta/issues/638))
+* Fix broken draw suites migration([#638](https://yale.githost.io/sdmp/rails/vesta/issues/638)).
+* Fix user counts on pre-lottery draw dashboards ([#628](https://yale.githost.io/sdmp/rails/vesta/issues/628)).
+
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).

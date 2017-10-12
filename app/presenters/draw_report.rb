@@ -9,6 +9,7 @@ class DrawReport < SimpleDelegator
   def initialize(draw)
     super(draw)
     @groups_report = GroupsReport.new(groups)
+    @draw = draw
   end
 
   delegate :by_size, :with_suites, :with_suites_count, :without_rooms_count,
@@ -98,6 +99,10 @@ class DrawReport < SimpleDelegator
   # @return [Hash{String => Integer}] a hash with intent Enum strings as keys
   #   and associated record counts as values
   def intent_metrics
-    @intent ||= IntentMetricsQuery.call(self)
+    @intent ||= IntentMetricsQuery.call(draw)
   end
+
+  private
+
+  attr_accessor :draw
 end

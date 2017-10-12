@@ -101,5 +101,13 @@ RSpec.describe DrawReport do
       allow(IntentMetricsQuery).to receive(:call).with(draw).and_return('stub')
       expect(described_class.new(draw).intent_metrics).to eq('stub')
     end
+
+    it 'returns a count of each intent' do
+      draw = FactoryGirl.create(:draw)
+      draw.students << FactoryGirl.create(:student, intent: 'on_campus')
+      draw.students << FactoryGirl.create(:student, intent: 'off_campus')
+      draw.students << FactoryGirl.create(:student, intent: 'undeclared')
+      expect(described_class.new(draw).intent_metrics.values).to eq([1, 1, 1])
+    end
   end
 end
