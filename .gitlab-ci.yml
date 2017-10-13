@@ -21,6 +21,7 @@
   cache:
     paths:
       - vendor/bundle
+      - node_modules
 
 spec:
   <<: *test_definition
