@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 * Switch :try with :& ([#217](https://yale.githost.io/sdmp/rails/vesta/issues/217))
 * Create query objects for queries in Draw Report ([#626](https://yale.githost.io/sdmp/rails/vesta/issues/626))
 * Make Building > Suite > Room nesting shallow ([#618](https://yale.githost.io/sdmp/rails/vesta/isses/618))
+* Modify user update functionality so admins cannot demote themselves ([#529](https://yale.githost.io/sdmp/rails/vesta/issues/529))
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).

@@ -46,9 +46,10 @@ RSpec.describe Updater do
     expect(updater.update[:msg]).to have_key(:error)
   end
   def mock_suite(valid:)
-    instance_spy('Suite', update: valid).tap do |suite|
-      allow(suite).to receive(:errors)
-        .and_return(instance_spy('ActiveModel::Errors', full_messages: []))
+    instance_spy('Suite').tap do |suite|
+      return suite if valid
+      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:suite))
+      allow(suite).to receive(:update!).and_raise(error)
     end
   end
 end

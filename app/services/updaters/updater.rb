@@ -4,6 +4,7 @@
 # Base class for updater service objects.
 # Handles param conversion, perisistance, and provides default messages.
 class Updater
+  include ActiveModel::Model
   include Callable
 
   # Initialize a new Updater.
@@ -24,11 +25,11 @@ class Updater
   #   A results hash with a message to set in the flash and either `nil`
   #   or the updated object.
   def update
-    if object.update(**params)
-      success
-    else
-      error
-    end
+    return error(self) unless valid?
+    object.update!(**params)
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
   end
 
   make_callable :update
@@ -44,11 +45,11 @@ class Updater
     }
   end
 
-  def error
-    msg = ErrorHandler.format(error_object: object)
+  def error(error_obj)
+    error_msgs = ErrorHandler.format(error_object: error_obj)
     {
       redirect_object: nil, record: object,
-      msg: { error: "Please review the errors below:\n#{msg}" }
+      msg: { error: "Please review the errors below:\n#{error_msgs}" }
     }
   end
 end

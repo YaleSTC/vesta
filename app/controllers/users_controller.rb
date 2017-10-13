@@ -39,8 +39,8 @@ class UsersController < ApplicationController
   def edit; end
 
   def update
-    result = Updater.new(object: @user, name_method: :name,
-                         params: user_params).update
+    result = UserUpdater.new(user: @user, params: user_params,
+                             editing_self: current_user.id == @user.id).update
     @user = result[:record]
     handle_action(action: 'edit', **result)
   end
