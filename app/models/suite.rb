@@ -62,7 +62,7 @@ class Suite < ApplicationRecord
   # @return [String] the suite name with draw names
   def name_with_draws(draw = nil)
     return name if draws.empty?
-    draws_to_display = draws.where.not(id: draw.try(:id))
+    draws_to_display = draws.where.not(id: draw&.id)
     return name if draws_to_display.empty?
     draws_str = draws_to_display.map(&:name).join(', ')
     "#{name} (#{draws_str})"

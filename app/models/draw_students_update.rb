@@ -42,8 +42,8 @@ class DrawStudentsUpdate
 
   def process_params(params)
     @params = params.to_h.transform_keys(&:to_sym)
-    @params[:class_year] = nil if @params[:class_year].try(:empty?)
-    @params[:to_add] = nil if @params[:to_add].try(:empty?)
+    @params[:class_year] = nil if @params[:class_year]&.empty?
+    @params[:to_add] = nil if @params[:to_add]&.empty?
     @to_add = @params[:to_add]
     @class_year = set_class_year
     @students_to_add = find_students_to_add

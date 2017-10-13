@@ -2,7 +2,7 @@
 <h1>Add User</h1>
 <%= simple_form_for @user do |f| %>
   <%= profile_field(form: f, user: @user, field: :email) %>
-  <% unless @user.try(:username).try(:empty?) %>
+  <% unless @user&.username&.empty? %>
     <%= f.input :username, disabled: true %>
     <%= f.input :username, as: :hidden %>
   <% end %>

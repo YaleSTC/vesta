@@ -30,7 +30,7 @@ class SuiteMergerForm
   #
   # @return [String] passed number from params or suite number if none passed
   def number
-    @number ||= suite.try(:number)
+    @number ||= suite&.number
   end
 
   # Perform the suite merging; deletes both suites, creates a new one, assigns

@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 * Rename the 'full' status to 'closed' ([#240](https://yale.githost.io/sdmp/rails/vesta/issues/240))
 * Configure JS  ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642)).
 * Move DrawSuite actions to DrawSuites controller ([#199](https://yale.githost.io/sdmp/rails/vesta/issues/199))
+* Switch :try with :& ([#240](https://yale.githost.io/sdmp/rails/vesta/issues/217))
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).

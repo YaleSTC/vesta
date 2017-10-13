@@ -95,6 +95,6 @@ class IDRProfileQuerier
 
   def extract_data(xml, field_key)
     tag = env(config_var(field_key.to_s.upcase))
-    xml.at_xpath("//#{tag}").try(:content)
+    xml.at_xpath("//#{tag}")&.content
   end
 end

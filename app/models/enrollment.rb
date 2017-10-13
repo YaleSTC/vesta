@@ -50,7 +50,7 @@ class Enrollment
   # @return [Boolean] whether or not the users created will have a username
   #   attribute
   def username?
-    successes.first.try(:[], :user).try(:username).present?
+    successes&.first&.dig(:user)&.username.present?
   end
 
   private

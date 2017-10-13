@@ -50,7 +50,7 @@ class DrawSizesQuery
   def group_query(draw) # rubocop:disable AbcSize
     groups.join(suites, Arel::Nodes::OuterJoin)
           .on(suites[:group_id].eq(groups[:id]))
-          .where(groups[:draw_id].eq(draw.try(:id)))
+          .where(groups[:draw_id].eq(draw&.id))
           .where(available_suite)
           .project(groups[:size])
           .distinct

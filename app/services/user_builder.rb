@@ -16,7 +16,7 @@ class UserBuilder
   #   values.
   def initialize(id_attr:, querier: nil)
     @id_attr = id_attr
-    @querier = querier.try(:new, id: id_attr)
+    @querier = querier&.new(id: id_attr)
     @user = User.new
     @id_symbol = User.cas_auth? ? :username : :email
   end
@@ -77,6 +77,6 @@ class UserBuilder
   end
 
   def assign_profile_attrs
-    user.assign_attributes(querier.try(:query) || {})
+    user.assign_attributes(querier&.query || {})
   end
 end
