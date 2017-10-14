@@ -41,7 +41,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   validate :validate_status, if: ->(g) { g.size.present? }
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
-  after_save :update_status!, if: ->() { saved_change_to_transfers }
+  after_save :update_status!,
+             if: ->() { saved_change_to_transfers || saved_change_to_size }
   before_destroy :remove_member_rooms
   after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
   after_destroy :notify_members_of_disband

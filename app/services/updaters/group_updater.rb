@@ -18,6 +18,7 @@ class GroupUpdater
   # @return [Hash{Symbol=>Group,Hash,Nil}] the return hash
   def update
     ActiveRecord::Base.transaction do
+      update_size
       update_members
       group.update!(params)
       group.update_status!
@@ -84,6 +85,12 @@ class GroupUpdater
 
   def update_added_user(user)
     user.update!(intent: 'on_campus')
+  end
+
+  def update_size
+    return unless params[:size]
+    group.update!(size: params[:size])
+    group.reload
   end
 
   def success

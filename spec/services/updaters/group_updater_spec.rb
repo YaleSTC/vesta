@@ -70,6 +70,13 @@ RSpec.describe GroupUpdater do
         result = described_class.update(group: group, params: p)
         expect(result[:msg]).to have_key(:success)
       end
+      it 'can add members and increase the size' do
+        group = expandable_group(size: 1)
+        user = FactoryGirl.create(:user, draw: group.draw, intent: 'on_campus')
+        params = { size: 2, member_ids: [user.id.to_s] }
+        described_class.update(group: group, params: params)
+        expect(group.members).to include(user)
+      end
     end
     context 'failure' do
       let!(:group) do
@@ -93,6 +100,12 @@ RSpec.describe GroupUpdater do
         result = described_class.update(group: group, params: p)
         expect(result[:msg]).to have_key(:error)
       end
+    end
+  end
+  def expandable_group(size: 1)
+    FactoryGirl.create(:full_group, size: size).tap do |g|
+      g.draw.suites << FactoryGirl.create(:suite_with_rooms,
+                                          rooms_count: size + 1)
     end
   end
 end

@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 * Modify user update functionality so admins cannot demote themselves ([#529](https://yale.githost.io/sdmp/rails/vesta/issues/529))
 * Rename Group Finalizing to Group Locking ([#352](https://yale.githost.io/sdmp/rails/vesta/issues/352))
 * Add new traits to group factories to allow for more flexible testing ([#665](https://yale.githost.io/sdmp/rails/vesta/issues/665)).
+* Allow new students to be added to group when increasing group size ([#556](https://yale.githost.io/sdmp/rails/vesta/issues/556))
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
