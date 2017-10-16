@@ -37,9 +37,7 @@ class DrawReport < SimpleDelegator
   # @return [Hash{Integer => Integer}] A hash mapping group sizes to the number
   #   of groups of that size
   def group_counts
-    @group_counts ||= groups.group(:size).count
-    @group_counts.default = 0
-    @group_counts
+    @group_counts ||= CountBySizeQuery.new(groups).call
   end
 
   # Calculates the number of locked groups per size
@@ -47,9 +45,7 @@ class DrawReport < SimpleDelegator
   # @return [Hash{Integer => Integer}] A hash mapping group sizes to the number
   #   of locked groups of that size
   def locked_counts
-    @locked_counts ||= groups.where(status: 'locked').group(:size).count
-    @locked_counts.default = 0
-    @locked_counts
+    @locked_counts ||= CountBySizeQuery.new(groups.where(status: 'locked')).call
   end
 
   # Calculates the difference between the number of suites of a given size
@@ -66,9 +62,7 @@ class DrawReport < SimpleDelegator
   # @return [Hash{Integer => Integer}] A hash mapping sizes to the number of
   #   available suites of that size
   def suite_counts
-    @suite_counts ||= suites.available.group(:size).count
-    @suite_counts.default = 0
-    @suite_counts
+    @suite_counts ||= CountBySizeQuery.new(suites.available).call
   end
 
   # Gets the selectable suites for a given size, grouped by building
@@ -78,8 +72,8 @@ class DrawReport < SimpleDelegator
   # @return [Hash{Building => ActiveRecord::Associations::CollectionProxy}] A
   #   hash mapping buildings to avaiable, non-medical suites of the given size
   def valid_suites(size:)
-    suites.includes(:building).available.where(medical: false, size: size)
-          .group_by(&:building)
+    ValidSuitesQuery.new(suites.where(size: size).includes(:building)).call
+                    .group_by(&:building)
   end
 
   # Gets the students in the draw without a group, grouped by intent,

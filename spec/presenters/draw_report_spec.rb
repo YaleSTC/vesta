@@ -58,25 +58,25 @@ RSpec.describe DrawReport do
   end
 
   describe '#valid_suites' do
-    it 'returns non-medical, available suites of the given size' do
+    # rubocop:disable RSpec/ExampleLength
+    it 'excludes non-valid suites' do
       size = 2
       draw = FactoryGirl.create(:full_group, :with_suite, size: size).draw
-      suite = valid_suite(draw: draw, size: size)
+      create_invalid_suites(draw: draw, size: size)
+      valid_suite = FactoryGirl.create(:suite_with_rooms, rooms_count: size,
+                                                          draws: [draw])
       expect(described_class.new(draw).valid_suites(size: size)).to \
-        eq(suite.building => [suite])
+        eq(valid_suite.building => [valid_suite])
     end
+    # rubocop:enable RSpec/ExampleLength
 
-    # rubocop:disable RSpec/InstanceVariable
-    def valid_suite(draw:, size:)
-      return @suite if @suite
+    def create_invalid_suites(draw:, size:)
       FactoryGirl.create(:suite_with_rooms, draws: [draw], medical: true,
                                             rooms_count: size)
       FactoryGirl.create(:suite_with_rooms, draws: [draw],
                                             rooms_count: size + 1)
-      @suite = FactoryGirl.create(:suite_with_rooms,
-                                  rooms_count: size, draws: [draw])
+      FactoryGirl.create(:suite_with_rooms, rooms_count: size)
     end
-    # rubocop:enable RSpec/InstanceVariable
   end
 
   describe '#ungrouped_students' do

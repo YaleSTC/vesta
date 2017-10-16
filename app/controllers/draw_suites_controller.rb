@@ -7,7 +7,7 @@ class DrawSuitesController < ApplicationController
   before_action :set_form_data, only: %i(new edit)
 
   def index
-    suites = @draw.suites.includes(:rooms).available.where(medical: false)
+    suites = ValidSuitesQuery.new(@draw.suites.includes(:rooms)).call
     @all_sizes = SuiteSizesQuery.new(suites).call
     @suites_by_size = SuitesBySizeQuery.new(suites).call
     @suites_by_size.default = []
@@ -49,23 +49,26 @@ class DrawSuitesController < ApplicationController
     end
   end
 
-  def prepare_suites_edit_data # rubocop:disable AbcSize, MethodLength
-    draw_suite = @draw.suites.available.where(medical: false)
-    all_suites = Suite.available.where(medical: false)
-    @suite_sizes ||= SuiteSizesQuery.new(all_suites).call
+  def prepare_suites_edit_data # rubocop: disable MethodLength
+    all_suites = ValidSuitesQuery.call
     @suites_update ||= DrawSuitesUpdate.new(draw: @draw)
-    base_suites = all_suites.order(:number)
+    @current_suites = suite_hash_merge(
+      ValidSuitesQuery.new(@draw.suites.includes(:draws)).call
+    )
+    @drawless_suites = suite_hash_merge(
+      DrawlessSuitesQuery.new(all_suites).call
+    )
+    @drawn_suites = suite_hash_merge(
+      SuitesInOtherDrawsQuery.new(all_suites).call(draw: @draw)
+    )
+  end
+
+  # rubocop: enable MethodLength
+
+  def suite_hash_merge(queried_suites)
+    @suite_sizes ||= SuiteSizesQuery.new(ValidSuitesQuery.call).call
     empty_suite_hash = @suite_sizes.map { |s| [s, []] }.to_h
-    @current_suites = empty_suite_hash.merge(
-      draw_suite.includes(:draws).order(:number).group_by(&:size)
-    )
-    @drawless_suites = empty_suite_hash.merge(
-      DrawlessSuitesQuery.new(base_suites).call.group_by(&:size)
-    )
-    @drawn_suites = empty_suite_hash.merge(
-      SuitesInOtherDrawsQuery.new(base_suites).call(draw: @draw)
-                             .group_by(&:size)
-    )
+    empty_suite_hash.merge(queried_suites.order(:number).group_by(&:size))
   end
 
   def suites_update_params

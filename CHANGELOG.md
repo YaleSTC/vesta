@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 * Configure JS  ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642)).
 * Move DrawSuite actions to DrawSuites controller ([#199](https://yale.githost.io/sdmp/rails/vesta/issues/199))
 * Switch :try with :& ([#240](https://yale.githost.io/sdmp/rails/vesta/issues/217))
+* Create query objects for queries in Draw Report ([#626](https://yale.githost.io/sdmp/rails/vesta/issues/626))
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
@@ -33,7 +34,6 @@ All notable changes to this project will be documented in this file.
 * Fix typo in confirmation message ([#630](https://yale.githost.io/sdmp/rails/vesta/issues/630)).
 * Fix broken draw suites migration([#638](https://yale.githost.io/sdmp/rails/vesta/issues/638)).
 * Fix user counts on pre-lottery draw dashboards ([#628](https://yale.githost.io/sdmp/rails/vesta/issues/628)).
-
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
@@ -113,7 +113,6 @@ All notable changes to this project will be documented in this file.
 ## v0.1.1 - 2017-03-29
 ### Fixed
 * Prevent students from performing suite selection ([#501](https://github.com/YaleSTC/vesta/issues/501)).
-
 
 ### Changed
 * Downgrade Ruby to v2.3.3 ([#493](https://github.com/YaleSTC/vesta/issues/493)).
