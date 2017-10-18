@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 * Fix n+3 query in suites summary partial ([#567](https://yale.githost.io/sdmp/rails/vesta/issues/567)).
 * Fix intermittent test failure in lottery number removal ([#532](https://yale.githost.io/sdmp/rails/vesta/issues/532)).
 * Fix seed script to persist lottery numbers ([#637](https://yale.githost.io/sdmp/rails/vesta/issues/637)).
+* Fix typo in confirmation message ([#630](https://yale.githost.io/sdmp/rails/vesta/issues/630)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
