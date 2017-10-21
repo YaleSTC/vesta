@@ -1,6 +1,6 @@
 class AddPrimaryKeyToDrawSuite < ActiveRecord::Migration[5.1]
   def change
-  	rename_table('draw_suites', 'draws_suites_old')
+    rename_table('draws_suites', 'draw_suites_old')
 
     create_table :draw_suites do |t|
       t.belongs_to :draw, index: true, null: false
