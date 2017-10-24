@@ -36,6 +36,13 @@ RSpec.feature 'Draw suite selection' do
       expect(page).to have_css('.flash-notice', text: /draw has been created/)
     end
 
+    it 'has option to remove selected suites' do
+      visit new_draw_suite_assignment_path(draw)
+      assign_suites(groups[0..1], suites[0..1])
+      visit draw_group_path(draw, groups[0])
+      expect(page).to have_button('Remove suite')
+    end
+
     def assign_suites(groups, suites)
       groups.each_with_index do |group, i|
         suite = suites[i]

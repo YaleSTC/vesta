@@ -8,7 +8,7 @@
         <li class="group-request">
           <%= link_to r.full_name, user_path(r) %>
           <% if policy(@group).accept_request? %>
-            (<%= link_to 'accept', 
+            (<%= link_to 'accept',
                          accept_request_draw_group_path(@draw, @group, params: { 'user_id' => r.id }),
                          method: :put %><%= policy(@group).reject_pending? ? ' / ' : ')' %>
           <% end %>
@@ -47,7 +47,7 @@
   <%= link_to 'Lock Group', lock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
   <%= link_to 'Unlock All Members', unlock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).unlock? %>
   <% if @group.suite.present? && policy(SuiteAssignment.new(groups: [@group], draw: @group.draw)).new? %>
-    <%= simple_form_for @group, url: assign_suite_draw_group_path(@draw, @group), method: :patch, html: { class: 'hidden-form' } do |f| %>
+    <%= simple_form_for @group, url: group_suite_assignment_path(@group), method: :delete, html: { class: 'hidden-form' } do |f| %>
       <%= f.input :suite, as: :hidden, input_html: { value: '' } %>
       <%= f.submit 'Remove suite' %>
     <% end %>
