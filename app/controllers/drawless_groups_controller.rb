@@ -78,10 +78,7 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def generate_suites_data
-    # TODO: make this a query object
-    @compatible_suites = Suite.available.where(size: @group.size)
-                              .includes(:building, :rooms, :draws)
-                              .order(:number)
+    @compatible_suites = CompatibleSuitesQuery.call(@group).order(:number)
     @compatible_suites_no_draw =
       @compatible_suites.select { |s| s.draws.empty? }.group_by(&:building)
     @compatible_suites_in_draw =

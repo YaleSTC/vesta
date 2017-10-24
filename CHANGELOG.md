@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 * Fix broken pathing in suite removal form ([#632](https://yale.githost.io/sdmp/rails/vesta/issues/632)).
 * Fix disband button not showing during suite selection ([#640](https://yale.githost.io/sdmp/rails/vesta/issues/640)).
 * Fix draw results not showing after finishing suite selection ([#631](https://yale.githost.io/sdmp/rails/vesta/issues/631)).
+* Correct housing sidebar counts ([#629](https://yale.githost.io/sdmp/rails/vesta/issues/629)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).

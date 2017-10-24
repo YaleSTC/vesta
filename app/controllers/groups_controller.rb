@@ -12,8 +12,7 @@ class GroupsController < ApplicationController
 
   def show
     @same_size_groups_count = @draw.groups.where(size: @group.size).count
-    @compatible_suites = @draw.suites.includes(:building, :rooms).available
-                              .where(size: @group.size).group_by(&:building)
+    @compatible_suites = CompatibleSuitesQuery.new(@draw.suites).call(@group)
   end
 
   def index
