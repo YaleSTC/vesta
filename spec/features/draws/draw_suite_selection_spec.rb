@@ -51,6 +51,15 @@ RSpec.feature 'Draw suite selection' do
       expect(page).to have_link('Disband')
     end
 
+    it 'moves to the result phase when there are no more groups to assign' do
+      # This leaves one group unassigned with no suites available
+      groups.where.not(id: groups.first.id).delete_all
+      suites.delete_all
+      visit new_draw_suite_assignment_path(draw)
+      click_on 'Disband'
+      expect(page).to have_css('.flash-success', text: /All groups have suites/)
+    end
+
     def assign_suites(groups, suites)
       groups.each_with_index do |group, i|
         suite = suites[i]

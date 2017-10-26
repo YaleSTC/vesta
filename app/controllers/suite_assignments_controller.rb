@@ -13,9 +13,6 @@ class SuiteAssignmentsController < ApplicationController
   def create
     @suite_assignment.prepare(params: suite_assignment_params)
     result = @suite_assignment.assign
-    if bulk_assigning? && NextGroupsQuery.call(draw: @draw).empty?
-      result = DrawResultsStarter.start(draw: @draw)
-    end
     handle_action(path: show_path, **result)
   end
 
@@ -58,6 +55,7 @@ class SuiteAssignmentsController < ApplicationController
               else
                 Group.where(id: params[:group_id])
               end
+    handle_action(**DrawResultsStarter.start(draw: @draw)) if @groups.empty?
     @group = @groups.first
     @groups_by_size = create_hash(@groups.group_by(&:size))
   end
