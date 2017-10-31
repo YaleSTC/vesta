@@ -44,6 +44,7 @@ RSpec.feature 'Draw suite selection' do
     end
 
     it 'shows the disband button when there are not enough suites' do
+      # This creates two groups with the same lottery number and only one suite
       suites.where.not(id: suites.first.id).delete_all
       groups.second.update(lottery_number: 1)
       visit new_draw_suite_assignment_path(draw)

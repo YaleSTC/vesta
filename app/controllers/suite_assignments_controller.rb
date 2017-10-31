@@ -59,7 +59,7 @@ class SuiteAssignmentsController < ApplicationController
                 Group.where(id: params[:group_id])
               end
     @group = @groups.first
-    @groups_by_size = @groups.group_by(&:size)
+    @groups_by_size = create_hash(@groups.group_by(&:size))
   end
 
   def set_suites
@@ -70,7 +70,7 @@ class SuiteAssignmentsController < ApplicationController
            end
     @suites = base.where(size: @groups.map(&:size))
                   .includes(:building, :rooms, :draws)
-    @suites_by_size = SuitesBySizeQuery.new(@suites).call
+    @suites_by_size = create_hash(SuitesBySizeQuery.new(@suites).call)
   end
 
   def set_suite_assignment
@@ -84,5 +84,9 @@ class SuiteAssignmentsController < ApplicationController
   def suite_assignment_params
     params.require(:suite_assignment)
           .permit(:suite, *@suite_assignment.valid_field_ids)
+  end
+
+  def create_hash(object_hash)
+    Hash.new([]).merge(object_hash)
   end
 end

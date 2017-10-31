@@ -2,7 +2,7 @@
   <% @groups.each do |group| %>
     <div id="group-fields-<%= group.id %>" class="actions">
       <h3><%= group.name %></h3>
-      <% if enough_suites_available(group) %>
+      <% if @suites_by_size[group.size].count >= @groups_by_size[group.size].count %>
         <%= f.label "suite_id_for_#{group.id}".to_sym, text: group.name, style: 'display: none;' %>
         <% if policy(Suite).medical? %>
           <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size], label_method: :name_with_medical %>

@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 * Fix broken draw suites migration([#638](https://yale.githost.io/sdmp/rails/vesta/issues/638)).
 * Fix user counts on pre-lottery draw dashboards ([#628](https://yale.githost.io/sdmp/rails/vesta/issues/628)).
 * Fix broken pathing in suite removal form ([#632](https://yale.githost.io/sdmp/rails/vesta/issues/632)).
+* Fix disband button not showing during suite selection ([#640](https://yale.githost.io/sdmp/rails/vesta/issues/640)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
