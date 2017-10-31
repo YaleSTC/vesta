@@ -59,6 +59,7 @@ class SuiteAssignmentsController < ApplicationController
                 Group.where(id: params[:group_id])
               end
     @group = @groups.first
+    @groups_by_size = @groups.group_by(&:size)
   end
 
   def set_suites

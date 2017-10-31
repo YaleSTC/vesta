@@ -43,6 +43,13 @@ RSpec.feature 'Draw suite selection' do
       expect(page).to have_button('Remove suite')
     end
 
+    it 'shows the disband button when there are not enough suites' do
+      suites.where.not(id: suites.first.id).delete_all
+      groups.second.update(lottery_number: 1)
+      visit new_draw_suite_assignment_path(draw)
+      expect(page).to have_link('Disband')
+    end
+
     def assign_suites(groups, suites)
       groups.each_with_index do |group, i|
         suite = suites[i]
