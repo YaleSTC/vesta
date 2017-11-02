@@ -67,4 +67,27 @@ RSpec.describe GroupsHelper, type: :helper do
       expect(helper.display_group_status(group)).to eq('Locking')
     end
   end
+
+  context '#clipping_name' do
+    let(:group) { instance_spy('group', name: 'Test') }
+
+    it "appends ' (confirmed)' when a clip is present" do
+      clip = instance_spy('clip', present?: true)
+      allow(group).to receive(:clip).and_return(clip)
+      expect(helper.clipping_name(group)).to eq('Test (confirmed)')
+    end
+
+    it "appends ' (invited to clip)' when an invite exists" do
+      clip_membership = instance_spy('clip_membership', present?: true)
+      allow(group).to receive(:clip).and_return(nil)
+      allow(group).to receive(:clip_memberships).and_return(clip_membership)
+      expect(helper.clipping_name(group)).to eq('Test (invited to clip)')
+    end
+
+    it 'appends nothing if no clip info exists' do
+      allow(group).to receive(:clip).and_return(nil)
+      allow(group).to receive(:clip_membership).and_return(nil)
+      expect(helper.clipping_name(group)).to eq(group.name)
+    end
+  end
 end

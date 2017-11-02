@@ -1,0 +1,26 @@
+<h2 class="clip-name"><%= clip.name %></h2>
+<h3 class="clip-size">Confirmed Members: <%= clip.size %></h3>
+<table>
+  <thead>
+    <tr>
+      <td>Groups</td>
+    </tr>
+  </thead>
+  <tbody>
+  <% clip.clip_memberships.each do |m| %>
+    <tr id="clip-membership-<%= m.id %>">
+      <td data-role="clip-membership-name"><%= link_to clipping_name(m.group), draw_group_path(clip.draw, m.group) %> </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<% clip.clip_memberships.each do |m| %>
+  <%= link_to 'Accept Invitation', clip_membership_path(m), method: :patch, class: 'button' if policy(m).accept? %>
+  <%= link_to 'Reject Invitation', clip_membership_path(m), method: :delete, class: 'button alert' if policy(m).reject? %>
+  <%= link_to 'Leave Clip', clip_membership_path(m), method: :delete, class: 'button alert' if policy(m).leave? %>
+<% end %>
+<%= link_to 'Edit', edit_clip_path(clip), class: 'button' if policy(clip).edit? %>
+<% if policy(clip).destroy? %>
+  <%= link_to 'Delete', clip_path(clip), method: :delete,
+    data: { confirm: 'Are you sure you want to delete this clip?' }, class: 'button alert' %>
+<% end %>

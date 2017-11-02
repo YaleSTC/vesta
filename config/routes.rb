@@ -101,7 +101,13 @@ Rails.application.routes.draw do
         resource :suite_assignment, only: %i(new create destroy)
       end
     end
+
+    resource :clip, only: %i(new create)
   end
+
+  resources :clips, only: %i(show edit update destroy)
+
+  resources :clip_memberships, only: %i(update destroy)
 
   resources :groups, controller: 'drawless_groups' do
     member do

@@ -22,6 +22,9 @@
         <% if policy(@draw).activate? %>
           <li><%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch, class: 'button' %></li>
         <% end %>
+        <% if policy(Clip.new(draw: @draw.__getobj__)).new? %>
+          <li><%= link_to 'Create a clip', new_draw_clip_path(@draw), class: 'button' %></li>
+        <% end %>
         <% if policy(@draw).start_lottery? %>
           <li><%= link_to 'Proceed to Lottery', lottery_confirmation_draw_path(@draw), class: start_lottery_btn_class(@draw) %></li>
         <% end %>
@@ -115,6 +118,9 @@
       <ul class="vertical menu" data-accordion-menu>
         <% if policy(Group).new? %>
           <li><%= link_to 'Create new housing group', new_draw_group_path(@draw), class: 'button secondary' %></li>
+        <% end %>
+        <% if policy(Clip.new(draw: @draw.__getobj__)).new? %>
+          <li><%= link_to 'Create a clip', new_draw_clip_path(@draw), class: 'button' %></li>
         <% end %>
         <% if policy(DrawSuite.new(draw: @draw.__getobj__)).index?%>
           <li><%= link_to 'View suites', draw_suites_path(@draw, method: :get), class: 'button secondary' %></li>

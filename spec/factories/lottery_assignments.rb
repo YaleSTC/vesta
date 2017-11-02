@@ -21,5 +21,12 @@ FactoryGirl.define do
       draw { group.draw }
       selected { group.suite.present? }
     end
+
+    trait :defined_by_clip do
+      clip nil
+      groups { clip.groups }
+      draw { clip.draw }
+      selected { groups.all? { |g| g.suite.present? } }
+    end
   end
 end

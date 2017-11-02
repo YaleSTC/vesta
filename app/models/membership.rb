@@ -10,6 +10,7 @@
 # @attr group [Group] The group of the membership.
 # @attr user [User] The user of the membership.
 # @attr status [Integer] Enum for membership status.
+# @attr locked [Boolean] Confirmation for membership. Defaults to false.
 #   (requested, invited, accepted)
 class Membership < ApplicationRecord
   belongs_to :group

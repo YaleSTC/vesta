@@ -31,6 +31,7 @@ class DrawLotteryStarter
   #   message to set in the flash and either `nil` or the modified object.
   def start
     return error(self) unless valid?
+    destroy_unconfirmed_clip_invites
     draw.update!(status: 'lottery', intent_locked: true)
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -86,6 +87,10 @@ class DrawLotteryStarter
     draw.groups.where(size: diff).destroy_all
     errors.add(:draw, 'all groups must be the size of an available suite. The'\
                       ' affected groups have been disbanded and must regroup.')
+  end
+
+  def destroy_unconfirmed_clip_invites
+    UnconfirmedClipMembershipsForDrawQuery.call(draw: draw).destroy_all
   end
 
   def success

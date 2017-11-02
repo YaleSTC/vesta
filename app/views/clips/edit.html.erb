@@ -1,0 +1,7 @@
+<% provide(:title, "Edit #{@clip.name}") %>
+<h1>Edit <%= @clip.name %></h1>
+<%= simple_form_for @clip do |f| %>
+  <%= f.input :group_ids, as: :check_boxes, label: 'Please select the groups for this clip:', collection: @groups %>
+  <%= f.submit %>
+<% end %>
+<%= link_to 'Cancel', clip_path(@clip) %>

@@ -74,6 +74,15 @@ RSpec.describe DrawLotteryStarter do
       expect(groups).to have_received(:destroy_all)
     end
 
+    it 'destroys unconfirmed clip invitations' do
+      draw = instance_spy('draw', validity_stubs(valid: true))
+      relation = instance_spy('ActiveRecord::Relation')
+      allow(UnconfirmedClipMembershipsForDrawQuery).to \
+        receive(:call).with(draw: draw).and_return(relation)
+      described_class.start(draw: draw)
+      expect(relation).to have_received(:destroy_all)
+    end
+
     it 'updates the status of the draw to lottery' do
       draw = instance_spy('draw', validity_stubs(valid: true))
       allow(draw).to receive(:update!)
@@ -112,11 +121,12 @@ RSpec.describe DrawLotteryStarter do
     end
   end
 
+  # id is necessary to run the UnconfirmedClipMembershipsForDrawQuery
   def validity_stubs(valid:, **attrs)
     {
       pre_lottery?: valid, groups?: valid, enough_beds?: valid, nil?: !valid,
       all_students_grouped?: valid, no_contested_suites?: valid,
-      all_groups_locked?: valid, all_intents_declared?: valid
+      all_groups_locked?: valid, all_intents_declared?: valid, id: 1
     }.merge(attrs)
   end
 end

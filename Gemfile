@@ -26,6 +26,7 @@ gem "title"
 gem "uglifier", "~> 3.2.0"
 gem "webpacker", "~> 2.0"
 gem "react-rails", "~> 2.2.1"
+gem "scenic", "~> 1.4.0"
 
 # for UserGenerator
 gem 'ffaker', '~> 2.5.0'

@@ -1,0 +1,8 @@
+<%= simple_form_for @new_clip_form, url: draw_clip_path, method: :post do |f| %>
+  <%= f.input :draw_id, as: :hidden %>
+  <%= f.input :group_ids, as: :check_boxes, label: 'Please select which groups you wish to clip with:', collection: @groups %>
+  <% if policy(Clip.new(draw: @draw)).create_as_rep? %>
+    <%= f.input :add_self, as: :boolean, label: 'Add your group to the clip?' %>
+  <% end %>
+  <%= f.submit %>
+<% end %>

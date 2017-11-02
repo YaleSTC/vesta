@@ -1,13 +1,13 @@
 <% if @color_class == 'success' %>
-  $('#lottery-form-<%= @group.id %>').addClass('<%= @color_class %>', 750, 'swing', function() {
-    $('#lottery-form-<%= @group.id %>').removeClass('<%= @color_class %>', 750, 'swing');
+  $("#<%= lottery_form_id(@lottery) %>").parent().addClass('<%= @color_class %>', 750, 'swing', function() {
+    $("#<%= lottery_form_id(@lottery) %>").parent().removeClass('<%= @color_class %>', 750, 'swing');
   });
-    $('#lottery-form-<%= @group.id %>').html('<%= escape_javascript(render partial: 'lottery_assignments/edit_form', locals: { group: @group }) %>');
+    $("#<%= lottery_form_id(@lottery) %>").html('<%= escape_javascript(render partial: 'lottery_assignments/edit_form', locals: { lottery: @lottery }) %>');
 <% else %>
     <% if @color_class %>
-      $('#lottery-form-<%= @group.id %>').addClass('<%= @color_class %>', 750, 'swing', function() {
-        $('#lottery-form-<%= @group.id %>').removeClass('<%= @color_class %>', 750, 'swing');
+      $("#<%= lottery_form_id(@lottery) %>").parent().addClass('<%= @color_class %>', 750, 'swing', function() {
+        $("#<%= lottery_form_id(@lottery) %>").parent().removeClass('<%= @color_class %>', 750, 'swing');
       });
     <% end %>
-    $('#lottery-form-<%= @group.id %>').html('<%= escape_javascript(render partial: 'lottery_assignments/new_form', locals: { group: @group }) %>');
+    $("#<%= lottery_form_id(@lottery) %>").html('<%= escape_javascript(render partial: 'lottery_assignments/new_form', locals: { lottery: @lottery }) %>');
 <% end %>

@@ -45,4 +45,18 @@ module GroupsHelper
       group.status.capitalize
     end
   end
+
+  # Generate the group name with relevant clipping information appended
+  #
+  # @param [Group] the group needing the appended information
+  # @return [String] the group's name
+  def clipping_name(group)
+    group.name + if group.clip.present?
+                   ' (confirmed)'
+                 elsif group.clip_memberships.present? && group.clip.blank?
+                   ' (invited to clip)'
+                 else
+                   ''
+                 end
+  end
 end

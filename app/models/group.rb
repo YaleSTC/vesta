@@ -13,9 +13,17 @@
 # @attr transfers [Integer] the number of transfer students in the group
 # @attr lottery_assignment [LotteryAssignment] the lottery assignment for the
 #   group
+# @attr clip [Clip] The clip that the group is in, if any.
+# @attr clip_memberships [Array<ClipMembership>] All clip memberships that the
+#   group is associated with, pending or confirmed.
+# @attr clip_membership [ClipMembership] The confirmed clip membership for the
+#   group, if any.
 class Group < ApplicationRecord # rubocop:disable ClassLength
   belongs_to :leader, inverse_of: :led_group, class_name: 'User'
   belongs_to :draw
+  has_one :clip_membership, -> { where(confirmed: true) }, dependent: :destroy
+  has_one :clip, through: :clip_membership
+  has_many :clip_memberships, dependent: :destroy
   has_one :suite, dependent: :nullify
   belongs_to :lottery_assignment, dependent: :destroy
   accepts_nested_attributes_for :suite
@@ -40,11 +48,16 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
            if: ->() { will_save_change_to_size? }
   validate :validate_members_count, if: ->(g) { g.size.present? }
   validate :validate_status, if: ->(g) { g.size.present? }
-  validate :validate_lottery_assignment, if: -> { lottery_assignment.present? }
+  validate :validate_lottery_assignment,
+           if: -> { will_save_change_to_lottery_assignment_id? }
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
   after_save :update_status!,
              if: ->() { saved_change_to_transfers || saved_change_to_size }
+  before_update :freeze_lottery,
+                if: -> { will_save_change_to_lottery_assignment_id? }
+  after_update :remove_clip_memberships,
+               if: ->() { changed_draw_with_clip_memberships? }
   before_destroy :remove_member_rooms
   after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
   after_destroy :notify_members_of_disband
@@ -151,12 +164,24 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     lottery_assignment.number
   end
 
+  # Check if there is an open invitation to join the provided clip
+  #
+  # @param [Clip] the clip to check for its invitation status
+  # @return [Boolean] true if invited to join the given clip
+  def invited_to_clip?(clip)
+    clip_memberships.where(clip_id: clip.id, confirmed: false).present?
+  end
+
   private
 
   def notify_members_of_disband
     members.each do |m|
       StudentMailer.disband_notification(user: m).deliver_later
     end
+  end
+
+  def remove_clip_memberships
+    clip_memberships.each(&:destroy)
   end
 
   def send_locked_email
@@ -234,10 +259,33 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   end
 
   def validate_lottery_assignment
-    return unless will_save_change_to_lottery_assignment_id?
-    return if lottery_assignment.groups.size == 1 &&
+    return unless lottery_assignment.present?
+    if clip.present?
+      validate_lottery_for_clipped
+    else
+      validate_lottery_for_unclipped
+    end
+  end
+
+  def validate_lottery_for_clipped
+    return if clip == lottery_assignment.clip
+    errors.add(:lottery_assignment, 'must belong to the same clip')
+  end
+
+  def validate_lottery_for_unclipped
+    return if clip.present?
+    return if lottery_assignment.groups.length == 1 &&
               lottery_assignment.group == self
-    errors.add :lottery_assignment, 'can only have one group'
+    errors.add(:lottery_assignment, 'can only have one group unless clipped')
+  end
+
+  def freeze_lottery
+    return unless lottery_assignment_id_in_database.present?
+    throw(:abort)
+  end
+
+  def changed_draw_with_clip_memberships?
+    saved_change_to_draw_id && clip_memberships.present?
   end
 
   def assign_new_status

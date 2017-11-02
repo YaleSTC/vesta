@@ -2,13 +2,16 @@
 <h1><%= @draw.name %> - Assign Lottery Numbers</h1>
 <p>Please enter a lottery number for each group below. The number will save after you click out of the field (and the background of the relevant row should turn blue). When you're finished please return to the draw page to proceed to suite selection.</p>
 <table class="lottery-forms-table">
-  <% @draw.groups.each do |group| %>
-    <tr class="lottery-form" id="lottery-form-<%= group.id %>">
-      <% if group.lottery_assignment %>
-        <%= render partial: 'edit_form', locals: { group: group, lottery_assignment: group.lottery_assignment } %>
-      <% else %>
-        <%= render partial: 'new_form', locals: { group: group, lottery_assignment: group.lottery_assignment } %>
-      <% end %>
+  <% @lotteries.each do |lottery| %>
+    <tr class="lottery-form">
+      <td class="lottery-owner"><%= link_to lottery.name, lottery_owner_url(lottery) %></td>
+      <td id=<%= lottery_form_id(lottery) %>>
+        <% if lottery.persisted? %>
+          <%= render partial: 'edit_form', locals: { lottery: lottery } %>
+        <% else %>
+          <%= render partial: 'new_form', locals: { lottery: lottery } %>
+        <% end %>
+      </td>
     </tr>
   <% end %>
 </table>

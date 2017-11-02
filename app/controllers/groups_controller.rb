@@ -13,6 +13,7 @@ class GroupsController < ApplicationController
   def show
     @same_size_groups_count = @draw.groups.where(size: @group.size).count
     @compatible_suites = CompatibleSuitesQuery.new(@draw.suites).call(@group)
+    @clip_invites = @group.clip_memberships.where(confirmed: false)
   end
 
   def index

@@ -64,4 +64,8 @@ class ApplicationPolicy
   def user_has_uber_permission?
     user.rep? || user.admin?
   end
+
+  def user_is_a_group_leader(user)
+    user.group.present? && user.group.leader == user
+  end
 end

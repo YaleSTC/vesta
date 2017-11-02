@@ -46,10 +46,12 @@ RSpec.describe LotteryAssignment, type: :model do
     end
   end
 
-  it 'must have one group' do
-    lottery = FactoryGirl.build(:lottery_assignment)
-    lottery.groups = []
-    expect(lottery).not_to be_valid
+  describe 'group validations' do
+    it 'must have at least one group' do
+      lottery = build(:lottery_assignment, clip: nil)
+      lottery.groups = []
+      expect(lottery).not_to be_valid
+    end
   end
 
   it 'number must be unique within a draw' do
@@ -82,7 +84,15 @@ RSpec.describe LotteryAssignment, type: :model do
 
   it 'can be destroyed' do
     lottery = FactoryGirl.create(:lottery_assignment)
-    expect { lottery.destroy }.to change { LotteryAssignment.count }.by(-1)
+    expect { lottery.destroy }.to change { described_class.count }.by(-1)
+  end
+
+  it 'properly updates groups when created from a clip' do
+    clip = create(:clip)
+    clip.draw.lottery!
+    lottery = described_class.create!(draw: clip.draw, clip: clip, number: 1,
+                                      groups: clip.groups)
+    expect(lottery.reload.groups).to match_array(clip.groups)
   end
 
   describe '#update_selected!' do
@@ -111,14 +121,40 @@ RSpec.describe LotteryAssignment, type: :model do
         expect(lottery.group).to eq(lottery.groups.first)
       end
     end
-    # TODO: re-enable when we have clips
-    # context 'when multiple groups' do
-    #   it do
-    #     lottery = FactoryGirl.create(:lottery_assignment)
-    #     lottery.groups << FactoryGirl.create(:group, :defined_by_draw,
-    #                                          draw: lottery.draw)
-    #     expect(lottery.group).to eq(nil)
-    #   end
-    # end
+
+    context 'when multiple groups' do
+      it do
+        clip = create(:locked_clip)
+        clip.draw.lottery!
+        lottery = create(:lottery_assignment, :defined_by_clip, clip: clip)
+        expect(lottery.group).to eq(nil)
+      end
+    end
+  end
+
+  describe '#leader' do
+    it 'returns the clip leader when a clip is present' do
+      clip = create(:locked_clip)
+      clip.draw.lottery!
+      lottery = create(:lottery_assignment, :defined_by_clip, clip: clip)
+      expect(lottery.leader).to eq(clip.leader)
+    end
+    it "returns the first group's leader otherwise" do
+      lottery = create(:lottery_assignment)
+      expect(lottery.leader).to eq(lottery.groups.first.leader)
+    end
+  end
+
+  describe '#name' do
+    it 'returns the name of the leader with "clip" if for a clip' do
+      clip = create(:locked_clip)
+      clip.draw.lottery!
+      lottery = create(:lottery_assignment, :defined_by_clip, clip: clip)
+      expect(lottery.name).to eq(clip.leader.full_name + "'s clip")
+    end
+    it 'returns the name of the leader with "group" if not for a clip' do
+      lottery = create(:lottery_assignment)
+      expect(lottery.name).to eq(lottery.group.leader.full_name + "'s group")
+    end
   end
 end

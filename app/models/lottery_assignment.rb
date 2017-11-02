@@ -9,6 +9,7 @@
 class LotteryAssignment < ApplicationRecord
   belongs_to :draw
   has_many :groups, dependent: :nullify
+  belongs_to :clip
 
   validates :number,
             presence: true,
@@ -21,6 +22,8 @@ class LotteryAssignment < ApplicationRecord
 
   validate :groups_presence
   validate :groups_in_draw, if: ->() { draw.present? }
+
+  after_create :assign_groups_if_clipped!, if: ->() { clip.present? }
 
   before_update :freeze_draw
   before_update :freeze_number, unless: ->() { draw.lottery? }
@@ -37,15 +40,37 @@ class LotteryAssignment < ApplicationRecord
     end
   end
 
+  # Returns the singular group for the lottery assignment or nil
+  #
+  # @return [Group,nil] the group associated with the lottery assignment if
+  #   there is only one, otherwise nil
   def group
     return nil if groups.count > 1
     groups.first
   end
 
+  # Return the "leader" of the lottery assignment for display purposes, either
+  # delegating to the clip if it's present or to the first group otherwise
+  #
+  # @return [User] the leader of the clip or first group
+  def leader
+    return clip.leader if clip.present?
+    groups.first.leader
+  end
+
+  # Return a "name" for the lottery assignment; states whether it is for a clip
+  # or a group
+  #
+  # @return [String] the lottery assignment's name
+  def name
+    suffix = clip.present? ? "'s clip" : "'s group"
+    leader.full_name + suffix
+  end
+
   private
 
   def groups_presence
-    return unless groups.empty?
+    return if groups.present?
     errors.add(:groups, 'must have at least one group')
   end
 
@@ -67,5 +92,9 @@ class LotteryAssignment < ApplicationRecord
   def freeze_number
     return unless will_save_change_to_number?
     throw(:abort)
+  end
+
+  def assign_groups_if_clipped!
+    clip.groups.each { |g| g.reload.update!(lottery_assignment: self) }
   end
 end

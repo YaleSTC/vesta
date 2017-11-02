@@ -6,22 +6,20 @@ class LotteryAssignmentsController < ApplicationController
   prepend_before_action :set_draw, except: %(index)
   prepend_before_action :set_lottery_assignment, only: %i(update)
 
-  def index; end
+  def index
+    @lotteries = ObjectsForLotteryQuery.call(draw: @draw)
+  end
 
   def create
-    # don't like this but we need it for the js rendering & we pass it
-    # as a hidden value so....
-    @group = Group.find(lottery_assignment_params[:group_ids])
     result = Creator.create!(klass: LotteryAssignment,
                              params: lottery_assignment_params,
                              name_method: :number)
-    @group.reload # necessary to update the association
+    @lottery = result[:record]
     @color_class = result[:msg].keys.first.to_s
   end
 
   def update
-    @group = @lottery_assignment.group
-    result = Updater.update(object: @lottery_assignment,
+    result = Updater.update(object: @lottery,
                             params: lottery_assignment_params,
                             name_method: :number)
     @color_class = result[:msg].keys.first.to_s
@@ -30,11 +28,12 @@ class LotteryAssignmentsController < ApplicationController
   private
 
   def lottery_assignment_params
-    params.require(:lottery_assignment).permit(:number, :draw_id, :group_ids)
+    params.require(:lottery_assignment)
+          .permit(:clip_id, :draw_id, :group_ids, :number)
   end
 
   def set_lottery_assignment
-    @lottery_assignment = LotteryAssignment.includes(:groups).find(params[:id])
+    @lottery = LotteryAssignment.includes(:groups).find(params[:id])
   end
 
   def set_draw_with_eager_load
@@ -47,8 +46,8 @@ class LotteryAssignmentsController < ApplicationController
   end
 
   def authorize!
-    if @lottery_assignment
-      authorize @lottery_assignment
+    if @lottery
+      authorize @lottery
     else
       authorize LotteryAssignment.new(draw: @draw)
     end
