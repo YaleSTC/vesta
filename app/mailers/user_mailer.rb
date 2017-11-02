@@ -10,9 +10,8 @@ class UserMailer < ApplicationMailer
   def new_user_confirmation(user:, password: nil)
     @user = user
     @password = password
-    @res_college = OpenStruct.new(name: 'College', dean: 'Dean Vesta',
-                                  vesta_url: 'https://vesta.app/',
-                                  admin_email: 'admin@vesta.app')
-    mail(to: @user.email, subject: 'Welcome to Vesta')
+    @res_college = College.current
+    mail(to: @user.email, subject: 'Welcome to Vesta',
+         reply_to: @res_college.admin_email)
   end
 end

@@ -12,11 +12,7 @@ module UsersHelper
   # @return [String] the form field, optionally disabled with a hidden field for
   #   the form to submit data
   def profile_field(form:, user:, field:)
-    if user.send(field)&.empty? || user.send(field).nil?
-      form.input(field, disabled: false)
-    else
-      form.input(field, disabled: true) + "\n" +
-        form.input(field, as: :hidden)
-    end
+    return form.input(field, disabled: false) if user.send(field).blank?
+    form.input(field, disabled: true) + "\n" + form.input(field, as: :hidden)
   end
 end

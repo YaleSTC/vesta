@@ -4,8 +4,8 @@ require 'rails_helper'
 
 REQUIRED_CONFIG_PARAMS =
   %w(PROFILE_REQUEST_URL PROFILE_REQUEST_QUERY_PARAM PROFILE_REQUEST_FIRST_NAME
-     PROFILE_REQUEST_LAST_NAME PROFILE_REQUEST_EMAIL PROFILE_REQUEST_CLASS_YEAR
-     PROFILE_REQUEST_COLLEGE).freeze
+     PROFILE_REQUEST_LAST_NAME PROFILE_REQUEST_EMAIL
+     PROFILE_REQUEST_CLASS_YEAR).freeze
 DUMMY_XML_RESPONSE =
   <<~HEREDOC
     <?xml version="1.0" encoding="UTF-8"?>
@@ -17,13 +17,12 @@ DUMMY_XML_RESPONSE =
           <Email>jane.smith@example.com</Email>
           <AltId>123456</AltId>
           <ClassYear>2018</ClassYear>
-          <College>AB</College>
       </Record>
     </ServiceResponse>
   HEREDOC
 DUMMY_PROFILE_HASH = { first_name: 'Jane', last_name: 'Smith',
-                       email: 'jane.smith@example.com', class_year: '2018',
-                       college: 'AB' }.freeze
+                       email: 'jane.smith@example.com',
+                       class_year: '2018' }.freeze
 
 RSpec.describe IDRProfileQuerier do
   describe '#query' do

@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-    <p>Hi <%= @user.name %>,</p>
-    <p>It's now your group's turn to pick a suite! Please log in to <a href="<% @college.site_url %>">Vesta</a> or meet with your housing rep to select a suite for your group.</p>
-    <p>Please e-mail <%= @college.admin_email %> or contact your housing rep if you have any questions.</p>
-    <p>Sincerely,<br /><%= @college.dean %></p>
-  </body>
-</html>
+<p>Hi <%= @user.name %>,</p>
+<p>It's now your group's turn to pick a suite! Please log in to <%= college_site_link(@college) %> or meet with your housing rep to select a suite for your group.</p>
+<p>Please e-mail <%= admin_mail_link(@college) %> or contact your housing rep if you have any questions.</p>
+<p>Sincerely,<br /><%= @college.dean %></p>

@@ -3,7 +3,12 @@
 #
 # Controller for College resources
 class CollegesController < ApplicationController
-  prepend_before_action :set_college, except: %i(new create)
+  prepend_before_action :set_college, except: %i(index new create)
+  skip_before_action :set_current_college, only: %i(index)
+
+  def index
+    @colleges = College.all
+  end
 
   def show; end
 
@@ -12,9 +17,9 @@ class CollegesController < ApplicationController
   end
 
   def create
-    result = Creator.new(klass: College, params: college_params,
-                         name_method: :name).create!
-    @college = result[:record]
+    result = CollegeCreator.create!(params: college_params,
+                                    user_for_access: current_user)
+    @college = result[:college]
     handle_action(action: 'new', **result)
   end
 
@@ -27,11 +32,6 @@ class CollegesController < ApplicationController
     handle_action(action: 'edit', **result)
   end
 
-  def destroy
-    result = Destroyer.new(object: @college, name_method: :name).destroy
-    handle_action(**result)
-  end
-
   private
 
   def authorize!
@@ -42,12 +42,16 @@ class CollegesController < ApplicationController
     end
   end
 
+  def unauthenticated?
+    action_name == 'index' && Apartment::Tenant.current == 'public'
+  end
+
   def college_params
-    params.require(:college).permit(:name, :admin_email, :dean, :site_url,
-                                    :floor_plan_url, :student_info_text)
+    params.require(:college).permit(:name, :admin_email, :dean, :floor_plan_url,
+                                    :student_info_text, :subdomain)
   end
 
   def set_college
-    @college = current_college
+    @college = College.find(params[:id])
   end
 end

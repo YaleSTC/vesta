@@ -16,8 +16,8 @@ class DrawStudentsUpdate
     process_params(params) if params
   end
 
-  # Execute the suites update, remove all suites to be removed and add all
-  # suites to be added. Occurs in a transaction for safety.
+  # Execute the students update, adding all students specified to the draw.
+  # Occurs in a transaction for safety.
   #
   # @return [Hash{Symbol=>String,Hash,Nil,DrawStringUpdate] a result hash
   #   containing the appropriate path to redirect to, a flash message to set,

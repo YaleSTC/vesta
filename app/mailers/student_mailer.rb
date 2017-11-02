@@ -11,7 +11,8 @@ class StudentMailer < ApplicationMailer
     @user = user
     @intent_locked = user.draw.intent_locked
     @intent_deadline = format_date(user.draw.intent_deadline)
-    mail(to: @user.email, subject: 'The housing process has begun')
+    mail(to: @user.email, subject: 'The housing process has begun',
+         reply_to: @college.admin_email)
   end
 
   # Send invitation to a group leader to select a suite
@@ -21,7 +22,8 @@ class StudentMailer < ApplicationMailer
   def selection_invite(user:, college: nil)
     determine_college(college)
     @user = user
-    mail(to: @user.email, subject: 'Time to select a suite!')
+    mail(to: @user.email, subject: 'Time to select a suite!',
+         reply_to: @college.admin_email)
   end
 
   # Send notification to a user that their group was deleted
@@ -31,7 +33,8 @@ class StudentMailer < ApplicationMailer
   def disband_notification(user:, college: nil)
     determine_college(college)
     @user = user
-    mail(to: @user.email, subject: 'Your housing group has been disbanded')
+    mail(to: @user.email, subject: 'Your housing group has been disbanded',
+         reply_to: @college.admin_email)
   end
 
   # Send notification to a user that their group is finalizing
@@ -42,12 +45,9 @@ class StudentMailer < ApplicationMailer
     return unless user.group
     determine_college(college)
     @user = user
-    @finalizing_url = if user.group.draw
-                        draw_group_url(user.draw, user.group)
-                      else
-                        group_url(user.group)
-                      end
-    mail(to: @user.email, subject: 'Confirm your housing group')
+    @finalizing_url = finalizing_url_for(@user)
+    mail(to: @user.email, subject: 'Confirm your housing group',
+         reply_to: @college.admin_email)
   end
 
   # Send notification to a leader that a user joined their group
@@ -58,7 +58,8 @@ class StudentMailer < ApplicationMailer
     determine_college(college)
     @user = group.leader
     @joined = joined
-    mail(to: @user.email, subject: "#{joined.full_name} has joined your group")
+    mail(to: @user.email, subject: "#{joined.full_name} has joined your group",
+         reply_to: @college.admin_email)
   end
 
   # Send notification to a leader that a user left their group
@@ -69,7 +70,8 @@ class StudentMailer < ApplicationMailer
     determine_college(college)
     @user = group.leader
     @left = left
-    mail(to: @user.email, subject: "#{left.full_name} has left your group")
+    mail(to: @user.email, subject: "#{left.full_name} has left your group",
+         reply_to: @college.admin_email)
   end
 
   # Send notification to a user that their group is locked
@@ -79,7 +81,8 @@ class StudentMailer < ApplicationMailer
   def group_locked(user:, college: nil)
     determine_college(college)
     @user = user
-    mail(to: @user.email, subject: 'Your housing group is now locked')
+    mail(to: @user.email, subject: 'Your housing group is now locked',
+         reply_to: @college.admin_email)
   end
 
   # Send reminder to submit housing intent to a user
@@ -90,7 +93,8 @@ class StudentMailer < ApplicationMailer
     determine_college(college)
     @user = user
     @intent_date = format_date(user.draw.intent_deadline)
-    mail(to: @user.email, subject: 'Reminder to submit housing intent')
+    mail(to: @user.email, subject: 'Reminder to submit housing intent',
+         reply_to: @college.admin_email)
   end
 
   # Send reminder to lock housing group to a user
@@ -101,17 +105,26 @@ class StudentMailer < ApplicationMailer
     determine_college(college)
     @user = user
     @locking_date = format_date(user.draw.locking_deadline)
-    mail(to: @user.email, subject: 'Reminder to lock housing group')
+    mail(to: @user.email, subject: 'Reminder to lock housing group',
+         reply_to: @college.admin_email)
   end
 
   private
 
   def determine_college(college)
-    @college = college || College.first || College.new
+    @college = college || College.current
   end
 
   def format_date(date)
-    return false unless date
+    return false unless date.present?
     date.strftime('%B %e')
+  end
+
+  def finalizing_url_for(user)
+    if user.group.draw.present?
+      draw_group_url(user.draw, user.group, host: @college.host)
+    else
+      group_url(user.group, host: @college.host)
+    end
   end
 end

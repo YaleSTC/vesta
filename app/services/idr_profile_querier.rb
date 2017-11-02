@@ -37,7 +37,7 @@ class IDRProfileQuerier
 
   CONFIG_PARAM_HEADER = 'PROFILE_REQUEST_'
   PROFILE_FIELDS =
-    %i(first_name last_name email class_year college).freeze
+    %i(first_name last_name email class_year).freeze
   REQUIRED_CONFIG_PARAMS =
     (%w(URL QUERY_PARAM) + PROFILE_FIELDS.map { |f| f.to_s.upcase }).freeze
 

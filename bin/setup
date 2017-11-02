@@ -14,30 +14,23 @@ bundle check || bundle install
 bin/rake dev:prime
 
 # Add binstubs to PATH via export PATH=".git/safe/../../bin:$PATH" in ~/.zshenv
-mkdir -p .git/safe
+if [ ! -d .git/safe ] && echo $PATH | grep .git/safe > /dev/null; then
+  echo "-----------------------------------------------------------------------"
+  echo
+  echo "-> When you trust this repo, remember to run: mkdir -p .git/safe"
+  echo
+fi
 
 # Only if this isn't CI
 # if [ -z "$CI" ]; then
 # fi
-          
-if heroku join --app vesta-staging &> /dev/null; then
-  git remote add staging git@heroku.com:vesta-staging.git || true
-  printf 'You are a collaborator on the "vesta-staging" Heroku app
-'
-else
-  printf 'Ask for access to the "vesta-staging" Heroku app
-'
-fi
 
-          
-if heroku join --app vesta-production &> /dev/null; then
-  git remote add production git@heroku.com:vesta-production.git || true
-  printf 'You are a collaborator on the "vesta-production" Heroku app
-'
-else
-  printf 'Ask for access to the "vesta-production" Heroku app
-'
-fi
+# Copy .env and database example file
+cp .env{.example,}
+cp config/database.yml{.example,}
 
-
-          git config heroku.remote staging
+# Print warning about uncommenting relevant lines in .env.example
+echo "-----------------------------------------------------------------------"
+echo
+echo "Please review .env and make sure all required lines are uncommented"
+echo

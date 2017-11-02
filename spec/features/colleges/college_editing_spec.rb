@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Building editing' do
+RSpec.feature 'College editing' do
   before { log_in FactoryGirl.create(:admin) }
   let(:college) { FactoryGirl.create(:college) }
 

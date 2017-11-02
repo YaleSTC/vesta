@@ -15,8 +15,6 @@
 # @attr intent [Integer] an enum for the user's housing intent, on_campus,
 #   off_campus, or undeclared (required)
 # @attr class_year [Integer] the graduating class year of the student (optional)
-# @attr college [String] a string describing the residential college to which
-#   the user belongs (optional)
 class User < ApplicationRecord
   # Determine whether or not CAS authentication is being used, must be at the
   # top of the class to be used in the Devise loading conditional below.

@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   end
   root to: 'dashboards#show'
 
-  resources :colleges, only: %i(new create show edit update)
+  resources :colleges, only: %i(index new create show edit update)
 
   shallow do
     resources :buildings do

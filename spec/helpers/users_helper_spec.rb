@@ -28,6 +28,14 @@ RSpec.describe UsersHelper, type: :helper do
              f.input(:first_name, as: :hidden))
       end
     end
+    it 'returns a disabled and a hidden field if the attribute is an integer' do
+      u = FactoryGirl.build_stubbed(:user, class_year: 2018, id: 123)
+      helper.simple_form_for u do |f|
+        expect(helper.profile_field(form: f, user: u, field: :class_year)).to \
+          eq(f.input(:class_year, disabled: true) + "\n" +
+             f.input(:class_year, as: :hidden))
+      end
+    end
     # rubocop:enable RSpec/ExampleLength
   end
 end

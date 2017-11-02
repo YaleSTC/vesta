@@ -2,7 +2,7 @@
 <h1 class="college-name"><%= @college.name %></h1>
 <h3 class="college-dean">Dean: <%= @college.dean %></h3>
 <h3 class="college-admin_email">Admin E-mail: <%= @college.admin_email %></h3>
-<h3 class="college-site_url">Site URL: <%= @college.site_url %></h3>
+<h3 class="college-site_url">Site URL: <%= root_url(host: @college.host) %></h3>
 <div>
   <% if policy(@college).edit? %>
     <%= link_to 'Edit settings', edit_college_path(@college), class: 'button secondary' %>

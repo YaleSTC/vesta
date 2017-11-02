@@ -12,25 +12,19 @@ your machine with [this script].
 
 [this script]: https://github.com/thoughtbot/laptop
 
-After setting up, you can run the application using [Heroku Local]:
+After running the script, make sure to check the `.env` file to make sure all
+required lines are uncommented. After setting up, you can run the application
+using Rails server:
 
-    % heroku local
+    % bin/rails server
 
-[Heroku Local]: https://devcenter.heroku.com/articles/heroku-local
+Your app will be accessible at:
 
-## Guidelines
+    [TENANT].lvh.me:3000
 
-Use the following guides for getting things done, programming well, and
-programming in style.
+Where \[TENANT\] is the subdomain of a given "tenant" or college (by default
+this should be set to `silliman`).
 
-* [Protocol](http://github.com/thoughtbot/guides/blob/master/protocol)
-* [Best Practices](http://github.com/thoughtbot/guides/blob/master/best-practices)
-* [Style](http://github.com/thoughtbot/guides/blob/master/style)
+## License
 
-## Deploying
-
-If you have previously run the `./bin/setup` script,
-you can deploy to staging and production with:
-
-    $ ./bin/deploy staging
-    $ ./bin/deploy production
+Licensed under the [GNU GPLv3](https://gitlab.com/yale-sdmp/vesta/blob/master/LICENSE).

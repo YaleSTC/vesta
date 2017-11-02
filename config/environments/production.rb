@@ -1,11 +1,23 @@
 # frozen_string_literal: true
+
 # rubocop:disable BlockLength
-require Rails.root.join('config/smtp')
+require Rails.root.join('config', 'smtp')
 Rails.application.configure do
   if ENV.fetch('HEROKU_APP_NAME', '').include?('staging-pr-')
     ENV['APPLICATION_HOST'] = ENV['HEROKU_APP_NAME'] + '.herokuapp.com'
   end
-  config.middleware.use Rack::CanonicalHost, ENV.fetch('APPLICATION_HOST')
+  config.middleware.use Rack::CanonicalHost do |env|
+    # make sure that we're always based on our canonical host
+    canonical_host = ENV.fetch('APPLICATION_HOST')
+    host = env['HTTP_HOST']
+    first_subdomain = host.split('.').first
+    base_host = host.split('.').drop(1).join('.')
+    if host == canonical_host || base_host == canonical_host
+      nil
+    else
+      "#{first_subdomain}.#{canonical_host}"
+    end
+  end
   config.cache_classes = true
   config.eager_load = true
   config.consider_all_requests_local       = false

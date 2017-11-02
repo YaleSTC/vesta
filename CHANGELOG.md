@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 * Add superuser role ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642)).
 * Add superuser dashboard ([#604](https://yale.githost.io/sdmp/rails/vesta/issues/604)).
 * Allow admins to automatically resolve oversubscription ([#195](https://gitlab.com/yale-sdmp/vesta/issues/195), [#697](https://gitlab.com/yale-sdmp/vesta/issues/697)).
+* Add multi-tenancy ([#641](https://gitlab.com/yale-sdmp/vesta/issues/641)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed

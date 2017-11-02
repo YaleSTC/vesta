@@ -26,7 +26,6 @@ class UserDashboard < Administrate::BaseDashboard
     intent: Field::String.with_options(searchable: false),
     username: Field::String,
     class_year: Field::Number,
-    college: Field::String,
     old_draw_id: Field::Number,
     reset_password_sent_at: Field::DateTime,
     remember_created_at: Field::DateTime,
@@ -63,7 +62,6 @@ class UserDashboard < Administrate::BaseDashboard
     intent
     username
     class_year
-    college
     draw
     old_draw_id
     group
@@ -92,7 +90,6 @@ class UserDashboard < Administrate::BaseDashboard
     intent
     username
     class_year
-    college
     draw
     old_draw_id
     room

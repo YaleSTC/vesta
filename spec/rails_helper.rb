@@ -19,8 +19,13 @@ module Features
   include Formulaic::Dsl
   # Capybara Config
   include Capybara::DSL
-  Capybara.asset_host = 'http://0.0.0.0:3000'
+  # https://robots.thoughtbot.com/acceptance-tests-with-subdomains
+  # no subdomain by default so that we can just use the public schema
+  Capybara.app_host = 'http://college.lvh.me'
+  Capybara.always_include_port = true
+  Capybara.asset_host = 'http://college.lvh.me:3000'
   Capybara.javascript_driver = :webkit
+  ENV['APPLICATION_HOST'] = 'lvh.me:3000'
 end
 
 RSpec.configure do |config|
@@ -36,12 +41,28 @@ RSpec.configure do |config|
     # Remove all PROFILE_REQUESTER keys from ENV to avoid issuing requests
     ENV.delete_if { |k, _v| !k.match(/PROFILE_REQUEST_/).nil? }
     ENV['MAILER_FROM'] = 'foo@example.com'
-    DatabaseCleaner.clean_with(:deletion)
+
+    # setup for Apartment
+    # see: https://github.com/influitive/apartment/wiki/Testing-Your-Application
+    DatabaseCleaner.clean_with :truncation
+    DatabaseCleaner.strategy = :transaction
+    # rubocop:disable RescueModifier
+    Apartment::Tenant.drop('college') rescue nil
+    # rubocop:enable RescueModifier
+    FactoryGirl.create(:college, subdomain: 'college')
   end
-  config.before(:each) { DatabaseCleaner.strategy = :transaction }
-  config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
-  config.before(:each) { DatabaseCleaner.start }
-  config.after(:each) { DatabaseCleaner.clean }
+
+  config.before(:each, type: :request) { host! 'college.lvh.me' }
+
+  config.before(:each) do
+    DatabaseCleaner.start
+    Apartment::Tenant.switch!('college')
+  end
+
+  config.after(:each) do
+    Apartment::Tenant.reset
+    DatabaseCleaner.clean
+  end
 end
 
 ActiveRecord::Migration.maintain_test_schema!

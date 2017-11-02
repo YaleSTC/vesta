@@ -35,8 +35,8 @@ class Generator
 
   # Generate an admin user
   # All params are passed as overrides to the user generator
-  def self.generate_admin(**overrides)
-    GENERATORS[:user].generate_admin(**overrides)
+  def self.generate_superuser(**overrides)
+    GENERATORS[:user].generate_superuser(**overrides)
   end
 
   private

@@ -9,7 +9,6 @@
   <%= profile_field(form: f, user: @user, field: :first_name) %>
   <%= profile_field(form: f, user: @user, field: :last_name) %>
   <%= profile_field(form: f, user: @user, field: :class_year) %>
-  <%= profile_field(form: f, user: @user, field: :college) %>
   <%= f.input :role, collection: User.roles.keys %>
   <%= f.submit %>
 <% end %>

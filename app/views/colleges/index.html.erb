@@ -1,0 +1,11 @@
+<div class="homepage-hero">
+  <h1>Welcome to Vesta</h1>
+  <p>
+  Vesta is a web app that manages the housing process for Yale's residential colleges. To proceed please click on the link for your college below:
+  </p>
+  <ul>
+    <% @colleges.each do |college| %>
+      <li><%= link_to college.name, root_url(host: college.host) %></li>
+    <% end %>
+  </ul>
+</div>

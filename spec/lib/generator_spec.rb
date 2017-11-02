@@ -14,9 +14,9 @@ describe Generator do
 
   OBJECTS.each { |o| it_behaves_like 'generates a valid', o }
 
-  it 'can generate an admin' do
-    expect { described_class.generate_admin }.to \
-      change { User.admin.count }.by(1)
+  it 'can generate an superuser' do
+    expect { described_class.generate_superuser }.to \
+      change { User.superuser.count }.by(1)
   end
 
   it 'fails if a record is not persisted after 50 tries' do

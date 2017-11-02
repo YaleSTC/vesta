@@ -23,8 +23,7 @@ class CollegeGenerator
     @params ||= {
       name: FFaker::Education.school_name,
       admin_email: FFaker::Internet.email,
-      dean: FFaker::Name.name,
-      site_url: FFaker::Internet.http_url
+      dean: FFaker::Name.name
     }.merge(overrides)
   end
 end

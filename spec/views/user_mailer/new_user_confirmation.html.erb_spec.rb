@@ -33,7 +33,6 @@ RSpec.describe 'user_mailer/new_user_confirmation.html.erb' do
 
   def mock_assigns
     assign(:user, FactoryGirl.build_stubbed(:user))
-    assign(:res_college, OpenStruct.new(name: 'Foo', dean: 'Foo',
-                                        vesta_url: 'Foo', admin_email: 'Foo'))
+    assign(:res_college, FactoryGirl.build_stubbed(:college))
   end
 end

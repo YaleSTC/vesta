@@ -5,17 +5,15 @@ class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
   before_action :authenticate_user!, unless: :unauthenticated?
-  before_action :check_college, unless: :devise_controller?
-  before_action :authorize!, except: :home, unless: :unauthenticated?
-  after_action :verify_authorized, except: :home, unless: :unauthenticated?
+  before_action :authorize!, unless: :unauthenticated?
+  before_action :set_current_college
+  after_action :verify_authorized, unless: :unauthenticated?
 
   rescue_from Pundit::NotAuthorizedError do |exception|
     Honeybadger.notify(exception)
     flash[:error] = "Sorry, you don't have permission to do that."
     redirect_to request.referer.present? ? request.referer : root_path
   end
-
-  def home; end
 
   private
 
@@ -58,13 +56,10 @@ class ApplicationController < ActionController::Base
     raise NoMethodError
   end
 
-  def check_college
-    return if current_college.persisted? || !policy(College).edit?
-    flash[:warning] = 'You must update your college settings in order for '\
-      'Vesta to function correctly'
-  end
-
-  def current_college
-    @current_college ||= College.first || College.new
+  def set_current_college
+    @current_college ||= College.current
+  rescue ActiveRecord::RecordNotFound
+    flash[:error] = 'Please select a valid college to proceed.'
+    redirect_to colleges_path
   end
 end

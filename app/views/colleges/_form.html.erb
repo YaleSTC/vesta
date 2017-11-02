@@ -1,7 +1,9 @@
 <%= simple_form_for @college do |f| %>
   <%= f.input :name %>
+  <% unless @college.persisted? %>
+    <%= f.input :subdomain, hint: 'The URL the college site will be accessible at, e.g. housing-sm for housing-sm.yalecollege.yale.edu' %>
+  <% end %>
   <%= f.input :admin_email, label: 'Administrator e-mail', hint: 'Used in e-mails sent to students' %>
-  <%= f.input :site_url, label: 'Site URL', hint: 'The web address used to visit Vesta' %>
   <%= f.input :dean, hint: 'Used in e-mail signatures' %>
   <%= f.input :floor_plan_url, label: 'Floor plan URL', hint: 'The web address used to view the floor plans' %>
   <%= f.input :student_info_text, label: 'Student welcome text', hint: 'This text is displayed to all students; you should outline your policies and any other information they may need to participate in the housing draw.' %>
