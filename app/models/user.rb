@@ -47,7 +47,7 @@ class User < ApplicationRecord
 
   validates :email, uniqueness: true
   validates :username, presence: true, if: :cas_auth?
-  validates :username, uniqueness: { case_sensitive: false }, if: :cas_auth?
+  validates :username, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :role, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true

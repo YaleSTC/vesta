@@ -9,6 +9,7 @@ FactoryGirl.define do
     role { 'student' }
     intent { 'on_campus' }
     class_year { Time.zone.today.year }
+    username { first_name.downcase if env? 'CAS_BASE_URL' }
 
     factory :student_in_draw do
       after(:build) do |user|

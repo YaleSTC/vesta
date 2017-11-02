@@ -22,9 +22,9 @@ class GroupGenerator
 
   def gen_params
     size = draw.suite_sizes.sample
-    members = Array.new(size) do
-      UserGenerator.generate(overrides: { draw: draw, intent: 'on_campus' })
-    end
+    # Use Generator to ensure we don't get invalid members due to validations
+    members = Generator.generate(model: 'user', count: size, draw: draw,
+                                 intent: 'on_campus')
     @params ||= { leader: members.sample,
                   size: size,
                   members: members,

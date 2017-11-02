@@ -18,4 +18,10 @@ describe Generator do
     expect { described_class.generate_admin }.to \
       change { User.admin.count }.by(1)
   end
+
+  it 'fails if a record is not persisted after 50 tries' do
+    allow(UserGenerator).to receive(:generate).and_return(nil)
+    expect { described_class.generate(model: 'user') }.to \
+      raise_exception(RuntimeError)
+  end
 end
