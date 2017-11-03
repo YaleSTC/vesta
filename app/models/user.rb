@@ -8,8 +8,8 @@
 # @attr encrypted_password [String] the encrypted password for database
 #   authentication (handled by Devise)
 # @attr username [String] the user's CAS login (required for CAS auth)
-# @attr role [Integer] an enum for the user's role, admin, [housing] rep, or
-#   student (required)
+# @attr role [Integer] an enum for the user's role: superuser, admin,
+#   [housing] rep, or student (required)
 # @attr first_name [String] the user's first name (required)
 # @attr last_name [String] the user's last name (required)
 # @attr intent [Integer] an enum for the user's housing intent, on_campus,
@@ -54,7 +54,7 @@ class User < ApplicationRecord
   validates :intent, presence: true
   validate :room_in_suite, if: ->() { group.present? && group.suite.present? }
 
-  enum role: %w(student admin rep)
+  enum role: %w(student admin rep superuser)
   enum intent: %w(undeclared on_campus off_campus)
 
   before_save :downcase_username, if: :cas_auth?
@@ -120,6 +120,13 @@ class User < ApplicationRecord
     assign_attributes(draw_id: new_draw_id, old_draw_id: to_save,
                       intent: 'undeclared')
     self
+  end
+
+  # Override #admin? to also return true for superusers
+  #
+  # @return [Boolean] True for admins and superusers
+  def admin?
+    role == 'admin' || role == 'superuser'
   end
 
   private

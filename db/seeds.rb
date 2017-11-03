@@ -8,9 +8,10 @@ Generator.generate(model: 'college', count: 1)
 if User.cas_auth?
   puts 'Please enter your CAS login: '
   cas_login = $stdin.gets.chomp
-  Generator.generate_admin(username: cas_login)
+  Generator.generate(model: 'user', username: cas_login, role: 'superuser')
 else
-  Generator.generate_admin(email: 'email@email.com', password: 'passw0rd')
+  Generator.generate(model: 'user', email: 'email@email.com',
+                     password: 'passw0rd', role: 'superuser')
 end
 Generator.generate(model: 'building', count: 2)
 Generator.generate(model: 'suite', count: 15)

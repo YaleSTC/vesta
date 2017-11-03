@@ -194,4 +194,21 @@ RSpec.describe User, type: :model do
       expect(user.leader_of?(group)).to be_falsey
     end
   end
+
+  describe '#admin?' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it 'returns true for admins' do
+      user.role = 'admin'
+      expect(user.admin?).to be(true)
+    end
+    it 'returns true for superusers' do
+      user.role = 'superuser'
+      allow(user).to receive(:role).and_return('superuser')
+      expect(user.admin?).to be(true)
+    end
+    it 'returns false for others' do
+      expect(user.admin?).to be(false)
+    end
+  end
 end
