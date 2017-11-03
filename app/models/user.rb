@@ -40,6 +40,7 @@ class User < ApplicationRecord
   has_one :led_group, inverse_of: :leader, dependent: :destroy,
                       class_name: 'Group', foreign_key: :leader_id
   has_one :membership, -> { where(status: 'accepted') }, dependent: :destroy
+  accepts_nested_attributes_for :membership
   has_one :group, through: :membership
   has_many :memberships, dependent: :destroy
 

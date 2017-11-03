@@ -2,6 +2,19 @@
 
 # rubocop:disable BlockLength
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :users
+    resources :suites
+    resources :colleges
+    resources :buildings
+    resources :draws
+    resources :groups
+    resources :memberships
+    resources :rooms
+
+    root to: 'users#index'
+  end
+
   devise_for :users
   unauthenticated :user do
     root to: 'high_voltage/pages#show', id: 'home', as: 'landing_page'

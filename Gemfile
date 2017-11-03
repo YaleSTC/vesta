@@ -33,6 +33,9 @@ gem 'ffaker', '~> 2.5.0'
 # Front-End Styling
 gem 'foundation-rails', '~> 6.3.0.0'
 
+# Superuser dashboard
+gem 'administrate', '~> 0.8.1'
+
 group :development do
   gem "listen"
   gem "spring", "~> 2.0.1"

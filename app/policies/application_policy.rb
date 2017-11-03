@@ -38,6 +38,10 @@ class ApplicationPolicy
     user.admin?
   end
 
+  def superuser_dash?
+    user.superuser?
+  end
+
   def scope
     Pundit.policy_scope!(user, record.class)
   end

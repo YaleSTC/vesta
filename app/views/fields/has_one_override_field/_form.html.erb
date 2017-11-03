@@ -1,0 +1,11 @@
+<!-- directly from the current (11/20/17) HasOne field implementation -->
+<%= f.fields_for field.attribute, field.data || field.nested_form.resource.class.new do |has_one_f| %>
+  <fieldset class="field-unit--nested">
+    <legend><%= field.nested_form.resource_name.titleize %></legend>
+    <% field.nested_form.attributes.each do |attribute| -%>
+      <div class="field-unit field-unit--<%= attribute.html_class %>">
+        <%= render_field attribute, f: has_one_f %>
+      </div>
+    <% end -%>
+  </fieldset>
+<% end %>

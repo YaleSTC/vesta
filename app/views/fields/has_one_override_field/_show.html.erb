@@ -1,0 +1,23 @@
+<% if field.data %>
+  <fieldset class="attribute--nested">
+    <legend>
+      <%= link_to(
+        field.display_associated_resource,
+        [namespace, field.data],
+      ) %>
+    </legend>
+    <% field.nested_form.attributes.each do |attribute| -%>
+      <div>
+      <dt class="attribute-label">
+        <%= t(
+          "helpers.label.#{resource_name}.#{attribute.name}",
+          default: attribute.name.titleize,
+        ) %>
+      </dt>
+      <dd class="attribute-data attribute-data--<%= attribute.html_class %>">
+        <%= attribute.data %>
+      </dd>
+      </div>
+    <% end -%>
+  </fieldset>
+<% end %>

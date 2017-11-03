@@ -48,6 +48,7 @@ All notable changes to this project will be documented in this file.
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
 * Install React.js and Webpacker ([#623](https://yale.githost.io/sdmp/rails/vesta/issues/623)).
 * Add superuser role ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642)).
+* Add superuser dashboard ([#604](https://yale.githost.io/sdmp/rails/vesta/issues/604)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed

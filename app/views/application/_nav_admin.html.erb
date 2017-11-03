@@ -36,4 +36,7 @@
     </ul>
   </li>
   <li><%= link_to 'Settings', settings_path(@current_college) %></li>
+  <% if current_user.superuser? %>
+    <li><%= link_to 'Superuser', admin_users_path %></li>
+  <% end %>
 </ul>
