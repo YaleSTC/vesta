@@ -11,7 +11,7 @@ RSpec.feature 'Suite CSV Import' do
       attach_file('suite_import_form[file]',
                   Rails.root.join('spec', 'fixtures', 'suite_upload.csv'))
       click_on 'Import'
-      expect(building.suites.count).to eq(2)
+      expect(building.suites.count).to eq(3)
     end
   end
 

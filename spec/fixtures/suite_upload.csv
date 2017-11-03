@@ -1,3 +1,4 @@
-Number,Singles,Doubles,Common
-A21,1,0,1
-H42,0,4,0
+number,common,single,double,medical
+A31,A31,A31A A31C,A31B,
+A32,,A32A,,X
+H35,H35,H35A H35B,,

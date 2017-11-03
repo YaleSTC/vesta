@@ -7,7 +7,7 @@ class SuiteImportForm
   include Callable
   require 'csv'
 
-  HEADER = %w(number singles doubles common).freeze
+  HEADER = %w(number common single double medical).freeze
 
   # Initialize a new SuiteImporter and call #import on it
   #
@@ -20,18 +20,19 @@ class SuiteImportForm
     @failures = []
   end
 
-  # Read in a CSV of suite information and create suites and rooms accordingly
-  # The CSV should be formatted with a header Number, Single, Double, where
-  # Single is the number of single rooms in the suite and Double is the number
-  # of double rooms.
+  # Import a set of suites from a CSV file. The file should have the header
+  # "number,common,single,double,medical" where Number is the suite number and
+  # Common, Single, and Double contain the room numbers for the rooms of that
+  # size, separated by spaces. Medical suites are indicated by having any
+  # content in the Medical column.
   #
   # @return [Hash{Symbol=>nil,Hash}] A hash with flash messages to be set.
   def import
     return error('No file uploaded') unless file
     prepare_csv
     return error('Header incorrect') unless correct_header?
-    CSV.parse(@body.join("\n"), headers: true).each_with_index do |row, i|
-      suite_from_row(row: row, index: i)
+    CSV.parse(@body.join("\n"), headers: true).each do |row|
+      create_suite_from_row(row: row.to_hash.symbolize_keys)
     end
     result
   end
@@ -43,36 +44,26 @@ class SuiteImportForm
   attr_accessor :successes, :failures
   attr_reader :body, :header, :string, :building, :file
 
-  def suite_from_row(row:, index:)
-    row_number = index + 2
+  BED_COUNTS = { common: 0, single: 1, double: 2 }.freeze
+
+  def create_suite_from_row(row:)
     ActiveRecord::Base.transaction do
-      suite = Suite.create!(building: building, number: row['number'])
-      create_rooms(suite: suite, row: row)
+      suite = Suite.create!(number: row[:number], building: building,
+                            medical: row[:medical].present?)
+      create_rooms(suite: suite, row: row.except!(:number, :medical))
     end
-    successes << row_number
-  rescue
-    failures << row_number
+    successes << row[:number]
+  rescue ActiveRecord::RecordInvalid
+    failures << row[:number]
   end
 
   def create_rooms(suite:, row:)
-    total = 0
-    hash = row_counts(row)
-    hash.each do |beds, count|
-      count.times do |i|
-        Room.create!(beds: beds, suite: suite,
-                     number: room_name(suite, total + i))
+    row.each do |type, room_numbers|
+      next unless room_numbers.present?
+      room_numbers.split(/\s+/).each do |number|
+        Room.create!(beds: BED_COUNTS[type], suite: suite, number: number)
       end
-      total += count
     end
-  end
-
-  def row_counts(row)
-    { 1 => row['singles'].to_i, 2 => row['doubles'].to_i,
-      0 => row['common'].to_i }
-  end
-
-  def room_name(suite, count)
-    "#{suite.number}-#{count}"
   end
 
   def result

@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 * Rename Group Finalizing to Group Locking ([#352](https://yale.githost.io/sdmp/rails/vesta/issues/352))
 * Add new traits to group factories to allow for more flexible testing ([#665](https://yale.githost.io/sdmp/rails/vesta/issues/665)).
 * Allow new students to be added to group when increasing group size ([#556](https://yale.githost.io/sdmp/rails/vesta/issues/556))
+* Refactor suite import to properly set room names and flag medical suites ([#658](https://gitlab.com/yale-sdmp/vesta/issues/658)).
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).

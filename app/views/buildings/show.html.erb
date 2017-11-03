@@ -11,9 +11,10 @@
 <% if policy(SuiteImportForm).import? %>
   <h3>Import Suites</h3>
   <p>Add many suites at once by uploading a CSV file with the building information.
-  The CSV must have the format "Number, Singles, Doubles" where Number is the 
-  identifier of the suite, Singles is the number of single bedrooms in the suite,
-  and Doubles is the number of double bedrooms in the suite.</p>
+  The CSV must have the columns / structure "Number, Common, Single, Double, Medical"
+  where Number is the identifier of the suite and Common, Single, and Double contain
+  the room numbers for the rooms of that size, separated by spaces. Medical suites
+  are indicated by placing any content in the Medical column.</p>
   <p>
   <%= simple_form_for @suite_importer, url: suite_import_path do |f| %>
     <%= f.hidden_field :building_id, value: @building.id %>
