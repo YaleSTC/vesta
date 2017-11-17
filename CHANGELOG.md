@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 * Make Building > Suite > Room nesting shallow ([#618](https://yale.githost.io/sdmp/rails/vesta/isses/618))
 * Modify user update functionality so admins cannot demote themselves ([#529](https://yale.githost.io/sdmp/rails/vesta/issues/529))
 * Rename Group Finalizing to Group Locking ([#352](https://yale.githost.io/sdmp/rails/vesta/issues/352))
+* Add new traits to group factories to allow for more flexible testing ([#665](https://yale.githost.io/sdmp/rails/vesta/issues/665)).
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
@@ -46,7 +47,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
 * Install React.js and Webpacker ([#623](https://yale.githost.io/sdmp/rails/vesta/issues/623)).
-* Add superuser role ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642))
+* Add superuser role ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed

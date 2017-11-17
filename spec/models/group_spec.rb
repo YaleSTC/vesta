@@ -296,4 +296,17 @@ RSpec.describe Group, type: :model do
         have_received(:group_locked).exactly(group.memberships_count)
     end
   end
+
+  describe 'group factories' do
+    context 'create valid groups' do
+      it 'and defaults to :defined_by_leader with the :group factory' do
+        group = FactoryGirl.create(:group)
+        expect(group).to be_persisted
+      end
+      it 'and uses :defined_by_draw trait in :group_from_draw factory' do
+        group = FactoryGirl.create(:group_from_draw)
+        expect(group).to be_persisted
+      end
+    end
+  end
 end

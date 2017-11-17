@@ -3,11 +3,29 @@
 FactoryGirl.define do
   factory :group do
     size 1
-    association :leader, factory: :student_in_draw, intent: 'on_campus'
-    draw { leader.draw }
+
+    # The group's draw can be changed by passing in a leader. The draw is
+    # inherited from the leader. This trait is used by default.
+    trait :defined_by_leader do
+      association :leader, factory: :student_in_draw, intent: 'on_campus'
+      draw { leader.draw }
+    end
+
+    defined_by_leader
+
+    # The group's draw can be changed by passing in a draw. The leader
+    # inherits the draw from whatever draw is passed in.  This will generate
+    # a draw if none is provided.
+    trait :defined_by_draw do
+      draw
+      leader { build(:user, role: 'student', intent: 'on_campus', draw: draw) }
+    end
+
     members { [leader] }
 
     after(:create) { |g| g.draw&.update(status: 'pre_lottery') }
+
+    factory :group_from_draw, traits: [:defined_by_draw]
 
     factory :full_group do
       size 2
