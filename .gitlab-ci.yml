@@ -1,5 +1,5 @@
 .test_template: &test_definition
-  image: yale.githost.io:4678/sdmp/rails/docker-rails-capybara/image:latest
+  image: gitlab.yale.edu:4567/sdmp/rails/docker-rails-capybara/image:latest
 
   services:
     - postgres:latest
