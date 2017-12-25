@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 * Fix draw results not showing after finishing suite selection ([#631](https://yale.githost.io/sdmp/rails/vesta/issues/631)).
 * Correct housing sidebar counts ([#629](https://yale.githost.io/sdmp/rails/vesta/issues/629)).
 * Fix issues with seed script ([#657](https://yale.githost.io/sdmp/rails/vesta/issues/657)).
+* Update security vulnerability in YARD ([#682](https://yale.githost.io/sdmp/rails/vesta/issues/682)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
