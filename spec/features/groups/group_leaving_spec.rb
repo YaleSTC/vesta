@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'Group leaving' do
-  let(:group) { FactoryGirl.create(:full_group, size: 2) }
+  let(:group) do
+    FactoryGirl.create(:full_group, size: 2).tap { |g| g.draw.pre_lottery! }
+  end
 
   before { log_in group.members.last }
   it 'can be performed' do

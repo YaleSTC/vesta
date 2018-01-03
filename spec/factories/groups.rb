@@ -23,8 +23,6 @@ FactoryGirl.define do
 
     members { [leader] }
 
-    after(:create) { |g| g.draw&.update(status: 'pre_lottery') }
-
     factory :group_from_draw, traits: [:defined_by_draw]
 
     factory :full_group do

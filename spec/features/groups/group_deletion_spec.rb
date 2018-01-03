@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Group deletion' do
-  let(:group) { FactoryGirl.create(:group) }
+  let(:group) { FactoryGirl.create(:group).tap { |g| g.draw.pre_lottery! } }
 
   before { log_in FactoryGirl.create(:admin) }
 

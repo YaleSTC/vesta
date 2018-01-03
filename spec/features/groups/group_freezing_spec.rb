@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.feature 'Group locking' do
   context 'suite size still available, full group' do
     it 'can be initiated by a leader' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = full_group(size: 2)
       log_in group.leader
       visit draw_group_path(group.draw, group)
       click_on 'Begin Locking Process for Group'
@@ -26,7 +26,7 @@ RSpec.feature 'Group locking' do
   end
   context 'as admin, full group' do
     it 'can be locked' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = full_group(size: 2)
       log_in FactoryGirl.create(:admin)
       visit draw_group_path(group.draw, group)
       click_on 'Lock Group'
@@ -40,5 +40,9 @@ RSpec.feature 'Group locking' do
       click_on 'Unlock All Members'
       expect(page).to have_css('.group-status', text: 'Status: Full')
     end
+  end
+
+  def full_group(size: 2)
+    FactoryGirl.create(:full_group, size: size).tap { |g| g.draw.pre_lottery! }
   end
 end
