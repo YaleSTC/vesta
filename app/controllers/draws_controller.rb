@@ -87,13 +87,9 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def lottery_confirmation; end
 
   def start_lottery
-    @lottery_starter = DrawLotteryStarter.new(draw: @draw)
+    @lottery_starter = DrawLotteryStarter.new(draw: @draw.__getobj__)
     result = @lottery_starter.start
     handle_action(action: 'lottery_confirmation', **result)
-  end
-
-  def lottery
-    @groups = @draw.groups.includes(:leader).order('users.last_name')
   end
 
   def oversubscription; end

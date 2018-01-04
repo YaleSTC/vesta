@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Room Selection' do
-  let(:group) { FactoryGirl.create(:full_group, :with_suite, size: 2) }
+  let(:group) { FactoryGirl.create(:group_with_suite, size: 2) }
 
   context 'as group leader' do
     before { log_in group.leader }

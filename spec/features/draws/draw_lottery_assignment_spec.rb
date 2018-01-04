@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw lottery assignment', js: true do
-  let!(:draw) { FactoryGirl.create(:draw_in_lottery, groups_count: 2) }
-  let!(:group) { draw.groups.first }
-
   context 'as admin' do
+    let(:draw) { FactoryGirl.create(:draw_in_lottery, groups_count: 2) }
+    let(:group) { draw.groups.first }
+
     before { log_in FactoryGirl.create(:admin) }
 
     it 'can be performed' do
@@ -14,20 +14,21 @@ RSpec.feature 'Draw lottery assignment', js: true do
       click_on 'Assign lottery numbers'
       assign_lottery_number(group, 1)
       reload
-      expect(lottery_number_saved?(page, group, 1)).to be_truthy
+      expect(lottery_number_saved?(group, 1)).to be_truthy
     end
 
-    it 'can be removed' do
-      group.update!(lottery_number: 2)
-      visit lottery_draw_path(draw)
-      assign_lottery_number(group, '')
-      expect(group.reload.lottery_number).to be_nil
+    it 'can be changed' do
+      FactoryGirl.create(:lottery_assignment, draw: draw, groups: [group])
+      visit draw_lottery_assignments_path(draw)
+      assign_lottery_number(group, '6')
+      reload
+      expect(lottery_number_saved?(group, 6)).to be_truthy
     end
 
     def assign_lottery_number(group, number)
       within("\#lottery-form-#{group.id}") do
-        fill_in 'group_lottery_number', with: number.to_s
-        find(:css, '#group_lottery_number').send_keys(:tab)
+        fill_in 'lottery_assignment_number', with: number.to_s
+        find(:css, '#lottery_assignment_number').send_keys(:tab)
       end
     end
 
@@ -35,18 +36,19 @@ RSpec.feature 'Draw lottery assignment', js: true do
       page.evaluate_script('window.location.reload()')
     end
 
-    def lottery_number_saved?(_page, group, number)
+    def lottery_number_saved?(group, number)
       within("\#lottery-form-#{group.id}") do
-        assert_selector(:css, "#group_lottery_number[value='#{number}']")
+        assert_selector(:css, "#lottery_assignment_number[value='#{number}']")
       end
     end
   end
 
   context 'as rep' do
-    before { log_in FactoryGirl.create(:user, role: 'rep') }
+    let(:draw) { FactoryGirl.create(:draw_in_lottery, groups_count: 2) }
+    let(:group) { draw.groups.first }
 
     it 'can view draw page with incomplete lottery' do
-      group.update!(lottery_number: 1)
+      log_in FactoryGirl.create(:user, role: 'rep')
       visit draw_path(draw)
       expect(page).to have_content(draw.name)
     end

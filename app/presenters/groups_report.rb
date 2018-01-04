@@ -40,8 +40,8 @@ class GroupsReport < SimpleDelegator
   # @return [ActiveRecord::Associations::CollectionProxy] The groups without
   #   suites, sorted by lottery number
   def without_suites
-    @without_suites ||= includes(:suite).where(suites: { group_id: nil })
-                                        .order(:lottery_number)
+    @without_suites ||= order_by_lottery.includes(:suite)
+                                        .where(suites: { group_id: nil })
   end
 
   # Gets the groups in the collection without suites, sorted by lottery number,

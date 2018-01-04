@@ -11,11 +11,13 @@
 # @attr memberships_count [Integer] the number of accepted memberships (counter
 #   cache)
 # @attr transfers [Integer] the number of transfer students in the group
-# @attr lottery_number [Integer] the lottery number assigned to the group
+# @attr lottery_assignment [LotteryAssignment] the lottery assignment for the
+#   group
 class Group < ApplicationRecord # rubocop:disable ClassLength
   belongs_to :leader, inverse_of: :led_group, class_name: 'User'
   belongs_to :draw
   has_one :suite, dependent: :nullify
+  belongs_to :lottery_assignment, dependent: :destroy
   accepts_nested_attributes_for :suite
 
   has_many :memberships, dependent: :delete_all
@@ -33,12 +35,12 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   validates :transfers, presence: true,
                         numericality: { greater_than_or_equal_to: 0,
                                         only_integer: true }
-  validates :lottery_number, numericality: { allow_nil: true }
 
   validate :validate_suite_size_inclusion,
            if: ->() { will_save_change_to_size? }
   validate :validate_members_count, if: ->(g) { g.size.present? }
   validate :validate_status, if: ->(g) { g.size.present? }
+  validate :validate_lottery_assignment, if: -> { lottery_assignment.present? }
 
   before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
   after_save :update_status!,
@@ -48,6 +50,9 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   after_destroy :notify_members_of_disband
 
   attr_reader :remove_ids
+
+  scope :order_by_lottery,
+        -> { joins(:lottery_assignment).order('lottery_assignments.number') }
 
   # Generate the group name
   #
@@ -138,6 +143,14 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     members_count == size
   end
 
+  # Return the lottery number assigned to the group, if present
+  #
+  # @return [Integer, nil] the number, or nil if it isn't present
+  def lottery_number
+    return nil unless lottery_assignment
+    lottery_assignment.number
+  end
+
   private
 
   def notify_members_of_disband
@@ -218,6 +231,13 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     validate_not_open
     return if lockable?
     errors.add :status, 'can only be locked when all members have locked'
+  end
+
+  def validate_lottery_assignment
+    return unless will_save_change_to_lottery_assignment_id?
+    return if lottery_assignment.groups.size == 1 &&
+              lottery_assignment.group == self
+    errors.add :lottery_assignment, 'can only have one group'
   end
 
   def assign_new_status

@@ -6,7 +6,9 @@ table.lottery-forms-table {
     vertical-align: center;
 
     &.success { background-color: lighten($success-color, 72%); }
+    &.notice { background-color: lighten($success-color, 72%); }
     &.failure { background-color: lighten($alert-color, 53%); }
+    &.error { background-color: lighten($alert-color, 53%); }
 
     .group-name {
       font-size: 1.4em;

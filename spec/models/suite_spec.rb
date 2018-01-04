@@ -38,7 +38,7 @@ RSpec.describe Suite, type: :model do
   end
 
   it 'clears room ids when group assignment changes' do
-    group = FactoryGirl.create(:locked_group, size: 1)
+    group = FactoryGirl.create(:lottery_assignment).group
     suite = FactoryGirl.create(:suite_with_rooms, group_id: group.id)
     group.leader.update!(room_id: suite.rooms.first.id)
     expect { group.suite.update!(group_id: nil) }.to \
@@ -223,6 +223,17 @@ RSpec.describe Suite, type: :model do
     it 'returns the name if not a medical suite' do
       allow(suite).to receive(:medical).and_return(false)
       expect(suite.name_with_medical).to eq(suite.name)
+    end
+  end
+
+  describe 'lottery assignment callbacks' do
+    # really don't like this but it's the simplest place for it to go
+    it 'updates the selected attr on the lottery assignment' do
+      lottery = FactoryGirl.create(:lottery_assignment)
+      group = lottery.groups.first
+      suite = group.draw.suites.first
+      expect { suite.update(group: group) }.to \
+        change { lottery.reload.selected }.from(false).to(true)
     end
   end
 end

@@ -17,7 +17,9 @@ RSpec.describe OtherSuitesInBuildingQuery do
   end
   it 'ignores unavailable suites' do
     suite = FactoryGirl.create(:suite)
-    _other = FactoryGirl.create(:suite, building: suite.building, group_id: 123)
+    other = FactoryGirl.create(:suite, building: suite.building)
+    FactoryGirl.create(:group_with_suite, :defined_by_draw,
+                       suite: other, draw: nil)
     expect(described_class.call(suite: suite)).to eq([])
   end
 end

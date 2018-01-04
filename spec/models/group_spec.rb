@@ -15,13 +15,13 @@ RSpec.describe Group, type: :model do
     it { is_expected.to validate_presence_of(:leader) }
     it { is_expected.to belong_to(:draw) }
     it { is_expected.to have_one(:suite) }
+    it { is_expected.to belong_to(:lottery_assignment) }
     it { is_expected.to have_many(:memberships) }
     it { is_expected.to have_many(:full_memberships) }
     it { is_expected.to have_many(:members).through(:full_memberships) }
     it { is_expected.not_to allow_value(-1).for(:memberships_count) }
     it { is_expected.to validate_presence_of(:transfers) }
     it { is_expected.not_to allow_value(-1).for(:transfers) }
-    it { is_expected.to validate_numericality_of(:lottery_number) }
   end
 
   describe 'size validations' do
@@ -307,6 +307,42 @@ RSpec.describe Group, type: :model do
         group = FactoryGirl.create(:group_from_draw)
         expect(group).to be_persisted
       end
+    end
+  end
+
+  describe 'lottery assignment validations' do
+    it 'must be the only group unless in a clip' do
+      lottery = FactoryGirl.create(:lottery_assignment)
+      group = FactoryGirl.create(:locked_group, :defined_by_draw,
+                                 draw: lottery.draw)
+      group.lottery_assignment_id = lottery.id
+      expect(group.valid?).to be_falsey
+    end
+  end
+
+  it 'deletes the lottery assignment on group deletion' do
+    lottery = FactoryGirl.create(:lottery_assignment)
+    expect { lottery.group.destroy }.to \
+      change { LotteryAssignment.count }.by(-1)
+  end
+
+  describe '.order_by_lottery' do
+    it 'orders the collection of groups by their lottery numbers' do
+      groups = FactoryGirl.create(:draw_in_selection, groups_count: 3).groups
+      lottery = groups.map(&:lottery_number).sort!
+      expect(groups.order_by_lottery.map(&:lottery_number)).to eq(lottery)
+    end
+  end
+
+  describe '#lottery_number' do
+    it 'is nil when no lottery assignment' do
+      group = FactoryGirl.build_stubbed(:group)
+      expect(group.lottery_number).to be_nil
+    end
+    it 'returns the number of the lottery assignment' do
+      lottery = FactoryGirl.create(:lottery_assignment)
+      group = lottery.group
+      expect(group.lottery_number).to eq(lottery.number)
     end
   end
 end

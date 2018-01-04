@@ -8,7 +8,9 @@ RSpec.feature 'Draw start selection' do
   before do
     FactoryGirl.create(:college)
     log_in FactoryGirl.create(:admin)
-    draw.groups.each { |g| g.update(lottery_number: 1) }
+    draw.groups.each do |g|
+      FactoryGirl.create(:lottery_assignment, groups: [g], draw: draw)
+    end
   end
 
   it 'can be done' do

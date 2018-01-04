@@ -68,7 +68,6 @@ Rails.application.routes.draw do
       patch 'size_lock/:size', to: 'draws#toggle_size_lock',
                                as: 'toggle_size_lock'
       patch 'lock_all_sizes'
-      get 'lottery'
       patch 'start_selection'
       get 'results'
     end
@@ -80,9 +79,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :lottery_assignments, only: %i(update create index)
+
     resources :groups do
       member do
-        patch 'assign_lottery'
         post 'request', to: 'groups#request_to_join'
         put 'accept_request'
         get 'invite'

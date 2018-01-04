@@ -6,8 +6,8 @@ RSpec.describe NextGroupsQuery do
   let(:draw) { FactoryGirl.create(:draw_in_lottery, groups_count: 2) }
 
   before do
-    draw.groups.each_with_index do |group, i|
-      group.update(lottery_number: i + 1)
+    draw.groups.each do |group|
+      FactoryGirl.create(:lottery_assignment, :defined_by_group, group: group)
     end
   end
 
@@ -16,8 +16,9 @@ RSpec.describe NextGroupsQuery do
     expect(result).to match_array([draw.groups.first])
   end
 
-  it 'returns multiple groups if tied' do
-    draw.groups[1].update(lottery_number: 1)
+  xit 'returns multiple groups if clipped' do
+    # skipping until we implement clips
+    draw.groups[1].lottery_assignment.update(number: 1)
     result = described_class.call(draw: draw)
     expect(result).to match_array(draw.groups[0..1])
   end
@@ -30,10 +31,10 @@ RSpec.describe NextGroupsQuery do
     expect(result).to match_array([draw.groups[1]])
   end
 
-  it 'can be scoped by passing a relation' do
-    triple = triple_in_draw(draw: draw, lottery_number: 1)
+  it 'can be scoped by passing a size' do
+    triple = triple_in_draw(draw: draw)
     draw.groups << triple
-    result = described_class.new(Group.where(size: 3)).call(draw: draw)
+    result = described_class.call(size: 3, draw: draw)
     expect(result).to match_array([triple])
   end
 
@@ -45,14 +46,15 @@ RSpec.describe NextGroupsQuery do
   end
 
   it 'ignores groups with no lottery number' do
-    draw.groups.each { |g| g.update!(lottery_number: nil) }
+    draw.groups.each { |g| g.lottery_assignment.destroy }
     expect(described_class.call(draw: draw)).to match_array([])
   end
 
-  def triple_in_draw(draw:, lottery_number:)
+  def triple_in_draw(draw:)
     draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: 3)
-    leader = FactoryGirl.create(:student, intent: 'on_campus', draw_id: draw.id)
-    FactoryGirl.create(:locked_group, size: 3, lottery_number: lottery_number,
-                                      leader: leader)
+    FactoryGirl.create(:locked_group, :defined_by_draw,
+                       draw: draw, size: 3).tap do |g|
+      FactoryGirl.create(:lottery_assignment, draw: draw, groups: [g])
+    end
   end
 end

@@ -112,16 +112,6 @@ class GroupsController < ApplicationController
     handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
-  def assign_lottery
-    number = if group_params['lottery_number'].empty?
-               nil
-             else
-               group_params['lottery_number'].to_i
-             end
-    @group.lottery_number = number
-    @color_class = @group.save ? 'success' : 'failure'
-  end
-
   def make_drawless
     result = GroupDrawRemover.remove(group: @group)
     handle_action(action: 'show', **result)

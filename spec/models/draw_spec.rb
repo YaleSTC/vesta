@@ -8,6 +8,7 @@ RSpec.describe Draw, type: :model do
     it { is_expected.to have_many(:students) }
     it { is_expected.to have_many(:groups) }
     it { is_expected.to have_many(:draw_suites) }
+    it { is_expected.to have_many(:lottery_assignments) }
     it { is_expected.to have_many(:suites).through(:draw_suites) }
     it { is_expected.to validate_presence_of(:status) }
     it { is_expected.to validate_presence_of(:suite_selection_mode) }
@@ -125,8 +126,10 @@ RSpec.describe Draw, type: :model do
   describe '#bed_count' do
     it 'returns the number of beds across all available suites' do
       draw = FactoryGirl.create(:draw_with_members, suites_count: 2)
-      draw.suites.last.update(group_id: 123)
-      expect(draw.send(:bed_count)).to eq(draw.suites.first.size)
+      group = FactoryGirl.create(:locked_group, :defined_by_draw, draw: draw)
+      draw.suites.last.update(group: group)
+      available_beds = draw.suites.sum(&:size) - draw.suites.last.size
+      expect(draw.send(:bed_count)).to eq(available_beds)
     end
   end
 
@@ -314,7 +317,9 @@ RSpec.describe Draw, type: :model do
     let(:draw) { FactoryGirl.create(:draw_in_lottery) }
 
     it 'returns true if all groups have lottery numbers assigned' do
-      draw.groups.each { |g| g.update(lottery_number: 1) }
+      draw.groups.each do |g|
+        FactoryGirl.create(:lottery_assignment, :defined_by_group, group: g)
+      end
       expect(draw.lottery_complete?).to be_truthy
     end
     it 'returns false if some groups do have lottery numbers assigned' do

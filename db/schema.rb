@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170923235715) do
+ActiveRecord::Schema.define(version: 20171226003422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,9 +80,19 @@ ActiveRecord::Schema.define(version: 20170923235715) do
     t.datetime "updated_at", null: false
     t.integer "memberships_count", default: 0, null: false
     t.integer "transfers", default: 0, null: false
-    t.integer "lottery_number"
+    t.bigint "lottery_assignment_id"
     t.index ["draw_id"], name: "index_groups_on_draw_id"
     t.index ["leader_id"], name: "index_groups_on_leader_id"
+    t.index ["lottery_assignment_id"], name: "index_groups_on_lottery_assignment_id"
+  end
+
+  create_table "lottery_assignments", force: :cascade do |t|
+    t.bigint "draw_id"
+    t.integer "number", null: false
+    t.boolean "selected", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["draw_id"], name: "index_lottery_assignments_on_draw_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -148,5 +158,7 @@ ActiveRecord::Schema.define(version: 20170923235715) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "groups", "lottery_assignments"
+  add_foreign_key "lottery_assignments", "draws"
   add_foreign_key "users", "rooms"
 end

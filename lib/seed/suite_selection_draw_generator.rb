@@ -5,13 +5,14 @@ class SuiteSelectionDrawGenerator < LotteryDrawGenerator
   private
 
   def update_status
-    super
     assign_lottery_numbers
+    super
   end
 
   def assign_lottery_numbers
+    draw.update(status: 'lottery')
     draw.groups.each do |g|
-      g.update(lottery_number: (g.id / 2).round)
+      LotteryAssignment.create(groups: [g], draw: draw, number: g.id)
     end
   end
 

@@ -10,9 +10,9 @@ RSpec.describe ValidSuitesQuery do
   end
 
   it 'only returns available suites' do
-    FactoryGirl.create(:suite, group_id: 1)
+    taken = FactoryGirl.create(:group_with_suite).suite
     result = described_class.call
-    expect(result).to be_empty
+    expect(result).not_to include(taken)
   end
 
   it 'does not return medical suites' do

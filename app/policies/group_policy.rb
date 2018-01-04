@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Class for Group permissions
-class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
+class GroupPolicy < ApplicationPolicy
   def show?
     true
   end
@@ -74,10 +74,6 @@ class GroupPolicy < ApplicationPolicy # rubocop:disable ClassLength
 
   def unlock?
     user_has_uber_permission? && record.unlockable?
-  end
-
-  def assign_lottery?
-    record.locked? && (user.admin? || user.rep?)
   end
 
   def view_pending_members?

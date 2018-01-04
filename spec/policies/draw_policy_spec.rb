@@ -167,17 +167,6 @@ RSpec.describe DrawPolicy do
       end
     end
 
-    permissions :lottery? do
-      context 'draw is not in lottery phase' do
-        before { allow(draw).to receive(:lottery?).and_return(false) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-      context 'draw is in lottery phase' do
-        before { allow(draw).to receive(:lottery?).and_return(true) }
-        it { is_expected.to permit(user, draw) }
-      end
-    end
-
     permissions :reminder? do
       context 'draw is not in pre_lottery phase' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
@@ -349,17 +338,6 @@ RSpec.describe DrawPolicy do
       context 'when draw has no groups' do
         before { allow(draw).to receive(:groups).and_return([]) }
         it { is_expected.not_to permit(user, draw) }
-      end
-    end
-
-    permissions :lottery? do
-      context 'draw is not in lottery phase' do
-        before { allow(draw).to receive(:lottery?).and_return(false) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-      context 'draw is in lottery phase' do
-        before { allow(draw).to receive(:lottery?).and_return(true) }
-        it { is_expected.to permit(user, draw) }
       end
     end
 

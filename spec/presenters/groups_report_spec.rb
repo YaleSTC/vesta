@@ -45,8 +45,9 @@ RSpec.describe GroupsReport do
 
     describe '#without_rooms_count' do
       it 'returns the number of groups with suites assigned' do
-        groups # initialize the data: one group with a suite, one without
-        group_with_room(draw: groups.first.draw, size: groups.first.size)
+        # initialize the data: one group with a suite, one without
+        groups(with_count: 2, total_count: 3)
+        assign_room(group: groups.first)
         expect(described_class.new(groups).without_rooms_count).to eq(1)
       end
     end
@@ -75,24 +76,25 @@ RSpec.describe GroupsReport do
 
     # rubocop:disable RSpec/InstanceVariable
     # Creates one group with a suite and one group without a suite
-    def groups
+    def groups(with_count: 1, total_count: 2)
       return @groups if @groups
-      draw = FactoryGirl.create(:draw_in_selection, groups_count: 2)
-      group = draw.groups.first
-      group.update(suite: draw.suites.where(size: group.size).first)
+      draw = FactoryGirl.create(:draw_in_selection, groups_count: total_count)
+      with_count.times do |i|
+        group = draw.groups[i]
+        suite = draw.available_suites.where(size: group.size).first
+        group.update(suite: suite)
+      end
       @groups = draw.groups
     end
     # rubocop:enable RSpec/InstanceVariable
   end
 
   def group_in_draw(factory:, draw:, size:, **attrs)
-    FactoryGirl.create(factory,
-                       leader: FactoryGirl.create(:student, draw: draw),
-                       size: size, **attrs)
+    FactoryGirl.create(factory, :defined_by_draw, draw: draw, size: size,
+                                                  **attrs)
   end
 
-  def group_with_room(**attrs)
-    group = group_in_draw(factory: :group_with_suite, **attrs)
+  def assign_room(group:)
     group.leader.update(room: group.suite.rooms.first)
     group
   end

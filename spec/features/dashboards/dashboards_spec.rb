@@ -52,13 +52,13 @@ RSpec.feature 'Dashboards' do
     end
     context 'with suite no room' do
       it_behaves_like 'renders' do
-        let(:student) { FactoryGirl.create(:full_group, :with_suite).leader }
+        let(:student) { FactoryGirl.create(:group_with_suite).leader }
       end
     end
     context 'with room' do
       it_behaves_like 'renders' do
         let(:student) do
-          g = FactoryGirl.create(:full_group, :with_suite)
+          g = FactoryGirl.create(:group_with_suite)
           s = g.leader
           s.update(room: g.suite.rooms.first)
           s

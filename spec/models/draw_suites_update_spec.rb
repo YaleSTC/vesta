@@ -19,7 +19,7 @@ RSpec.describe DrawSuitesUpdate do
       end
       it 'does not remove suites with groups' do
         draw = FactoryGirl.create(:draw)
-        draw.suites << FactoryGirl.create(:suite_with_rooms, group_id: 123)
+        FactoryGirl.create(:group_with_suite, :defined_by_draw, draw: draw)
         params = mock_params(suite_ids_1: [])
         expect { described_class.update(draw: draw, params: params) }.to \
           change { draw.suites.count }.by(0)

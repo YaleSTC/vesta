@@ -88,10 +88,6 @@ class DrawPolicy < ApplicationPolicy
     edit?
   end
 
-  def lottery?
-    record.lottery? && (user.admin? || user.rep?)
-  end
-
   def start_selection?
     edit? && record.lottery?
   end

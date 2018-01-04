@@ -212,8 +212,8 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, group) }
       it { is_expected.not_to permit(user, other_group) }
     end
-    permissions :lock?, :unlock?, :advanced_edit?, :assign_lottery?,
-                :make_drawless?, :edit_room_assignment? do
+    permissions :lock?, :unlock?, :advanced_edit?, :make_drawless?,
+                :edit_room_assignment? do
       it { is_expected.not_to permit(user, other_group) }
       it { is_expected.not_to permit(user, group) }
     end
@@ -313,16 +313,6 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, group) }
       end
     end
-    permissions :assign_lottery? do
-      context 'group is locked' do
-        before { allow(group).to receive(:locked?).and_return(true) }
-        it { is_expected.to permit(user, group) }
-      end
-      context 'group is not locked' do
-        before { allow(group).to receive(:locked?).and_return(false) }
-        it { is_expected.not_to permit(user, group) }
-      end
-    end
     permissions :request_to_join?, :finalize_membership? do
       it { is_expected.not_to permit(user, group) }
     end
@@ -401,16 +391,6 @@ RSpec.describe GroupPolicy do
       end
       context 'not unlockable group' do
         before { allow(group).to receive(:unlockable?).and_return(false) }
-        it { is_expected.not_to permit(user, group) }
-      end
-    end
-    permissions :assign_lottery? do
-      context 'group is locked' do
-        before { allow(group).to receive(:locked?).and_return(true) }
-        it { is_expected.to permit(user, group) }
-      end
-      context 'group is not locked' do
-        before { allow(group).to receive(:locked?).and_return(false) }
         it { is_expected.not_to permit(user, group) }
       end
     end

@@ -30,6 +30,7 @@ class Suite < ApplicationRecord
   before_save :clear_room_ids, if: ->() { will_save_change_to_group_id? }
   before_save :remove_draw_from_medical_suites,
               if: ->() { will_save_change_to_medical? }
+  after_save :update_lottery_assignment, if: ->() { saved_change_to_group_id? }
 
   # Return the equivalent string for a given suite size
   #
@@ -131,5 +132,12 @@ class Suite < ApplicationRecord
     ActiveRecord::Base.transaction { draws.delete_all }
   rescue
     throw(:abort)
+  end
+
+  def update_lottery_assignment
+    g_id = saved_change_to_group_id.compact.first
+    lottery = Group.includes(:lottery_assignment).find(g_id).lottery_assignment
+    return unless lottery
+    lottery.update_selected!
   end
 end

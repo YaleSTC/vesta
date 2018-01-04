@@ -10,8 +10,8 @@
         <% if policy(SuiteAssignment.new(draw: @draw.__getobj__, groups: [])).new? %>
           <li><%= link_to 'Select suites', new_draw_suite_assignment_path(@draw), class: 'button' %></li>
         <% end %>
-        <% if policy(@draw).lottery? %>
-          <li><%= link_to 'Assign lottery numbers', lottery_draw_path(@draw), class: 'button' %></li>
+        <% if policy(LotteryAssignment.new(draw: @draw.__getobj__)).index? %>
+          <li><%= link_to 'Assign lottery numbers', draw_lottery_assignments_path(@draw), class: 'button' %></li>
         <% end %>
         <% if policy(Group).new? && policy(@draw).group_actions? %>
           <li><%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %></li>
