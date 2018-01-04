@@ -28,7 +28,8 @@ FactoryGirl.define do
     factory :full_group do
       size 2
       after(:build) do |g|
-        g.draw.suites << create(:suite_with_rooms, rooms_count: g.size)
+        suite = create(:suite_with_rooms, rooms_count: g.size)
+        g.draw.suites << suite if g.draw.present?
         (g.size - g.members.size).times do
           g.members << create(:student, draw: g.draw)
         end
@@ -36,7 +37,7 @@ FactoryGirl.define do
 
       factory :finalizing_group do
         after(:create) do |g|
-          g.draw.update(status: 'pre_lottery')
+          g.draw.update(status: 'pre_lottery') if g.draw&.draft?
           g.update(status: 'finalizing')
           g.leader.membership.update(locked: true)
         end
@@ -44,19 +45,26 @@ FactoryGirl.define do
 
       factory :locked_group do
         after(:create) do |g|
-          g.draw.update(status: 'pre_lottery')
+          g.draw.update(status: 'pre_lottery') if g.draw&.draft?
           g.update(status: 'finalizing')
           g.full_memberships.each { |m| m.update!(locked: true) }
           g.update(status: 'locked')
         end
-        factory :group_with_suite, traits: %i(with_suite)
-      end
-
-      trait :with_suite do
-        after(:create) do |g|
-          # ideally this gets the last suite added to the draw which SHOULD
-          # be the one created in the above after(:build) callback
-          g.draw.suites.last.update(group: g)
+        factory :group_with_suite do
+          transient do
+            suite nil
+          end
+          after(:create) do |g, e|
+            if g.draw.present?
+              g.draw.lottery!
+              FactoryGirl.create(:lottery_assignment, :defined_by_group,
+                                 group: g)
+            end
+            # ideally this gets the last suite added to the draw which SHOULD
+            # be the one created in the above after(:build) callback
+            suite_to_assign = e.suite ? e.suite : Suite.last
+            suite_to_assign.update(group: g)
+          end
         end
       end
     end
@@ -66,7 +74,9 @@ FactoryGirl.define do
       after(:build) do |g|
         g.draw.suites << create(:suite_with_rooms, rooms_count: g.size)
       end
-      after(:create) { |g| g.draw.update(status: 'pre_lottery') }
+      after(:create) do |g|
+        g.draw.update(status: 'pre_lottery') if g.draw.draft?
+      end
     end
 
     factory :drawless_group do

@@ -30,11 +30,9 @@ RSpec.describe Suite, type: :model do
   context 'scopes' do
     describe '.available' do
       it 'returns all suites not assigned to groups' do
-        suite1 = FactoryGirl.create(:suite, number: 'def')
-        suite2 = FactoryGirl.create(:suite, number: 'abc')
-        FactoryGirl.create(:suite, group_id: 1234)
-        expect(described_class.available.map(&:id)).to \
-          eq([suite1.id, suite2.id])
+        available = FactoryGirl.create(:suite)
+        FactoryGirl.create(:group_with_suite, :defined_by_draw, draw: nil)
+        expect(described_class.available).to eq([available])
       end
     end
   end

@@ -133,7 +133,7 @@ RSpec.describe Draw, type: :model do
   describe '#available_suites' do
     it 'returns suites without associated groups' do
       available = FactoryGirl.create(:suite)
-      taken = FactoryGirl.create(:locked_group, :with_suite).suite
+      taken = FactoryGirl.create(:group_with_suite).suite
       draw = FactoryGirl.create(:draw, suites: [available, taken])
       expect(draw.available_suites).to eq([available])
     end

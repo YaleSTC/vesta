@@ -40,7 +40,7 @@ RSpec.describe RoomAssignment do
       expect(ra).to have_received(:prepare).with(params).at_least(1)
     end
     it 'updates each member with the appropriate room id' do
-      group = FactoryGirl.create(:locked_group, :with_suite, size: 1)
+      group = FactoryGirl.create(:group_with_suite, size: 1)
       ra = described_class.new(group: group)
       params = mock_params(group.leader.id => group.suite.rooms.first.id)
       expect { ra.assign(params) }.to change { group.leader.reload.room }

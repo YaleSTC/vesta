@@ -50,7 +50,7 @@ RSpec.describe DrawReport do
   describe '#suite_counts' do
     it 'returns the number of available suites grouped by size ' do
       size = 2
-      draw = FactoryGirl.create(:full_group, :with_suite, size: size).draw
+      draw = FactoryGirl.create(:group_with_suite, size: size).draw
       FactoryGirl.create(:suite_with_rooms, rooms_count: size, draws: [draw])
       # 1 => 1 created during draw creation
       expect(described_class.new(draw).suite_counts).to eq(size => 1, 1 => 1)
@@ -61,7 +61,7 @@ RSpec.describe DrawReport do
     # rubocop:disable RSpec/ExampleLength
     it 'excludes non-valid suites' do
       size = 2
-      draw = FactoryGirl.create(:full_group, :with_suite, size: size).draw
+      draw = FactoryGirl.create(:group_with_suite, size: size).draw
       create_invalid_suites(draw: draw, size: size)
       valid_suite = FactoryGirl.create(:suite_with_rooms, rooms_count: size,
                                                           draws: [draw])
