@@ -27,8 +27,9 @@ class Suite < ApplicationRecord
 
   scope :available, -> { where(group_id: nil) }
 
-  before_save :clear_room_ids, ->(s) { s.group_id_changed? }
-  before_save :remove_draw_from_medical_suites, ->(s) { s.medical_changed? }
+  before_save :clear_room_ids, if: ->() { will_save_change_to_group_id? }
+  before_save :remove_draw_from_medical_suites,
+              if: ->() { will_save_change_to_medical? }
 
   # Return the equivalent string for a given suite size
   #
@@ -118,7 +119,7 @@ class Suite < ApplicationRecord
   private
 
   def clear_room_ids
-    id_array = [group_id, group_id_was].compact
+    id_array = group_id_change_to_be_saved.compact
     members = User.includes(:group).where(groups: { id: id_array })
     ActiveRecord::Base.transaction { members.update(room_id: nil) }
   rescue
