@@ -11,7 +11,8 @@
 #   was in. Is an empty string unless the room belongs to a merged suite.
 class Room < ApplicationRecord
   belongs_to :suite
-  has_many :users, dependent: :nullify
+  has_many :room_assignments, dependent: :destroy
+  has_many :users, through: :room_assignments
 
   validates :suite, presence: true
   validates :number, presence: true, allow_blank: false,

@@ -27,7 +27,8 @@ class Suite < ApplicationRecord
 
   scope :available, -> { where(group_id: nil) }
 
-  before_save :clear_room_ids, if: ->() { will_save_change_to_group_id? }
+  before_save :remove_room_assignments,
+              if: ->() { will_save_change_to_group_id? }
   before_save :remove_draw_from_medical_suites,
               if: ->() { will_save_change_to_medical? }
   after_save :update_lottery_assignment, if: ->() { saved_change_to_group_id? }
@@ -119,10 +120,8 @@ class Suite < ApplicationRecord
 
   private
 
-  def clear_room_ids
-    id_array = group_id_change_to_be_saved.compact
-    members = User.includes(:group).where(groups: { id: id_array })
-    ActiveRecord::Base.transaction { members.update(room_id: nil) }
+  def remove_room_assignments
+    rooms.map(&:room_assignments).map(&:destroy_all)
   rescue
     throw(:abort)
   end

@@ -1,6 +1,6 @@
 <% provide(:title, "#{@group.name} - Assign Rooms") %>
 <h1><%= @group.name %> - Assign Rooms</h1>
-<%= simple_form_for @room_assignment, url: confirm_group_room_assignment_path(@group), method: :get do |f| %>
+<%= simple_form_for @room_assignment_form, url: confirm_group_room_assignment_path(@group), method: :get do |f| %>
   <%= render 'form_fields', group: @group, f: f %>
   <%= f.submit 'Proceed to confirmation', **with_tooltip(text: 'You will have an opportunity to review the room assignments before submitting.') %>
 <% end %>

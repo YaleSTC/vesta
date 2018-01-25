@@ -60,7 +60,7 @@ RSpec.feature 'Dashboards' do
         let(:student) do
           g = FactoryGirl.create(:group_with_suite)
           s = g.leader
-          s.update(room: g.suite.rooms.first)
+          RoomAssignment.create!(room: g.suite.rooms.first, user: s.reload)
           s
         end
       end

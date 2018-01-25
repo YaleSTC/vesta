@@ -267,7 +267,11 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   end
 
   def remove_member_rooms
-    ActiveRecord::Base.transaction { members.update(room_id: nil) }
+    ActiveRecord::Base.transaction do
+      members.each do |member|
+        member.room_assignment.destroy! if member.room_assignment.present?
+      end
+    end
   rescue
     throw(:abort)
   end

@@ -47,7 +47,8 @@ RSpec.describe GroupsReport do
       it 'returns the number of groups with suites assigned' do
         # initialize the data: one group with a suite, one without
         groups(with_count: 2, total_count: 3)
-        assign_room(group: groups.first)
+        RoomAssignment.create!(user: groups.first.leader,
+                               room: groups.first.suite.rooms.first)
         expect(described_class.new(groups).without_rooms_count).to eq(1)
       end
     end
@@ -92,10 +93,5 @@ RSpec.describe GroupsReport do
   def group_in_draw(factory:, draw:, size:, **attrs)
     FactoryGirl.create(factory, :defined_by_draw, draw: draw, size: size,
                                                   **attrs)
-  end
-
-  def assign_room(group:)
-    group.leader.update(room: group.suite.rooms.first)
-    group
   end
 end

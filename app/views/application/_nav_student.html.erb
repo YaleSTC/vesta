@@ -19,7 +19,7 @@
       <% if policy(Clip.new(draw: current_user.draw)).new? %>
         <li><%= link_to 'Create a clip', new_draw_clip_path(current_user.draw) %></li>
       <% end %>
-      <% if policy(current_user.group).assign_rooms? %>
+      <% if policy(RoomAssignment.from_group(current_user.group)).new? %>
         <li><%= link_to 'Assign Rooms', new_group_room_assignment_path(current_user.group) %></li>
       <% end %>
       <% if policy(current_user.group).select_suite? %>
@@ -27,7 +27,7 @@
       <% end %>
     <% else %>
       <li><%= link_to 'My Group', group_path(current_user.group) %></li>
-      <% if policy(current_user.group).assign_rooms? %>
+      <% if policy(RoomAssignment.from_group(current_user.group)).new? %>
         <li><%= link_to 'Assign Rooms', new_group_room_assignment_path(current_user.group) %></li>
       <% end %>
     <% end %>

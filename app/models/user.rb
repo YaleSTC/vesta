@@ -42,8 +42,8 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :membership
   has_one :group, through: :membership
   has_many :memberships, dependent: :destroy
-
-  belongs_to :room
+  has_one :room_assignment
+  has_one :room, through: :room_assignment
 
   delegate :name, to: :draw, prefix: :draw, allow_nil: true
   delegate :name, to: :group, prefix: :group, allow_nil: true
@@ -60,7 +60,6 @@ class User < ApplicationRecord
   validates :intent, presence: true
   validates :class_year, presence: true,
                          if: ->() { role == 'student' || role == 'rep' }
-  validate :room_in_suite, if: ->() { group.present? && group.suite.present? }
 
   enum role: %w(student admin rep superuser)
   enum intent: %w(undeclared on_campus off_campus)
@@ -171,11 +170,6 @@ class User < ApplicationRecord
 
   def cas_auth?
     User.cas_auth?
-  end
-
-  def room_in_suite
-    return if !room || room.suite_id == group.suite.id
-    errors.add(:room, "room must be in the user's group's suite.")
   end
 
   def freeze_tos_acceptance

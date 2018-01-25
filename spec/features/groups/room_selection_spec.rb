@@ -21,7 +21,7 @@ RSpec.feature 'Room Selection' do
     context 'assignment editing' do
       before do
         group.members.each_with_index do |m, i|
-          m.update(room_id: group.suite.rooms[i].id)
+          RoomAssignment.create!(user: m.reload, room: group.suite.rooms[i])
         end
       end
 
@@ -45,18 +45,18 @@ RSpec.feature 'Room Selection' do
 
   def assign_rooms_to_members(rs, ms)
     select rs.first.number_with_type,
-           from: "room_assignment_room_id_for_#{ms.first.id}"
+           from: "room_assignment_form_room_id_for_#{ms.first.id}"
     select rs.last.number_with_type,
-           from: "room_assignment_room_id_for_#{ms.last.id}"
+           from: "room_assignment_form_room_id_for_#{ms.last.id}"
     click_on 'Proceed to confirmation'
     click_on 'Confirm room assignments'
   end
 
   def update_room_assignments(rs, ms)
     select rs.last.number_with_type,
-           from: "room_assignment_room_id_for_#{ms.first.id}"
+           from: "room_assignment_form_room_id_for_#{ms.first.id}"
     select rs.first.number_with_type,
-           from: "room_assignment_room_id_for_#{ms.last.id}"
+           from: "room_assignment_form_room_id_for_#{ms.last.id}"
     click_on 'Update room assignments'
   end
 end

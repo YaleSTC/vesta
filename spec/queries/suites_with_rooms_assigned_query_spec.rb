@@ -34,7 +34,8 @@ RSpec.describe SuitesWithRoomsAssignedQuery do
     group = FactoryGirl.create(:drawless_group, size: size)
     suite.update!(group_id: group.id)
     group.members.each_with_index do |student, i|
-      student.update!(room_id: suite.rooms[i].id)
+      RoomAssignment.create!(user: student.reload,
+                             room_id: suite.rooms[i].id)
     end
     suite
   end

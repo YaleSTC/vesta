@@ -7,8 +7,10 @@ class ResultsController < ApplicationController
   end
 
   def students
-    @students = User.includes(room: :suite).where(role: %w(student rep))
-                    .where.not(room_id: nil).order(:last_name)
+    @students = User.includes(room: :suite)
+                    .where(role: %w(student rep))
+                    .where.not(room_assignments: { room_id: nil })
+                    .order(:last_name)
   end
 
   def export

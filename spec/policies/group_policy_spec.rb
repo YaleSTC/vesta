@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable RSpec/ScatteredSetup, RSpec/RepeatedExample
-# rubocop:disable RSpec/NestedGroups
+# rubocop:disable RSpec/NestedGroups, RSpec/RepeatedExample
 
 require 'rails_helper'
 
@@ -236,18 +235,7 @@ RSpec.describe GroupPolicy do
         end
       end
     end
-    permissions :assign_rooms? do
-      before do
-        suite = instance_spy('suite', present?: true)
-        allow(group).to receive(:suite).and_return(suite)
-        allow(user).to receive(:group).and_return(group)
-        allow(user).to receive(:room_id).and_return(nil)
-      end
-      it { is_expected.to permit(user, group) }
-      it { is_expected.not_to permit(user, other_group) }
-    end
-    permissions :lock?, :unlock?, :advanced_edit?, :make_drawless?,
-                :edit_room_assignment? do
+    permissions :lock?, :unlock?, :advanced_edit?, :make_drawless? do
       it { is_expected.not_to permit(user, other_group) }
       it { is_expected.not_to permit(user, group) }
     end
@@ -378,22 +366,6 @@ RSpec.describe GroupPolicy do
         end
       end
     end
-    permissions :assign_rooms? do
-      before do
-        suite = instance_spy('suite', present?: true)
-        allow(group).to receive(:suite).and_return(suite)
-        leader = instance_spy('user', room_id: nil)
-        allow(group).to receive(:leader).and_return(leader)
-      end
-      it { is_expected.to permit(user, group) }
-    end
-    permissions :edit_room_assignment? do
-      before do
-        leader = instance_spy('user', room_id: 123)
-        allow(group).to receive(:leader).and_return(leader)
-      end
-      it { is_expected.not_to permit(user, group) }
-    end
   end
 
   context 'admin' do
@@ -482,22 +454,6 @@ RSpec.describe GroupPolicy do
           end
         end
       end
-    end
-    permissions :assign_rooms? do
-      before do
-        suite = instance_spy('suite', present?: true)
-        allow(group).to receive(:suite).and_return(suite)
-        leader = instance_spy('user', room_id: nil)
-        allow(group).to receive(:leader).and_return(leader)
-      end
-      it { is_expected.to permit(user, group) }
-    end
-    permissions :edit_room_assignment? do
-      before do
-        leader = instance_spy('user', room_id: 123)
-        allow(group).to receive(:leader).and_return(leader)
-      end
-      it { is_expected.to permit(user, group) }
     end
   end
 end

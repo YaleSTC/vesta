@@ -75,10 +75,10 @@
       <%= f.submit 'Remove suite' %>
     <% end %>
   <% end %>
-  <% if policy(@group).assign_rooms? %>
+  <% if policy(RoomAssignment.from_group(@group)).new? %>
     <%= link_to 'Assign rooms', new_group_room_assignment_path(@group), class: 'button' %>
   <% end %>
-  <% if policy(@group).edit_room_assignment? %>
+  <% if policy(RoomAssignment.from_group(@group)).edit? %>
     <%= link_to 'Edit room assignments', edit_group_room_assignment_path(@group), class: 'button' %>
   <% end %>
   <% if policy(@group).make_drawless? %>

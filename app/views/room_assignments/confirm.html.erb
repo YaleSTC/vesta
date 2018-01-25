@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @room_assignment.assignment_hash.each do |room, members| %>
+    <% @room_assignment_form.assignment_hash.each do |room, members| %>
       <tr>
         <th scope="row"><%= room.number %></th>
         <td><%= members.map(&:full_name).join(', ') %></td>
@@ -16,7 +16,7 @@
     <% end %>
   </tbody>
 </table>
-<%= simple_form_for @room_assignment, url: group_room_assignment_path(@group) do |f| %>
+<%= simple_form_for @room_assignment_form, url: group_room_assignment_path(@group) do |f| %>
   <% @group.members.each do |m| %>
     <%= f.input "room_id_for_#{m.id}".to_sym, as: :hidden %>
   <% end %>

@@ -130,7 +130,7 @@ Rails.application.routes.draw do
       put 'unlock'
     end
     resource :suite_assignment, only: %i(new create destroy)
-    resource :room_assignment, only: %i(new create edit) do
+    resource :room_assignment, only: %i(new create edit update) do
       collection do
         get 'confirm'
       end
