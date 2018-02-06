@@ -15,7 +15,7 @@ RSpec.feature 'Draw lottery assignment', js: true do
 
     it 'can be performed' do # rubocop:disable RSpec/ExampleLength
       visit draw_path(draw)
-      click_on 'Assign lottery numbers'
+      click_on 'Manually assign lottery numbers'
       assign_lottery_number(object: clip, number: 1)
       assign_lottery_number(object: group, number: 2)
       reload

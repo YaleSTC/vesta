@@ -80,7 +80,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :lottery_assignments, only: %i(update create index)
+    resources :lottery_assignments, only: %i(update create index) do
+      collection do
+        post 'automatic'
+      end
+    end
 
     resources :groups do
       member do

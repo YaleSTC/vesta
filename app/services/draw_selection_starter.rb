@@ -27,19 +27,35 @@ class DrawSelectionStarter
   #   message to set in the flash and either `nil` or the modified object.
   def start
     return error(self) unless valid?
-    draw.update!(status: 'suite_selection')
-    notify_first_groups
-    success
+    run!
   rescue ActiveRecord::RecordInvalid => e
     error(e)
   end
 
   make_callable :start
 
+  # Start the suite selection phase of a Draw and notify the first group(s) to
+  # select. Same as #start, but does not rescue internal exceptions.
+  #
+  # @return [Hash{Symbol=>ApplicationRecord,Hash}] A results hash with the
+  #   message to set in the flash and either `nil` or the modified object.
+  def start!
+    validate!
+    run!
+  end
+
+  make_callable :start!
+
   private
 
   attr_reader :mailer, :college
   attr_accessor :draw
+
+  def run!
+    draw.update!(status: 'suite_selection')
+    notify_first_groups
+    success
+  end
 
   def draw_in_lottery_phase
     return if draw.nil? || draw.lottery?

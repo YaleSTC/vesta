@@ -11,7 +11,14 @@
           <li><%= link_to 'Select suites', new_draw_suite_assignment_path(@draw), class: 'button' %></li>
         <% end %>
         <% if policy(LotteryAssignment.new(draw: @draw.__getobj__)).index? %>
-          <li><%= link_to 'Assign lottery numbers', draw_lottery_assignments_path(@draw), class: 'button' %></li>
+          <li><%= link_to 'Manually assign lottery numbers', draw_lottery_assignments_path(@draw), class: 'button' %></li>
+        <% end %>
+        <% if policy(LotteryAssignment.new(draw: @draw.__getobj__)).automatic? %>
+          <%= link_to 'Automatically assign lottery numbers',
+            automatic_draw_lottery_assignments_path(@draw),
+            method: :post,
+            data: { confirm: 'This will randomly assign lottery numbers to all groups and clips. They cannot be altered after being set and the draw will proceed to the suite selection phase. Are you sure you want to continue?' },
+            class: 'button' %>
         <% end %>
         <% if policy(Group).new? && policy(@draw).group_actions? %>
           <li><%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %></li>

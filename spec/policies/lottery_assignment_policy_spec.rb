@@ -10,7 +10,7 @@ RSpec.describe LotteryAssignmentPolicy do
     let(:draw) { FactoryGirl.build_stubbed(:draw, status: 'lottery') }
     let(:lottery) { LotteryAssignment.new(draw: draw) }
 
-    permissions :index?, :create?, :update? do
+    permissions :index?, :create?, :update?, :automatic? do
       it { is_expected.not_to permit(user, lottery) }
     end
   end
@@ -18,17 +18,23 @@ RSpec.describe LotteryAssignmentPolicy do
   context 'rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
 
-    permissions :index?, :create?, :update? do
-      context 'draw in lottery' do
-        let(:draw) { FactoryGirl.build_stubbed(:draw, status: 'lottery') }
-        let(:lottery) { LotteryAssignment.new(draw: draw) }
+    context 'draw in lottery' do
+      let(:draw) { FactoryGirl.build_stubbed(:draw, status: 'lottery') }
+      let(:lottery) { LotteryAssignment.new(draw: draw) }
 
+      permissions :index?, :create?, :update? do
         it { is_expected.to permit(user, lottery) }
       end
-      context 'draw not in lottery' do
-        let(:draw) { FactoryGirl.build_stubbed(:draw, status: 'pre_lottery') }
-        let(:lottery) { LotteryAssignment.new(draw: draw) }
 
+      permissions :automatic? do
+        it { is_expected.not_to permit(user, lottery) }
+      end
+    end
+    context 'draw not in lottery' do
+      let(:draw) { FactoryGirl.build_stubbed(:draw, status: 'pre_lottery') }
+      let(:lottery) { LotteryAssignment.new(draw: draw) }
+
+      permissions :index?, :create?, :update?, :automatic? do
         it { is_expected.not_to permit(user, lottery) }
       end
     end
@@ -37,7 +43,7 @@ RSpec.describe LotteryAssignmentPolicy do
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
 
-    permissions :index?, :create?, :update? do
+    permissions :index?, :create?, :update?, :automatic? do
       context 'draw in lottery' do
         let(:draw) { FactoryGirl.build_stubbed(:draw, status: 'lottery') }
         let(:lottery) { LotteryAssignment.new(draw: draw) }

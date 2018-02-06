@@ -52,6 +52,25 @@ RSpec.describe DrawSelectionStarter do
     end
   end
 
+  describe '#start!' do
+    it 'raises ActiveModel::ValidationError on validation failure' do
+      draw = instance_spy('draw', lottery_complete?: false)
+      expect { described_class.start!(draw: draw) }.to \
+        raise_error(ActiveModel::ValidationError)
+    end
+    it 'raises ActiveRecord::RecordInvalid on update failure' do
+      draw = instance_spy('draw', validity_stubs(valid: true))
+      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
+      allow(draw).to receive(:update!).and_raise(error)
+      expect { described_class.start!(draw: draw) }.to raise_error(error)
+    end
+    it 'returns the updated draw on success' do
+      draw = instance_spy('draw', validity_stubs(valid: true))
+      result = described_class.start!(draw: draw)
+      expect(result[:redirect_object]).to eq(draw)
+    end
+  end
+
   def mock_draw_selection_starter(param_hash)
     instance_spy('draw_selection_starter').tap do |draw_selection_starter|
       allow(described_class).to receive(:new).with(param_hash)

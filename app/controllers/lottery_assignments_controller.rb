@@ -25,6 +25,11 @@ class LotteryAssignmentsController < ApplicationController
     @color_class = result[:msg].keys.first.to_s
   end
 
+  def automatic
+    result = RandomLottery.run(draw: @draw)
+    handle_action(**result, action: 'index')
+  end
+
   private
 
   def lottery_assignment_params

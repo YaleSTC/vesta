@@ -13,4 +13,8 @@ class LotteryAssignmentPolicy < ApplicationPolicy
   def update?
     create?
   end
+
+  def automatic?
+    user.admin? && record.draw.lottery?
+  end
 end
