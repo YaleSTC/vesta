@@ -161,7 +161,10 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def prune_params
-    params.permit(:id, :prune_size)
+    {
+      id: params.fetch(:id, ''),
+      prune_size: params.fetch(:prune_size, '')
+    }
   end
 
   def set_draw
