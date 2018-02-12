@@ -19,7 +19,6 @@ All notable changes to this project will be documented in this file.
 * Make error handling more consistent across service objects ([#602](https://yale.githost.io/sdmp/rails/vesta/issues/602))
 * Clean up ReminderQueuer ([#625](https://yale.githost.io/sdmp/rails/vesta/issues/625))
 * Rename the 'full' status to 'closed' ([#240](https://yale.githost.io/sdmp/rails/vesta/issues/240))
-* Configure JS ([#636](https://yale.githost.io/sdmp/rails/vesta/issues/636))
 * Move DrawSuite actions to DrawSuites controller ([#199](https://yale.githost.io/sdmp/rails/vesta/issues/199))
 * Switch :try with :& ([#217](https://yale.githost.io/sdmp/rails/vesta/issues/217))
 * Create query objects for queries in Draw Report ([#626](https://yale.githost.io/sdmp/rails/vesta/issues/626))

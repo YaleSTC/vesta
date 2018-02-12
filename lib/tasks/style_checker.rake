@@ -2,8 +2,6 @@
 
 RUBY = /\.(rb)|(rake)$/
 RUBY_PASS = %w(true no\ offenses files\ found).freeze
-JS = /\.jsx?$/
-JS_PASS = %w(true files\ found).freeze
 
 EXISTING_FILES = /^[^D].*/
 FILE = /^[A-Z].*\t(.*)$/
@@ -15,8 +13,6 @@ task :check_style do
   puts diff_output
   puts "\nRunning rubocop..."
   puts check_ruby
-  puts "\nRunning eslint..."
-  puts check_js
   exit evaluate
 end
 
@@ -34,10 +30,6 @@ def check_ruby
   @ruby_results ||= check(type: 'ruby', regex: RUBY, checker: :rubocop)
 end
 
-def check_js
-  @js_results ||= check(type: 'javascript', regex: JS, checker: :eslint)
-end
-
 def evaluate
   return 0 if passed?
   1
@@ -49,10 +41,6 @@ end
 
 def rubocop(files)
   "rubocop -D --force-exclusion #{files}"
-end
-
-def eslint(files)
-  "./node_modules/.bin/eslint #{files}"
 end
 
 def diff
