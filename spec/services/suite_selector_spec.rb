@@ -62,6 +62,18 @@ RSpec.describe SuiteSelector do
         described_class.select(group: group, suite_id: suite.id.to_s)
         expect(suite).to have_received(:update!).with(group: group)
       end
+      it 'sets the room if the suite is of size 1' do
+        group = create(:locked_group, size: 1)
+        suite = create(:suite_with_rooms, rooms_count: 1)
+        described_class.select(group: group, suite_id: suite.id.to_s)
+        expect(group.reload.members.first.room).to eq(suite.rooms.first)
+      end
+      it 'does not set the room if the suite is of size >1' do
+        group = create(:locked_group, size: 2)
+        suite = create(:suite_with_rooms, rooms_count: 2)
+        described_class.select(group: group, suite_id: suite.id.to_s)
+        expect(group.reload.members.first.room).to eq(nil)
+      end
       it 'sets a success message in the flash' do
         group = instance_spy('group', suite: nil)
         suite = mock_suite(id: 123)

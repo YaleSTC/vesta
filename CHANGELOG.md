@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 * Allow new students to be added to group when increasing group size ([#556](https://yale.githost.io/sdmp/rails/vesta/issues/556))
 * Refactor suite import to properly set room names and flag medical suites ([#658](https://gitlab.com/yale-sdmp/vesta/issues/658)).
 * Add an "Allow Clipping" option for draws ([#716](https://yale.githost.io/sdmp/rails/vesta/issues/716)).
+* Add automatic room assignment for students assigned to singles ([#703](https://gitlab.com/yale-sdmp/vesta/issues/703)).
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).

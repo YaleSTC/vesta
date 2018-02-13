@@ -32,6 +32,7 @@ class SuiteSelector
   def select
     return error(self) unless valid?
     suite.update!(group: group)
+    assign_single! if suite.size == 1
     success
   rescue ActiveRecord::RecordInvalid => e
     error(e)
@@ -65,6 +66,11 @@ class SuiteSelector
     return unless suite
     return unless suite.group_id.present?
     errors.add(:suite, 'is assigned to a different group')
+  end
+
+  def assign_single!
+    room = suite.rooms.where(beds: 1).first
+    group.leader.update!(room_id: room.id)
   end
 
   def success
