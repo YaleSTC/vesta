@@ -17,9 +17,7 @@
   before_script:
     - ruby -v
     - which ruby
-    - node -v
     - gem install bundler --no-ri --no-rdoc
-    - yarn install
 
   cache:
     paths:

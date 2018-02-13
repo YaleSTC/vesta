@@ -48,7 +48,6 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
-* Install React.js and Webpacker ([#623](https://yale.githost.io/sdmp/rails/vesta/issues/623)).
 * Add superuser role ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642)).
 * Add superuser dashboard ([#604](https://yale.githost.io/sdmp/rails/vesta/issues/604)).
 * Allow admins to automatically resolve oversubscription ([#195](https://gitlab.com/yale-sdmp/vesta/issues/195), [#697](https://gitlab.com/yale-sdmp/vesta/issues/697)).
