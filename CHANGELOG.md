@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 * Correct housing sidebar counts ([#629](https://yale.githost.io/sdmp/rails/vesta/issues/629)).
 * Fix issues with seed script ([#657](https://yale.githost.io/sdmp/rails/vesta/issues/657)).
 * Update security vulnerability in YARD ([#682](https://yale.githost.io/sdmp/rails/vesta/issues/682)).
+* Fix searching for users in admin dashboard ([#699](https://gitlab.com/yale-sdmp/vesta/issues/699)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).

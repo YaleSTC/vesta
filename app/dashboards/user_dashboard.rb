@@ -19,7 +19,7 @@ class UserDashboard < Administrate::BaseDashboard
     room: Field::BelongsTo,
     id: Field::Number,
     email: Field::String,
-    password: Field::String,
+    password: Field::String.with_options(searchable: false),
     role: Field::String.with_options(searchable: false),
     first_name: Field::String,
     last_name: Field::String,
