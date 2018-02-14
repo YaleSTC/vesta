@@ -1,0 +1,4 @@
+<p>Hi <%= @user.name %>,</p>
+<p>The lottery process for your draw has been completed and your group has been assigned a lottery number of <%= @number %>, which is <%= @rank_str %>. The suite selection phase will begin now.</p>
+<p>Please e-mail <%= admin_mail_link(@college) %> if you have any questions.</p>
+<p>Sincerely,<br /><%= @college.dean %></p>

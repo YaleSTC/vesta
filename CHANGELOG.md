@@ -62,6 +62,7 @@ All notable changes to this project will be documented in this file.
 * Allow admins to automatically resolve oversubscription ([#195](https://gitlab.com/yale-sdmp/vesta/issues/195), [#697](https://gitlab.com/yale-sdmp/vesta/issues/697), [#698](https://gitlab.com/yale-sdmp/vesta/issues/698)).
 * Add multi-tenancy ([#641](https://gitlab.com/yale-sdmp/vesta/issues/641)).
 * Add securely random automatic lottery number generation ([#361](https://gitlab.com/yale-sdmp/vesta/issues/361), [#698](https://gitlab.com/yale-sdmp/vesta/issues/698)).
+* Add an e-mail to all on-campus students notifying them of their lottery number ([#702](https://gitlab.com/yale-sdmp/vesta/issues/702)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed

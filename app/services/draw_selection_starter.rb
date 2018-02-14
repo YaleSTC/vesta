@@ -53,6 +53,7 @@ class DrawSelectionStarter
 
   def run!
     draw.update!(status: 'suite_selection')
+    notify_all_students
     notify_first_groups
     success
   end
@@ -65,6 +66,13 @@ class DrawSelectionStarter
   def lottery_complete
     return if draw.nil? || draw.lottery_complete?
     errors.add(:base, 'All groups must have lottery numbers assigned')
+  end
+
+  def notify_all_students
+    students = draw.students.on_campus
+    students.each do |s|
+      mailer.lottery_notification(user: s, college: college).deliver_later
+    end
   end
 
   def notify_first_groups

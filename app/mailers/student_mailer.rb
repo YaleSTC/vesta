@@ -109,6 +109,20 @@ class StudentMailer < ApplicationMailer
          reply_to: @college.admin_email)
   end
 
+  # Send an e-mail notifying the student that their lottery number has been
+  # assigned
+  #
+  # @param user [User] the student to send the notification to
+  # @param college [College] the college to pull settings from
+  def lottery_notification(user:, college:)
+    @user = user
+    determine_college(college)
+    @number = @user.group.lottery_number
+    @rank_str = determine_rank_str
+    subject = 'Your group has been assigned a lottery number'
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
+  end
+
   private
 
   def determine_college(college)
@@ -126,5 +140,18 @@ class StudentMailer < ApplicationMailer
     else
       group_url(user.group, host: @college.host)
     end
+  end
+
+  def determine_rank_str
+    count = lottery_numbers.length
+    rank = lottery_numbers.index(@number) + 1
+    "\##{rank} out of #{count} #{'group'.pluralize(count)} of size "\
+      "#{@user.group.size}"
+  end
+
+  def lottery_numbers
+    @lottery_numbers ||=
+      @user.draw.groups.includes(:lottery_assignment)
+           .where(size: @user.group.size).map(&:lottery_number).sort
   end
 end

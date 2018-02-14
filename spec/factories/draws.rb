@@ -35,6 +35,12 @@ FactoryGirl.define do
             l = FactoryGirl.create(:student, draw: draw, intent: 'on_campus')
             FactoryGirl.create(:locked_group, size: suite.size, leader: l)
           end
+          # clean-up to ensure we only have valid students
+          draw.students.each do |s|
+            unless s.off_campus? || (s.on_campus? && s.group.present?)
+              s.destroy!
+            end
+          end
           draw.update(status: 'lottery')
         end
       end
@@ -42,6 +48,12 @@ FactoryGirl.define do
       factory :draw_in_selection do
         after(:create) do |draw, e|
           suites = create_list(:suite_with_rooms, e.groups_count, draws: [draw])
+          # clean-up to ensure we only have valid students
+          draw.students.each do |s|
+            unless s.off_campus? || (s.on_campus? && s.group.present?)
+              s.destroy!
+            end
+          end
           draw.update(status: 'lottery')
           suites.each do |suite|
             l = FactoryGirl.create(:student, draw: draw, intent: 'on_campus')
