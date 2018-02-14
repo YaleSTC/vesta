@@ -11,6 +11,6 @@ class DrawSuitePolicy < ApplicationPolicy
   end
 
   def update_collection?
-    user_has_uber_permission?
+    user_has_uber_permission? && record.draw.before_lottery?
   end
 end

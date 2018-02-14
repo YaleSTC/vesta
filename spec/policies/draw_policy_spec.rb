@@ -245,9 +245,19 @@ RSpec.describe DrawPolicy do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
 
     permissions :show?, :edit?, :update?, :destroy?, :intent_report?,
-                :filter_intent_report?, :student_summary?, :students_update?,
-                :toggle_size_lock?, :lock_all_sizes? do
+                :filter_intent_report?, :student_summary?, :toggle_size_lock?,
+                :lock_all_sizes? do
       it { is_expected.to permit(user, draw) }
+    end
+    permissions :students_update? do
+      context 'draw not before lottery?' do
+        before { allow(draw).to receive(:before_lottery?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw before lottery?' do
+        before { allow(draw).to receive(:before_lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
     end
     permissions :index?, :new?, :create? do
       it { is_expected.to permit(user, Draw) }

@@ -27,7 +27,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def students_update?
-    edit?
+    student_summary? && record.before_lottery?
   end
 
   def group_actions?

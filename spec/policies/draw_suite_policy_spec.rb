@@ -35,16 +35,48 @@ RSpec.describe DrawSuitePolicy do
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
 
-    permissions :index?, :edit_collection?, :update_collection? do
+    permissions :index? do
       it { is_expected.to permit(user, draw_suite) }
+    end
+    permissions :edit_collection?, :update_collection? do
+      context 'draw not before lottery' do
+        before do
+          draw = instance_spy('draw', before_lottery?: false)
+          allow(draw_suite).to receive(:draw).and_return(draw)
+        end
+        it { is_expected.not_to permit(user, draw_suite) }
+      end
+      context 'draw before lottery' do
+        before do
+          draw = instance_spy('draw', before_lottery?: true)
+          allow(draw_suite).to receive(:draw).and_return(draw)
+        end
+        it { is_expected.to permit(user, draw_suite) }
+      end
     end
   end
 
   context 'admin' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
 
-    permissions :index?, :edit_collection?, :update_collection? do
+    permissions :index? do
       it { is_expected.to permit(user, draw_suite) }
+    end
+    permissions :edit_collection?, :update_collection? do
+      context 'draw not before lottery' do
+        before do
+          draw = instance_spy('draw', before_lottery?: false)
+          allow(draw_suite).to receive(:draw).and_return(draw)
+        end
+        it { is_expected.not_to permit(user, draw_suite) }
+      end
+      context 'draw before lottery' do
+        before do
+          draw = instance_spy('draw', before_lottery?: true)
+          allow(draw_suite).to receive(:draw).and_return(draw)
+        end
+        it { is_expected.to permit(user, draw_suite) }
+      end
     end
   end
 end
