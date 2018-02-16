@@ -59,7 +59,19 @@ RSpec.describe ClipPolicy do
               before do
                 allow(draw).to receive(:pre_lottery?).and_return(true)
               end
-              it { is_expected.to permit(user, clip) }
+
+              context 'but the draw does not allow for clipping' do
+                before do
+                  allow(draw).to receive(:allow_clipping).and_return(false)
+                end
+                it { is_expected.not_to permit(user, clip) }
+              end
+              context 'and the draw allows for clipping' do
+                before do
+                  allow(draw).to receive(:allow_clipping).and_return(true)
+                end
+                it { is_expected.to permit(user, clip) }
+              end
             end
           end
         end
@@ -104,7 +116,19 @@ RSpec.describe ClipPolicy do
           before do
             allow(draw).to receive(:pre_lottery?).and_return(true)
           end
-          it { is_expected.to permit(user, clip) }
+
+          context 'but the draw does not allow for clipping' do
+            before do
+              allow(draw).to receive(:allow_clipping).and_return(false)
+            end
+            it { is_expected.not_to permit(user, clip) }
+          end
+          context 'and the draw allows for clipping' do
+            before do
+              allow(draw).to receive(:allow_clipping).and_return(true)
+            end
+            it { is_expected.to permit(user, clip) }
+          end
         end
       end
     end
@@ -121,7 +145,39 @@ RSpec.describe ClipPolicy do
       it { is_expected.to permit(user, clip) }
     end
 
-    permissions :create?, :edit?, :update?, :destroy? do
+    permissions :create? do
+      let(:draw) { instance_spy('Draw') }
+
+      context 'the draw is not pre_lottery' do
+        before do
+          allow(clip).to receive(:draw).and_return(draw)
+          allow(draw).to receive(:pre_lottery?).and_return(false)
+        end
+        it { is_expected.not_to permit(user, clip) }
+      end
+
+      context 'the draw is pre_lottery' do
+        before do
+          allow(clip).to receive(:draw).and_return(draw)
+          allow(draw).to receive(:pre_lottery?).and_return(true)
+        end
+
+        context 'but the draw does not allow for clipping' do
+          before do
+            allow(draw).to receive(:allow_clipping).and_return(false)
+          end
+          it { is_expected.not_to permit(user, clip) }
+        end
+        context 'and the draw allows for clipping' do
+          before do
+            allow(draw).to receive(:allow_clipping).and_return(true)
+          end
+          it { is_expected.to permit(user, clip) }
+        end
+      end
+    end
+
+    permissions :edit?, :update?, :destroy? do
       let(:draw) { instance_spy('Draw') }
 
       context 'the draw is not pre_lottery' do

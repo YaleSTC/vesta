@@ -3,6 +3,7 @@
 FactoryGirl.define do
   factory :draw do
     name 'MyString'
+    allow_clipping true
 
     factory :draw_with_members do
       transient do

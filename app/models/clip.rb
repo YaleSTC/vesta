@@ -14,6 +14,8 @@ class Clip < ApplicationRecord
            through: :clip_memberships
   has_one :lottery_assignment, dependent: :destroy
 
+  validate :draw_allows_clipping
+
   before_update ->() { throw(:abort) if will_save_change_to_draw_id? }
 
   # Generate the clip's name
@@ -49,5 +51,10 @@ class Clip < ApplicationRecord
 
   def existing_memberships
     clip_memberships.to_a.keep_if(&:persisted?)
+  end
+
+  def draw_allows_clipping
+    return if draw.allow_clipping
+    errors.add(:base, 'This draw currently does not allow for clipping.')
   end
 end

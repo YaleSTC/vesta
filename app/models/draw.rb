@@ -18,6 +18,10 @@
 #   enforced, just used for display purposes and sending emails.
 # @attr locking_deadline [Datetime] Deadline to lock groups. Not strictly
 #   enforced, just used for display purposes and sending emails.
+# @attr suite_selection_mode [String] The draw's mode for selecting suites. Can
+#   be either "admin_selection" or "student_selection"
+# @attr allow_clipping [Boolean] True if the draw allows for clipping,
+#  false otherwise.
 class Draw < ApplicationRecord # rubocop:disable ClassLength
   has_many :groups
   has_many :students, class_name: 'User', dependent: :nullify
@@ -33,6 +37,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   validate :cannot_lock_intent_if_undeclared,
            if: ->() { intent_locked_changed? }
 
+  after_update :destroy_all_clips, if: ->() { saved_change_to_allow_clipping }
   after_destroy :remove_old_draw_ids
 
   enum status: %w(draft pre_lottery lottery suite_selection results)
@@ -249,5 +254,9 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   def cannot_lock_intent_if_undeclared
     return if all_intents_declared?
     errors.add :intent_locked, 'Cannot lock intent with undeclared students'
+  end
+
+  def destroy_all_clips
+    clips.destroy_all
   end
 end
