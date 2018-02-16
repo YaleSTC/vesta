@@ -23,10 +23,9 @@ module Vesta
     end
     forms_path = %w(/app/forms)
     presenters_path = %w(/app/presenters)
-    lib_paths = %w(seed).map { |s| "/lib/#{s}" }
-    paths = services_paths + forms_path + presenters_path +
-            lib_paths + %w(/lib/)
-    config.autoload_paths += paths.map { |s| "#{config.root}#{s}" }
+    lib_paths = %w(/lib) + %w(seed).map { |s| "/lib/#{s}" }
+    paths = services_paths + forms_path + presenters_path + lib_paths
+    config.eager_load_paths += paths.map { |s| "#{config.root}#{s}" }
     config.time_zone = ENV['RAILS_TIME_ZONE'] || 'UTC'
   end
 end
