@@ -22,7 +22,7 @@ class DrawSuitesController < ApplicationController
     @suites_update = result[:update_object]
     if @suites_update
       prepare_suites_edit_data
-      result[:action] = 'suites_edit'
+      result[:action] = 'edit_collection'
     else
       result[:path] = draw_suites_path(@draw)
     end

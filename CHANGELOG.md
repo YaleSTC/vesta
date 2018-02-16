@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 * Fix searching for users in admin dashboard ([#699](https://gitlab.com/yale-sdmp/vesta/issues/699)).
 * Fix config file to properly eager load files ([#708](https://gitlab.com/yale-sdmp/vesta/issues/708)).
 * Fix 404 issue with font files ([#720](https://gitlab.com/yale-sdmp/vesta/issues/720)).
+* Fix redirect on DrawSuite update failure ([#710](https://gitlab.com/yale-sdmp/vesta/issues/710)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
