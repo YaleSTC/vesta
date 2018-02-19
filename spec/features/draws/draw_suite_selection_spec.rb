@@ -10,6 +10,8 @@ RSpec.feature 'Draw suite selection' do
     clip.groups.map { |g| create(:suite_with_rooms, rooms_count: g.size) }
   end
   let!(:other_suite) { create(:suite_with_rooms, rooms_count: group.size) }
+  let(:f) { "vesta_lotteries_export_#{Time.zone.today.to_s(:number)}.csv" }
+  let(:h_str) { 'name,lottery_number' }
 
   before do
     draw.suites << clip_suites << other_suite
@@ -68,6 +70,13 @@ RSpec.feature 'Draw suite selection' do
       expect(page).to have_css('.flash-success', text: /All groups have suites/)
     end
 
+    it 'can export lottery assignment information' do
+      visit draw_path(draw)
+      click_on 'Export Lottery Numbers'
+      expect(page_is_valid_export?(page: page, data: draw.groups,
+                                   filename: f, header_str: h_str)).to be_truthy
+    end
+
     def assign_suites(groups, suites)
       groups.each_with_index do |group, i|
         select suites[i].name, from: "suite_assignment_suite_id_for_#{group.id}"
@@ -92,5 +101,9 @@ RSpec.feature 'Draw suite selection' do
       visit draw_path(draw)
       expect(page).to have_content(draw.name)
     end
+  end
+
+  def export_row_for(group)
+    [group.name, group.lottery_number].join(',')
   end
 end

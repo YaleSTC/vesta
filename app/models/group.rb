@@ -33,6 +33,9 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
            class_name: 'Membership', inverse_of: :group
   has_many :members, through: :full_memberships, source: :user
 
+  delegate :number, to: :lottery_assignment, prefix: :lottery, allow_nil: true
+  delegate :number, to: :suite, prefix: :suite, allow_nil: true
+
   enum status: %w(open closed finalizing locked)
 
   # validates :draw, presence: true

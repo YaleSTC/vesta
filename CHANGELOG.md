@@ -73,6 +73,7 @@ All notable changes to this project will be documented in this file.
 * Add a terms of service page for new users ([#719](https://gitlab.com/yale-sdmp/vesta/issues/719)).
 * Add Rake tasks for college setup and user management ([#726](https://gitlab.com/yale-sdmp/vesta/issues/726)).
 * Allow admins to specify student roles when importing ([#731](https://gitlab.com/yale-sdmp/vesta/issues/731)).
+* Add CSV export functionality for intents and lottery numbers ([#701](https://gitlab.com/yale-sdmp/vesta/issues/701)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed

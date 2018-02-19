@@ -45,6 +45,9 @@ class User < ApplicationRecord
 
   belongs_to :room
 
+  delegate :number, to: :room, prefix: :room, allow_nil: true
+  delegate :suite_number, to: :group, allow_nil: true
+
   validates :email, uniqueness: true
   validates :username, presence: true, if: :cas_auth?
   validates :username, uniqueness: { case_sensitive: false }, allow_nil: true

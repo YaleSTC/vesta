@@ -60,8 +60,6 @@ Rails.application.routes.draw do
   resources :draws do
     member do
       patch 'activate'
-      get 'intent_report'
-      post 'intent_report', to: 'draws#filter_intent_report'
       post 'reminder'
       patch 'bulk_on_campus'
       get 'students', to: 'draws#student_summary', as: 'student_summary'
@@ -87,6 +85,7 @@ Rails.application.routes.draw do
     resources :lottery_assignments, only: %i(update create index) do
       collection do
         post 'automatic'
+        get 'export'
       end
     end
 
@@ -111,6 +110,11 @@ Rails.application.routes.draw do
     end
 
     resource :clip, only: %i(new create)
+
+    resource :intents, only: [] do
+      get 'report'
+      get 'export'
+    end
   end
 
   resources :clips, only: %i(show edit update destroy)

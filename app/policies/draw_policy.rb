@@ -14,10 +14,6 @@ class DrawPolicy < ApplicationPolicy
     edit? && record.draft?
   end
 
-  def intent_report?
-    user.admin? || user.rep?
-  end
-
   def student_summary?
     edit?
   end

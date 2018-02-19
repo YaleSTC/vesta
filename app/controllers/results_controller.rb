@@ -8,14 +8,14 @@ class ResultsController < ApplicationController
     @suites = SuitesWithRoomsAssignedQuery.call
   end
 
-  def students
-    @students = @students.order(:last_name)
-  end
+  def students; end
 
   def export
-    parameters = { students: @students, sort_by_suite: params['sort_by_suite'] }
-    csv_contents = ResultsCSVGenerator.generate(parameters)
-    send_data csv_contents, filename: csv_filename, type: 'text/csv'
+    login_attr = User.cas_auth? ? :username : :email
+    attributes = %I[#{login_attr} last_name first_name suite_number room_number]
+    result = CSVGenerator.generate(data: @students, attributes: attributes,
+                                   name: 'results')
+    handle_file_action(**result)
   end
 
   private
@@ -25,12 +25,12 @@ class ResultsController < ApplicationController
   end
 
   def collect_student_data
-    @students = User.includes(room: :suite).where(role: %w(student rep))
-                    .where.not(room_id: nil)
-  end
-
-  def csv_filename
-    time_str = Time.zone.today.to_s(:number)
-    "vesta_export_#{time_str}.csv"
+    base = User.includes(room: :suite).where(role: %w(student rep))
+               .where.not(room_id: nil)
+    @students = if params['sort_by_suite']
+                  base.order(%w(suites.number rooms.number users.last_name))
+                else
+                  base.order(:last_name)
+                end
   end
 end

@@ -44,12 +44,6 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(action: 'show', **result)
   end
 
-  def intent_report
-    @students_by_intent = @draw.students.order(:intent, :last_name)
-                               .group_by(&:intent)
-    @intent_metrics = @students_by_intent.transform_values(&:count)
-  end
-
   def bulk_on_campus
     result = BulkOnCampusUpdater.update(draw: @draw)
     # note that BulkOnCampusUpdater.update always returns a success hash with

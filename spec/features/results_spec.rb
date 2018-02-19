@@ -4,11 +4,10 @@ require 'rails_helper'
 
 RSpec.feature 'Results' do
   let!(:data) { create_data }
+  let(:f) { "vesta_results_export_#{Time.zone.today.to_s(:number)}.csv" }
+  let(:h_str) { 'email,last_name,first_name,suite_number,room_number' }
 
-  before do
-    create_data
-    log_in FactoryGirl.create(:admin)
-  end
+  before { log_in create(:admin) }
 
   it 'can be listed by student' do
     visit root_path
@@ -31,7 +30,8 @@ RSpec.feature 'Results' do
   it 'can export data by student' do
     visit students_results_path
     click_on 'Export CSV'
-    expect(page_is_valid_export(page)).to be_truthy
+    expect(page_is_valid_export?(page: page, data: data[:members],
+                                 filename: f, header_str: h_str)).to be_truthy
   end
 
   def page_has_student_results(page)
@@ -53,44 +53,29 @@ RSpec.feature 'Results' do
     end
   end
 
-  def page_is_valid_export(page) # rubocop:disable AbcSize
-    headers = page.response_headers
-    filename = "vesta_export_#{Time.zone.today.to_s(:number)}.csv"
-    csv_header_str = ResultsCSVGenerator::EXPORT_HEADERS.map(&:to_s).join(',')
-    headers['Content-Disposition'] == "attachment; filename=\"#{filename}\"" &&
-      headers['Content-Type'] == 'text/csv' &&
-      page.body.include?(csv_header_str) &&
-      data[:members].all? do |student|
-        page.body.include?(export_row_for(student))
-      end
-  end
-
   def export_row_for(student)
     [
-      student.last_name, student.first_name, student.username,
-      student.room.suite.number, student.room.number
+      student.email, student.last_name, student.first_name,
+      student.suite_number, student.room_number
     ].join(',')
   end
 
   def create_data # rubocop:disable MethodLength, AbcSize
-    draw = FactoryGirl.create(:draw_with_members, students_count: 2,
-                                                  status: 'suite_selection')
-    transfer = FactoryGirl.create(:open_group, leader: draw.students.last,
-                                               transfers: 1)
-    special = FactoryGirl.create(:drawless_group, size: 2)
-    group = FactoryGirl.create(:locked_group, leader: draw.students.first)
-    suite1 = FactoryGirl.create(:suite_with_rooms,
-                                rooms_count: special.size, group: special,
-                                draws: [draw])
-    suite2 = FactoryGirl.create(:suite_with_rooms,
-                                rooms_count: group.size, group: group,
-                                draws: [draw])
-    suite3 = FactoryGirl.create(:suite_with_rooms,
-                                rooms_count: transfer.size, group: transfer,
-                                draws: [draw])
+    draw = create(:draw_with_members, students_count: 2,
+                                      status: 'suite_selection')
+    transfer = create(:open_group, leader: draw.students.last, transfers: 1)
+    special = create(:drawless_group, size: 2)
+    group = create(:locked_group, leader: draw.students.first)
+    suite1 = create(:suite_with_rooms, rooms_count: special.size,
+                                       group: special, draws: [draw])
+    suite2 = create(:suite_with_rooms, rooms_count: group.size, group: group,
+                                       draws: [draw])
+    suite3 = create(:suite_with_rooms, rooms_count: transfer.size,
+                                       group: transfer, draws: [draw])
     assign_students_to_rooms(special => suite1, group => suite2,
                              transfer => suite3)
-    members = special.members + group.members + transfer.members
+    members = special.members.reload + group.members.reload + \
+              transfer.members.reload
     rooms = suite1.rooms + suite2.rooms + suite3.rooms
     draw.update!(status: 'results')
     { members: members, rooms: rooms }
@@ -99,7 +84,7 @@ RSpec.feature 'Results' do
   def assign_students_to_rooms(assignment_hash)
     assignment_hash.each do |group, suite|
       group.members.each_with_index do |member, i|
-        member.update(room_id: suite.rooms[i].id)
+        member.update!(room_id: suite.rooms[i].id)
       end
     end
   end

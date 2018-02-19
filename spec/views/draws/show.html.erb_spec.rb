@@ -13,14 +13,14 @@ RSpec.describe 'draws/show.html.erb' do
 
     it 'is displayed with the appropriate permissions' do
       mock_assigns(draw: draw)
-      mock_user_and_policies(draw: draw, intent_report?: true)
+      mock_user_and_policies(draw: draw, report: true)
       render
       expect(rendered).to match(intent_report_link_regex)
     end
 
     it 'does not display the link if the user does not have access' do
       mock_assigns(draw: draw)
-      mock_user_and_policies(draw: draw, intent_report?: false)
+      mock_user_and_policies(draw: draw, report: false)
       render
       expect(rendered).not_to match(intent_report_link_regex)
     end
@@ -37,14 +37,14 @@ RSpec.describe 'draws/show.html.erb' do
 
     it 'is displayed with the appropriate permissions' do
       mock_assigns(draw: draw)
-      mock_user_and_policies(draw: draw, activate?: true)
+      mock_user_and_policies(draw: draw, activate: true)
       render
       expect(rendered).to match(activate_link_regex)
     end
 
     it 'does not display the link if the user does not have access' do
       mock_assigns(draw: draw)
-      mock_user_and_policies(draw: draw, activate?: false)
+      mock_user_and_policies(draw: draw, activate: false)
       render
       expect(rendered).not_to match(activate_link_regex)
     end
@@ -63,17 +63,19 @@ RSpec.describe 'draws/show.html.erb' do
     assign(:ungrouped_students, {})
   end
 
-  def mock_user_and_policies(draw:, **stubs)
+  # rubocop: disable AbcSize
+  def mock_user_and_policies(draw:, report: true, activate: true)
     # Note that this hack-y stubbing is necessary to prevent issues while
     # rendering the oversubscription report. In the future we should a) write
     # specs for said report and b) stub things more elegantly.
-    mock_policy = instance_spy('draw_policy', oversub_report?: false,
+    draw_policy = instance_spy('draw_policy', oversub_report?: false,
                                               selection_metrics?: false,
-                                              **stubs)
+                                              activate?: activate)
+    intent_policy = instance_spy('intent_policy', report?: report)
     without_partial_double_verification do
-      allow(view).to receive(:policy).with(draw).and_return(mock_policy)
-      allow(view).to receive(:current_user)
-        .and_return(FactoryGirl.build(:admin))
+      allow(view).to receive(:policy).with(draw).and_return(draw_policy)
+      allow(view).to receive(:policy).with(:intent).and_return(intent_policy)
+      allow(view).to receive(:current_user).and_return(build(:admin))
     end
   end
 

@@ -74,11 +74,14 @@
       <% end %>
     <% elsif @draw.status == 'suite_selection' %>
       <% if policy(SuiteAssignment.new(draw: @draw.__getobj__, groups: [])).new? %>
-        <%= link_to 'Select suites', new_draw_suite_assignment_path(@draw), class: 'button secondary' %>
+        <%= link_to 'Select suites', new_draw_suite_assignment_path(@draw), class: 'button' %>
+      <% end %>
+      <% if policy(LotteryAssignment.new(draw: @draw.__getobj__)).export? %>
+        <%= link_to 'Export Lottery Numbers', export_draw_lottery_assignments_path(@draw), class: 'button secondary' %>
       <% end %>
     <% elsif @draw.status == 'results' %>
       <% if policy(@draw).results? %>
-        <%= link_to 'View results', results_draw_path(@draw), class: 'button secondary' %>
+        <%= link_to 'View results', results_draw_path(@draw), class: 'button' %>
       <% end %>
     <% end %>
   <% end %>

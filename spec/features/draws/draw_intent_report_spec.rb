@@ -4,22 +4,44 @@ require 'rails_helper'
 
 RSpec.feature 'Draw intent report' do
   let(:draw) { FactoryGirl.create(:draw, status: 'pre_lottery') }
+  let(:f) { "vesta_intents_export_#{Time.zone.today.to_s(:number)}.csv" }
+  let(:h_str) { 'email,last_name,first_name,intent' }
 
-  it 'displays a table with intent data' do
-    student = create_student_data(draw: draw, intents: %w(on_campus))
-    log_in(FactoryGirl.create(:admin))
-    visit draw_path(draw)
-    click_link('View intent report')
+  context 'as an admin' do
+    before { log_in(FactoryGirl.create(:admin)) }
 
-    expect(page_has_intent_report(page, student)).to be_truthy
+    it 'displays a table with intent data' do
+      student = create_student_data(draw: draw, intents: %w(on_campus))
+      visit draw_path(draw)
+      click_link('View intent report')
+      expect(page_has_intent_report(page, student)).to be_truthy
+    end
+
+    it 'can export data to CSV' do
+      data = create_student_data(draw: draw, intents: %w(on_campus off_campus))
+      visit report_draw_intents_path(draw)
+      click_link('Export to CSV')
+      expect(page_is_valid_export?(page: page, data: data,
+                                   filename: f, header_str: h_str)).to be_truthy
+    end
+
+    it 'csv export raises an error if no data is created' do
+      visit report_draw_intents_path(draw)
+      click_link('Export to CSV')
+      msg = 'Data must exist before it can be exported.'
+      expect(page).to have_css('.flash-error', text: /#{msg}/)
+    end
   end
 
-  it 'does not display form when rep' do
-    create_student_data(draw: draw, intents: %w(on_campus))
-    log_in(FactoryGirl.create(:student, role: 'rep'))
-    visit draw_path(draw)
-    click_link('View intent report')
-    expect(page).to have_css('td[data-role="student-intent"]')
+  context 'as a rep' do
+    before { log_in(FactoryGirl.create(:student, role: 'rep')) }
+
+    it 'does not display form' do
+      create_student_data(draw: draw, intents: %w(on_campus))
+      visit draw_path(draw)
+      click_link('View intent report')
+      expect(page).to have_css('td[data-role="student-intent"]')
+    end
   end
 
   def create_student_data(draw:, intents: %w(on_campus))
@@ -57,5 +79,12 @@ RSpec.feature 'Draw intent report' do
 
   def page_has_intent_update_form(page, student)
     page.assert_selector(:css, "td.intent-form#intent-form-#{student.id} form")
+  end
+
+  def export_row_for(student)
+    [
+      student.email, student.last_name, student.first_name,
+      student.intent
+    ].join(',')
   end
 end

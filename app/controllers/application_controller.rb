@@ -49,6 +49,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Abstract method to handle file export actions. Handles success, failure,
+  # and setting the flash appropriately.
+  #
+  # @abstract
+  # @param file [Object] the file to be exported.
+  # @param filename [String] the file name.
+  # @param type [String] the type of the file (ex: 'text/csv').
+  # @param errors [String] the errors incurred during file creation, if any.
+  def handle_file_action(file:, filename:, type:, errors: nil)
+    if errors
+      flash[:error] = errors
+      redirect_to request.referer
+    else
+      send_data(file, filename: filename, type: type)
+    end
+  end
+
   # Abstract method to enforce permissions authorization in all controllers.
   # Must be overridden in all controllers.
   #

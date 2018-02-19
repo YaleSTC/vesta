@@ -1,4 +1,4 @@
-$('#intent-form-<%= @user.id %>').html('<%= escape_javascript(render 'draws/intent_form', user: @user) %>');
+$('#intent-form-<%= @user.id %>').html('<%= escape_javascript(render 'intents/intent_form', user: @user) %>');
 <% if @color_class %>
   $('#intent-form-<%= @user.id %>').addClass('<%= @color_class %>', 750, 'swing', function() {
     $('#intent-form-<%= @user.id %>').removeClass('<%= @color_class %>', 750, 'swing');

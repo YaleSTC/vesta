@@ -16,6 +16,8 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_many(:memberships) }
     it { is_expected.to have_one(:group).through(:membership) }
     it { is_expected.to belong_to(:room) }
+    it { is_expected.to delegate_method(:room_number).to(:room).as(:number) }
+    it { is_expected.to delegate_method(:suite_number).to(:group) }
   end
 
   describe 'other validations' do
