@@ -2,42 +2,42 @@
 @import 'https://fonts.googleapis.com/css?family=Source+Code+Pro';
 @font-face {
   font-family: 'yale';
-  src: url("/assets/yalenew-roman-webfont.eot");
-  src: url("/assets/yalenew-roman-webfont.eot?#iefix")
-  format("embedded-opentype"), url("/assets/yalenew-roman-webfont.woff2")
-  format("woff2"), url("/assets/yalenew-roman-webfont.woff")
-  format("woff"), url("/assets/yalenew-roman-webfont.ttf")
+  src: font-url("yalenew-roman-webfont.eot");
+  src: font-url("yalenew-roman-webfont.eot?#iefix")
+  format("embedded-opentype"), font-url("yalenew-roman-webfont.woff2")
+  format("woff2"), font-url("yalenew-roman-webfont.woff")
+  format("woff"), font-url("yalenew-roman-webfont.ttf")
   format("truetype"),
-  url("/assets/yalenew-roman-webfont.svg#yalenewregular") format("svg");
+  font-url("yalenew-roman-webfont.svg#yalenewregular") format("svg");
   font-weight: normal;
 font-style: normal; }
 
 @font-face {
   font-family: 'yale';
-  src: url("/assets/yalenew-bold-webfont.eot");
-  src: url("/assets/yalenew-bold-webfont.eot?#iefix")
+  src: font-url("yalenew-bold-webfont.eot");
+  src: font-url("yalenew-bold-webfont.eot?#iefix")
   format("embedded-opentype"),
-  url("/assets/yalenew-bold-webfont.woff2") format("woff2"),
-  url("/assets/yalenew-bold-webfont.woff") format("woff"),
-  url("/assets/yalenew-bold-webfont.ttf") format("truetype"),
-  url("/assets/yalenew-bold-webfont.svg#yalenewbold")
+  font-url("yalenew-bold-webfont.woff2") format("woff2"),
+  font-url("yalenew-bold-webfont.woff") format("woff"),
+  font-url("yalenew-bold-webfont.ttf") format("truetype"),
+  font-url("yalenew-bold-webfont.svg#yalenewbold")
   format("svg");
   font-weight: bold;
 font-style: normal; }
 
 @font-face {
   font-family: 'yale';
-  src: url("/assets/yalenew-italic-webfont.eot");
+  src: font-url("yalenew-italic-webfont.eot");
   src:
-  url("/assets/yalenew-italic-webfont.eot?#iefix")
+  font-url("yalenew-italic-webfont.eot?#iefix")
   format("embedded-opentype"),
-  url("/assets/yalenew-italic-webfont.woff2")
+  font-url("yalenew-italic-webfont.woff2")
   format("woff2"),
-  url("/assets/yalenew-italic-webfont.woff")
+  font-url("yalenew-italic-webfont.woff")
   format("woff"),
-  url("/assets/yalenew-italic-webfont.ttf")
+  font-url("yalenew-italic-webfont.ttf")
   format("truetype"),
-  url("/assets/yalenew-italic-webfont.svg#yalenewitalic")
+  font-url("yalenew-italic-webfont.svg#yalenewitalic")
   format("svg");
   font-weight: normal;
 font-style: italic; }
@@ -45,28 +45,28 @@ font-style: italic; }
 @font-face {
   font-family: 'yale';
   src:
-  url("/assets/yalenew-bolditalic-webfont.eot");
+  font-url("yalenew-bolditalic-webfont.eot");
   src:
-  url("/assets/yalenew-bolditalic-webfont.eot?#iefix")
+  font-url("yalenew-bolditalic-webfont.eot?#iefix")
   format("embedded-opentype"),
-  url("/assets/yalenew-bolditalic-webfont.woff2")
+  font-url("yalenew-bolditalic-webfont.woff2")
   format("woff2"),
-  url("/assets/yalenew-bolditalic-webfont.woff")
+  font-url("yalenew-bolditalic-webfont.woff")
   format("woff"),
-  url("/assets/yalenew-bolditalic-webfont.ttf")
+  font-url("yalenew-bolditalic-webfont.ttf")
   format("truetype"),
-  url("/assets/yalenew-bolditalic-webfont.svg#yalenewbold_italic")
+  font-url("yalenew-bolditalic-webfont.svg#yalenewbold_italic")
   format("svg");
   font-weight: bold;
 font-style: italic; }
 
 @font-face {
   font-family: "YaleMarks";
-  src: url("/assets/yalemarks-webfont.eot");
-  src: url("/assets/yalemarks-webfont.eot?#iefix")
-  format("embedded-opentype"), url("/assets/yalemarks-webfont.ttf")
-  format("truetype"), url("/assets/yalemarks-webfont.woff")
-  format("woff"), url("/assets/yalemarks-webfont.svg#yalenewmarks")
+  src: font-url("yalemarks-webfont.eot");
+  src: font-url("yalemarks-webfont.eot?#iefix")
+  format("embedded-opentype"), font-url("yalemarks-webfont.ttf")
+  format("truetype"), font-url("yalemarks-webfont.woff")
+  format("woff"), font-url("yalemarks-webfont.svg#yalenewmarks")
   format("svg");
   font-weight: normal;
 font-style: normal; }
