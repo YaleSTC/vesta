@@ -20,6 +20,20 @@ RSpec.describe User, type: :model do
 
   describe 'other validations' do
     xit 'checks to make sure an assigned room belongs to the right group'
+
+    context 'tos_accepted' do
+      it 'can be accepted' do
+        user = create(:user, tos_accepted: nil)
+        user.tos_accepted = Time.current
+        user.save!
+        expect(user).to be_valid
+      end
+      it 'is frozen once accepted' do
+        user = create(:user, tos_accepted: Time.current)
+        user.tos_accepted = Time.current
+        expect { user.save! }.to raise_error(ActiveRecord::RecordNotSaved)
+      end
+    end
   end
 
   describe 'CAS username' do

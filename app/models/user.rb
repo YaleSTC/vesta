@@ -15,6 +15,7 @@
 # @attr intent [Integer] an enum for the user's housing intent, on_campus,
 #   off_campus, or undeclared (required)
 # @attr class_year [Integer] the graduating class year of the student (optional)
+# @attr tos_accepted [DateTime] the time of agreement to the terms of service
 class User < ApplicationRecord
   # Determine whether or not CAS authentication is being used, must be at the
   # top of the class to be used in the Devise loading conditional below.
@@ -55,6 +56,9 @@ class User < ApplicationRecord
 
   enum role: %w(student admin rep superuser)
   enum intent: %w(undeclared on_campus off_campus)
+
+  before_update :freeze_tos_acceptance,
+                if: ->() { will_save_change_to_tos_accepted? }
 
   before_save :downcase_username, if: :cas_auth?
 
@@ -141,5 +145,10 @@ class User < ApplicationRecord
   def room_in_suite
     return if !room || room.suite_id == group.suite.id
     errors.add(:room, "room must be in the user's group's suite.")
+  end
+
+  def freeze_tos_acceptance
+    return if tos_accepted_in_database.nil?
+    throw(:abort)
   end
 end

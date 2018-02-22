@@ -1,1 +1,13 @@
-footer { margin-bottom: 2em; }
+footer {
+  margin-bottom: 2em;
+
+  ul.footer-links {
+    float: right;
+    list-style: none;
+
+    li {
+      display: inline-block;
+      padding-left: 1em;
+    }
+  }
+}

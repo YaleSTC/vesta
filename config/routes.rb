@@ -40,6 +40,10 @@ Rails.application.routes.draw do
 
   post 'suite_import/import', to: 'suite_imports#import', as: 'suite_import'
 
+  resource :terms_of_service, only: %i(show) do
+    patch 'accept'
+  end
+
   resources :users do
     member do
       get 'intent', to: 'users#edit_intent', as: 'edit_intent'

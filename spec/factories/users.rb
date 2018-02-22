@@ -10,6 +10,7 @@ FactoryGirl.define do
     intent { 'on_campus' }
     class_year { Time.zone.today.year }
     username { first_name.downcase if env? 'CAS_BASE_URL' }
+    tos_accepted { Time.zone.now }
 
     factory :student_in_draw do
       after(:build) do |user|
@@ -22,6 +23,7 @@ FactoryGirl.define do
 
     factory :admin do
       role { 'admin' }
+      tos_accepted { nil }
     end
   end
 end

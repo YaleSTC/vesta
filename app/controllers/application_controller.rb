@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, unless: :unauthenticated?
   before_action :authorize!, unless: :unauthenticated?
   before_action :set_current_college
+  before_action :verify_tos_accepted, unless: :unauthenticated?
   after_action :verify_authorized, unless: :unauthenticated?
 
   rescue_from Pundit::NotAuthorizedError do |exception|
@@ -61,5 +62,11 @@ class ApplicationController < ActionController::Base
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'Please select a valid college to proceed.'
     redirect_to colleges_path
+  end
+
+  def verify_tos_accepted
+    return if current_user.admin? || current_user.tos_accepted
+    flash[:error] = 'You must accept the Terms of Service to proceed.'
+    redirect_to terms_of_service_path
   end
 end
