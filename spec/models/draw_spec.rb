@@ -14,6 +14,14 @@ RSpec.describe Draw, type: :model do
     it { is_expected.to validate_presence_of(:status) }
     it { is_expected.to validate_presence_of(:suite_selection_mode) }
 
+    it 'cannot set intent dealine in the past' do
+      draw = FactoryGirl.build(:draw, intent_deadline: Time.zone.today - 1)
+      expect(draw).not_to be_valid
+    end
+    it 'cannot set locking deadline in the past' do
+      draw = FactoryGirl.build(:draw, locking_deadline: Time.zone.today - 1)
+      expect(draw).not_to be_valid
+    end
     it 'cannot lock intent if undeclared students' do
       draw = FactoryGirl.create(:draw, status: 'pre_lottery')
       draw.students << FactoryGirl.create(:student, intent: 'undeclared')

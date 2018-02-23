@@ -24,12 +24,15 @@ RSpec.feature 'Draw email buttons' do
   end
 
   context 'after intent deadline and before lottery' do
-    let(:draw) do
+    let!(:draw) do
       FactoryGirl.create(:draw_with_members,
                          status: 'pre_lottery',
-                         intent_deadline: Time.zone.yesterday,
-                         locking_deadline: Time.zone.tomorrow)
+                         intent_deadline: Time.zone.tomorrow,
+                         locking_deadline: Time.zone.today + 3.days)
     end
+
+    before { Timecop.freeze(Time.zone.now + 2.days) }
+    after { Timecop.return }
 
     it 'sends locking reminders' do
       time = Time.zone.now.strftime('%B %e, %l:%M %P')

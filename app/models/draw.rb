@@ -33,7 +33,8 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   validates :name, presence: true
   validates :status, presence: true
   validates :suite_selection_mode, presence: true
-
+  validate :intent_deadline_is_not_in_the_past, on: :create
+  validate :locking_deadline_is_not_in_the_past, on: :create
   validate :cannot_lock_intent_if_undeclared,
            if: ->() { intent_locked_changed? }
 
@@ -255,6 +256,18 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   def cannot_lock_intent_if_undeclared
     return if all_intents_declared?
     errors.add :intent_locked, 'Cannot lock intent with undeclared students'
+  end
+
+  # custom validation of intent deadline
+  def intent_deadline_is_not_in_the_past
+    return unless intent_deadline.present? && intent_deadline.past?
+    errors.add(:intent_deadline, 'can not be in the past')
+  end
+
+  # custom validation of locking deadline
+  def locking_deadline_is_not_in_the_past
+    return unless locking_deadline.present? && locking_deadline.past?
+    errors.add(:locking_deadline, 'can not be in the past')
   end
 
   def destroy_all_clips
