@@ -53,14 +53,15 @@ All notable changes to this project will be documented in this file.
 * Fix config file to properly eager load files ([#708](https://gitlab.com/yale-sdmp/vesta/issues/708)).
 * Fix 404 issue with font files ([#720](https://gitlab.com/yale-sdmp/vesta/issues/720)).
 * Fix redirect on DrawSuite update failure ([#710](https://gitlab.com/yale-sdmp/vesta/issues/710)).
-* Make lottery assignment and oversubscription draws securely random ([#698](https://gitlab.com/yale-sdmp/vesta/issues/698)).
+* Fix handling of students without accounts logging in via CAS ([#717](https://gitlab.com/yale-sdmp/vesta/issues/717)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
 * Add superuser role ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642)).
 * Add superuser dashboard ([#604](https://yale.githost.io/sdmp/rails/vesta/issues/604)).
-* Allow admins to automatically resolve oversubscription ([#195](https://gitlab.com/yale-sdmp/vesta/issues/195), [#697](https://gitlab.com/yale-sdmp/vesta/issues/697)).
+* Allow admins to automatically resolve oversubscription ([#195](https://gitlab.com/yale-sdmp/vesta/issues/195), [#697](https://gitlab.com/yale-sdmp/vesta/issues/697), [#698](https://gitlab.com/yale-sdmp/vesta/issues/698)).
 * Add multi-tenancy ([#641](https://gitlab.com/yale-sdmp/vesta/issues/641)).
+* Add securely random automatic lottery number generation ([#361](https://gitlab.com/yale-sdmp/vesta/issues/361), [#698](https://gitlab.com/yale-sdmp/vesta/issues/698)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed
