@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'securerandom'
+
 # Service object to handle oversubscribed groups of a given suite size, by
 # randomly disbanding suites in excess of those currently available. Validates
 # that the size given is indeed oversubscribed and is in the draw. Locks
@@ -63,8 +65,8 @@ class OversubscriptionPruner
 
   def destroy_groups!(size)
     # takes place within a transaction
-    unlucky = draw_report.groups.where(size: size)
-                         .sample(-draw_report.oversubscription[size])
+    shuffle = draw_report.groups.where(size: size).shuffle(random: SecureRandom)
+    unlucky = shuffle.pop(-draw_report.oversubscription[size])
     unlucky.map(&:destroy!)
     disbanded[size] = unlucky.map(&:name)
   end

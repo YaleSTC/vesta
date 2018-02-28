@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'securerandom'
+
 # Service Object to assign random lottery numbers in a draw
 class RandomLottery
   include ActiveModel::Model
@@ -48,8 +50,7 @@ class RandomLottery
   def lottery!
     draw.lottery_assignments.each(&:destroy!)
     lottery_assignments = ObjectsForLotteryQuery.call(draw: draw)
-    # TODO: create crypto-secure randomly generated ordering
-    order = (1..lottery_assignments.count).to_a.shuffle
+    order = (1..lottery_assignments.count).to_a.shuffle(random: SecureRandom)
     lottery_assignments.each_with_index do |l, i|
       l.number = order[i]
       l.save!

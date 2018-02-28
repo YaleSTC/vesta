@@ -33,7 +33,6 @@ RSpec.describe RandomLottery do
       expect(result[:redirect_object]).to eq(draw)
     end
     xit 'destroys existing lottery assignments before assigning numbers'
-    xit 'generates cryptographically secure random numbers'
   end
 
   describe 'validations' do
