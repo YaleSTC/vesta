@@ -18,6 +18,7 @@ Rails.application.configure do
       "#{first_subdomain}.#{canonical_host}"
     end
   end
+  config.force_ssl = true
   config.cache_classes = true
   config.eager_load = true
   config.consider_all_requests_local       = false
