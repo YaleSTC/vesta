@@ -23,8 +23,7 @@ RSpec.describe DrawPolicy do
       end
     end
     permissions :destroy?, :edit?, :update?, :activate?, :intent_report?,
-                :filter_intent_report?, :student_summary?, :students_update?,
-                :oversubscription?,
+                :student_summary?, :students_update?, :oversubscription?,
                 :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
                 :start_selection?, :bulk_on_campus?, :reminder?, :results?,
                 :intent_reminder?, :locking_reminder?, :lock_all_sizes?,
@@ -75,24 +74,14 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :group_report? do
-      context 'when draw has groups' do
-        before do
-          allow(draw).to receive(:groups).and_return([instance_spy('group')])
-        end
-        it { is_expected.to permit(user, draw) }
-      end
-      context 'when draw has no groups' do
-        before { allow(draw).to receive(:groups).and_return([]) }
-        it { is_expected.not_to permit(user, draw) }
-      end
+      it { is_expected.to permit(user, draw) }
     end
   end
 
   context 'housing rep' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
 
-    permissions :show?, :intent_report?,
-                :filter_intent_report?, :toggle_size_lock? do
+    permissions :show?, :intent_report?, :toggle_size_lock?, :group_report? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :edit?, :update?, :destroy?, :activate?, :student_summary?,
@@ -151,19 +140,6 @@ RSpec.describe DrawPolicy do
       end
       context 'when draw is not pre lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-    end
-
-    permissions :group_report? do
-      context 'when draw has groups' do
-        before do
-          allow(draw).to receive(:groups).and_return([instance_spy('group')])
-        end
-        it { is_expected.to permit(user, draw) }
-      end
-      context 'when draw has no groups' do
-        before { allow(draw).to receive(:groups).and_return([]) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -245,8 +221,8 @@ RSpec.describe DrawPolicy do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
 
     permissions :show?, :edit?, :update?, :destroy?, :intent_report?,
-                :filter_intent_report?, :student_summary?, :toggle_size_lock?,
-                :lock_all_sizes? do
+                :student_summary?, :toggle_size_lock?, :lock_all_sizes?,
+                :group_report? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :students_update? do
@@ -333,17 +309,13 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :start_selection? do
-      context 'when draw is in lottery' do
-        before do
-          allow(draw).to receive(:lottery?).and_return(true)
-        end
-        it { is_expected.to permit(user, draw) }
-      end
-      context 'when draw is not in lottery' do
-        before do
-          allow(draw).to receive(:lottery?).and_return(false)
-        end
+      context 'when draw is not lottery' do
+        before { allow(draw).to receive(:lottery?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
+      end
+      context 'when draw is lottery' do
+        before { allow(draw).to receive(:lottery?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
       end
     end
 
@@ -368,19 +340,6 @@ RSpec.describe DrawPolicy do
       end
       context 'when draw is not pre lottery' do
         before { allow(draw).to receive(:pre_lottery?).and_return(false) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-    end
-
-    permissions :group_report? do
-      context 'when draw has groups' do
-        before do
-          allow(draw).to receive(:groups).and_return([instance_spy('group')])
-        end
-        it { is_expected.to permit(user, draw) }
-      end
-      context 'when draw has no groups' do
-        before { allow(draw).to receive(:groups).and_return([]) }
         it { is_expected.not_to permit(user, draw) }
       end
     end

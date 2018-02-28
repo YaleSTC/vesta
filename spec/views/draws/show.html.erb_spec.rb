@@ -4,13 +4,13 @@ require 'rails_helper'
 
 # rubocop:disable RSpec/DescribeClass
 RSpec.describe 'draws/show.html.erb' do
-  let(:draw) do
-    DrawReport.new(FactoryGirl.build(:draw, id: 1, status: 'pre_lottery'))
-  end
-
   before { mock_policy }
 
   context 'link to intent report' do
+    let(:draw) do
+      DrawReport.new(FactoryGirl.build(:draw, id: 1, status: 'pre_lottery'))
+    end
+
     it 'is displayed with the appropriate permissions' do
       mock_assigns(draw: draw)
       mock_user_and_policies(draw: draw, intent_report?: true)
@@ -31,6 +31,10 @@ RSpec.describe 'draws/show.html.erb' do
   end
 
   context 'link to activate draw' do
+    let(:draw) do
+      DrawReport.new(FactoryGirl.build(:draw, id: 1, status: 'draft'))
+    end
+
     it 'is displayed with the appropriate permissions' do
       mock_assigns(draw: draw)
       mock_user_and_policies(draw: draw, activate?: true)

@@ -12,8 +12,8 @@ RSpec.feature 'Draw start lottery' do
 
   it 'can be done' do
     visit draw_path(draw)
-    click_on 'Proceed to Lottery'
-    click_on 'Proceed to Lottery'
+    click_on 'Proceed to lottery'
+    click_on 'Proceed to lottery'
     expect(page).to have_css('.flash-success',
                              text: 'You can now assign lottery numbers')
   end

@@ -34,7 +34,7 @@ RSpec.feature 'Draw oversubscription handling' do
 
   it 'allows admins to lock suite sizes' do
     visit draw_path(draw)
-    within('.draw-menu') { click_on 'Lock Singles' }
+    click_on 'Lock Singles'
     expect(page).to have_css('.flash-success', text: /Singles locked/)
   end
 

@@ -37,7 +37,7 @@ RSpec.feature 'Draw group report' do
 
     it 'can be viewed by reps' do
       visit draw_path(draw)
-      click_on 'View groups'
+      click_on 'View printable group report'
       expect(page).to have_css('td[data-role="group-members"]')
     end
   end

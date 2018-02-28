@@ -3,7 +3,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw suite summary' do
-  let(:draw) { FactoryGirl.create(:draw_with_members, suites_count: 1) }
+  let(:draw) do
+    FactoryGirl.create(:draw_with_members, suites_count: 1,
+                                           status: 'pre_lottery')
+  end
   let(:draw_suite) { draw.suites.first }
   let(:other_suite) { FactoryGirl.create(:suite) }
 

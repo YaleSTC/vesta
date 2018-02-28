@@ -1,31 +1,43 @@
 <% if groups.empty? %>
   <p>There are no groups.</p>
 <% else %>
-  <% groups.keys.sort.each do |size| %>
-    <h4><%= headerize_size(size) %></h4>
-    <table>
-      <thead>
-        <tr>
-          <td>Group Leader</td>
-          <td>Status</td>
-          <td>Lottery #</td>
-          <td>Suite</td>
-          <td>Rooms?</td>
-          <td></td>
-        </tr>
-      </thead>
-      <tbody>
-        <% sort_by_lottery(groups[size]).each do |group| %>
-          <tr id="group-<%= group.id %>">
-            <td data-role="group-leader"><%= group.leader.full_name %></td>
-            <td data-role="group-status"><%= display_group_status(group) %></td>
-            <td data-role="group-lottery"><%= group.lottery_number %></td>
-            <td data-role="group-suite"><%= link_to group.suite.name, suite_path(group.suite) if group.suite %> </td>
-            <td data-roloe="group-room"> <%= group.leader.room_id.present? ? 'Y' : 'N' %></td>
-            <td class="actions" data-role="group-actions"><%= render actions_partial, group: group, path: path %></td>
-          </tr>
+  <ul class="tabs" data-tabs id="group-size-tabs">
+    <% groups.keys.sort.each do |size| %>
+      <li class="tabs-title<%= groups.keys.sort.first == size ? ' is-active' : '' %>">
+        <a href="#size-<%= size %>"><%= headerize_size(size) %></a>
+      </li>
+    <% end %>
+  </ul>
+  <div class="tabs-content" data-tabs-content="group-size-tabs">
+    <% groups.keys.sort.each do |size| %>
+      <div class="tabs-panel<%= groups.keys.sort.first == size ? ' is-active' : '' %>" id="size-<%= size %>">
+        <% if groups[size].empty? %>
+          <p>No groups of size <%= size %></p>
+        <% else %>
+          <table class="group-report-1">
+            <thead>
+              <tr>
+                <td>Group Leader</td>
+                <td>Lottery #</td>
+                <td>Suite</td>
+                <td>Rooms?</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              <% groups[size].each do |group| %>
+                <tr id="group-<%= group.id %>">
+                  <td data-role="group-leader"><%= group.leader.full_name %></td>
+                  <td data-role="group-lottery"><%= group.lottery_number %></td>
+                  <td data-role="group-suite"><%= link_to group.suite.name, suite_path(group.suite) if group.suite %> </td>
+                  <td data-roloe="group-room"> <%= group.leader.room_id.present? ? 'Y' : 'N' %></td>
+                  <td class="actions" data-role="group-actions"><%= render actions_partial, group: group, path: path %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         <% end %>
-      </tbody>
-    </table>
-  <% end %>
+      </div>
+    <% end %>
+  </div>
 <% end %>

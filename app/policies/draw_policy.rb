@@ -18,10 +18,6 @@ class DrawPolicy < ApplicationPolicy
     user.admin? || user.rep?
   end
 
-  def filter_intent_report?
-    intent_report?
-  end
-
   def student_summary?
     edit?
   end
@@ -65,7 +61,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def group_report?
-    !record.groups.empty?
+    true
   end
 
   def start_lottery?

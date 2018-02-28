@@ -1,10 +1,12 @@
+<h3>Total Number of Suites: <%= @draw.suite_counts.empty? ? 0 : @draw.suite_counts.values.inject(&:+) %></h3>
+<% unless @draw.suite_sizes.empty? %>
+  <ul style="list-style-type: none;">
+    <% @draw.suite_sizes.each do |size| %>
+      <li>
+        <%= "#{headerize_size(size)} - #{@draw.suite_counts[size]}" %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
 <h3>Total Number of Beds in All Suites: <%= @draw.bed_count %> </h3>
 <h3>Total Number of Students: <%= @draw.student_count %></h3>
-<h3>Available Suites</h3>
-<ul style="list-style-type: none;">
-  <% @draw.suite_sizes.each do |size| %>
-    <li>
-      <%= "#{headerize_size(size)} - #{@draw.suite_counts[size]}" %>
-    </li>
-  <% end %>
-</ul>

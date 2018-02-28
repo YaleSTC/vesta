@@ -1,221 +1,139 @@
 <% provide(:title, @draw.name) %>
 <h1 class="draw-name"><%= @draw.name %></h1>
-<div class="draw-menu-container" data-sticky-container>
-  <div class="draw-menu" data-sticky data-margin-top="0">
-    <% if current_user.admin? || current_user.rep? %>
-      <ul class="vertical menu" data-accordion-menu>
-        <% if policy(@draw).results? %>
-          <li><%= link_to 'View results', results_draw_path(@draw), class: 'button' %></li>
-        <% end %>
-        <% if policy(SuiteAssignment.new(draw: @draw.__getobj__, groups: [])).new? %>
-          <li><%= link_to 'Select suites', new_draw_suite_assignment_path(@draw), class: 'button' %></li>
-        <% end %>
-        <% if policy(LotteryAssignment.new(draw: @draw.__getobj__)).index? %>
-          <li><%= link_to 'Manually assign lottery numbers', draw_lottery_assignments_path(@draw), class: 'button' %></li>
-        <% end %>
-        <% if policy(LotteryAssignment.new(draw: @draw.__getobj__)).automatic? %>
-          <%= link_to 'Automatically assign lottery numbers',
-            automatic_draw_lottery_assignments_path(@draw),
-            method: :post,
-            data: { confirm: 'This will randomly assign lottery numbers to all groups and clips. They cannot be altered after being set and the draw will proceed to the suite selection phase. Are you sure you want to continue?' },
-            class: 'button' %>
-        <% end %>
-        <% if policy(Group).new? && policy(@draw).group_actions? %>
-          <li><%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %></li>
-        <% end %>
-        <% if @draw.oversubscribed? && policy(@draw).oversubscription? %>
-          <li><%= link_to 'Handle oversubscription', oversub_draw_path(@draw), class: 'button secondary' %></li>
-        <% end %>
-        <% if policy(@draw).activate? %>
-          <li><%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch, class: 'button' %></li>
-        <% end %>
-        <% if policy(Clip.new(draw: @draw.__getobj__)).new? %>
-          <li><%= link_to 'Create a clip', new_draw_clip_path(@draw), class: 'button' %></li>
-        <% end %>
-        <% if policy(@draw).start_lottery? %>
-          <li><%= link_to 'Proceed to Lottery', lottery_confirmation_draw_path(@draw), class: start_lottery_btn_class(@draw) %></li>
-        <% end %>
-        <% if policy(@draw).start_selection? %>
-          <li><%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch,
-            data: { confirm: 'Are you sure that you have finished assigning lottery numbers? They cannot be changed after you proceed!' }, class: 'button' %></li>
-        <% end %>
-        <% if policy(@draw).intent_actions? %>
-          <li>
-            <a href="#">Intent</a>
-            <ul class="menu vertical nested">
-              <% if policy(@draw).intent_report? %>
-                <li><%= link_to 'View intent report', intent_report_draw_path(@draw), class: 'button expanded secondary' %></li>
-              <% end %>
-              <% if policy(@draw).bulk_on_campus? %>
-                <li><%= link_to 'Make all students on campus', bulk_on_campus_draw_path(@draw),
-                  method: :patch,
-                  **with_tooltip(text: 'Sets all students who have not declared'\
-                                ' their housing intent to living on campus',
-                                class_override: 'button') %></li>
-              <% end %>
-              <% if policy(@draw).lock_intent? %>
-                <li><%= simple_form_for @draw do |f| %>
-                  <%= f.input :intent_locked, as: 'hidden',
-                    input_html: { value: !@draw.intent_locked } %>
-                  <%= f.submit lock_intent_btn_label(@draw),
-                    **with_tooltip(text: lock_intent_btn_tooltip(@draw), class_override: 'button expanded') %>
-                <% end %>
-              <% end %></li>
-            </ul>
-          </li>
-        <% end %>
+<div class="contextual-draw-buttons"><%= render "contextual_draw_buttons", draw: @draw %></div>
+<% if @draw.draft? %>
+  <div class="suite-report">
+    <%= render 'suite_report' %>
+  </div>
+  <hr />
+<% else %>
+  <% if policy(@draw).oversub_report? %>
+      <div class="oversub-report">
+        <%= render 'oversub_report', draw: @draw, path: draw_path(@draw) %>
         <% if policy(@draw).lock_all_sizes? %>
-          <li>
-            <a href="#">Lock Sizes</a>
-            <ul class="menu vertical nested">
-              <li><%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %></li>
-              <% if policy(@draw).toggle_size_lock? %>
-                <% @draw.suite_sizes.each do |size| %>
-                  <li><%= toggle_size_lock_btn(draw: @draw, size: size, path: draw_path(@draw)) %></li>
-                <% end %>
-              <% end %>
-            </ul>
-          </li>
-        <% end %>
-        <% if policy(EmailExport).new? %>
-          <li>
-            <a href="#">Export Leader Emails</a>
-            <ul class="menu vertical nested">
-              <li><%= render 'email_exports/hidden_form', draw: @draw, size: nil, btn_str: 'All' %></li>
-              <% @draw.group_sizes.each do |size| %>
-                <li><%= render 'email_exports/hidden_form', draw: @draw, size: size, btn_str: headerize_size(size) %></li>
-              <% end %>
-            </ul>
-          </li>
-        <% end %>
-        <li>
-          <a href="#">Draw Information</a>
-          <ul class="menu vertical nested">
-            <% if policy(@draw).student_summary? %>
-              <li><%= link_to 'View students', student_summary_draw_path(@draw), class: 'button secondary' %></li>
-            <% end %>
-            <% if policy(DrawSuite.new(draw: @draw.__getobj__)).index? %>
-              <li><%= link_to 'View suites', draw_suites_path(@draw, method: :get), class: 'button secondary' %></li>
-            <% end %>
-            <% if policy(Group).index? %>
-              <li><%= link_to 'View groups', draw_groups_path(@draw), class: 'button secondary' %></li>
-            <% end %>
-          </ul>
-        </li>
-        <li>
-          <a href="#">Draw Config</a>
-          <ul class="menu vertical nested">
-            <% if policy(@draw).edit? %>
-              <li><%= link_to 'Edit draw', edit_draw_path(@draw), class: 'button secondary' %></li>
-            <% end %>
-            <% if policy(@draw).student_summary? %>
-              <li><%= link_to 'Edit students', student_summary_draw_path(@draw), class: 'button secondary' %></li>
-            <% end %>
-            <% if policy(DrawSuite.new(draw: @draw.__getobj__)).edit_collection? %>
-              <li><%= link_to 'Edit suites', edit_collection_draw_suites_path(@draw), class: 'button secondary' %></li>
-            <% end %>
-            <% if policy(@draw).destroy? %>
-              <li><%= link_to 'Delete', draw_path(@draw), method: :delete,
-                data: { confirm: 'Are you sure you want to delete this draw? You will lose all group, lottery, and suite assignment information!' }, class: 'button alert' %></li>
-            <% end %>
-          </ul>
-        </li>
-      </ul>
-    <% else %>
-      <ul class="vertical menu" data-accordion-menu>
-        <% if policy(Group).new? %>
-          <li><%= link_to 'Create new housing group', new_draw_group_path(@draw), class: 'button secondary' %></li>
-        <% end %>
-        <% if policy(Clip.new(draw: @draw.__getobj__)).new? %>
-          <li><%= link_to 'Create a clip', new_draw_clip_path(@draw), class: 'button' %></li>
+          <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
         <% end %>
         <% if policy(DrawSuite.new(draw: @draw.__getobj__)).index?%>
-          <li><%= link_to 'View suites', draw_suites_path(@draw, method: :get), class: 'button secondary' %></li>
+          <%= link_to 'View suites', draw_suites_path(@draw, method: :get), class: 'button secondary' %>
         <% end %>
-        <% if policy(Group).index? %>
-          <li><%= link_to 'View groups', draw_groups_path(@draw), class: 'button secondary' %></li>
-        <% end %>
-      </ul>
-    <% end %>
-  </div>
-</div>
-<div class="draw-body">
-  <% if @draw.draft? %>
-    <div class="suite-report">
-      <%= render 'suite_report' %>
-    </div>
-    <hr />
+      </div>
   <% end %>
-  <% if policy(@draw).oversub_report? %>
-    <div class="oversub-report">
-      <%= render 'oversub_report', draw: @draw, path: draw_path(@draw) %>
-    </div>
-    <hr />
-  <% end %>
-  <% if policy(@draw).selection_metrics? %>
-    <div>
-      <%= render 'selection_metrics', draw: @draw, group: current_user.group,
-        without_suites: @draw.groups_without_suites_by_size[current_user.group.size],
-        valid_suites: @draw.valid_suites(size: current_user.group.size) %>
-    </div>
-    <hr />
-  <% end %>
-  <% if policy(@draw).group_report? %>
-    <div class="group-report">
-      <h3>Group Report</h3>
-      <% if @draw.lottery_or_later? %>
+  <% if policy(@draw).group_report? && @draw.lottery_or_later? %>
+      <div class="secondary-group-report">
+        <h3>Group Report</h3>
         <%= render 'groups/secondary_report', groups: @draw.groups_by_size, path: draw_path(@draw),
-          actions_partial: 'groups/actions' %>
-      <% elsif @draw.before_lottery? %>
-        <%= render 'group_report', sizes: @draw.sizes, groups: @draw.groups_by_size,
-          diff: @diff, group_counts: @draw.group_counts, suite_counts: @draw.suite_counts,
-          actions_partial: 'groups/actions', path: draw_path(@draw) %>
-      <% end %>
-    </div>
-    <hr />
+            actions_partial: 'groups/actions' %>
+      </div>
   <% end %>
-  <% if @draw.pre_lottery? %>
-    <div class="ungrouped-report">
-      <%= render 'ungrouped_report' %>
-    </div>
-    <hr />
+  <ul class="accordion" data-accordion data-multi-expand="true" data-accordion data-allow-all-closed="true">
+    <% if policy(@draw).intent_report? && @draw.pre_lottery? %>
+      <li class="accordion-item is-active' %>" data-accordion-item>
+        <a href="#" class="accordion-title">Intent</a>
+        <div class="accordion-content" data-tab-content>
+          <p class="h3"><%= @draw.intent_metrics['on_campus'] %> on campus students</p>
+          <p class="h3"><%= @draw.intent_metrics['off_campus'] %> off campus students</p>
+          <p class="h3"><%= @draw.intent_metrics['undeclared'] %> undeclared students</p>
+          <% if @draw.ungrouped_students.key?('undeclared') %>
+            <ul style="columns: 4; list-style-type: none; padding-bottom: 1em;">
+              <% @draw.ungrouped_students['undeclared'].each do |student| %>
+                <li><%= link_to student.full_name, user_path(student) %></li>
+              <% end %>
+            </ul>
+          <% end %>
+          <%= link_to 'View intent report', intent_report_draw_path(@draw), class: 'button secondary' %>
+        </div>
+      </li>
+    <% end %>
+    <% if policy(@draw).group_report? && @draw.pre_lottery? %>
+      <li class="accordion-item" data-accordion-item>
+        <a href="#" class="accordion-title">Groups</a>
+        <div class="accordion-content group-report" data-tab-content>
+          <h3>Group Report</h3>
+          <%= render 'group_report', sizes: @draw.sizes, groups: @draw.groups_by_size,
+            diff: @diff, group_counts: @draw.group_counts, suite_counts: @draw.suite_counts,
+            actions_partial: 'groups/actions', path: draw_path(@draw) %>
+          <div class="ungrouped-report">
+            <%= render 'ungrouped_report' %>
+          </div>
+          <% if policy(Group).index? %>
+            <%= link_to 'View printable group report', draw_groups_path(@draw), class: 'button secondary' %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+    <% if policy(@draw).selection_metrics? %>
+      <li class="accordion-item" data-accordion-item>
+        <a href="#" class="accordion-title">Export Leader E-mails</a>
+        <div class="accordion-content selection-metrics" data-tab-content>
+          <%= render 'selection_metrics', draw: @draw, group: current_user.group,
+            without_suites: @draw.groups_without_suites_by_size[current_user.group.size],
+            valid_suites: @draw.valid_suites(size: current_user.group.size) %>
+        </div>
+      </li>
+    <% end %>
+    <% if @draw.intent_deadline.present? || @draw.locking_deadline.present? %>
+      <li class="accordion-item" data-accordion-item>
+        <a href="#" class="accordion-title">Export Leader E-mails</a>
+        <div class="accordion-content deadlines" data-tab-content>
+          <h3>Deadlines</h3>
+          <% if @draw.intent_deadline.present? %>
+            <p>Deadline to submit intent: <%= @draw.intent_deadline.strftime('%B %e') %></p>
+          <% end %>
+          <% if @draw.locking_deadline.present? %>
+            <p>Deadline to form a group: <%= @draw.locking_deadline.strftime('%B %e') %></p>
+          <% end %>
+          <% if policy(@draw).intent_reminder? || policy(@draw).locking_reminder? %>
+            <% if policy(@draw).intent_reminder? %>
+              <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
+                <%= f.input :email_type, as: 'hidden',
+                  input_html: { value: 'intent' } %>
+                <%= f.submit 'Send intent reminder',
+                  **with_tooltip(text: 'Emails students a reminder to submit their housing intent',
+                                class_override: 'button') %>
+              <% end %>
+              <% if @draw.last_email_sent.present? %>
+                (Last reminder was sent <%= format_email_date(@draw.last_email_sent) %>)
+              <% end %>
+            <% elsif policy(@draw).locking_reminder? %>
+              <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
+                <%= f.input :email_type, as: 'hidden', input_html: { value: 'locking' } %>
+                <%= f.submit 'Send locking reminder',
+                            **with_tooltip(text: 'Emails students a reminder to lock their group',
+                                            class_override: 'button') %>
+              <% end %>
+              <% if @draw.last_email_sent.present? %>
+                (Last reminder was sent <%= format_email_date(@draw.last_email_sent) %>.
+                It was for <%= @draw.email_type %>.
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+    <% if policy(EmailExport).new? %>
+      <li class="accordion-item" data-accordion-item>
+        <a href="#" class="accordion-title">Export Leader E-mails</a>
+        <div class="accordion-content export-leader-btns" data-tab-content>
+          <p>Click the buttons below to export the e-mail addresses of either all group leaders or leaders of groups of a specific size.</p>
+          <ul>
+            <li><%= render 'email_exports/hidden_form', draw: @draw, size: nil, btn_str: 'All' %></li>
+            <% @draw.group_sizes.each do |size| %>
+              <li><%= render 'email_exports/hidden_form', draw: @draw, size: size, btn_str: headerize_size(size) %></li>
+            <% end %>
+          </ul>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+  <hr />
+<% end %>
+<div>
+  <% if policy(@draw).edit? %>
+    <%= link_to 'Edit draw', edit_draw_path(@draw), class: 'button secondary' %>
   <% end %>
-  <% if @draw.intent_deadline.present? || @draw.locking_deadline.present? %>
-    <div>
-      <h3>Deadlines</h3>
-      <% if @draw.intent_deadline.present? %>
-        <p>Deadline to submit intent: <%= @draw.intent_deadline.strftime('%B %e') %></p>
-      <% end %>
-      <% if @draw.locking_deadline.present? %>
-        <p>Deadline to form a group: <%= @draw.locking_deadline.strftime('%B %e') %></p>
-      <% end %>
-      <% if policy(@draw).intent_reminder? || policy(@draw).locking_reminder? %>
-        <% if policy(@draw).intent_reminder? %>
-          <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
-            <%= f.input :email_type, as: 'hidden',
-              input_html: { value: 'intent' } %>
-            <%= f.submit 'Send intent reminder',
-              **with_tooltip(text: 'Emails students a reminder to submit their housing intent',
-                            class_override: 'button') %>
-          <% end %>
-          <% if @draw.last_email_sent.present? %>
-            (Last reminder was sent <%= format_email_date(@draw.last_email_sent) %>)
-          <% end %>
-        <% elsif policy(@draw).locking_reminder? %>
-          <%= simple_form_for @draw, url: reminder_draw_path(@draw), method: :post do |f| %>
-            <%= f.input :email_type, as: 'hidden', input_html: { value: 'locking' } %>
-            <%= f.submit 'Send locking reminder',
-                        **with_tooltip(text: 'Emails students a reminder to lock their group',
-                                        class_override: 'button') %>
-          <% end %>
-          <% if @draw.last_email_sent.present? %>
-            (Last reminder was sent <%= format_email_date(@draw.last_email_sent) %>.
-            It was for <%= @draw.email_type %>.
-          <% end %>
-        <% end %>
-      <% end %>
-      <hr />
-    </div>
+  <% if policy(@draw).destroy? %>
+    <%= link_to 'Delete draw', draw_path(@draw), method: :delete,
+      data: { confirm: 'Are you sure you want to delete this draw? You will lose all group, lottery, and suite assignment information!' }, class: 'button alert' %>
   <% end %>
-  <%= link_to 'View all draws', draws_path %>
 </div>
+<%= link_to 'View all draws', draws_path %>

@@ -11,7 +11,9 @@
           <tr>
             <td>Group Leader</td>
             <td>Other Members</td>
-            <td>Transfers</td>
+            <% if current_user.admin? %>
+              <td>Transfers</td>
+            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -23,7 +25,9 @@
                 <% end %>
               </td>
               <td data-role="group-members"><%= group.members.map(&:full_name).join(', ') %></td>
-              <td data-role="group-transfers"><%= group.transfers %></td>
+              <% if current_user.admin? %>
+                <td data-role="group-transfers"><%= group.transfers %></td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>

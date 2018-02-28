@@ -9,7 +9,7 @@ RSpec.feature 'Draw deletion' do
   it 'succeeds' do
     msg = "Draw #{draw.name} deleted."
     visit draw_path(draw)
-    click_on 'Delete'
+    click_on 'Delete draw'
     expect(page).to have_content(msg)
   end
 end

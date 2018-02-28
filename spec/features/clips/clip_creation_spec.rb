@@ -27,7 +27,7 @@ RSpec.feature 'Clip creation' do
 
     it 'succeeds while adding themselves to the clip' do
       visit draw_path(groups.first.draw)
-      click_link('Create a clip')
+      click_link('Create a clip', match: :first)
       create_clip_with_groups(groups: [groups.last], add_self_as_rep: true)
       msg = 'Clip created'
       expect(page).to have_css('.flash-success', text: /#{msg}/)
@@ -35,7 +35,7 @@ RSpec.feature 'Clip creation' do
 
     it 'fails while not adding enough groups' do
       visit draw_path(groups.first.draw)
-      click_link('Create a clip')
+      click_link('Create a clip', match: :first)
       create_clip_with_groups(groups: [groups.last], add_self_as_rep: false)
       expect(page).to have_text('There must be more than one group per clip')
     end

@@ -94,7 +94,7 @@ RSpec.describe GroupPolicy do
       end
     end
     permissions :index? do
-      it { is_expected.to permit(user, Group) }
+      it { is_expected.not_to permit(user, Group) }
     end
     permissions :show? do
       it { is_expected.to permit(user, group) }
@@ -140,14 +140,23 @@ RSpec.describe GroupPolicy do
       end
     end
     permissions :request_to_join? do
-      context 'in same draw as record, not in group' do
+      context 'in same draw as record, not in group, draw is pre_lottery' do
         before do
-          draw = instance_spy('Draw')
+          draw = instance_spy('Draw', pre_lottery?: true)
           allow(group).to receive(:draw).and_return(draw)
           allow(user).to receive(:draw).and_return(draw)
           allow(user).to receive(:group).and_return(nil)
         end
         it { is_expected.to permit(user, group) }
+      end
+      context 'in same draw as record, not in group, draw is not pre_lottery' do
+        before do
+          draw = instance_spy('Draw', pre_lottery?: false)
+          allow(group).to receive(:draw).and_return(draw)
+          allow(user).to receive(:draw).and_return(draw)
+          allow(user).to receive(:group).and_return(nil)
+        end
+        it { is_expected.not_to permit(user, group) }
       end
       context 'in different draw, not in group' do
         before do

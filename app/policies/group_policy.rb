@@ -7,7 +7,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def index?
-    true
+    user_has_uber_permission?
   end
 
   def create?
@@ -32,7 +32,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def request_to_join?
-    (user.draw == record.draw) && !user.group
+    (user.draw == record.draw) && !user.group && record.draw.pre_lottery?
   end
 
   def accept_request?

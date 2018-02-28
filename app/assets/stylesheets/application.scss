@@ -12,9 +12,13 @@
 @import "simpleform_hint_override";
 @import "buildings";
 @import "draws";
+@import "groups";
 @import "users";
 
 td.actions a.button { margin: 0 }
+
+.accordion-title { font-size: 1.1em; }
+.tabs-title a { font-size: 1em; }
 
 .homepage-hero {
   @include grid-col;
@@ -34,3 +38,5 @@ footer {
   margin-top: 1em;
   line-height: 1.5;
 }
+
+.has-tip { font-weight: normal; }

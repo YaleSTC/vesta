@@ -8,6 +8,16 @@
   .zero { background-color: lighten($success-color, 72%); }
 }
 
+.lock-intent-form { display: inline-block; }
+
+.export-leader-btns ul {
+  list-style: none;
+
+  li {
+    display: inline-block;
+  }
+}
+
 .group-report-1 {
   td[data-role="group-leader"] {
     width: 35%;
@@ -33,6 +43,12 @@
       font-weight: bold;
       color: $alert-color;
     }
+  }
+  .ungrouped-report {
+    padding-top: 1em;
+    padding-bottom: 1em;
+
+    ul { padding-bottom: 1em; }
   }
 }
 

@@ -16,6 +16,9 @@
   <% if current_user.group %>
     <% if current_user.draw %>
       <li><%= link_to 'My Group', draw_group_path(current_user.draw, current_user.group) %></li>
+      <% if policy(Clip.new(draw: current_user.draw)).new? %>
+        <li><%= link_to 'Create a clip', new_draw_clip_path(current_user.draw) %></li>
+      <% end %>
       <% if policy(current_user.group).assign_rooms? %>
         <li><%= link_to 'Assign Rooms', new_group_room_assignment_path(current_user.group) %></li>
       <% end %>
