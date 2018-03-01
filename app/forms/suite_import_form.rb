@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
-#
+require 'csv'
+require 'csv_reader'
+
 # Form Object for Suite Importing
 class SuiteImportForm
   include ActiveModel::Model
   include Callable
-  require 'csv'
 
   HEADER = %w(number common single double medical).freeze
 
@@ -29,7 +30,7 @@ class SuiteImportForm
   # @return [Hash{Symbol=>nil,Hash}] A hash with flash messages to be set.
   def import
     return error('No file uploaded') unless file
-    prepare_csv
+    @body = CSVReader.read(filename: file)
     return error('Header incorrect') unless correct_header?
     CSV.parse(@body.join("\n"), headers: true).each do |row|
       create_suite_from_row(row: row.to_hash.symbolize_keys)
@@ -97,29 +98,5 @@ class SuiteImportForm
   def correct_header?
     return true if @body.first.split(',') == HEADER
     false
-  end
-
-  def prepare_csv
-    @string = File.read(file).encode('UTF-8', 'binary',
-                                     invalid: :replace, undef: :replace,
-                                     replace: '')
-    remove_extra_columns
-    @body = clean_line_endings
-    process_header_line
-  end
-
-  def process_header_line
-    @body.first.gsub!(/\s+/, '')
-    @body.first.downcase!
-  end
-
-  def clean_line_endings
-    lines = string.split(/(\r?\n)|\r/)
-    lines.reject! { |s| /(\r?\n)|\r/.match s }
-    lines
-  end
-
-  def remove_extra_columns
-    @string.gsub!(/,,*$/, '')
   end
 end

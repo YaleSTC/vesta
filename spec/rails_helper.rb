@@ -60,7 +60,11 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    Apartment::Tenant.reset
+    # Must be rescued for testing lib/user_cloner.rb since that is not meant to
+    # be run in a transaction and it breaks this command
+    # rubocop:disable RescueModifier
+    Apartment::Tenant.reset rescue nil
+    # rubocop:enable RescueModifier
     DatabaseCleaner.clean
   end
 end

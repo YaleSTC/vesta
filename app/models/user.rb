@@ -132,6 +132,12 @@ class User < ApplicationRecord
     role == 'admin' || role == 'superuser'
   end
 
+  # Return the login attribute for a user; the username if using CAS or the
+  # email otherwise
+  def login_attr
+    self.class.cas_auth? ? username : email
+  end
+
   private
 
   def downcase_username

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Seed a college (tenant) with dummy housing inventory and users. Designed to
+# assist with the provisioning of test or demo instances.
+
+# Exit if any subcommand fails
+set -e
+
+# Test inputs
+SUBDOMAIN=$1
+
+if test -z "$SUBDOMAIN"; then
+  echo "Usage: bin/seed_college [subdomain of college]"
+  exit 1
+fi
+
+bin/rake colleges:seed["$SUBDOMAIN"]

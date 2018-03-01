@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Provision a set of colleges whose subdomains and names are defined in a CSV
+# file. Optionally seeds the colleges with dummy data.
+
+# Exit if any subcommand fails
+set -e
+
+# Test inputs
+FILENAME=$1
+
+if test -z "$FILENAME"; then
+  echo "Usage: bin/provision_colleges [csv_filename]"
+  exit 1
+fi
+
+bin/rake colleges:provision["$FILENAME"]

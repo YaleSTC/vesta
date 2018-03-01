@@ -31,7 +31,7 @@ class CollegeCreator
     return error(self) unless valid?
     ActiveRecord::Base.transaction do
       college.save!
-      save_new_superuser!
+      clone_user_for_access
     end
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -49,12 +49,11 @@ class CollegeCreator
     errors.add(:base, 'You must grant access the new college to a superuser')
   end
 
-  def save_new_superuser!
+  def clone_user_for_access
     # Note that this runs in a transaction
     current_college = College.current
-    college.activate!
-    # This is necessary to avoid failing the password presence validation
-    User.new(user_for_access.attributes).save!(validate: false)
+    UserCloner.clone(username: user_for_access.login_attr,
+                     from: current_college, to: college, io: StringIO.new)
     current_college.activate!
   end
 

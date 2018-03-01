@@ -225,4 +225,17 @@ RSpec.describe User, type: :model do
       expect(user.admin?).to be(false)
     end
   end
+
+  describe '#login_attr' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it 'returns the username if CAS is being used' do
+      allow(User).to receive(:cas_auth?).and_return(true)
+      expect(user.login_attr).to eq(user.username)
+    end
+    it 'returns the email if CAS is not being used' do
+      allow(User).to receive(:cas_auth?).and_return(false)
+      expect(user.login_attr).to eq(user.email)
+    end
+  end
 end

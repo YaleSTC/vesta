@@ -64,6 +64,7 @@ All notable changes to this project will be documented in this file.
 * Add securely random automatic lottery number generation ([#361](https://gitlab.com/yale-sdmp/vesta/issues/361), [#698](https://gitlab.com/yale-sdmp/vesta/issues/698)).
 * Add an e-mail to all on-campus students notifying them of their lottery number ([#702](https://gitlab.com/yale-sdmp/vesta/issues/702)).
 * Add a terms of service page for new users ([#719](https://gitlab.com/yale-sdmp/vesta/issues/719)).
+* Add Rake tasks for college setup and user management ([#726](https://gitlab.com/yale-sdmp/vesta/issues/726)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed

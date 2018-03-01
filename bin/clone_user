@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Copy a single user record to all colleges, takes a NetID / username for CAS
+# auth or an e-mail address otherwise.
+
+# Exit if any subcommand fails
+set -e
+
+# Test inputs
+USERNAME=$1
+
+if test -z "$USERNAME"; then
+  echo "Usage: bin/clone_user [username / e-mail]"
+  exit 1
+fi
+
+bin/rake colleges:clone_user["$USERNAME"]
