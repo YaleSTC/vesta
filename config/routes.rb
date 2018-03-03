@@ -97,19 +97,12 @@ Rails.application.routes.draw do
 
     resources :groups do
       member do
-        post 'request', to: 'groups#request_to_join'
-        put 'accept_request'
-        get 'invite'
-        patch 'invite', to: 'groups#send_invites', as: 'send_invites'
-        put 'accept_invitation'
-        put 'reject_pending'
         put 'finalize'
-        put 'finalize_membership'
         put 'lock'
         put 'unlock'
-        delete 'leave'
         patch 'make_drawless'
       end
+
       collection do
         resource :suite_assignment, only: %i(new create destroy)
       end
@@ -132,7 +125,10 @@ Rails.application.routes.draw do
     member do
       put 'lock'
       put 'unlock'
+      get 'invite', to: 'memberships#new_invite', as: 'new_invite'
+      post 'invite', to: 'memberships#create_invite', as: 'create_invite'
     end
+    resources :memberships, only: %i(create update destroy)
     resource :suite_assignment, only: %i(new create destroy)
     resource :room_assignment, only: %i(new create edit update) do
       collection do

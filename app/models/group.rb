@@ -98,16 +98,16 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
 
   # Get the group's membership requests
   #
-  # @return [Array<User>] the users who have requested to join the housing group
+  # @return [Array<Membership>] the group's memberships with a requested status
   def requests
-    memberships.select { |m| m.status == 'requested' }.map(&:user)
+    memberships.select { |m| m.status == 'requested' }
   end
 
   # Get the group's membership invitations
   #
-  # @return [Array<User>] the users who have been invited to join the group
+  # @return [Array<Membership>] the group's memberships with an invited status
   def invitations
-    memberships.select { |m| m.status == 'invited' }.map(&:user)
+    memberships.select { |m| m.status == 'invited' }
   end
 
   # Get all of the non-accepted memberships for the group

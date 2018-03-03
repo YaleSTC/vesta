@@ -7,13 +7,13 @@ class MembershipBatchCreator
 
   # Create a new MembershipBatchCreator
   #
-  # @param [Array] user_ids The ids of users to create memberships for
-  # @param [Group] group The group to create memberships in
-  # @param [#to_h] params The params for the memberships
-  def initialize(user_ids:, group:, **params)
+  # @param user_ids [Array] The ids of users to create memberships for
+  # @param group [Group] The group to create memberships in
+  # @param action [String] The action creating the membership ('invite', etc.)
+  def initialize(user_ids:, group:, action:)
     @users = User.find(user_ids.reject(&:empty?))
-    @params = params.to_h
     @group = group
+    @action = action
   end
 
   # Use MembershipCreator to create many memberships. Creates no memberships if
@@ -24,7 +24,7 @@ class MembershipBatchCreator
   def run
     return error if too_many_invitations?
     @results = users.map do |u|
-      MembershipCreator.create!(user: u, group: group, **params)
+      MembershipCreator.create!(user: u, group: group, action: action)
     end
     build_result
   end
@@ -33,7 +33,7 @@ class MembershipBatchCreator
 
   private
 
-  attr_reader :users, :successes, :failures, :results, :params, :group
+  attr_reader :users, :successes, :failures, :results, :group, :action
 
   def error
     { redirect_object: nil, msg: { error: 'Too many invitations' } }

@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength
 # Controller for Groups
 class GroupsController < ApplicationController
   layout 'application_with_sidebar', except: %i(new create edit update index)
   prepend_before_action :set_group, except: %i(new create index)
   prepend_before_action :set_draw
-  before_action :authorize_draw!, except: %i(select_suite assign_suite show
-                                             assign_lottery index)
+  before_action :authorize_draw!, except: %i(show index)
   before_action :set_form_data, only: %i(new edit)
 
   def show
@@ -17,6 +15,7 @@ class GroupsController < ApplicationController
     @compatible_suites_count = @compatible_suites.count
     @clip_invites = @group.clip_memberships.includes(:clip)
                           .where(confirmed: false)
+    @membership = @group.memberships.find_by(user: current_user)
   end
 
   def index
@@ -50,60 +49,9 @@ class GroupsController < ApplicationController
     handle_action(**result, path: path)
   end
 
-  def request_to_join
-    result = MembershipCreator.create!(group: @group, user: current_user,
-                                       status: 'requested')
-    handle_action(path: draw_group_path(@draw, @group), **result)
-  end
-
-  def accept_request
-    user = User.includes(:membership).find(params['user_id'])
-    membership = user.memberships.where(group: @group).first
-    result = MembershipUpdater.update(membership: membership,
-                                      params: { status: 'accepted' })
-    handle_action(path: draw_group_path(@draw, @group), **result)
-  end
-
-  def send_invites
-    batch_params = { user_ids: group_params['invitations'], group: @group,
-                     status: 'invited' }
-    results = MembershipBatchCreator.run(**batch_params)
-    handle_action(path: request.referer, **results)
-  end
-
-  def invite
-    @students = UngroupedStudentsQuery.new(@draw.students.on_campus).call
-  end
-
-  def accept_invitation
-    membership = current_user.memberships.where(group: @group).first
-    result = MembershipUpdater.update(membership: membership,
-                                      params: { status: 'accepted' })
-    handle_action(path: draw_group_path(@draw, @group), **result)
-  end
-
-  def reject_pending
-    user = User.includes(:membership).find(params['user_id'])
-    membership = user.memberships.find_by(group: @group)
-    result = MembershipDestroyer.destroy(membership: membership)
-    handle_action(path: draw_group_path(@draw, @group), **result)
-  end
-
-  def leave
-    result = MembershipDestroyer.destroy(membership: current_user.membership)
-    handle_action(path: draw_group_path(@draw, @group), **result)
-  end
-
   def finalize
     result = GroupFinalizer.finalize(group: @group)
     handle_action(**result)
-  end
-
-  def finalize_membership
-    membership = current_user.memberships.where(group: @group).first
-    result = MembershipUpdater.update(membership: membership,
-                                      params: { locked: true })
-    handle_action(path: draw_group_path(@draw, @group), **result)
   end
 
   def lock

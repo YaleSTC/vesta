@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 * Add error messages to throw_abort ([#792](https://gitlab.com/yale-sdmp/vesta/issues/792)).
 * Add a new DrawStudentsController to handle actions that involve student enrollment in draws ([#620](https://gitlab.com/yale-sdmp/vesta/issues/620)).
 * Add group#cleanup! ([#808](https://gitlab.com/yale-sdmp/vesta/issues/808)).
+* Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333))
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600))

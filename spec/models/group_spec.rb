@@ -261,8 +261,8 @@ RSpec.describe Group, type: :model do
     it 'returns an array of users who have requested to join' do
       group = FactoryGirl.create(:open_group)
       user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
-      Membership.create(group: group, user: user, status: 'requested')
-      expect(group.requests).to eq([user])
+      m = Membership.create(group: group, user: user, status: 'requested')
+      expect(group.requests).to eq([m])
     end
   end
 
@@ -270,8 +270,8 @@ RSpec.describe Group, type: :model do
     it 'returns an array of users who have been invited to join' do
       group = FactoryGirl.create(:open_group)
       user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
-      Membership.create(group: group, user: user, status: 'invited')
-      expect(group.invitations).to eq([user])
+      m = Membership.create(group: group, user: user, status: 'invited')
+      expect(group.invitations).to eq([m])
     end
   end
 

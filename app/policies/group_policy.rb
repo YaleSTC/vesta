@@ -14,8 +14,9 @@ class GroupPolicy < ApplicationPolicy
     student_can_create_group(user) || user_has_uber_permission?
   end
 
-  def edit?
-    update?
+  def update?
+    (user.leader_of?(record) && group_can_be_edited_by_leader?(record)) ||
+      user_has_uber_permission?
   end
 
   def advanced_edit?
@@ -23,49 +24,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def destroy?
-    edit?
-  end
-
-  def update?
-    (user.leader_of?(record) && group_can_be_edited_by_leader?(record)) ||
-      user_has_uber_permission?
-  end
-
-  def request_to_join?
-    (user.draw == record.draw) && !user.group && record.draw.pre_lottery?
-  end
-
-  def accept_request?
-    edit?
-  end
-
-  def send_invites?
-    invite?
-  end
-
-  def invite?
-    (user.leader_of?(record) || user_has_uber_permission?) && record.open?
-  end
-
-  def reject_pending?
-    edit?
-  end
-
-  def accept_invitation?
-    !user.group && record.invitations.include?(user)
-  end
-
-  def leave?
-    !record.locked? && record.members.include?(user) && !user.leader_of?(record)
+    update?
   end
 
   def finalize?
-    edit? && record.full? && !record.finalizing? && !record.locked?
-  end
-
-  def finalize_membership?
-    (user.group == record && !record.locked_members.include?(user)) &&
-      record.finalizing?
+    update? && record.full? && !record.finalizing? && !record.locked?
   end
 
   def lock?
@@ -77,11 +40,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def view_pending_members?
-    edit? || user.rep?
+    update?
   end
 
   def change_leader?
-    edit?
+    update?
   end
 
   def make_drawless?

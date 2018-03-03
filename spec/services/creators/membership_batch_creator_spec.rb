@@ -51,7 +51,7 @@ RSpec.describe MembershipBatchCreator do
   # rubocop:disable RSpec/InstanceVariable
   def params_hash
     @group ||= FactoryGirl.create(:open_group, size: 3)
-    { group: @group, status: 'requested' }
+    { group: @group, action: 'request' }
   end
 
   def users

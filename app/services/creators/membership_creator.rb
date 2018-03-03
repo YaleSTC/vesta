@@ -7,9 +7,9 @@ class MembershipCreator < Creator
   #
   # @param [User] user The user to create the membership for
   # @param [Group] group The group to create the membership in
-  def initialize(user:, group:, **params)
-    params[:user] = user
-    params[:group] = group
+  # @param [String] action The action creating the membership (ie. 'request')
+  def initialize(user:, group:, action:)
+    set_params(user, group, action)
     super(klass: Membership, name_method: nil, params: params)
   end
 
@@ -29,5 +29,14 @@ class MembershipCreator < Creator
       errors: msg,
       params: params
     }
+  end
+
+  def set_params(user, group, action)
+    status = if action == 'request'
+               'requested'
+             elsif action == 'invite'
+               'invited'
+             end
+    @params = { user: user, group: group, status: status }
   end
 end

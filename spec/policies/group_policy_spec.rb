@@ -52,47 +52,6 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, Group) }
       end
     end
-    permissions :accept_invitation? do
-      context 'invited, not in group' do
-        before do
-          allow(other_group).to receive(:invitations).and_return([user])
-          allow(user).to receive(:group).and_return(nil)
-        end
-        it { is_expected.to permit(user, other_group) }
-      end
-      context 'in same draw, in group' do
-        before do
-          allow(user).to receive(:group).and_return(group)
-          allow(other_group).to receive(:invitations).and_return([user])
-        end
-        it { is_expected.not_to permit(user, other_group) }
-      end
-    end
-    permissions :leave? do
-      context 'in group, not leader' do
-        before do
-          allow(other_group).to receive(:members).and_return([user])
-          allow(user).to receive(:leader_of?).with(other_group)
-                                             .and_return(false)
-        end
-        it { is_expected.to permit(user, other_group) }
-      end
-      context 'in locked_group, not leader' do
-        before do
-          allow(other_group).to receive(:members).and_return([user])
-          allow(other_group).to receive(:locked?).and_return(true)
-        end
-        it { is_expected.not_to permit(user, other_group) }
-      end
-      context 'in group, leader' do
-        before { allow(group).to receive(:members).and_return([user]) }
-        it { is_expected.not_to permit(user, group) }
-      end
-      context 'not in group' do
-        before { allow(other_group).to receive(:members).and_return([]) }
-        it { is_expected.not_to permit(user, other_group) }
-      end
-    end
     permissions :index? do
       it { is_expected.not_to permit(user, Group) }
     end
@@ -100,8 +59,8 @@ RSpec.describe GroupPolicy do
       it { is_expected.to permit(user, group) }
       it { is_expected.to permit(user, other_group) }
     end
-    permissions :destroy?, :edit?, :update?, :accept_request?, :change_leader?,
-                :view_pending_members?, :reject_pending? do
+    permissions :destroy?, :edit?, :change_leader?,
+                :view_pending_members? do
       context 'not finalizing or locked' do
         before do
           allow(group).to receive(:finalizing?).and_return(false)
@@ -124,86 +83,6 @@ RSpec.describe GroupPolicy do
           allow(group).to receive(:locked?).and_return(true)
         end
         it { is_expected.not_to permit(user, group) }
-        it { is_expected.not_to permit(user, other_group) }
-      end
-    end
-    permissions :send_invites?, :invite? do
-      context 'group open' do
-        before { allow(group).to receive(:open?).and_return(true) }
-        it { is_expected.to permit(user, group) }
-        it { is_expected.not_to permit(user, other_group) }
-      end
-      context 'group not open' do
-        before { allow(group).to receive(:open?).and_return(false) }
-        it { is_expected.not_to permit(user, group) }
-        it { is_expected.not_to permit(user, other_group) }
-      end
-    end
-    permissions :request_to_join? do
-      context 'in same draw as record, not in group, draw is pre_lottery' do
-        before do
-          draw = instance_spy('Draw', pre_lottery?: true)
-          allow(group).to receive(:draw).and_return(draw)
-          allow(user).to receive(:draw).and_return(draw)
-          allow(user).to receive(:group).and_return(nil)
-        end
-        it { is_expected.to permit(user, group) }
-      end
-      context 'in same draw as record, not in group, draw is not pre_lottery' do
-        before do
-          draw = instance_spy('Draw', pre_lottery?: false)
-          allow(group).to receive(:draw).and_return(draw)
-          allow(user).to receive(:draw).and_return(draw)
-          allow(user).to receive(:group).and_return(nil)
-        end
-        it { is_expected.not_to permit(user, group) }
-      end
-      context 'in different draw, not in group' do
-        before do
-          allow(group).to receive(:draw).and_return(instance_spy('Draw'))
-          allow(user).to receive(:draw).and_return(instance_spy('Draw'))
-          allow(user).to receive(:group).and_return(nil)
-        end
-        it { is_expected.not_to permit(user, group) }
-      end
-      context 'in same draw, in group' do
-        before do
-          draw = instance_spy('Draw')
-          allow(group).to receive(:draw).and_return(draw)
-          allow(user).to receive(:draw).and_return(draw)
-          allow(user).to receive(:group).and_return(instance_spy('Group'))
-        end
-        it { is_expected.not_to permit(user, group) }
-      end
-    end
-    permissions :finalize_membership? do
-      context 'in finalizing group, accepted membership' do
-        before do
-          allow(user).to receive(:group).and_return(other_group)
-          allow(other_group).to receive(:finalizing?).and_return(true)
-        end
-        it { is_expected.to permit(user, other_group) }
-      end
-      context 'in finalizing group, pending membership' do
-        before do
-          allow(user).to receive(:group).and_return(nil)
-          allow(other_group).to receive(:finalizing?).and_return(true)
-        end
-        it { is_expected.not_to permit(user, other_group) }
-      end
-      context 'in full group, accepted membership' do
-        before do
-          allow(user).to receive(:group).and_return(other_group)
-          allow(other_group).to receive(:finalizing?).and_return(false)
-        end
-        it { is_expected.not_to permit(user, other_group) }
-      end
-      context 'already locked membership' do
-        before do
-          allow(user).to receive(:group).and_return(other_group)
-          allow(other_group).to receive(:finalizing?).and_return(true)
-          allow(other_group).to receive(:locked_members).and_return([user])
-        end
         it { is_expected.not_to permit(user, other_group) }
       end
     end
@@ -290,23 +169,13 @@ RSpec.describe GroupPolicy do
     permissions :index? do
       it { is_expected.to permit(user, Group) }
     end
-    permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
-                :advanced_edit?, :view_pending_members?, :reject_pending?,
+    permissions :show?, :edit?, :update?, :destroy?,
+                :advanced_edit?, :view_pending_members?,
                 :change_leader?, :select_suite?, :assign_suite? do
       it { is_expected.to permit(user, group) }
     end
     permissions :make_drawless? do
       it { is_expected.not_to permit(user, group) }
-    end
-    permissions :send_invites?, :invite? do
-      context 'group open' do
-        before { allow(group).to receive(:open?).and_return(true) }
-        it { is_expected.to permit(user, group) }
-      end
-      context 'group not open' do
-        before { allow(group).to receive(:open?).and_return(false) }
-        it { is_expected.not_to permit(user, group) }
-      end
     end
     permissions :lock? do
       context 'lockable group' do
@@ -334,9 +203,6 @@ RSpec.describe GroupPolicy do
         before { allow(group).to receive(:unlockable?).and_return(false) }
         it { is_expected.not_to permit(user, group) }
       end
-    end
-    permissions :request_to_join?, :finalize_membership? do
-      it { is_expected.not_to permit(user, group) }
     end
     permissions :finalize? do
       context 'group is not full' do
@@ -381,21 +247,11 @@ RSpec.describe GroupPolicy do
     permissions :index? do
       it { is_expected.to permit(user, [group]) }
     end
-    permissions :show?, :edit?, :update?, :destroy?, :accept_request?,
-                :advanced_edit?, :view_pending_members?, :reject_pending?,
+    permissions :show?, :edit?, :update?, :destroy?,
+                :advanced_edit?, :view_pending_members?,
                 :change_leader?, :make_drawless?, :select_suite?,
                 :assign_suite? do
       it { is_expected.to permit(user, group) }
-    end
-    permissions :send_invites?, :invite? do
-      context 'group open' do
-        before { allow(group).to receive(:open?).and_return(true) }
-        it { is_expected.to permit(user, group) }
-      end
-      context 'group not open' do
-        before { allow(group).to receive(:open?).and_return(false) }
-        it { is_expected.not_to permit(user, group) }
-      end
     end
     permissions :lock? do
       context 'lockable group' do
@@ -423,9 +279,6 @@ RSpec.describe GroupPolicy do
         before { allow(group).to receive(:unlockable?).and_return(false) }
         it { is_expected.not_to permit(user, group) }
       end
-    end
-    permissions :request_to_join?, :finalize_membership? do
-      it { is_expected.not_to permit(user, group) }
     end
     permissions :finalize? do
       context 'group is not full' do

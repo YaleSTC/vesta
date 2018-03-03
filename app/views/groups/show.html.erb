@@ -5,17 +5,16 @@
     <h2 class="group-requests h4">Requests</h2>
     <ul>
       <% @group.requests.each do |r| %>
-        <% if policy(r).show? %>
+        <% if policy(r.user).show? %>
           <li class="group-request">
-            <%= link_to r.full_name, user_path(r) %>
-            <% if policy(@group).accept_request? %>
+            <%= link_to r.user.full_name, user_path(r.user) %>
+            <% if policy(r).accept? %>
               (<%= link_to 'accept',
-                           accept_request_draw_group_path(@draw, @group, params: { 'user_id' => r.id }),
-                           method: :put %><%= policy(@group).reject_pending? ? ' / ' : ')' %>
-            <% end %>
-            <% if policy(@group).reject_pending? %>
-              <%= '(' unless policy(@group).accept_request? %><%= link_to 'reject', reject_pending_draw_group_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %>)
-            <% end %>
+               group_membership_path(@group, r, update_action: 'accept'), method: :patch %><%= policy(r).destroy? ? ' / ' : ')' %>
+           <% end %>
+           <% if policy(r).destroy? %>
+             <%= '(' unless policy(r).accept? %><%= link_to 'reject', group_membership_path(@group, r), method: :delete %>)
+           <% end %>
           </li>
         <% end %>
       <% end %>
@@ -25,12 +24,14 @@
     <h2 class="group-invitations h4">Invitations</h2>
     <ul>
       <% @group.invitations.each do |i| %>
-        <li class="group-invitation">
-          <%= link_to i.full_name, user_path(i) if policy(i).show? %>
-          <% if policy(@group).reject_pending? %>
-            (<%= link_to 'rescind', reject_pending_draw_group_path(@draw, @group, params: { 'user_id' => i.id }), method: :put %>)
-          <% end %>
-        </li>
+        <% if policy(i.user).show? %>
+          <li class="group-invitation">
+            <%= link_to i.user.full_name, user_path(i.user) %>
+            <% if policy(i).destroy? %>
+              (<%= link_to 'rescind', group_membership_path(@group, i), method: :delete %>)
+            <% end %>
+          </li>
+        <% end %>
       <% end %>
     </ul>
   <% end %>
@@ -58,15 +59,17 @@
   <hr style="border-color: #DDDDDD;" />
 <% end %>
 <div>
-  <%= link_to 'Edit', edit_draw_group_path(@draw, @group), class: 'button secondary' if policy(@group).edit? %>
-  <%= link_to 'Request To Join', request_draw_group_path(@draw, @group), method: :post, class: 'button secondary' if policy(@group).request_to_join? %>
-  <% if policy(@group).leave? %>
-    <%= link_to 'Leave group', leave_draw_group_path(@draw, @group), method: :delete, class: 'button alert' %>
+  <% if @membership.present? %>
+    <%= link_to 'Accept Invitation', group_membership_path(@group, @membership, update_action: 'accept'), method: :patch, class: 'button' if policy(@membership).accept? %>
+    <%= link_to 'Lock Membership', group_membership_path(@group, @membership, update_action: 'finalize'), method: :patch, class: 'button' if policy(@membership).finalize? %>
+    <% if policy(@membership).destroy? %>
+      <%= link_to 'Leave group', group_membership_path(@group, @membership), method: :delete, class: 'button alert' %>
+    <% end %>
   <% end %>
-  <%= link_to 'Invite Members', invite_draw_group_path(@draw, @group), class: 'button secondary' if policy(@group).invite? %>
-  <%= link_to 'Accept Invitation', accept_invitation_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).accept_invitation? %>
+  <%= link_to 'Edit', edit_draw_group_path(@draw, @group), class: 'button secondary' if policy(@group).edit? %>
+  <%= link_to 'Request To Join', group_memberships_path(@group, create_action: 'request'), method: :post, class: 'button secondary' if policy(Membership.new(group: @group, user: current_user)).request_to_join? %>
+  <%= link_to 'Invite Members', new_invite_group_path(@group), class: 'button secondary' if policy(Membership.new(group: @group, user: current_user)).create_invite? %>
   <%= link_to 'Begin Locking Process for Group', finalize_draw_group_path(@draw, @group), method: :put, data: { confirm: 'This will begin the process of confirming this housing group and cannot be undone. Are you sure you want to proceed?' }, class: 'button' if policy(@group).finalize? %>
-  <%= link_to 'Lock Membership', finalize_membership_draw_group_path(@draw, @group), method: :put, class: 'button' if policy(@group).finalize_membership? %>
   <%= link_to 'Lock Group', lock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
   <%= link_to 'Unlock All Members', unlock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).unlock? %>
   <% if @group.suite.present? && policy(SuiteAssignment.new(groups: [@group], draw: @group.draw)).new? %>
@@ -83,7 +86,7 @@
   <% end %>
   <% if policy(@group).make_drawless? %>
     <%= link_to 'Make special group', make_drawless_draw_group_path(@draw, @group), method: :patch, data: { confirm: 'Are you sure you want to remove this group and its members from the draw?' },
-                **with_tooltip(text: 'Remove this group and its members from the draw and convert it to a special group.', class_override: 'button alert') %>
+      **with_tooltip(text: 'Remove this group and its members from the draw and convert it to a special group.', class_override: 'button alert') %>
   <% end %>
   <%= link_to('Disband', draw_group_path(@draw, @group), method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert') if policy(@group).destroy? %>
 </div>
