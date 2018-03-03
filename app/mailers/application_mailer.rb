@@ -7,6 +7,14 @@ class ApplicationMailer < ActionMailer::Base
   layout 'mailer'
   helper :mail
 
+  def mail(**params)
+    text = ActionController::Base.helpers.strip_tags(render).strip
+    super(**params) do |format|
+      format.text { text }
+      format.html { render }
+    end
+  end
+
   private
 
   def vesta_sender

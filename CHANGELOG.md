@@ -112,6 +112,7 @@ All notable changes to this project will be documented in this file.
 * Prevent changes to suites and students in a draw after the pre-lottery phase ([#704](https://gitlab.com/yale-sdmp/vesta/issues/704)).
 * Force HTTPS in production environments.
 * Automatically drop database schemas when destroying a college ([#730](https://gitlab.com/yale-sdmp/vesta/issues/730)).
+* Remove duplication of email text and html files ([#420](https:/gitlab.com/yale-sdmp/vesta/issues/420)).
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://gitlab.com/yale-sdmp/vesta/issues/576)).
