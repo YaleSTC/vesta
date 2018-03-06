@@ -14,6 +14,7 @@ test:
     - pages
 
 pages:
+  stage: deploy
   script:
   - apt-get update -yqqq
   - apt-get install -y nodejs
