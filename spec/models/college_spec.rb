@@ -38,11 +38,18 @@ RSpec.describe College do
     end
   end
 
-  describe 'apartment callback' do
+  describe 'apartment callbacks' do
     it 'creates a schema on create' do
       allow(Apartment::Tenant).to receive(:create).with('foo')
       FactoryGirl.create(:college, subdomain: 'foo')
       expect(Apartment::Tenant).to have_received(:create).with('foo')
+    end
+
+    it 'drops the schema on destroy' do
+      allow(Apartment::Tenant).to receive(:drop).with('foo')
+      college = create(:college, subdomain: 'foo')
+      college.destroy
+      expect(Apartment::Tenant).to have_received(:drop).with('foo')
     end
   end
 

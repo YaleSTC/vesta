@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 * Add automatic room assignment for students assigned to singles ([#703](https://gitlab.com/yale-sdmp/vesta/issues/703)).
 * Prevent changes to suites and students in a draw after the pre-lottery phase ([#704](https://gitlab.com/yale-sdmp/vesta/issues/704)).
 * Force HTTPS in production environments.
+* Automatically drop database schemas when destroying a college ([#730](https://gitlab.com/yale-sdmp/vesta/issues/730)).
 
 ### Fixed
 * Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
