@@ -128,7 +128,7 @@ RSpec.describe Draw, type: :model do
     it 'returns the number of beds across all available suites' do
       draw = FactoryGirl.create(:draw_with_members, suites_count: 2)
       group = FactoryGirl.create(:locked_group, :defined_by_draw, draw: draw)
-      draw.suites.last.update(group: group)
+      draw.reload.suites.last.update(group: group)
       available_beds = draw.suites.sum(&:size) - draw.suites.last.size
       expect(draw.send(:bed_count)).to eq(available_beds)
     end
