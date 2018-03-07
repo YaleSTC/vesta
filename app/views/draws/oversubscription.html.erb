@@ -1,43 +1,31 @@
 <% provide(:title, "#{@draw.name} - Handle Oversubscription") %>
 <h1><%= @draw.name %> - Handle Oversubscription</h1>
-<div class="draw-menu-container" data-sticky-container>
-  <div class="draw-menu" data-sticky data-margin-top="0">
-    <ul class="vertical menu" data-accordion-menu>
-      <% if policy(@draw).lock_all_sizes? %>
-        <li><%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)),
-          method: :patch,
-          **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %></li>
-      <% end %>
-      <% if policy(@draw).toggle_size_lock? %>
-        <% @draw.suite_sizes.each do |size| %>
-          <li><%= toggle_size_lock_btn(draw: @draw, size: size, path: draw_path(@draw)) %></li>
-        <% end %>
-      <% end %>
-      <% if policy(@draw).prune? %>
-        <li><%= link_to 'Resolve all', prune_draw_path(@draw, 'all'), 
-          method: :delete, class: 'button alert expanded',
-          data: { confirm: 'This will randomly disband groups so that there is '\
-                  'no more oversubscription. The disbanded groups cannot be restored. '\
-                  'Are you sure you want to continue?' } %></li>
-        <% @draw.oversubscribed_sizes.each do |size| %>
-          <li><%= link_to "Resolve #{headerize_size(size)}", prune_draw_path(@draw, size),
-                          method: :delete, class: 'button alert expanded',
-                          id: "fix-oversub-size-#{size}", data: {
-                            confirm: 'This will randomly disband groups so that '\
-                              "#{headerize_size(size).downcase} are no longer oversubscribed. "\
-                              'The disbanded groups cannot be restored. '\
-                              'Are you sure you want to continue?' } %></li>
-        <% end %>
-      <% end %>
-    </ul>
-  </div>
+<div class="contextual-draw-buttons">
+  <% if policy(@draw).prune? %>
+    <%= link_to 'Resolve oversubscription for all sizes', prune_draw_path(@draw, 'all'),
+      method: :delete, class: 'button alert',
+      data: { confirm: 'This will randomly disband groups so that there is '\
+              'no more oversubscription. The disbanded groups cannot be restored. '\
+              'Are you sure you want to continue?' } %>
+    <% @draw.oversubscribed_sizes.each do |size| %>
+      <%= link_to "Resolve #{headerize_size(size)}", prune_draw_path(@draw, size),
+        method: :delete, class: 'button alert', id: "fix-oversub-size-#{size}",
+        data: { confirm: 'This will randomly disband groups so that '\
+                "#{headerize_size(size).downcase} are no longer oversubscribed. "\
+                'The disbanded groups cannot be restored. Are you sure you want to continue?' } %>
+    <% end %>
+  <% end %>
 </div>
-<div class="draw-body">
-  <div class="group-report">
-    <%= render 'group_report', sizes: @draw.sizes, groups: @draw.groups_by_size, 
-      diff: @diff, group_counts: @draw.group_counts,
-      suite_counts: @draw.suite_counts, actions_partial: 'groups/actions',
-      path: oversub_draw_path(@draw) %>
-  </div>
+<div class="oversub-report">
+  <%= render 'oversub_report', draw: @draw, path: oversub_draw_path(@draw) %>
+  <% if policy(@draw).lock_all_sizes? %>
+    <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: oversub_draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
+  <% end %>
+</div>
+<div class="group-report">
+  <%= render 'group_report', sizes: @draw.oversubscribed_sizes, groups: @draw.groups_by_size,
+    diff: @draw.oversubscription, group_counts: @draw.group_counts,
+    suite_counts: @draw.suite_counts, actions_partial: 'groups/actions',
+    path: oversub_draw_path(@draw) %>
 </div>
 <%= link_to 'Return to draw', draw_path(@draw) %>

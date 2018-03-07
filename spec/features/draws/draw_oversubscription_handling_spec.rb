@@ -49,7 +49,7 @@ RSpec.feature 'Draw oversubscription handling' do
     2.times { create(:locked_group, :defined_by_draw, draw: draw, size: 2) }
     draw.suites.delete_all
     visit oversub_draw_path(draw)
-    click_link('Resolve all')
+    click_link('Resolve oversubscription for all sizes')
     expect(page).to have_css('.flash-success',
                              text: /Singles disbanded.+Doubles disbanded/)
   end

@@ -40,8 +40,9 @@
     <li>
       <a href="#">Superuser</a>
       <ul class="menu vertical">
-        <li><%= link_to 'New College', new_college_path %></li>
+        <li><%= link_to 'All Colleges', colleges_url(host: env('APPLICATION_HOST')) %></li>
         <li><%= link_to 'Admin Dashboard', admin_users_path %></li>
+        <li><%= link_to 'New College', new_college_path %></li>
       </ul>
     </li>
   <% end %>

@@ -3,7 +3,7 @@
   <p>
   Vesta is a web app that manages the housing process for Yale's residential colleges.
   <% unless @current_college.name.empty? || @current_college.admin_email.empty? %>
-    This site was set up for <b><%= @current_college.name %></b> and you can log in by clicking <%= link_to 'here', new_user_session_path %>. If you don't have access and believe that you should, please contact the <%= link_to 'site administrators', "mailto:#{@current_college.admin_email}" %>. If you're looking for a different college click <%= link_to 'here', colleges_url(host: env('APPLICATION_HOST')) %> to view a list of all of the colleges in the system.
+    This site was set up for <b><%= @current_college.name %></b> and you can <%= link_to 'log in here', new_user_session_path %>. If you don't have access and believe that you should, please contact the <%= link_to 'site administrators', "mailto:#{@current_college.admin_email}" %>. If you're looking for a different college please visit <%= link_to 'the list of colleges in the system', colleges_url(host: env('APPLICATION_HOST')) %>.
   <% end %>
   </p>
   <p>If you'd like to learn more about Vesta you can visit our <%= link_to 'documentation site', 'https://yale-sdmp.gitlab.io/vesta', target: '_blank' %>. For technical questions please <%= link_to 'open an issue', 'https://gitlab.com/yale-sdmp/vesta/issues/new', target: '_blank' %> or contact the <%= link_to 'developer team', 'mailto:vesta-support@yale.edu' %>.

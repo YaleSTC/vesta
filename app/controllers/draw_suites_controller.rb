@@ -2,7 +2,6 @@
 
 # Controller for Draws
 class DrawSuitesController < ApplicationController
-  layout 'application_with_sidebar', except: %i(new create edit update index)
   prepend_before_action :set_draw
   before_action :set_form_data, only: %i(new edit)
 

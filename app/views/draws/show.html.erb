@@ -1,5 +1,5 @@
 <% provide(:title, @draw.name) %>
-<h1 class="draw-name"><%= @draw.name %></h1>
+<h1 class="draw-name"><%= @draw.name %> (<%= @draw.status.humanize %>)</h1>
 <div class="contextual-draw-buttons"><%= render "contextual_draw_buttons", draw: @draw %></div>
 <% if @draw.draft? %>
   <div class="suite-report">
@@ -50,7 +50,7 @@
         <div class="accordion-content group-report" data-tab-content>
           <h3>Group Report</h3>
           <%= render 'group_report', sizes: @draw.sizes, groups: @draw.groups_by_size,
-            diff: @diff, group_counts: @draw.group_counts, suite_counts: @draw.suite_counts,
+            diff: @draw.oversubscription, group_counts: @draw.group_counts, suite_counts: @draw.suite_counts,
             actions_partial: 'groups/actions', path: draw_path(@draw) %>
           <div class="ungrouped-report">
             <%= render 'ungrouped_report' %>
