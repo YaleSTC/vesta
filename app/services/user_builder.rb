@@ -10,12 +10,14 @@ class UserBuilder
   #
   # @param id_attr [String] the value for the ID attribute, either username
   # (CAS) or e-mail (non-CAS)
+  # @param role [String] the role of the user to be built
   # @param querier [#query] a service object to retrieve user profile data from.
   #   This must take the id_attr as an initializer parameter (assigned to :id),
   #   and implement a method :query that returns a hash of user attributes and
   #   values.
-  def initialize(id_attr:, querier: nil)
+  def initialize(id_attr:, role: 'student', querier: nil)
     @id_attr = id_attr
+    @role = role
     @querier = querier&.new(id: id_attr)
     @user = User.new
     @id_symbol = User.cas_auth? ? :username : :email
@@ -30,7 +32,8 @@ class UserBuilder
   def build
     return invalid_error if id_attr.empty?
     return duplicate_error if exists?
-    assign_login
+    return invalid_role_error unless role.in?(User.roles.keys)
+    assign_login_and_role
     assign_profile_attrs
     success
   end
@@ -50,7 +53,7 @@ class UserBuilder
   private
 
   attr_accessor :user
-  attr_reader :id_attr, :id_symbol, :querier
+  attr_reader :id_attr, :id_symbol, :querier, :role
 
   def result_hash
     { redirect_object: nil, user: user }
@@ -71,9 +74,15 @@ class UserBuilder
                       msg: { error: 'User already exists' })
   end
 
-  def assign_login
+  def invalid_role_error
+    result_hash.merge(action: 'build',
+                      msg: { error: 'Invalid role provided' })
+  end
+
+  def assign_login_and_role
     assign_method = "#{id_symbol}=".to_sym
     user.send(assign_method, id_attr)
+    user.role = role
   end
 
   def assign_profile_attrs

@@ -22,6 +22,12 @@ RSpec.describe Enrollment do
         result = described_class.enroll(ids: ids, querier: FakeProfileQuerier)
         expect(result[:msg][:success]).to include('id1')
       end
+      it 'correctly creates the valid user role' do
+        ids = %w(id1 badqueryid).join(', ')
+        result = described_class.enroll(ids: ids, role: 'rep',
+                                        querier: FakeProfileQuerier)
+        expect(result[:users].first.role).to eq(User.first.role)
+      end
       it 'notes the failure of the invalid query' do
         ids = %w(id1 badqueryid).join(', ')
         result = described_class.enroll(ids: ids, querier: FakeProfileQuerier)

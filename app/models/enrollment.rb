@@ -7,18 +7,22 @@ class Enrollment
   include Callable
 
   attr_reader :successes
-  attr_accessor :ids, :ids_array
+  attr_accessor :ids, :ids_array, :role
 
   validates :ids, presence: true
+  validates :role, inclusion: { in: %w(student rep) }
 
   # Initialize an Enrollment
   #
   # @param ids [String] the admin-entered string of multiple user IDs to import
+  # @param role [String] the role of the users to be created, either 'student'
+  #   or 'rep'
   # @param querier [#query] the profile querier service object, see UserBuilder
   #   for more details
-  def initialize(ids: '', querier: nil)
+  def initialize(ids: '', role: 'student', querier: nil)
     @ids = ids
     @ids_array = process_ids_str(ids)
+    @role = role
     @querier = querier
     @successes = []
     @failures = []
@@ -69,10 +73,14 @@ class Enrollment
   end
 
   def process_id(id)
-    ub = UserBuilder.new(id_attr: id, querier: querier)
+    ub = UserBuilder.new(id_attr: id, role: role, querier: querier)
     user = ub.build[:user]
     return if ub.exists?
     return failed_query_ids << id if user.first_name.nil?
+    save_user(user, id)
+  end
+
+  def save_user(user, id)
     if user.save
       successes << { user: user, id: id }
     else

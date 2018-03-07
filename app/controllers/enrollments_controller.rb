@@ -4,6 +4,7 @@
 class EnrollmentsController < ApplicationController
   def new
     @enrollment = Enrollment.new
+    @roles = %w(student rep)
   end
 
   def create
@@ -22,8 +23,8 @@ class EnrollmentsController < ApplicationController
   end
 
   def enrollment_params
-    params.require(:enrollment).permit(:ids).to_h.transform_keys(&:to_sym)
-          .merge(querier: querier)
+    params.require(:enrollment).permit(:ids, :role).to_h
+          .transform_keys(&:to_sym).merge(querier: querier)
   end
 
   def querier

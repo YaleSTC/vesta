@@ -18,6 +18,10 @@ RSpec.describe UserBuilder do
         result = described_class.new(id_attr: 'foo', querier: querier).build
         expect(result[:user][:first_name]).to eq('John')
       end
+      it 'assigns a role' do
+        result = described_class.build(id_attr: 'foo', role: 'rep')
+        expect(result[:user].role).to eq('rep')
+      end
       it 'returns a success flash' do
         result = described_class.build(id_attr: 'foo')
         expect(result[:msg]).to have_key(:success)
@@ -65,6 +69,10 @@ RSpec.describe UserBuilder do
           result = described_class.build(id_attr: 'foo')
           expect(result[:action]).to eq('build')
         end
+      end
+      it 'giving a bad role returns an error flash' do
+        result = described_class.build(id_attr: 'foo', role: 'foo')
+        expect(result[:msg]).to have_key(:error)
       end
     end
   end
