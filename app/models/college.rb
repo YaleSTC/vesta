@@ -31,6 +31,13 @@ class College < ApplicationRecord
     find_by!(subdomain: Apartment::Tenant.current)
   end
 
+  # Activate a given college, by subdomain
+  #
+  # @param subdomain [String] the subdomain of the college to activate
+  def self.activate!(subdomain)
+    find_by(subdomain: subdomain).activate!
+  end
+
   # Switch to the college's Postgres schema
   def activate!
     Apartment::Tenant.switch!(subdomain)

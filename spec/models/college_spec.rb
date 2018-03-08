@@ -63,6 +63,19 @@ RSpec.describe College do
     end
   end
 
+  describe '.activate!' do
+    # rubocop:disable RSpec/ExampleLength
+    it 'activates a given college by subdomain' do
+      college = described_class.new
+      allow(college).to receive(:activate!)
+      allow(described_class).to receive(:find_by).with(subdomain: 'foo')
+                                                 .and_return(college)
+      described_class.activate!('foo')
+      expect(college).to have_received(:activate!)
+    end
+    # rubocop:enable RSpec/ExampleLength
+  end
+
   describe '#activate!' do
     it "switches to the college's schema" do
       subdomain = 'foo'
