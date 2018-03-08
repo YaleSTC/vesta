@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file.
 * Fix redirect on DrawSuite update failure ([#710](https://gitlab.com/yale-sdmp/vesta/issues/710)).
 * Fix handling of students without accounts logging in via CAS ([#717](https://gitlab.com/yale-sdmp/vesta/issues/717)).
 * Fix race condition in the testing suite ([#732](https://gitlab.com/yale-sdmp/vesta/issues/732)).
+* Fix CORS issue with assets requested from root host ([734](https://gitlab.com/yale-sdmp/vesta/issues/734)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).

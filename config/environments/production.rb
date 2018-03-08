@@ -6,8 +6,8 @@ Rails.application.configure do
   if ENV.fetch('HEROKU_APP_NAME', '').include?('staging-pr-')
     ENV['APPLICATION_HOST'] = ENV['HEROKU_APP_NAME'] + '.herokuapp.com'
   end
+  # make sure that we're always based on our canonical host
   config.middleware.use Rack::CanonicalHost do |env|
-    # make sure that we're always based on our canonical host
     canonical_host = ENV.fetch('APPLICATION_HOST')
     host = env['HTTP_HOST']
     first_subdomain = host.split('.').first
@@ -16,6 +16,13 @@ Rails.application.configure do
       nil
     else
       "#{first_subdomain}.#{canonical_host}"
+    end
+  end
+  # Allow CORS requests for assets
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins %r{\Ahttps:\/\/.+\.#{ENV.fetch('APPLICATION_HOST')}\z}
+      resource '/assets/*', headers: :any, methods: :get
     end
   end
   config.force_ssl = true
