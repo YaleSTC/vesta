@@ -2,7 +2,7 @@
 <h1 class="user-name"><%= @user.full_name %></h1>
 <% if policy(@user).draw_info? %>
   <h3>Draw: <%= @user.draw.name %></h3>
-  <h3 class="user-intent">Housing Intent: <%= @user.intent %></h3>
+  <h3 class="user-intent">Housing Intent: <%= @user.intent.humanize %></h3>
 <% end %>
 <h3 class="user-role">Role: <%= @user.role %></h3>
 <h3 class="user-email">Email: <%= @user.email %></h3>

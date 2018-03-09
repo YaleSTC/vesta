@@ -9,12 +9,12 @@ RSpec.feature 'Housing Intent' do
       student.draw.update(status: 'pre_lottery')
       log_in student
       declare_off_campus student
-      expect(page).to have_css('.user-intent', text: 'off_campus')
+      expect(page).to have_css('.user-intent', text: 'Off campus')
     end
 
     def declare_off_campus(student)
       visit "users/#{student.id}/intent"
-      select('off_campus', from: 'user_intent')
+      select('Off campus', from: 'user_intent')
       click_on 'Submit Intent'
     end
   end
