@@ -11,8 +11,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update_intent?
-    user.admin? || user.rep? ||
-      (user == record && !user.group && draw_intent_state)
+    record&.draw&.pre_lottery? && !record.group.present? && draw_intent_state
   end
 
   def build?
@@ -32,7 +31,6 @@ class UserPolicy < ApplicationPolicy
   private
 
   def draw_intent_state
-    return false unless user.draw
-    !user.draw.intent_locked && !user.draw.draft?
+    user.admin? || (!record.draw.intent_locked && (user.rep? || record == user))
   end
 end

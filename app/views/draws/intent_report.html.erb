@@ -1,7 +1,7 @@
 <% provide(:title, "#{@draw.name} - Intent Report" ) %>
 <h1 class="draw-name"><%= @draw.name %> - Intent Report</h1>
 <div class="intent-report">
-  <p>You can view and update the intents of the students in this draw below. Note that selecting a different option in the dropdown menu will <em>immediately</em> change that student's intent.</p>
+  <p>You can view and update the intents of students <strong>who are not in a group</strong> below. Note that selecting a different option in the dropdown menu will <em>immediately</em> change that student's intent.</p>
   <hr />
   <% if @students_by_intent.empty? %>
     <p>There are no students in this draw yet!</p>
