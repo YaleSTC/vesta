@@ -82,6 +82,11 @@ class UserBuilder
   def assign_login_and_role
     assign_method = "#{id_symbol}=".to_sym
     user.send(assign_method, id_attr)
+    unless User.cas_auth?
+      password = User.random_password
+      user.password = password
+      user.password_confirmation = password
+    end
     user.role = role
   end
 

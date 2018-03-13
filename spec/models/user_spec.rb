@@ -79,6 +79,22 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.random_password' do
+    it 'returns a 12 character token from Devise by default' do
+      random = 'abcdefghijkl'
+      allow(Devise).to receive(:friendly_token).with(12)
+                                               .and_return(random)
+      expect(described_class.random_password).to eq(random)
+    end
+
+    it 'allows for the length to be specified' do
+      random = 'abcdefghijklmno'
+      allow(Devise).to receive(:friendly_token).with(15)
+                                               .and_return(random)
+      expect(described_class.random_password(15)).to eq(random)
+    end
+  end
+
   describe '#name' do
     it 'is the first name' do
       name = 'Sydney'

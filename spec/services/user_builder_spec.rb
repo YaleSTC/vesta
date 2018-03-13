@@ -46,6 +46,16 @@ RSpec.describe UserBuilder do
           result = described_class.build(id_attr: 'foo')
           expect(result[:user].email).to eq('foo')
         end
+        it 'assigns a random password' do
+          allow(User).to receive(:random_password).and_return('password')
+          result = described_class.build(id_attr: 'foo')
+          expect(result[:user].password).to eq('password')
+        end
+        it 'assigns the password confirmation' do
+          result = described_class.build(id_attr: 'foo')
+          expect(result[:user].password_confirmation).to \
+            eq(result[:user].password)
+        end
       end
     end
 

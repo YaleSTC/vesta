@@ -1,25 +1,22 @@
 # frozen_string_literal: true
 
-class FakeProfileQuerier
-  attr_reader :id
-
-  def self.query(**params)
-    new(**params).query
-  end
-
-  def initialize(id:)
-    @id = id
-  end
-
+class FakeProfileQuerier < ProfileQuerier
   def query
     return {} if id == 'badqueryid'
     return fg_attrs.merge(last_name: nil) if id == 'invalidid'
-    fg_attrs.merge(username: id)
+    if User.cas_auth?
+      id_attr = :username
+      id_value = id
+    else
+      id_attr = :email
+      id_value = "#{id}@example.com"
+    end
+    fg_attrs.merge(id_attr => id_value)
   end
 
   private
 
   def fg_attrs
-    FactoryGirl.attributes_for(:student)
+    FactoryGirl.attributes_for(:student).slice(*PROFILE_FIELDS)
   end
 end

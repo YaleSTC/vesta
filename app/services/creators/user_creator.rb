@@ -38,7 +38,7 @@ class UserCreator
   attr_reader :mailer
 
   def set_password
-    @password ||= Devise.friendly_token(12)
+    @password ||= User.random_password
     user.password = @password
     user.password_confirmation = @password
   end

@@ -1,16 +1,22 @@
 # frozen_string_literal: true
 
 # Mailer class for student e-mails
-class StudentMailer < ApplicationMailer
+class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   # Send initial invitation to students in a draw
   #
   # @param user [User] the user to send the invitation to
   # @param college [College] the college to pull settings from
-  def draw_invitation(user:, college: nil)
+  def draw_invitation(user:, college: nil) # rubocop:disable MethodLength
     determine_college(college)
     @user = user
     @intent_locked = user.draw.intent_locked
     @intent_deadline = format_date(user.draw.intent_deadline)
+    @login_str = if User.cas_auth?
+                   ''
+                 else
+                   ' (you will need to use the password reset feature to set '\
+                     'your password if you have not logged in before)'
+                 end
     mail(to: @user.email, subject: 'The housing process has begun',
          reply_to: @college.admin_email)
   end

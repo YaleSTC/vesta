@@ -26,7 +26,7 @@ RSpec.describe Enrollment do
         ids = %w(id1 badqueryid).join(', ')
         result = described_class.enroll(ids: ids, role: 'rep',
                                         querier: FakeProfileQuerier)
-        expect(result[:users].first.role).to eq(User.first.role)
+        expect(result[:users].first.role).to eq('rep')
       end
       it 'notes the failure of the invalid query' do
         ids = %w(id1 badqueryid).join(', ')

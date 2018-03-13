@@ -1,5 +1,5 @@
 <p>Hi <%= @user.name %>,</p>
-<p>The housing process for <%= @college.name %> is now open. Please log in to <%= college_site_link(@college) %>.
+<p>The housing process for <%= @college.name %> is now open. Please log in to <%= college_site_link(@college) %><%= @login_str %>.
 <% unless @intent_locked %>
   Please indicate whether you'll be living on- or off-campus
   <% if @intent_deadline %>
