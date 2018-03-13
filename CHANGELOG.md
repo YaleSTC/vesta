@@ -60,6 +60,7 @@ All notable changes to this project will be documented in this file.
 * Humanize intents for display on intent form and user page ([#735](https://gitlab.com/yale-sdmp/vesta/issues/735)).
 * Prevent student intent from being modified if they are in a group ([#718](https://gitlab.com/yale-sdmp/vesta/issues/718)).
 * Fix user import when not using CAS ([#736](https://gitlab.com/yale-sdmp/vesta/issues/736)).
+* Fix 'Begin Locking Process for Group' button policy ([#728](https://gitlab.com/yale-sdmp/vesta/issues/728)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).

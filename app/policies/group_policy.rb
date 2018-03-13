@@ -60,7 +60,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def finalize?
-    edit? && record.full?
+    edit? && record.full? && !record.finalizing? && !record.locked?
   end
 
   def finalize_membership?
