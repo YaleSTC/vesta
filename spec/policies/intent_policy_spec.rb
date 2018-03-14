@@ -8,7 +8,7 @@ RSpec.describe IntentPolicy do
   context 'student' do
     let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
 
-    permissions :report?, :export? do
+    permissions :report?, :import?, :export? do
       it { is_expected.not_to permit(user) }
     end
   end
@@ -18,6 +18,10 @@ RSpec.describe IntentPolicy do
 
     permissions :report?, :export? do
       it { is_expected.to permit(user) }
+    end
+
+    permissions :import? do
+      it { is_expected.not_to permit(user) }
     end
   end
 

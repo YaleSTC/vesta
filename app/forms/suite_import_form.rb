@@ -10,7 +10,7 @@ class SuiteImportForm
 
   HEADER = %w(number common single double medical).freeze
 
-  # Initialize a new SuiteImporter and call #import on it
+  # Initialize a new SuiteImporter
   #
   # @param [String] file The path to the CSV
   # @param [Building] building The building to put the suites in
@@ -43,7 +43,7 @@ class SuiteImportForm
   private
 
   attr_accessor :successes, :failures
-  attr_reader :body, :header, :string, :building, :file
+  attr_reader :body, :building, :file
 
   BED_COUNTS = { common: 0, single: 1, double: 2 }.freeze
 

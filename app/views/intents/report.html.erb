@@ -1,5 +1,17 @@
 <% provide(:title, "#{@draw.name} - Intent Report" ) %>
 <h1 class="draw-name"><%= @draw.name %> - Intent Report</h1>
+<% if policy(:intent).import? %>
+  <h3>Import Intents</h3>
+  <p>If you would like to import the intents for students in this draw
+  please upload a CSV file containing the relevant data below. The CSV
+  must have the columns "<%= User.login_attr %>,intent" where the
+  intent is either "on_campus" or "off_campus"</p>
+  <p>
+  <%= simple_form_for @intents_importer, url: import_draw_intents_path(@draw) do |f| %>
+    <%= f.input :file, label: 'Upload a CSV', as: :file %>
+    <%= f.submit 'Import' %>
+  <% end %>
+<% end %>
 <div class="intent-report">
   <p>You can view and update the intents of students <strong>who are not in a group</strong> below. Note that selecting a different option in the dropdown menu will <em>immediately</em> change that student's intent.</p>
   <hr />

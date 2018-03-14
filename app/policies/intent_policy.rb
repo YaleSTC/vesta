@@ -6,6 +6,10 @@ class IntentPolicy < ApplicationPolicy
     user.admin? || user.rep?
   end
 
+  def import?
+    user.admin?
+  end
+
   def export?
     report?
   end

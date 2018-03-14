@@ -113,6 +113,7 @@ Rails.application.routes.draw do
 
     resource :intents, only: [] do
       get 'report'
+      post 'import'
       get 'export'
     end
   end

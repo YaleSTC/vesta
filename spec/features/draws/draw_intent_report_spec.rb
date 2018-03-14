@@ -31,6 +31,22 @@ RSpec.feature 'Draw intent report' do
       msg = 'Data must exist before it can be exported.'
       expect(page).to have_css('.flash-error', text: /#{msg}/)
     end
+
+    # rubocop:disable ExampleLength
+    it 'can import intents for students in the draw' do
+      draw = create(:draw_with_members, students_count: 3)
+      User.first.update!(email: 'email1@email.com')
+      User.second.update!(email: 'email2@email.com')
+      User.third.update!(email: 'email3@email.com')
+      visit report_draw_intents_path(draw)
+      attach_file('intents_import_form[file]',
+                  Rails.root.join('spec', 'fixtures', 'intent_upload.csv'))
+      click_on('Import')
+      # email1@email.com is already taken by the admin logging in so only two
+      # of the three users will be updated from the csv
+      expect(page).to have_css('.flash-success',
+                               text: 'Successfully updated 2 intents.')
+    end
   end
 
   context 'as a rep' do
