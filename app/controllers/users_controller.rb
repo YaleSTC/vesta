@@ -19,11 +19,12 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  def new
+  def new # rubocop:disable AbcSize
     redirect_to(build_user_path) && return unless params['user']
     result = UserBuilder.build(id_attr: build_user_params[User.login_attr.to_s],
                                querier: querier)
     @user = result[:user]
+    @roles = valid_user_roles
     handle_action(**result)
   rescue Rack::Timeout::RequestTimeoutException => exception
     Honeybadger.notify(exception)
@@ -33,6 +34,7 @@ class UsersController < ApplicationController
   def create
     result = UserCreator.create!(params: user_params)
     @user = result[:user]
+    @roles = valid_user_roles unless result[:redirect_object].present?
     handle_action(action: 'new', **result)
   end
 
@@ -83,7 +85,11 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:first_name, :last_name, :role, :email,
                                  :intent, :gender, :username, :class_year,
-                                 :college)
+                                 :college).tap { |p| process_params(p) }
+  end
+
+  def process_params(p)
+    p[:role] = 'student' if p[:role] == 'superuser' && !current_user.superuser?
   end
 
   def querier
@@ -97,5 +103,10 @@ class UsersController < ApplicationController
     flash[:error] = 'There was a problem with that request, please try again.'
     @user = User.new
     render action: 'build'
+  end
+
+  def valid_user_roles
+    return User.roles.keys if current_user.superuser?
+    User.roles.keys - %w(superuser)
   end
 end

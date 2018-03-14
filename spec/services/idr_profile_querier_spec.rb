@@ -11,7 +11,7 @@ DUMMY_XML_RESPONSE =
     <?xml version="1.0" encoding="UTF-8"?>
     <ServiceResponse>
       <Record>
-          <Login>foo</Login>
+          <Login>bar</Login>
           <FirstName>Jane</FirstName>
           <LastName>Smith</LastName>
           <Email>jane.smith@example.com</Email>
@@ -31,9 +31,15 @@ RSpec.describe IDRProfileQuerier do
         assign_required_attributes
         stub_profile_request
       end
-      it 'returns profile data' do
+      it 'returns full profile data with CAS' do
+        allow(User).to receive(:cas_auth?).and_return(true)
         result = described_class.query(id: 'bar')
         expect(result).to eq(DUMMY_PROFILE_HASH)
+      end
+      it 'does not return e-mail when not using CAS' do
+        allow(User).to receive(:cas_auth?).and_return(false)
+        result = described_class.query(id: 'bar')
+        expect(result).to eq(DUMMY_PROFILE_HASH.except(:email))
       end
     end
 

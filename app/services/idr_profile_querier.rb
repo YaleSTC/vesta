@@ -84,7 +84,7 @@ class IDRProfileQuerier < ProfileQuerier
 
   def parse_results
     xml = Nokogiri::XML(response.body)
-    PROFILE_FIELDS.each do |field|
+    profile_fields.each do |field|
       attr_hash.store(field, extract_data(xml, field))
     end
   end
@@ -92,5 +92,10 @@ class IDRProfileQuerier < ProfileQuerier
   def extract_data(xml, field_key)
     tag = env(config_var(field_key.to_s.upcase))
     xml.at_xpath("//#{tag}")&.content
+  end
+
+  def profile_fields
+    return PROFILE_FIELDS if User.cas_auth?
+    PROFILE_FIELDS - [User.login_attr]
   end
 end
