@@ -16,8 +16,7 @@ class UserCloner
   def initialize(username:, from: College.first, to: nil, io: $stdout)
     @io = io
     from.activate!
-    field = User.cas_auth? ? :username : :email
-    @user_attrs = find_user_attrs(field: field, value: username)
+    @user_attrs = find_user_attrs(field: User.login_attr, value: username)
     @colleges = generate_college_array(from: from, to: to)
   end
 

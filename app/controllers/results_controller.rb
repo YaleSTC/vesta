@@ -11,8 +11,8 @@ class ResultsController < ApplicationController
   def students; end
 
   def export
-    login_attr = User.cas_auth? ? :username : :email
-    attributes = %I[#{login_attr} last_name first_name suite_number room_number]
+    attributes = %I[#{User.login_attr} last_name first_name suite_number
+                    room_number]
     result = CSVGenerator.generate(data: @students, attributes: attributes,
                                    name: 'results')
     handle_file_action(**result)

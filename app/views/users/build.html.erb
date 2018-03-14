@@ -1,7 +1,11 @@
 <% provide(:title, 'Add User') %>
 <h1>Add User</h1>
 <%= simple_form_for @user, url: new_user_path, method: :get do |f| %>
-  <%= f.input :username %>
+  <% if User.cas_auth? %>
+    <%= f.input :username, title: 'CAS Login' %>
+  <% else %>
+    <%= f.input :email %>
+  <% end %>
   <%= f.submit 'Continue' %>
 <% end %>
 <%= link_to 'Cancel', users_path %>

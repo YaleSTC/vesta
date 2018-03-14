@@ -13,7 +13,7 @@ class UserCreator
     @params = params.to_h.transform_keys(&:to_sym)
     @mailer = mailer
     @user = User.new(@params)
-    set_password unless cas_auth?
+    set_password unless User.cas_auth?
   end
 
   # Attempt to create a new user. If CAS auth is NOT enabled, autogenerates a
@@ -41,10 +41,6 @@ class UserCreator
     @password ||= User.random_password
     user.password = @password
     user.password_confirmation = @password
-  end
-
-  def cas_auth?
-    User.cas_auth?
   end
 
   def success

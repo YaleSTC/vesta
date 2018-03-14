@@ -62,6 +62,7 @@ All notable changes to this project will be documented in this file.
 * Fix user import when not using CAS ([#736](https://gitlab.com/yale-sdmp/vesta/issues/736)).
 * Fix 'Begin Locking Process for Group' button policy ([#728](https://gitlab.com/yale-sdmp/vesta/issues/728)).
 * Fix minor front-end issues ([#707](https://gitlab.com/yale-sdmp/vesta/issues/707)).
+* Make adding users more flexible for non-CAS uses ([#737](https://gitlab.com/yale-sdmp/vesta/issues/737)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).

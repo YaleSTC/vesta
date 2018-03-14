@@ -81,6 +81,17 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.login_attr' do
+    it 'returns :username if CAS auth is enabled' do
+      allow(described_class).to receive(:cas_auth?).and_return(true)
+      expect(described_class.login_attr).to eq(:username)
+    end
+    it 'returns :email if CAS auth is not enabled' do
+      allow(described_class).to receive(:cas_auth?).and_return(false)
+      expect(described_class.login_attr).to eq(:email)
+    end
+  end
+
   describe '.random_password' do
     it 'returns a 12 character token from Devise by default' do
       random = 'abcdefghijkl'

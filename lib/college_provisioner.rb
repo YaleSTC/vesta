@@ -67,8 +67,7 @@ class CollegeProvisioner
       WHERE users.role = #{User.roles[:superuser]}
       LIMIT 1;
     SQL
-    return result.first.to_h['username'] if User.cas_auth?
-    result.first.to_h['email']
+    result.first.to_h[User.login_attr.to_s]
   end
 
   def seed?

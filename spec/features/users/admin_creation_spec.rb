@@ -31,7 +31,7 @@ RSpec.feature 'Admin creation' do
   end
 
   def submit_username(username)
-    fill_in 'user_username', with: username
+    fill_in "user_#{User.login_attr}", with: username
     click_on 'Continue'
   end
 

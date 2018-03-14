@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 
   def new
     redirect_to(build_user_path) && return unless params['user']
-    result = UserBuilder.build(id_attr: build_user_params['username'],
+    result = UserBuilder.build(id_attr: build_user_params[User.login_attr.to_s],
                                querier: querier)
     @user = result[:user]
     handle_action(**result)
@@ -77,7 +77,7 @@ class UsersController < ApplicationController
   end
 
   def build_user_params
-    params.require(:user).permit(:username)
+    params.require(:user).permit(User.login_attr)
   end
 
   def user_params

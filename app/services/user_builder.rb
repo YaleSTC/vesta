@@ -20,7 +20,7 @@ class UserBuilder
     @role = role
     @querier = querier&.new(id: id_attr)
     @user = User.new
-    @id_symbol = User.cas_auth? ? :username : :email
+    @id_symbol = User.login_attr
   end
 
   # Build a user record based on the given input, ensuring that it is unique
