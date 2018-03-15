@@ -47,29 +47,44 @@
 #   end
 # end
 
-set :css_dir, 'stylesheets'
+activate :aria_current
+activate :autoprefixer
 
-set :js_dir, 'javascripts'
+set :css_dir, "assets/stylesheets"
+set :fonts_dir, "assets/fonts"
+set :images_dir, "assets/images"
+set :js_dir, "assets/javascripts"
+set :markdown,
+  autolink: true,
+  fenced_code_blocks: true,
+  footnotes: true,
+  highlight: true,
+  smartypants: true,
+  strikethrough: true,
+  tables: true,
+  with_toc_data: true
+set :markdown_engine, :redcarpet
 
-set :images_dir, 'images'
+page "/*.json", layout: false
+page "/*.txt", layout: false
+page "/*.xml", layout: false
+page "/*.csv", layout: false
+
+configure :development do
+  activate :livereload do |reload|
+    reload.no_swf = true
+  end
+end
 
 # Build-specific configuration
 configure :build do
   set :build_dir, 'public'
   set :base_url, "/vesta" # baseurl for GitLab Pages (project name) - leave empty if you're building a user/group website
-  activate :relative_assets # Use relative URLs
-  # For example, change the Compass output style for deployment
-  # activate :minify_css
 
-  # Minify Javascript on build
-  # activate :minify_javascript
-
-  # Enable cache buster
-  # activate :asset_hash
-
-  # Use relative URLs
-  # activate :relative_assets
-
-  # Or use a different image path
-  # set :http_prefix, "/Content/images/"
+  activate :relative_assets
+  activate :asset_hash
+  activate :gzip
+  activate :minify_css
+  activate :minify_html
+  activate :minify_javascript
 end
