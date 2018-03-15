@@ -158,6 +158,7 @@ All notable changes to this project will be documented in this file.
 * Allow admins to specify student roles when importing ([#731](https://gitlab.com/yale-sdmp/vesta/issues/731)).
 * Add CSV export functionality for intents and lottery numbers ([#701](https://gitlab.com/yale-sdmp/vesta/issues/701)).
 * Add CSV import functionality for intents ([#729](https://gitlab.com/yale-sdmp/vesta/issues/729)).
+* Add version number to footer ([#510](https://gitlab.com/yale-sdmp/vesta/issues/510)).
 
 ## v0.1.8 - 2017-04-19
 ### Fixed
