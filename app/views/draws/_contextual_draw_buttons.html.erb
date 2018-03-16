@@ -7,6 +7,9 @@
       <% if policy(DrawSuite.new(draw: @draw.__getobj__)).edit_collection? %>
         <%= link_to 'Add or edit suites', edit_collection_draw_suites_path(@draw), class: 'button secondary' %>
       <% end %>
+      <% if policy(:intent).report? %>
+        <%= link_to 'Upload intents', report_draw_intents_path(@draw), class: 'button secondary' %>
+      <% end %>
       <% if policy(@draw).bulk_on_campus? %>
         <%= link_to 'Make all students on campus', bulk_on_campus_draw_path(@draw),
           method: :patch,

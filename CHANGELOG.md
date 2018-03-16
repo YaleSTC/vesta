@@ -63,6 +63,7 @@ All notable changes to this project will be documented in this file.
 * Fix 'Begin Locking Process for Group' button policy ([#728](https://gitlab.com/yale-sdmp/vesta/issues/728)).
 * Fix minor front-end issues ([#707](https://gitlab.com/yale-sdmp/vesta/issues/707)).
 * Make adding users more flexible for non-CAS uses ([#737](https://gitlab.com/yale-sdmp/vesta/issues/737)).
+* Fix mislabeled accordions on draw#show ([#739](https://gitlab.com/yale-sdmp/vesta/issues/739)).
 
 ### Added
 * Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).

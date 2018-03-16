@@ -63,7 +63,7 @@
     <% end %>
     <% if policy(@draw).selection_metrics? %>
       <li class="accordion-item" data-accordion-item>
-        <a href="#" class="accordion-title">Export Leader E-mails</a>
+        <a href="#" class="accordion-title">Selection Metrics</a>
         <div class="accordion-content selection-metrics" data-tab-content>
           <%= render 'selection_metrics', draw: @draw, group: current_user.group,
             without_suites: @draw.groups_without_suites_by_size[current_user.group.size],
@@ -73,7 +73,7 @@
     <% end %>
     <% if @draw.intent_deadline.present? || @draw.locking_deadline.present? %>
       <li class="accordion-item" data-accordion-item>
-        <a href="#" class="accordion-title">Export Leader E-mails</a>
+        <a href="#" class="accordion-title">Deadlines</a>
         <div class="accordion-content deadlines" data-tab-content>
           <h3>Deadlines</h3>
           <% if @draw.intent_deadline.present? %>
