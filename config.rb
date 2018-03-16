@@ -79,7 +79,7 @@ end
 # Build-specific configuration
 configure :build do
   set :build_dir, 'public'
-  set :base_url, "/vesta" # baseurl for GitLab Pages (project name) - leave empty if you're building a user/group website
+  set :http_prefix, "/vesta"
 
   activate :relative_assets
   activate :asset_hash
