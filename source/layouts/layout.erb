@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>thoughtbot Middleman Template</title>
+    <title><%= page_title %></title>
     <%= stylesheet_link_tag "main" %>
   </head>
-  <body>
+  <body class="page-<%= page_classes %>">
+    <%= partial "partials/nav" %>
     <main role="main">
       <%= yield %>
     </main>

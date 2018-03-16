@@ -26,4 +26,10 @@ module ApplicationHelpers
 
     raise "SVG not found: #{name}"
   end
+
+  def page_title
+    base = 'Vesta Docs'
+    return base unless current_page.data.title.present?
+    "#{base} | #{current_page.data.title}"
+  end
 end

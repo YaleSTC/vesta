@@ -17,6 +17,9 @@ h6 {
   margin: 0 0 $small-spacing;
 }
 
+h1 { font-size: modular-scale(3) };
+h2 { font-size: modular-scale(2) };
+
 p {
   margin: 0 0 $small-spacing;
 }

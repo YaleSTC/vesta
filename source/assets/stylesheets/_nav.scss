@@ -1,0 +1,53 @@
+.site-nav {
+  @include padding($base-spacing null);
+  border-bottom: $base-border;
+  font-size: $base-font-size;
+}
+
+.site-nav__section {
+  @include grid-media($neat-grid-tablet) {
+    float: right;
+  }
+}
+
+.site-nav__link,
+.site-nav__logo {
+  border: 0;
+  color: $base-font-color;
+  font-weight: 700;
+  letter-spacing: $letter-spacing-small;
+
+  &:focus,
+  &:hover {
+    border: 0;
+    color: $link-color;
+  }
+}
+
+.site-nav__link {
+  margin-left: map-get($neat-grid, gutter);
+
+  @include grid-media($neat-grid-tablet) {
+    margin-left: map-get($neat-grid, gutter);
+  }
+}
+
+.site-nav__logo {
+  float: left;
+  margin: 0;
+
+  &:hover {
+    color: $blue;
+  }
+}
+
+.site-nav__logo__text {
+  font-size: modular-scale(3);
+  line-height: 0;
+  font-family: $heading-font-family;
+  font-weight: normal;
+}
+
+.site-nav__container {
+  margin-bottom: 0;
+}

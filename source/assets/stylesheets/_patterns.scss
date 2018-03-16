@@ -1,0 +1,80 @@
+.container {
+  @include grid-container;
+  @include margin(null auto);
+  max-width: 88rem;
+  position: relative;
+}
+
+.container--spacing {
+  @include margin($base-spacing null);
+
+  @include grid-media($neat-grid-tablet) {
+    @include margin(($base-spacing * 2) null);
+  }
+
+  @include grid-media($neat-grid-desktop) {
+    @include margin(($base-spacing * 3) null);
+  }
+}
+
+.column {
+  @include grid-column(12);
+
+  @include grid-media($neat-grid-tablet) {
+    @include grid-column(10);
+    @include grid-push(1);
+  }
+
+  @include grid-media($neat-grid-desktop) {
+    @include grid-column(6);
+    @include grid-push(2);
+  }
+}
+
+.column--6 {
+  @include grid-column(12);
+
+  @include grid-media($neat-grid-desktop) {
+    @include grid-column(6);
+  }
+}
+
+.column--8 {
+  @include grid-column(12);
+
+  @include grid-media($neat-grid-tablet) {
+    @include grid-column(10);
+  }
+
+  @include grid-media($neat-grid-desktop) {
+    @include grid-column(8);
+  }
+}
+
+.column--12 {
+  @include grid-column(12);
+
+  @include grid-media($neat-grid-tablet) {
+    @include grid-column(12);
+  }
+}
+
+.column--push-2 {
+  @include grid-media($neat-grid-tablet) {
+    @include grid-push(1);
+  }
+
+  @include grid-media($neat-grid-desktop) {
+    @include grid-push(2);
+  }
+}
+
+.column--push-3 {
+  @include grid-media($neat-grid-tablet) {
+    @include grid-push(3);
+  }
+}
+
+.text-center {
+  text-align: center;
+}

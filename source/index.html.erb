@@ -1,10 +1,17 @@
----
-title: Welcome to Middleman
----
-
-<div class="welcome">
-  <h1>Middleman is Watching</h1>
-  <p class="doc">
-    <%= link_to "Read Online Documentation", "http://middlemanapp.com/" %>
-  </p><!-- .doc -->
-</div><!-- .welcome -->
+<section class="container--spacing">
+  <div class="container text-center">
+    <div class="column">
+      <h1>Welcome to the Vesta Documentation site!</h1>
+      <p>
+        This site contains end-user information for <%= link_to 'Vesta', 'https://gitlab.com/yale-sdmp/vesta' %>,
+        an open-source tool for managing to facilitate an on-campus housing process. It was developed for the
+        Yale College Dean's Office by the Yale Student Developer &amp; Mentorship Program.
+      </p>
+      <h2>Choose your role:</h2>
+      <div class="button-bar">
+        <%= link_to 'Student', 'https://docs.google.com/document/d/1sMQw1cSBYMQ3kJ8qVfmlUeNr4W2ojYlGyxnmZVZkFvM', class: 'button' %>
+        <%= link_to 'Admin', 'https://docs.google.com/document/d/1K1Z2U35lFP0UnlRtiLz3-S1GCJudDdLIJrsJ1E-cpzk', class: 'button' %>
+      </div>
+    </div>
+  </div>
+</section>

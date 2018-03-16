@@ -2,15 +2,23 @@
 $base-font-family: $font-stack-system;
 $heading-font-family: $base-font-family;
 
+$base-font-size: 1em;
+
 // Line height
 $base-line-height: 1.5;
 $heading-line-height: 1.2;
 
 // Other Sizes
 $base-border-radius: 3px;
-$base-spacing: 1.5em;
+$base-spacing: $base-line-height * 1em;
 $small-spacing: $base-spacing / 2;
+$tiny-spacing: $base-spacing / 4;
 $base-z-index: 0;
+$letter-spacing: 0.04em;
+$letter-spacing-small: 0.02em;
+$letter-spacing-extra-small: $letter-spacing-small / 2;
+$heading-spacing: 1rem;
+$aproximate-nav-height: 85px;
 
 // Colors
 $blue: #1565c0;
@@ -21,6 +29,7 @@ $light-gray: #ddd;
 // Font Colors
 $base-font-color: $dark-gray;
 $action-color: $blue;
+$link-color: $blue;
 
 // Border
 $base-border-color: $light-gray;
@@ -38,3 +47,30 @@ $focus-outline-offset: 2px;
 // Animations
 $base-duration: 150ms;
 $base-timing: ease;
+
+// Media
+$media-tablet: 600px;
+$media-desktop: 1100px;
+$media-desktop-large: 1300px;
+
+// Grids
+$neat-grid: (
+  columns: 12,
+  gutter: 1rem,
+);
+
+$neat-grid-tablet: (
+  gutter: 2rem,
+  media: $media-tablet,
+);
+
+$neat-grid-desktop: (
+  gutter: 2rem,
+  media: $media-desktop,
+);
+
+$neat-grid-desktop-large: (
+  gutter: 2rem,
+  media: $media-desktop-large,
+);
+
