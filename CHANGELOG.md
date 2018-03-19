@@ -2,31 +2,33 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+## v1.0.0 - 2018-03-19
 ### Changed
-* Make seed script create draws in three stages ([#530](https://yale.githost.io/sdmp/rails/vesta/issues/530)
+* Make seed script create draws in three stages ([#530](https://gitlab.com/yale-sdmp/vesta/issues/530)
 * Re-enable student suite selection ([#502](https://github.com/YaleSTC/vesta/issues/502)).
-* Update to Ruby v2.4.1 ([#607](https://yale.githost.io/sdmp/rails/vesta/issues/607)).
-* Fix intent reminder emails so they only go to students who haven't set intent ([#588](https://yale.githost.io/sdmp/rails/vesta/merge_requests/599)).
-* Rename :object key to :redirect_object in service object return hash ([#176](https://yale.githost.io/sdmp/rails/vesta/issues/176)).
-* Modularize service object class methods ([#140](https://yale.githost.io/sdmp/rails/vesta/issues/140)).
-* Update to Rails 5.1 ([#608](https://yale.githost.io/sdmp/rails/vesta/issues/608)).
-* Make suites and rooms nested resources ([#431](https://yale.githost.io/sdmp/rails/vesta/issues/431)).
-* DrawsController#lock_all_sizes should use Updater ([#610](https://yale.githost.io/sdmp/rails/vesta/issues/610))
-* Remove students and suites from Draw strong params ([#282](https://yale.githost.io/sdmp/rails/vesta/issues/282)).
-* Extract Group#remove_members ([#280](https://yale.githost.io/sdmp/rails/vesta/isses/280))
-* Refactor Draw reporting ([#619](https://yale.githost.io/sdmp/rails/vesta/isses/619))
-* Fix error handling in service objects ([#241](https://yale.githost.io/sdmp/rails/vesta/issues/241))
-* Make error handling more consistent across service objects ([#602](https://yale.githost.io/sdmp/rails/vesta/issues/602))
-* Clean up ReminderQueuer ([#625](https://yale.githost.io/sdmp/rails/vesta/issues/625))
-* Rename the 'full' status to 'closed' ([#240](https://yale.githost.io/sdmp/rails/vesta/issues/240))
-* Move DrawSuite actions to DrawSuites controller ([#199](https://yale.githost.io/sdmp/rails/vesta/issues/199))
-* Switch :try with :& ([#217](https://yale.githost.io/sdmp/rails/vesta/issues/217))
-* Create query objects for queries in Draw Report ([#626](https://yale.githost.io/sdmp/rails/vesta/issues/626))
-* Make Building > Suite > Room nesting shallow ([#618](https://yale.githost.io/sdmp/rails/vesta/isses/618))
-* Modify user update functionality so admins cannot demote themselves ([#529](https://yale.githost.io/sdmp/rails/vesta/issues/529))
-* Rename Group Finalizing to Group Locking ([#352](https://yale.githost.io/sdmp/rails/vesta/issues/352))
-* Add new traits to group factories to allow for more flexible testing ([#665](https://yale.githost.io/sdmp/rails/vesta/issues/665)).
-* Allow new students to be added to group when increasing group size ([#556](https://yale.githost.io/sdmp/rails/vesta/issues/556))
+* Update to Ruby v2.4.1 ([#607](https://gitlab.com/yale-sdmp/vesta/issues/607)).
+* Fix intent reminder emails so they only go to students who haven't set intent ([#588](https://gitlab.com/yale-sdmp/vesta/merge_requests/599)).
+* Rename :object key to :redirect_object in service object return hash ([#176](https://gitlab.com/yale-sdmp/vesta/issues/176)).
+* Modularize service object class methods ([#140](https://gitlab.com/yale-sdmp/vesta/issues/140)).
+* Update to Rails 5.1 ([#608](https://gitlab.com/yale-sdmp/vesta/issues/608)).
+* Make suites and rooms nested resources ([#431](https://gitlab.com/yale-sdmp/vesta/issues/431)).
+* DrawsController#lock_all_sizes should use Updater ([#610](https://gitlab.com/yale-sdmp/vesta/issues/610))
+* Remove students and suites from Draw strong params ([#282](https://gitlab.com/yale-sdmp/vesta/issues/282)).
+* Extract Group#remove_members ([#280](https://gitlab.com/yale-sdmp/vesta/isses/280))
+* Refactor Draw reporting ([#619](https://gitlab.com/yale-sdmp/vesta/isses/619))
+* Fix error handling in service objects ([#241](https://gitlab.com/yale-sdmp/vesta/issues/241))
+* Make error handling more consistent across service objects ([#602](https://gitlab.com/yale-sdmp/vesta/issues/602))
+* Clean up ReminderQueuer ([#625](https://gitlab.com/yale-sdmp/vesta/issues/625))
+* Rename the 'full' status to 'closed' ([#240](https://gitlab.com/yale-sdmp/vesta/issues/240))
+* Move DrawSuite actions to DrawSuites controller ([#199](https://gitlab.com/yale-sdmp/vesta/issues/199))
+* Switch :try with :& ([#217](https://gitlab.com/yale-sdmp/vesta/issues/217))
+* Create query objects for queries in Draw Report ([#626](https://gitlab.com/yale-sdmp/vesta/issues/626))
+* Make Building > Suite > Room nesting shallow ([#618](https://gitlab.com/yale-sdmp/vesta/isses/618))
+* Modify user update functionality so admins cannot demote themselves ([#529](https://gitlab.com/yale-sdmp/vesta/issues/529))
+* Rename Group Finalizing to Group Locking ([#352](https://gitlab.com/yale-sdmp/vesta/issues/352))
+* Add new traits to group factories to allow for more flexible testing ([#665](https://gitlab.com/yale-sdmp/vesta/issues/665)).
+* Allow new students to be added to group when increasing group size ([#556](https://gitlab.com/yale-sdmp/vesta/issues/556))
 * Refactor suite import to properly set room names and flag medical suites ([#658](https://gitlab.com/yale-sdmp/vesta/issues/658)).
 * Add an "Allow Clipping" option for draws ([#716](https://gitlab.com/yale-sdmp/vesta/issues/716)).
 * Add automatic room assignment for students assigned to singles ([#703](https://gitlab.com/yale-sdmp/vesta/issues/703)).
@@ -35,21 +37,21 @@ All notable changes to this project will be documented in this file.
 * Automatically drop database schemas when destroying a college ([#730](https://gitlab.com/yale-sdmp/vesta/issues/730)).
 
 ### Fixed
-* Prevent non-admins from seeing the suite import form ([#576](https://yale.githost.io/sdmp/rails/vesta/issues/576)).
-* Pass overrides properly in seed script generators ([#616](https://yale.githost.io/sdmp/rails/vesta/issues/616)).
-* Fixed definition inconsistencies in policy files ([#216](https://yale.githost.io/sdmp/rails/vesta/issues/216)).
-* Fix n+3 query in suites summary partial ([#567](https://yale.githost.io/sdmp/rails/vesta/issues/567)).
-* Fix intermittent test failure in lottery number removal ([#532](https://yale.githost.io/sdmp/rails/vesta/issues/532)).
-* Fix seed script to persist lottery numbers ([#637](https://yale.githost.io/sdmp/rails/vesta/issues/637)).
-* Fix typo in confirmation message ([#630](https://yale.githost.io/sdmp/rails/vesta/issues/630)).
-* Fix broken draw suites migration([#638](https://yale.githost.io/sdmp/rails/vesta/issues/638)).
-* Fix user counts on pre-lottery draw dashboards ([#628](https://yale.githost.io/sdmp/rails/vesta/issues/628)).
-* Fix broken pathing in suite removal form ([#632](https://yale.githost.io/sdmp/rails/vesta/issues/632)).
-* Fix disband button not showing during suite selection ([#640](https://yale.githost.io/sdmp/rails/vesta/issues/640)).
-* Fix draw results not showing after finishing suite selection ([#631](https://yale.githost.io/sdmp/rails/vesta/issues/631)).
-* Correct housing sidebar counts ([#629](https://yale.githost.io/sdmp/rails/vesta/issues/629)).
-* Fix issues with seed script ([#657](https://yale.githost.io/sdmp/rails/vesta/issues/657)).
-* Update security vulnerability in YARD ([#682](https://yale.githost.io/sdmp/rails/vesta/issues/682)).
+* Prevent non-admins from seeing the suite import form ([#576](https://gitlab.com/yale-sdmp/vesta/issues/576)).
+* Pass overrides properly in seed script generators ([#616](https://gitlab.com/yale-sdmp/vesta/issues/616)).
+* Fixed definition inconsistencies in policy files ([#216](https://gitlab.com/yale-sdmp/vesta/issues/216)).
+* Fix n+3 query in suites summary partial ([#567](https://gitlab.com/yale-sdmp/vesta/issues/567)).
+* Fix intermittent test failure in lottery number removal ([#532](https://gitlab.com/yale-sdmp/vesta/issues/532)).
+* Fix seed script to persist lottery numbers ([#637](https://gitlab.com/yale-sdmp/vesta/issues/637)).
+* Fix typo in confirmation message ([#630](https://gitlab.com/yale-sdmp/vesta/issues/630)).
+* Fix broken draw suites migration([#638](https://gitlab.com/yale-sdmp/vesta/issues/638)).
+* Fix user counts on pre-lottery draw dashboards ([#628](https://gitlab.com/yale-sdmp/vesta/issues/628)).
+* Fix broken pathing in suite removal form ([#632](https://gitlab.com/yale-sdmp/vesta/issues/632)).
+* Fix disband button not showing during suite selection ([#640](https://gitlab.com/yale-sdmp/vesta/issues/640)).
+* Fix draw results not showing after finishing suite selection ([#631](https://gitlab.com/yale-sdmp/vesta/issues/631)).
+* Correct housing sidebar counts ([#629](https://gitlab.com/yale-sdmp/vesta/issues/629)).
+* Fix issues with seed script ([#657](https://gitlab.com/yale-sdmp/vesta/issues/657)).
+* Update security vulnerability in YARD ([#682](https://gitlab.com/yale-sdmp/vesta/issues/682)).
 * Fix searching for users in admin dashboard ([#699](https://gitlab.com/yale-sdmp/vesta/issues/699)).
 * Fix config file to properly eager load files ([#708](https://gitlab.com/yale-sdmp/vesta/issues/708)).
 * Fix 404 issue with font files ([#720](https://gitlab.com/yale-sdmp/vesta/issues/720)).
@@ -66,9 +68,9 @@ All notable changes to this project will be documented in this file.
 * Fix mislabeled accordions on draw#show ([#739](https://gitlab.com/yale-sdmp/vesta/issues/739)).
 
 ### Added
-* Add suite unmerging ([#257](https://yale.githost.io/sdmp/rails/vesta/issues/257)).
-* Add superuser role ([#642](https://yale.githost.io/sdmp/rails/vesta/issues/642)).
-* Add superuser dashboard ([#604](https://yale.githost.io/sdmp/rails/vesta/issues/604)).
+* Add suite unmerging ([#257](https://gitlab.com/yale-sdmp/vesta/issues/257)).
+* Add superuser role ([#642](https://gitlab.com/yale-sdmp/vesta/issues/642)).
+* Add superuser dashboard ([#604](https://gitlab.com/yale-sdmp/vesta/issues/604)).
 * Allow admins to automatically resolve oversubscription ([#195](https://gitlab.com/yale-sdmp/vesta/issues/195), [#697](https://gitlab.com/yale-sdmp/vesta/issues/697), [#698](https://gitlab.com/yale-sdmp/vesta/issues/698)).
 * Add multi-tenancy ([#641](https://gitlab.com/yale-sdmp/vesta/issues/641)).
 * Add securely random automatic lottery number generation ([#361](https://gitlab.com/yale-sdmp/vesta/issues/361), [#698](https://gitlab.com/yale-sdmp/vesta/issues/698)).
