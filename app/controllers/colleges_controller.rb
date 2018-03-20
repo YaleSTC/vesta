@@ -7,7 +7,7 @@ class CollegesController < ApplicationController
   skip_before_action :set_current_college, only: %i(index)
 
   def index
-    @colleges = College.all
+    @colleges = College.all.order(name: :asc)
   end
 
   def show; end
