@@ -1,17 +1,17 @@
 <% provide(:title, "#{@draw.name} - Entering Lottery Phase") %>
 <h1 class="draw-name"><%= @draw.name %> - Entering Lottery Phase</h1>
+<h2>Draw Summary</h2>
 <% if policy(@draw).oversub_report? %>
   <div class="oversub-report">
     <%= render 'oversub_report', draw: @draw, path: lottery_confirmation_draw_path(@draw) %>
   </div>
-  <hr />
 <% end %>
 <div class="ungrouped-report">
   <%= render 'ungrouped_report' %>
 </div>
 <hr />
 <% if @draw.oversubscribed? %>
-  <h3>Warning!</h3>
+  <h2>Warning!</h2>
   <p> There are still oversubscribed suite sizes. If you choose to proceed to
   lottery, the groups that do not get their suite size will be disbanded
   and those students must be housed through a subsequent draw. </p>

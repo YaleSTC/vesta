@@ -1,6 +1,6 @@
 <% provide(:title, @building.name) %>
 <h1 class="building-name"><%= @building.name %></h1>
-<h3>Suites</h3>
+<h2>Suites</h2>
 <% if @suites.empty? %>
   <p>No suites yet!</p>
 <% else %>
@@ -9,7 +9,7 @@
 <hr />
 <p><%= link_to 'New Suite', new_building_suite_path(@building), class: 'button secondary' if policy(Suite).new? %></p>
 <% if policy(SuiteImportForm).import? %>
-  <h3>Import Suites</h3>
+  <h2>Import Suites</h2>
   <p>Add many suites at once by uploading a CSV file with the building information.
   The CSV must have the columns / structure "Number, Common, Single, Double, Medical"
   where Number is the identifier of the suite and Common, Single, and Double contain

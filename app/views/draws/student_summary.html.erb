@@ -2,12 +2,12 @@
 <h1 class="draw-name"><%= @draw.name %> Students</h1>
 <% if policy(@draw).students_update? %>
   <div class="student-assignment">
-    <h3>Student actions</h3>
+    <h2>Student actions</h2>
     <div class="bulk">
       <% if @available_students_count.zero? %>
         <p>There are no students available to add to this draw.</p>
       <% else %>
-        <h4>Add students by class year</h4>
+        <h3>Add students by class year</h3>
         <%= simple_form_for @students_update, url: students_update_draw_path(@draw), method: :patch do |f| %>
           <%= f.input :class_year, as: :select, collection: @class_years, required: true %>
           <%= f.submit 'Assign students', data: { confirm: 'This will assign ALL students of the selected class year to this draw and cannot be undone! Are you sure you want to proceed?' } %>
@@ -15,7 +15,7 @@
       <% end %>
     </div>
     <div class="single">
-      <h4>Add/Remove by NetID</h4>
+      <h3>Add/Remove by NetID</h3>
       <%= simple_form_for @student_assignment_form, url: students_update_draw_path(@draw), method: :patch do |f| %>
         <%= f.input :username %>
         <%= f.input :adding, label: 'Action', as: :select, collection: [['Add', true], ['Remove', false]], required: true %>
@@ -26,7 +26,7 @@
   <hr />
 <% end %>
 <div class="students-list">
-  <h3>Students in draw (<%= @students.count %> total)</h3>
+  <h2>Students in draw (<%= @students.count %> total)</h2>
   <%= render 'users/table', users: @students, hide_actions: true %>
 </div>
 <hr />

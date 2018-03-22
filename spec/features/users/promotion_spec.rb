@@ -9,6 +9,6 @@ RSpec.feature 'User Promotion' do
     visit edit_user_path(user)
     select('rep', from: 'user_role')
     click_on 'Save'
-    expect(page).to have_css('.user-role', text: 'rep')
+    expect(page).to have_css('.user-role', text: 'Rep')
   end
 end

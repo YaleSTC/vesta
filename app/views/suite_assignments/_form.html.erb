@@ -1,7 +1,7 @@
 <%= simple_form_for @suite_assignment, url: @url, method: :post do |f| %>
   <% @groups.each do |group| %>
     <div id="group-fields-<%= group.id %>" class="actions">
-      <h3><%= group.name %></h3>
+      <h2 class="h3"><%= group.name %></h2>
       <% if @suites_by_size[group.size].count >= @groups_by_size[group.size].count %>
         <%= f.label "suite_id_for_#{group.id}".to_sym, text: group.name, style: 'display: none;' %>
         <% if policy(Suite).medical? %>

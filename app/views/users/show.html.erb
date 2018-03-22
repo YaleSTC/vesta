@@ -1,11 +1,17 @@
 <% provide(:title, @user.full_name) %>
 <h1 class="user-name"><%= @user.full_name %></h1>
+<dl>
 <% if policy(@user).draw_info? %>
-  <h3>Draw: <%= @user.draw.name %></h3>
-  <h3 class="user-intent">Housing Intent: <%= @user.intent.humanize %></h3>
+    <dt>Draw</dt>
+    <dd><%= @user.draw.name %></dd>
+    <dt>Housing Intent</dt>
+    <dd class="user-intent"><%= @user.intent.humanize %></dd>
 <% end %>
-<h3 class="user-role">Role: <%= @user.role %></h3>
-<h3 class="user-email">Email: <%= @user.email %></h3>
+  <dt>Role</dt>
+  <dd class="user-role"><%= @user.role.humanize %></dd>
+  <dt>Email</dt>
+  <dd class="user-email"><%= @user.email %></dd>
+</dl>
 <% if policy(@user).edit? %>
   <div>
     <%= link_to 'Edit', edit_user_path(@user), class: 'button secondary' %>

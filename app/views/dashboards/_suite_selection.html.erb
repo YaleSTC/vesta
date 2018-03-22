@@ -1,8 +1,14 @@
+<h2 class="h5">Suite Selection Progress</h2>
 <% if draw.next_groups %>
-  <p>Groups currently picking suites: <%= draw.next_groups.map(&:name).join(', ') %></p>
-  <p><%= draw.groups_without_suites_count %> groups still have to select suites</p>
-  <p><%= draw.groups_with_suites_count %> groups have selected suites</p>
+  <ul class="no-bullet">
+    <li>Groups currently picking suites: <%= draw.next_groups.map(&:name).join(', ') %></li>
+    <li><%= draw.groups_without_suites_count %> groups still have to select suites</li>
+    <li><%= draw.groups_with_suites_count %> groups have selected suites</li>
+  </ul>
 <% else %>
   <p>All groups have selected suites.</p>
 <% end %>
-<p><%= draw.groups_without_rooms_count %> groups with suites still have to select rooms</p>
+<h2 class="h5">Room Selection Progress</h2>
+  <ul class="no-bullet">
+    <li><%= draw.groups_without_rooms_count %> groups with suites still have to select rooms</li>
+  </ul>

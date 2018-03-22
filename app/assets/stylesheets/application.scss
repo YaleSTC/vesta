@@ -14,6 +14,7 @@
 @import "draws";
 @import "groups";
 @import "users";
+@import "header_sizes";
 
 td.actions a.button { margin: 0 }
 
@@ -40,3 +41,5 @@ footer {
 }
 
 .has-tip { font-weight: normal; }
+
+dd { margin-bottom: 0.6rem; }

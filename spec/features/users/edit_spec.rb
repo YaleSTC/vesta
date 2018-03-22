@@ -10,7 +10,7 @@ RSpec.feature 'User Editing' do
     visit_edit_form(user)
     select('rep', from: 'user_role')
     click_on 'Save'
-    expect(page).to have_css('.user-role', text: 'rep')
+    expect(page).to have_css('.user-role', text: 'Rep')
   end
   it 'can update first name' do
     visit_edit_form(user)

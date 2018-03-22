@@ -24,13 +24,13 @@
     <% end %>
   </li>
 </ul>
-<h3>Rooms</h3>
+<h2 class="h3">Rooms</h2>
 <%= render 'rooms/summary', rooms: @rooms %>
 <p><%= link_to 'Add room', new_suite_room_path(@suite), class: 'button secondary' if policy(Room).new? %></p>
 <hr />
 <% if policy(@suite).merge? %>
   <div class="suite-merging">
-    <h3>Merge suites</h3>
+    <h2>Merge suites</h2>
     <p>Please enter a suite to merge with this one; <b>it must be in the same building</b>. The two suites will be removed from Vesta and will be replaced with a single suite containing all of their rooms. You will able to set the name/number of the new suite on the following page.</p>
     <%= simple_form_for @merger_form, url: merge_suite_path(@suite), method: :get do |f| %>
       <%= f.input :other_suite_number, label: 'Other suite' %>

@@ -1,4 +1,4 @@
-<h3>Suite selection status</h3>
+<h3 class="h4">Suite selection status</h3>
 <p>Other <%= headerize_size(group.size).downcase %> that have not yet selected a suite:</p>
 <ol>
   <% without_suites.each do |g| %>
@@ -9,5 +9,6 @@
     <% end %>
   <% end %>
 </ol>
-<p>Available suites:</p>
+<br />
+<h3 class="h4">Available suites</h3>
 <%= render 'groups/suites_table', suites: valid_suites %>

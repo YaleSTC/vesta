@@ -1,14 +1,15 @@
 <% provide(:title, @group.name) %>
 <%= render 'groups/group_details', group: @group %>
 <% if policy(DrawlessGroup.new(@group)).select_suite? %>
-  <h3><%= suite_str(@group) %></h3>
   <% if @group.suite.present? %>
+    <dl>
+      <dt>Suite</dt>
+      <dd><%= @group.suite.name %></dd>
+    </dl>
     <%= link_to 'Remove suite', group_suite_assignment_path(@group), method: :delete, class: 'button alert' %>
   <% else %>
     <%= link_to 'Assign suite', new_group_suite_assignment_path(@group), class: 'button' %>
   <% end %>
-<% elsif @group.suite.present? %>
-  <h3>Suite: <%= @group.suite.name %></h3>
 <% end %>
 <hr />
 <div>
@@ -31,16 +32,17 @@
 <%= link_to 'View all special groups', groups_path %>
 
 <% content_for :sidebar do %>
-  <h3>
+  <h1 class="h3">Compatible Suites</h1>
+  <p class="h4">
     <%= @compatible_suites.count %> available
     <%= size_str(@group.size).capitalize.pluralize(@compatible_suites.count) %>
-  </h3>
+  </p>
   <% unless @compatible_suites_no_draw.count.zero? %>
-    <h4>Not in Any Draw</h4>
+    <h2 class="h4">Not in Any Draw</h2>
     <%= render 'groups/suites_table', suites: @compatible_suites_no_draw %>
   <% end %>
   <% unless @compatible_suites_in_draw.count.zero? %>
-    <h4>In Draw(s)</h4>
+    <h2 class="h4">In Draw(s)</h2>
     <%= render 'groups/suites_table', suites: @compatible_suites_in_draw %>
   <% end %>
 <% end %>

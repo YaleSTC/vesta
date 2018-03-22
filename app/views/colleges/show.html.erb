@@ -1,8 +1,13 @@
 <% provide(:title, 'Settings') %>
 <h1 class="college-name"><%= @college.name %></h1>
-<h3 class="college-dean">Dean: <%= @college.dean %></h3>
-<h3 class="college-admin_email">Admin E-mail: <%= @college.admin_email %></h3>
-<h3 class="college-site_url">Site URL: <%= root_url(host: @college.host) %></h3>
+<dl>
+  <dt>Dean</dt>
+  <dd><%= @college.dean %></dd>
+  <dt>Admin E-mail</dt>
+  <dd><%= @college.admin_email %></dd>
+  <dt>Site URL</dt>
+  <dd><%= root_url(host: @college.host) %></dd>
+</dl>
 <div>
   <% if policy(@college).edit? %>
     <%= link_to 'Edit settings', edit_college_path(@college), class: 'button secondary' %>

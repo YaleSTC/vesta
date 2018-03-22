@@ -12,9 +12,9 @@
     <% sizes.each do |size| %>
       <div class="tabs-panel<%= sizes.first == size ? ' is-active' : '' %>" id="size-<%= size %>">
         <% if diff.present? && suite_counts.present? && group_counts.present? %>
-          <h4><%= headerize_size(size) %><%= ' (locked)' if @draw.size_locked?(size) %> - <span class="group-size-header <%= diff_class(diff[size]) %>"><%= "#{pluralize(suite_counts[size], 'suite')}, #{pluralize(group_counts[size], 'group')}" %><%= oversub_str(diff[size]) %></span></h4>
+          <h3 class="h4"><%= headerize_size(size) %><%= ' (locked)' if @draw.size_locked?(size) %> - <span class="group-size-header <%= diff_class(diff[size]) %>"><%= "#{pluralize(suite_counts[size], 'suite')}, #{pluralize(group_counts[size], 'group')}" %><%= oversub_str(diff[size]) %></span></h3>
         <% else %>
-          <h4><%= headerize_size(size) %></h4>
+          <h3 class="h4"><%= headerize_size(size) %></h3>
         <% end %>
         <% if groups[size].empty? %>
           <p>No groups of size <%= size %></p>

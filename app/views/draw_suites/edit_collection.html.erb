@@ -3,7 +3,7 @@
 <%= simple_form_for @suites_update, url: update_collection_draw_suites_path(@draw), method: :patch do |f| %>
   <% @suite_sizes.each do |size| %>
     <div class="suites-fields" id="suites-fields-<%= size %>">
-      <h4><%= headerize_size(size) %></h4>
+      <h2><%= headerize_size(size) %></h2>
       <%= render 'suite_edit_fields', f: f, size: size, current_suites: @current_suites[size],
                                       drawless_suites: @drawless_suites[size],
                                       drawn_suites: @drawn_suites[size], draw: @draw %>

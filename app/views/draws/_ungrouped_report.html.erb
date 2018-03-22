@@ -1,9 +1,9 @@
-<h3>Students without Groups</h3>
+<h3 class="h4">Students without Groups</h3>
 <% if @draw.ungrouped_students.all? { |_s, students| students.empty? } %>
   <p>All students are either off-campus or in groups</p>
 <% else %>
   <% if @draw.ungrouped_students.key?('on_campus') %>
-    <h4>On Campus</h4>
+    <h4 class="h5">On Campus</h4>
     <ul style="columns: 4; list-style-type: none;">
       <% @draw.ungrouped_students['on_campus'].each do |student| %>
         <li><%= link_to student.full_name, user_path(student) %></li>
@@ -11,7 +11,7 @@
     </ul>
   <% end %>
   <% if @draw.ungrouped_students.key?('undeclared') %>
-    <h4>Undeclared Intent</h4>
+    <h4 class="h5">Undeclared Intent</h4>
     <ul style="columns: 4; list-style-type: none;">
       <% @draw.ungrouped_students['undeclared'].each do |student| %>
         <li><%= link_to student.full_name, user_path(student) %></li>

@@ -1,6 +1,6 @@
 <% provide(:title, 'Add Users') %>
 <h1>Add Users</h1>
-<h3>Instructions</h3>
+<h2>Instructions</h2>
 <p>Please enter a list of <%= User.cas_auth? ? 'CAS usernames' : 'e-mail addresses' %>, either separated by commas or one per line (you can copy and paste a list out of Excel, for example). The system will attempt to look them up in the directory service and create user accounts for them if they are found.</p>
 <%= simple_form_for @enrollment do |f| %>
   <%= f.input :ids, as: :text %>

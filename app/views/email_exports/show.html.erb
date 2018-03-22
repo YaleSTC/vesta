@@ -1,6 +1,6 @@
 <% provide(:title, 'Email Export Results') %>
 <h1>Email Export Results</h1>
-<h3><%= draw_scope_str(@email_export) %><%= size_scope_str(@email_export) %><%= locked_scope_str(@email_export) %></h3>
+<h2><%= draw_scope_str(@email_export) %><%= size_scope_str(@email_export) %><%= locked_scope_str(@email_export) %></h2>
 <% if @email_export.leaders.empty? %>
   <p>No matching groups</p>
 <% else %>

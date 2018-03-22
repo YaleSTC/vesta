@@ -1,7 +1,7 @@
 <% provide(:title, "#{@draw.name} - Intent Report" ) %>
 <h1 class="draw-name"><%= @draw.name %> - Intent Report</h1>
 <% if policy(:intent).import? %>
-  <h3>Import Intents</h3>
+  <h2>Import Intents</h2>
   <p>If you would like to import the intents for students in this draw
   please upload a CSV file containing the relevant data below. The CSV
   must have the columns "<%= User.login_attr %>,intent" where the
@@ -28,7 +28,7 @@
     <div class="tabs-content" data-tabs-content="student-intent-tabs">
       <% @intent_metrics.each do |intent, count| %>
         <div class="tabs-panel<%= @intent_metrics.keys.first == intent ? ' is-active' : '' %>" id="students-<%= intent %>">
-          <h3><%= intent.humanize %> (<%= pluralize(count, 'student') %>)</h3>
+          <h2><%= intent.humanize %> (<%= pluralize(count, 'student') %>)</h2>
           <table>
             <thead>
               <tr>

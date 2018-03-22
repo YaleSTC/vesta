@@ -53,7 +53,7 @@ RSpec.feature 'Special group editing' do
     visit edit_group_path(group)
     fill_in 'group_transfers', with: '1'
     click_on 'Save'
-    expect(page).to have_css('.transfers', text: 'Transfers: 1')
+    expect(page).to have_css('.transfers', text: '1')
   end
 
   def update_group_size(new_size)

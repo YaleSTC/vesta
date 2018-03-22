@@ -2,7 +2,7 @@
 <%= render 'group_details', group: @group %>
 <% if policy(@group).view_pending_members? %>
   <% unless @group.requests.empty? %>
-    <h3 class="group-requests">Requests:</h3>
+    <h2 class="group-requests h4">Requests</h2>
     <ul>
       <% @group.requests.each do |r| %>
         <li class="group-request">
@@ -20,7 +20,7 @@
     </ul>
   <% end %>
   <% unless @group.invitations.empty? %>
-    <h3 class="group-invitations">Invitations:</h3>
+    <h2 class="group-invitations h4">Invitations</h2>
     <ul>
       <% @group.invitations.each do |i| %>
         <li class="group-invitation">
@@ -97,8 +97,9 @@
 <%= link_to 'Return to draw', draw_path(@draw) %>
 
 <% content_for :sidebar do %>
-  <h3><%= @same_size_groups_count %> <%= 'group'.pluralize(@same_size_groups_count) %> of size <%= @group.size %></h3>
-  <h3><%= @compatible_suites.count %> available <%= size_str(@group.size).capitalize.pluralize(@compatible_suites.count) %></h3>
+  <h1 class="h3">Compatible Suites</h1>
+  <h2 class="h4"><%= @same_size_groups_count %> <%= 'group'.pluralize(@same_size_groups_count) %> of size <%= @group.size %></h2>
+  <h2 class="h4"><%= @compatible_suites.count %> available <%= size_str(@group.size).capitalize.pluralize(@compatible_suites.count) %></h2>
   <% unless @compatible_suites.count.zero? %>
     <%= render 'groups/suites_table', suites: @compatible_suites.group_by(&:building) %>
   <% end %>

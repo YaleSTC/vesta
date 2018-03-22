@@ -1,14 +1,14 @@
 <% provide(:title, 'All Users') %>
 <h1 id="top">All Users</h1>
 <p><a href="#admins">Admins</a> / <a href="#reps">Housing Committee</a> / <a href="#students">Students</a></p>
-<h3 id="admins">Admins</h3>
+<h2 id="admins">Admins</h2>
 <% if @users.has_key? 'admin' %>
   <%= render 'table', users: @users['admin'], hide_actions: false %>
 <% else %>
   <p>No admins!</p>
 <% end %>
 
-<h3 id="reps">Housing Committee (<%= @users['rep'].size %> total)</h3>
+<h2 id="reps">Housing Committee (<%= @users['rep'].size %> total)</h2>
 <p><a href="#top">Back to top</a></p>
 <% if @users.has_key? 'rep' %>
   <%= render 'table', users: @users['rep'], hide_actions: false %>
@@ -16,7 +16,7 @@
   <p>No housing committee members!</p>
 <% end %>
 
-<h3 id="students">Students (<%= @users['student'].empty? ? 0 : @users['student'].values.map(&:size).reduce(:+) %> total)</h3>
+<h2 id="students">Students (<%= @users['student'].empty? ? 0 : @users['student'].values.map(&:size).reduce(:+) %> total)</h2>
 <p><a href="#top">Back to top</a></p>
 <% if @users.has_key? 'student' %>
   <ul class="tabs" data-tabs id="student-year-tabs">
@@ -29,7 +29,7 @@
   <div class="tabs-content" data-tabs-content="student-year-tabs">
     <% @users['student'].keys.sort.each do |year| %>
       <div class="tabs-panel<%= @users['student'].keys.sort.first == year ? ' is-active' : '' %>" id="students-<%= year %>">
-        <h4>Class of <%= year %> (<%= @users['student'][year].size %> total)</h4>
+        <h3>Class of <%= year %> (<%= @users['student'][year].size %> total)</h3>
         <%= render 'table', users: @users['student'][year], hide_actions: false %>
       </div>
     <% end %>
