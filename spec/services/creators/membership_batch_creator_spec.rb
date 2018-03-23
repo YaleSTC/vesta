@@ -34,6 +34,20 @@ RSpec.describe MembershipBatchCreator do
     end
   end
 
+  context 'redirect object' do
+    it 'is added when there are no failures' do
+      users.last.update!(intent: 'on_campus')
+      result = described_class.run(user_ids: users.map { |u| u.id.to_s },
+                                   **params_hash)
+      expect(result[:redirect_object].map(&:class)).to eq([Draw, Group])
+    end
+    it 'is not added when there are failures' do
+      result = described_class.run(user_ids: users.map { |u| u.id.to_s },
+                                   **params_hash)
+      expect(result[:redirect_object]).to be_nil
+    end
+  end
+
   # rubocop:disable RSpec/InstanceVariable
   def params_hash
     @group ||= FactoryGirl.create(:open_group, size: 3)

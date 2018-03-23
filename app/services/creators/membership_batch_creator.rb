@@ -45,7 +45,8 @@ class MembershipBatchCreator
 
   def build_result
     @successes, @failures = results.partition { |r| r[:msg].key? :success }
-    { redirect_object: [group.draw, group], msg: build_flash }
+    redirect_object = failures.empty? ? [group.draw, group] : nil
+    { redirect_object: redirect_object, msg: build_flash }
   end
 
   def build_flash

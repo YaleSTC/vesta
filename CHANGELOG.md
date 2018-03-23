@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 ### Fixed
 * Fix colleges#index not sorting alphabetically ([#741](https://gitlab.com/yale-sdmp/vesta/issues/741)).
+* Fix accessibility issues with group creation and flash messages ([#744](https://gitlab.com/yale-sdmp/vesta/issues/744)).
 
 ## v1.0.0 - 2018-03-19
 ### Changed

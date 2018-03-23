@@ -1,7 +1,7 @@
 <% if flash.any? %>
   <div class="flashes">
     <% user_facing_flashes.each do |key, value| -%>
-      <div class="flash-<%= key %>" data-closable>
+      <div class="flash-<%= key %>" role="complementary" data-closable>
         <div class="row">
           <%= value %>
           <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
