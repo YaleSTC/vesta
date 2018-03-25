@@ -31,7 +31,7 @@ gem "apartment", "~> 2.0.0"
 gem 'ffaker', '~> 2.5.0'
 
 # Front-End Styling
-gem 'foundation-rails', '~> 6.3.0.0'
+gem 'foundation-rails', '~> 6.4.3'
 
 # Superuser dashboard
 gem 'administrate', '~> 0.8.1'
