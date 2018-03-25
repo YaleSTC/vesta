@@ -1,7 +1,7 @@
 <% provide(:title, "#{@user.full_name} - Declare Housing Intent") %>
 <h1><%= @user.full_name %> - Declare Housing Intent</h1>
 <%= simple_form_for @user, url: update_intent_user_path(@user) do |f| %>
-  <%= f.input :intent, collection: User.intents.keys, label_method: :humanize %>
+  <%= f.input :intent, collection: User.intents.keys, label_method: :humanize, required: true %>
   <%= f.submit 'Submit Intent' %>
 <% end %>
 <%= link_to 'Cancel', user_path(@user) %>

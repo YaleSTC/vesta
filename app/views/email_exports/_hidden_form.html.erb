@@ -1,9 +1,9 @@
-<%= simple_form_for EmailExport.new, url: email_export_path, html: { class: 'hidden-form' } do |f| %>
+<%= simple_form_for EmailExport.new, url: email_export_path, html: { class: 'hidden-form', id: id } do |f| %>
   <% if draw.present? %>
-    <%= f.input :draw_id, as: :hidden, input_html: { value: draw.id } %>
+    <%= f.input :draw_id, as: :hidden, input_html: { value: draw.id, id: "#{id}_draw_id" } %>
   <% end %>
   <% if size.present? %>
-    <%= f.input :size, as: :hidden, input_html: { value: size } %>
+    <%= f.input :size, as: :hidden, input_html: { value: size, id: "#{id}_size" } %>
   <% end %>
   <%= f.button :submit, btn_str, class: 'button secondary' %>
 <% end %>

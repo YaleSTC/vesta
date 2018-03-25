@@ -26,7 +26,14 @@
         <h1 class="h4">Your draw: <%= link_to @draw.name, draw_path(@draw) %></h1>
       </div>
       <div class="card-section">
-        <p>You are living <%= current_user.intent.humanize.downcase %>.</p>
+        <% if current_user.undeclared? %>
+          <p>You have not declared your housing intent.</p>
+        <% else %>
+          <p>You are living <%= current_user.intent.humanize.downcase %>.</p>
+        <% end %>
+        <% if policy(current_user).edit_intent? %>
+          <%= link_to 'Edit Intent', edit_intent_user_path(current_user), class: 'button' %>
+        <% end %>
         <% if @intent_deadline.present? %>
           <p>Deadline to submit intent: <%= @intent_deadline.strftime('%B %e') %></p>
         <% end %>

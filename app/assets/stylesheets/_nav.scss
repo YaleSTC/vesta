@@ -1,4 +1,13 @@
-.top-bar-title {
-  font-family: "yale", serif;
-  font-size: 1.1em;
+.top-bar {
+  a { color: $body-font-color; }
+  // Fix the dropdown triangle color
+  .dropdown.menu li.is-dropdown-submenu-parent a::after {
+    border-top-color: $body-font-color;
+  }
+
+  &-title {
+    font-family: "yale", serif;
+    font-size: 1.1em;
+    text-transform: uppercase;
+  }
 }

@@ -14,12 +14,12 @@
       <%= render "nav" %>
     </header>
     <%= render "flashes" -%>
-    <main class="row" role="main" data-equalizer>
-      <div class="small-12 large-3 large-push-9 columns" style="border-left: 1px solid #DDDDDD;" data-equalizer-watch>
-        <%= yield :sidebar %>
-      </div>
-      <div class="small-12 large-9 large-pull-3 columns" data-equalizer-watch>
+    <main class="row" id="main-content" role="main" data-equalizer>
+      <div class="small-12 large-9 columns" data-equalizer-watch>
         <%= yield %>
+      </div>
+      <div class="small-12 large-3 columns" style="border-left: 1px solid #DDDDDD;" data-equalizer-watch>
+        <%= yield :sidebar %>
       </div>
     </main>
     <%= render "footer" %>

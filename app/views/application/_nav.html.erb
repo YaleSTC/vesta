@@ -1,8 +1,9 @@
 <div class="top-bar">
   <div class="row">
+    <%= link_to 'Skip to main content', '#main-content', class: 'show-on-focus' %>
     <div class="top-bar-title">
       <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
-        <button class="menu-icon dark" type="button" data-toggle></button>
+        <button class="menu-icon dark" type="button" data-toggle aria-label="Toggle menu"></button>
       </span>
       <strong><%= link_to 'Vesta', root_path %></strong>
     </div>

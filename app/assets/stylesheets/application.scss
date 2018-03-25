@@ -16,10 +16,26 @@
 @import "users";
 @import "header_sizes";
 
+*:focus {
+  outline: $body-font-color auto 5px;
+}
+
+a.button { text-decoration: none; }
 td.actions a.button { margin: 0 }
 
-.accordion-title { font-size: 1.1em; }
-.tabs-title a { font-size: 1em; }
+// Tabs and accordions, oh my
+.accordion-title {
+  font-size: 1.1em;
+
+  &:hover, &:focus { color: $body-font-color; }
+}
+
+.tabs-title {
+  a { font-size: 1em; }
+  &.is-active a { color: $body-font-color; }
+}
+
+.card-divider a { color: $body-font-color; }
 
 .homepage-hero {
   @include grid-col;
