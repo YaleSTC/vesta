@@ -1,4 +1,8 @@
 <% provide(:title, "Edit #{@draw.name}") %>
 <h1>Edit <%= @draw.name %></h1>
+<%= link_to 'Edit students', student_summary_draw_path(@draw), class: 'button secondary' %>
+<% if policy(DrawSuite.new(draw: @draw)).edit_collection? %>
+  <%= link_to 'Edit suites', edit_collection_draw_suites_path(@draw), class: 'button secondary' %>
+<% end %>
 <%= render "form", draw: @draw %>
 <%= link_to 'Cancel', draw_path(@draw) %>

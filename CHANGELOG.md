@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.0.3 - 2018-03-26
 ### Changed
 * Allow admins to change intent in draft draws ([#754](https://gitlab.com/yale-sdmp/vesta/issues/754)).
 * Prevent suite selection e-mails from going out if admin selection is being used ([#752](https://gitlab.com/yale-sdmp/vesta/issues/752)).
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 * Add confirmation to Activate Draw button ([#757](https://gitlab.com/yale-sdmp/vesta/issues/757)).
+* Add Edit Students and Edit Suites buttons to the draw edit page ([#758](https://gitlab.com/yale-sdmp/vesta/issues/758)).
 
 ## v1.0.2 - 2018-03-26
 ### Fixed
