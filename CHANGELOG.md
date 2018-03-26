@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 ### Changed
 * Allow admins to change intent in draft draws ([#754](https://gitlab.com/yale-sdmp/vesta/issues/754)).
+* Prevent suite selection e-mails from going out if admin selection is being used ([#752](https://gitlab.com/yale-sdmp/vesta/issues/752)).
 
 ### Fixed
 * Fix various accessibility issues ([#742](https://gitlab.com/yale-sdmp/vesta/issues/742), [#748](https://gitlab.com/yale-sdmp/vesta/issues/748)).

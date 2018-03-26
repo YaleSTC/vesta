@@ -219,6 +219,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   #
   # @param [Mailer] The mailer to use
   def notify_next_groups(mailer = StudentMailer)
+    return unless student_selection?
     next_groups.each do |group|
       mailer.selection_invite(user: group.leader).deliver_later
     end
