@@ -31,17 +31,17 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def reminder?
-    record.pre_lottery? && !user.student?
+    record.pre_lottery? && user_has_uber_permission?
   end
 
   def intent_reminder?
-    return false unless record.intent_deadline
+    return false unless record.intent_deadline.present?
     reminder? && Time.zone.today <= record.intent_deadline
   end
 
   def locking_reminder?
-    return false unless record.locking_deadline
-    reminder? && Time.zone.today > record.intent_deadline
+    return false unless record.locking_deadline.present?
+    reminder? && Time.zone.today <= record.locking_deadline
   end
 
   def bulk_on_campus?

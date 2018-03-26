@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 * Fix various accessibility issues ([#742](https://gitlab.com/yale-sdmp/vesta/issues/742), [#748](https://gitlab.com/yale-sdmp/vesta/issues/748)).
+* Fix broken locking deadline locking policy ([#755](https://gitlab.com/yale-sdmp/vesta/issues/755)).
 
 ### Added
 * Add confirmation to Activate Draw button ([#757](https://gitlab.com/yale-sdmp/vesta/issues/757)).

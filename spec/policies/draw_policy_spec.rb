@@ -26,8 +26,7 @@ RSpec.describe DrawPolicy do
                 :students_update?, :oversubscription?,
                 :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
                 :start_selection?, :bulk_on_campus?, :reminder?, :results?,
-                :intent_reminder?, :locking_reminder?, :lock_all_sizes?,
-                :prune? do
+                :lock_all_sizes?, :prune? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -35,6 +34,22 @@ RSpec.describe DrawPolicy do
     end
     permissions :index? do
       it { is_expected.to permit(user, Draw) }
+    end
+
+    permissions :intent_reminder? do
+      before do
+        allow(draw).to receive(:intent_deadline).and_return(Time.zone.today)
+        allow(draw).to receive(:pre_lottery?).and_return(true)
+      end
+      it { is_expected.not_to permit(user, draw) }
+    end
+
+    permissions :locking_reminder? do
+      before do
+        allow(draw).to receive(:locking_deadline).and_return(Time.zone.today)
+        allow(draw).to receive(:pre_lottery?).and_return(true)
+      end
+      it { is_expected.not_to permit(user, draw) }
     end
 
     permissions :group_actions? do
@@ -157,12 +172,9 @@ RSpec.describe DrawPolicy do
 
     permissions :intent_reminder? do
       before { allow(draw).to receive(:pre_lottery?).and_return(true) }
-      context 'before/on intent deadline' do
-        before do
-          allow(draw).to receive(:intent_deadline)
-            .and_return(Time.zone.tomorrow)
-        end
-        it { is_expected.to permit(user, draw) }
+      context 'no intent deadline' do
+        before { allow(draw).to receive(:intent_deadline).and_return(nil) }
+        it { is_expected.not_to permit(user, draw) }
       end
       context 'after intent deadline' do
         before do
@@ -171,37 +183,36 @@ RSpec.describe DrawPolicy do
         end
         it { is_expected.not_to permit(user, draw) }
       end
-      context 'no intent deadline' do
-        it { is_expected.not_to permit(user, draw) }
+      context 'before/on intent deadline' do
+        before do
+          allow(draw).to receive(:intent_deadline)
+            .and_return(Time.zone.today)
+        end
+        it { is_expected.to permit(user, draw) }
       end
     end
 
     permissions :locking_reminder? do
       before { allow(draw).to receive(:pre_lottery?).and_return(true) }
-      context 'before/on locking deadline' do
+      context 'no locking deadline' do
         before do
-          allow(draw).to receive(:locking_deadline)
-            .and_return(Time.zone.today + 3.days)
-          allow(draw).to receive(:intent_deadline)
-            .and_return(Time.zone.today + 1.day)
+          allow(draw).to receive(:locking_deadline).and_return(nil)
         end
         it { is_expected.not_to permit(user, draw) }
       end
       context 'after intent deadline' do
         before do
           allow(draw).to receive(:locking_deadline)
-            .and_return(Time.zone.today + 3.days)
-          allow(draw).to receive(:intent_deadline)
-            .and_return(Time.zone.yesterday)
-        end
-        it { is_expected.to permit(user, draw) }
-      end
-      context 'no intent deadline' do
-        before do
-          allow(draw).to receive(:intent_deadline)
             .and_return(Time.zone.yesterday)
         end
         it { is_expected.not_to permit(user, draw) }
+      end
+      context 'before/on locking deadline' do
+        before do
+          allow(draw).to receive(:locking_deadline)
+            .and_return(Time.zone.today)
+        end
+        it { is_expected.to permit(user, draw) }
       end
     end
 
@@ -377,12 +388,9 @@ RSpec.describe DrawPolicy do
 
     permissions :intent_reminder? do
       before { allow(draw).to receive(:pre_lottery?).and_return(true) }
-      context 'before/on intent deadline' do
-        before do
-          allow(draw).to receive(:intent_deadline)
-            .and_return(Time.zone.tomorrow)
-        end
-        it { is_expected.to permit(user, draw) }
+      context 'no intent deadline' do
+        before { allow(draw).to receive(:intent_deadline).and_return(nil) }
+        it { is_expected.not_to permit(user, draw) }
       end
       context 'after intent deadline' do
         before do
@@ -391,37 +399,36 @@ RSpec.describe DrawPolicy do
         end
         it { is_expected.not_to permit(user, draw) }
       end
-      context 'no intent deadline' do
-        it { is_expected.not_to permit(user, draw) }
+      context 'before/on intent deadline' do
+        before do
+          allow(draw).to receive(:intent_deadline)
+            .and_return(Time.zone.today)
+        end
+        it { is_expected.to permit(user, draw) }
       end
     end
 
     permissions :locking_reminder? do
       before { allow(draw).to receive(:pre_lottery?).and_return(true) }
-      context 'before/on locking deadline' do
+      context 'no locking deadline' do
         before do
-          allow(draw).to receive(:locking_deadline)
-            .and_return(Time.zone.today + 3.days)
-          allow(draw).to receive(:intent_deadline)
-            .and_return(Time.zone.today + 1.day)
+          allow(draw).to receive(:locking_deadline).and_return(nil)
         end
         it { is_expected.not_to permit(user, draw) }
       end
       context 'after intent deadline' do
         before do
           allow(draw).to receive(:locking_deadline)
-            .and_return(Time.zone.today + 3.days)
-          allow(draw).to receive(:intent_deadline)
-            .and_return(Time.zone.yesterday)
-        end
-        it { is_expected.to permit(user, draw) }
-      end
-      context 'no intent deadline' do
-        before do
-          allow(draw).to receive(:intent_deadline)
             .and_return(Time.zone.yesterday)
         end
         it { is_expected.not_to permit(user, draw) }
+      end
+      context 'before/on locking deadline' do
+        before do
+          allow(draw).to receive(:locking_deadline)
+            .and_return(Time.zone.today)
+        end
+        it { is_expected.to permit(user, draw) }
       end
     end
 
