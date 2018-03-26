@@ -17,7 +17,7 @@ class DrawSelectionStarter
   def initialize(draw:, mailer: StudentMailer)
     @draw = draw
     @mailer = mailer
-    @college = College.first
+    @college = College.current
   end
 
   # Start the suite selection phase of a Draw and notify the first group(s) to

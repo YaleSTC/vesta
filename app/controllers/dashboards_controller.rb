@@ -17,7 +17,7 @@ class DashboardsController < ApplicationController
   end
 
   def student_variables
-    @college = College.first || College.new
+    @college = @current_college
     @draw = current_user.draw
     set_deadlines
     set_group_info

@@ -14,10 +14,8 @@ class DrawResultsStarter
   # Initialize a new DrawResultsStarter
   #
   # @param draw [Draw] the draw in question
-  def initialize(draw:, mailer: StudentMailer)
+  def initialize(draw:)
     @draw = draw
-    @mailer = mailer
-    @college = College.first
   end
 
   # Start the results phase of a Draw and create a duplicate draw if necessary

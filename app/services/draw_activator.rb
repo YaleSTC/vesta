@@ -18,7 +18,7 @@ class DrawActivator
   def initialize(draw:, mailer: StudentMailer)
     @draw = draw
     @mailer = mailer
-    @college = College.first
+    @college = College.current
   end
 
   # Activate a Draw

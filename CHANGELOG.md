@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.0.2 - 2018-03-26
+### Fixed
+* Fix incorrect references to College.first ([#741](https://gitlab.com/yale-sdmp/vesta/issues/741)).
+
 ## v1.0.1 - 2018-03-26
 ### Fixed
 * Fix colleges#index not sorting alphabetically ([#741](https://gitlab.com/yale-sdmp/vesta/issues/741)).

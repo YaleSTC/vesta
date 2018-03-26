@@ -102,12 +102,12 @@ class Membership < ApplicationRecord
 
   def send_joined_email
     StudentMailer.joined_group(joined: user, group: group,
-                               college: College.first).deliver_later
+                               college: College.current).deliver_later
   end
 
   def send_left_email
     StudentMailer.left_group(left: user, group: group,
-                             college: College.first).deliver_later
+                             college: College.current).deliver_later
   end
 
   def destroy_pending
