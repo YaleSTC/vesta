@@ -105,6 +105,16 @@ class DrawReport < SimpleDelegator
                     .group_by(&:building)
   end
 
+  # Gets the available suites for a given draw, ordered by number and grouped by
+  # size
+  #
+  # @return Hash{Integer => Array<Suite>} a hash with the available suite sizes
+  #   as keys and arrays of the corresponding suites ordered by number as values
+  def suites_by_size
+    @suites_by_size ||=
+      SuitesBySizeQuery.new(available_suites).call
+  end
+
   # Gets the students in the draw without a group, grouped by intent,
   # without off campus students
   #

@@ -2,8 +2,8 @@
 <h1 class="draw-name"><%= @draw.name %> (<%= @draw.status.humanize %>)</h1>
 <div class="contextual-draw-buttons"><%= render "contextual_draw_buttons", draw: @draw %></div>
 <% if @draw.draft? %>
-  <div class="suite-report">
-    <%= render 'suite_report' %>
+  <div class="suite-metrics">
+    <%= render 'suite_metrics' %>
   </div>
   <hr />
 <% else %>
@@ -13,12 +13,6 @@
         <%= render 'oversub_report', draw: @draw, path: draw_path(@draw) %>
         <% if policy(@draw).lock_all_sizes? %>
           <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
-        <% end %>
-        <% if policy(DrawSuite.new(draw: @draw.__getobj__)).index?%>
-          <%= link_to 'View suites', draw_suites_path(@draw, method: :get), class: 'button secondary' %>
-        <% end %>
-        <% if policy(@draw).student_summary? %>
-          <%= link_to 'View or edit students', student_summary_draw_path(@draw), class: 'button secondary' %>
         <% end %>
       </div>
   <% end %>
@@ -60,8 +54,26 @@
           <div class="ungrouped-report">
             <%= render 'ungrouped_report' %>
           </div>
+          <% if policy(@draw).student_summary? %>
+            <%= link_to 'View or edit students', student_summary_draw_path(@draw), class: 'button secondary' %>
+          <% end %>
           <% if policy(Group).index? %>
             <%= link_to 'View printable group report', draw_groups_path(@draw), class: 'button secondary' %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+    <% if policy(DrawSuite.new(draw: @draw.__getobj__)).index? && @draw.pre_lottery? %>
+      <li class="accordion-item" data-accordion-item>
+        <a href="#" class="accordion-title"><h2 class="h4">Suites</h2></a>
+        <div class="accordion-content suite-report" data-tab-content>
+          <%= render 'suite_report', sizes: @draw.sizes, suites: @draw.suites_by_size,
+            diff: @draw.oversubscription, group_counts: @draw.group_counts, suite_counts: @draw.suite_counts,
+            path: draw_path(@draw) %>
+          <% if policy(DrawSuite.new(draw: @draw.__getobj__)).edit_collection? %>
+            <div style="padding-top: 1em;">
+              <%= link_to 'Edit suites', edit_collection_draw_suites_path(@draw), class: 'button secondary' %>
+            </div>
           <% end %>
         </div>
       </li>

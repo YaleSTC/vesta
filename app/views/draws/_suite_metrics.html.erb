@@ -1,0 +1,11 @@
+<dl>
+  <dt>Total Number of Suites</dt>
+  <dd><%= @draw.suite_counts.empty? ? 0 : @draw.suite_counts.values.inject(&:+) %>
+  <% unless @draw.suite_sizes.empty? %>
+    (<%= @draw.suite_sizes.map { |size| pluralize(@draw.suite_counts[size], headerize_size(size)) }.join(', ') %>)
+  <% end %></dd>
+  <dt>Total Number of Beds in All Suites</dt>
+  <dd><%= @draw.bed_count %> </dd>
+  <dt>Total Number of Students</dt>
+  <dd><%= @draw.student_count %></dd>
+</dl>

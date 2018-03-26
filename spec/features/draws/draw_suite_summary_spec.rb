@@ -14,7 +14,6 @@ RSpec.feature 'Draw suite summary' do
 
   it 'displays correctly' do
     visit draw_path(draw)
-    click_on 'View suites'
     expect(page_has_suite_summary?(page, draw_suite, other_suite)).to be_truthy
   end
 
@@ -24,12 +23,12 @@ RSpec.feature 'Draw suite summary' do
   end
 
   def page_has_suite_content?(page, suite)
-    page.assert_selector(:css, 'td[data-role="suite-number"]',
+    page.assert_selector(:css, 'td[data-role="suite-name"]',
                          text: suite.number)
   end
 
   def page_does_not_have_suite_content?(page, suite)
-    page.refute_selector(:css, 'td[data-role="suite-number"]',
+    page.refute_selector(:css, 'td[data-role="suite-name"]',
                          text: suite.number)
   end
 end

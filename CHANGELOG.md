@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Added
+* Add suites table to draws#show view ([#751](https://gitlab.com/yale-sdmp/vesta/issues/751)).
+
 ## v1.0.3 - 2018-03-26
 ### Changed
 * Allow admins to change intent in draft draws ([#754](https://gitlab.com/yale-sdmp/vesta/issues/754)).
