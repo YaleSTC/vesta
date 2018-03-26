@@ -242,15 +242,15 @@ RSpec.describe UserPolicy do
 
         before { allow(other_user).to receive(:draw).and_return(draw) }
 
-        context 'draw is not pre-lottery' do
-          before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        context 'draw is not before lottery' do
+          before { allow(draw).to receive(:before_lottery?).and_return(false) }
           it { is_expected.not_to permit(user, other_user) }
         end
 
-        context 'draw is pre-lottery' do
+        context 'draw is before lottery' do
           let(:group) { instance_spy('group', present?: true) }
 
-          before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+          before { allow(draw).to receive(:before_lottery?).and_return(true) }
 
           context 'other user has a group' do
             before { allow(other_user).to receive(:group).and_return(group) }
