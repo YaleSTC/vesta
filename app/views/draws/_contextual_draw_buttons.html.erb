@@ -28,7 +28,10 @@
         </div>
       <% end %>
       <% if policy(@draw).activate? %>
-        <%= link_to 'Begin draw process', activate_draw_path(@draw), method: :patch, class: 'button' %>
+        <%= link_to 'Begin draw process',
+          activate_draw_path(@draw), method: :patch,
+          data: { confirm: 'This will send an e-mail to all students in the draw inviting them to log in and start forming groups. Do you want to continue?' },
+          class: 'button' %>
       <% end %>
     <% elsif @draw.status == 'pre_lottery' %>
       <% if policy(Group).new? && policy(@draw).group_actions? %>
