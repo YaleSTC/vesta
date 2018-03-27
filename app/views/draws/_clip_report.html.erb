@@ -1,0 +1,38 @@
+<% if clips.empty? %>
+  <p>There are no clips yet.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <th>Clip ID</th>
+        <th>Groups</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% clips.each do |clip| %>
+        <tr>
+          <td><%= link_to clip.id, clip_path(clip) %></td>
+          <td>
+            <ul style="list-style: none;">
+              <% clip.groups.each do |group| %>
+                <li><%= link_to group.name(:with_size), group_path(group) %></li>
+              <% end %>
+            </ul>
+          </td>
+          <td class="actions">
+            <% if policy(clip).show? %>
+              <%= link_to 'View', clip_path(clip), class: 'button' %>
+            <% end %>
+            <% if policy(clip).edit? %>
+              <%= link_to 'Edit', edit_clip_path(clip), class: 'button' %>
+            <% end %>
+            <% if policy(clip).destroy? %>
+              <%= link_to 'Destroy', clip_path(clip), method: :delete, class: 'button alert' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

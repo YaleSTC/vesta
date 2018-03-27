@@ -1,5 +1,6 @@
 <% provide(:title, @clip.name) %>
 <h1 class="clip-name"><%= @clip.name %></h1>
+<h2 class="clip-size">Confirmed Members: <%= @clip.size %></h2>
 <%= render 'clip_details', clip: @clip %>
 <p>
 <% if @current_user.group.present? %>

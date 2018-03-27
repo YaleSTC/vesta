@@ -184,18 +184,46 @@ RSpec.describe Group, type: :model do
   end
 
   describe '#name' do
-    it "includes the leader's name" do
-      leader = instance_spy('User', full_name: 'First Last')
-      group = FactoryGirl.build_stubbed(:group)
-      allow(group).to receive(:leader).and_return(leader)
-      expect(group.name).to include(leader.full_name)
+    let(:group) { build_stubbed(:group) }
+    let(:leader) { instance_spy('user', full_name: 'First Last') }
+
+    before { allow(group).to receive(:leader).and_return(leader) }
+
+    context 'default' do
+      it "includes the leader's name" do
+        expect(group.name).to eq("First Last's Group")
+      end
+
+      it 'ignores unexpected options' do
+        expect(group.name(:foo)).to eq("First Last's Group")
+      end
     end
 
-    it "includes the leader's class year" do
-      leader = instance_spy('User', full_name: 'First Last', class_year: 2017)
-      group = FactoryGirl.build_stubbed(:group)
-      allow(group).to receive(:leader).and_return(leader)
-      expect(group.name).to include(leader.class_year.to_s)
+    context 'with just size' do
+      it 'includes the group size' do
+        allow(group).to receive(:size).and_return(2)
+        allow(Suite).to receive(:size_str).with(2).and_return('double')
+        expect(group.name(:with_size)).to \
+          eq("First Last's Group (double)")
+      end
+    end
+
+    context 'with just class year' do
+      it "includes the leader's class year" do
+        allow(leader).to receive(:class_year).and_return(2017)
+        expect(group.name(:with_year)).to \
+          eq("First Last's Group (2017)")
+      end
+    end
+
+    context 'with both size and class year' do
+      it "includes both the group size and leader's class year" do
+        allow(group).to receive(:size).and_return(2)
+        allow(Suite).to receive(:size_str).with(2).and_return('double')
+        allow(leader).to receive(:class_year).and_return(2017)
+        expect(group.name(:with_size, :with_year)).to \
+          eq("First Last's Group (double, 2017)")
+      end
     end
   end
 

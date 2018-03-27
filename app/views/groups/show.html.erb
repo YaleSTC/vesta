@@ -35,34 +35,25 @@
 <% end %>
 <hr style="border-color: #DDDDDD;" />
 <% if @group.clip.present? %>
+  <h2 class="clip-information h4">Your Clip</h2>
   <%= render 'clips/clip_details', clip: @group.clip %>
   <hr style="border-color: #DDDDDD;" />
 <% elsif @clip_invites.length.positive? %>
-  <div>
-    <table>
-      <thead>
-        <tr>
-          <td>Clip Invites</td>
-          <td></td>
-          <td></td>
-        </tr>
-      </thead>
-      <tbody>
-      <% @clip_invites.each do |m| %>
-        <tr id="clip-membership-<%= m.id %>">
-          <td data-role="clip-membership-name"><%= link_to m.clip.name, clip_path(m.clip) %></td>
-          <td class="actions" data-role="clip-membership-actions">
-            <%= link_to 'Accept Invitation', clip_membership_path(m), method: :patch if policy(m).accept? %>
-          </td>
-          <td class="actions" data-role="clip-membership-actions">
-            <%= link_to 'Reject Invitation', clip_membership_path(m), method: :delete if policy(m).reject? %>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-    <hr style="border-color: #DDDDDD;" />
-  </div>
+  <h2 class="clip-invites h4">Clip Invitations</h2>
+  <ul>
+    <% @clip_invites.each do |m| %>
+      <li class="clip-invitation" id="clip-membership-<%= m.id %>">
+        <%= link_to m.clip.name, clip_path(m.clip) %>
+        <% if policy(m).accept? %>
+          (<%= link_to 'Accept Invitation', clip_membership_path(m), method: :patch %><%= policy(m).reject? ? ' / ' : ')' %>
+        <% end %>
+        <% if policy(m).reject? %>
+          <%= '(' unless policy(m).accept? %><%= link_to 'Reject Invitation', clip_membership_path(m), method: :delete %>)
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <hr style="border-color: #DDDDDD;" />
 <% end %>
 <div>
   <%= link_to 'Edit', edit_draw_group_path(@draw, @group), class: 'button secondary' if policy(@group).edit? %>

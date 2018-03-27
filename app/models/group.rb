@@ -73,9 +73,11 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   # Generate the group name
   #
   # @return [String] the group's name
-  def name
-    year_str = leader.class_year.present? ? " (#{leader.class_year})" : ''
-    "#{leader.full_name}'s Group" + year_str
+  def name(*opts)
+    base = "#{leader.full_name}'s Group"
+    opt_strs = opts.map { |o| name_str(o) }.compact.join(', ')
+    return base unless opt_strs.present?
+    "#{base} (#{opt_strs})"
   end
 
   # Updates the status to match the group size (open when fewer members than
@@ -176,6 +178,15 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   end
 
   private
+
+  def name_str(opt)
+    case opt
+    when :with_size
+      Suite.size_str(size)
+    when :with_year
+      leader.class_year.to_s
+    end
+  end
 
   def notify_members_of_disband
     members.each do |m|

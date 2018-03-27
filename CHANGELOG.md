@@ -1,9 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.0.4 - 2018-03-27
 ### Added
 * Add suites table to draws#show view ([#751](https://gitlab.com/yale-sdmp/vesta/issues/751)).
+* Add clips table to draws#show view ([#759](https://gitlab.com/yale-sdmp/vesta/issues/759)).
 
 ## v1.0.3 - 2018-03-26
 ### Changed
