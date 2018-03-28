@@ -21,9 +21,10 @@ RSpec.describe DrawReport do
   end
 
   describe '#groups' do
-    it 'gets the groups with the leader eager-loaded' do
+    it 'gets the groups with the a bunch of stuff eager-loaded' do
       groups = instance_spy('ActiveRecord::Associations::CollectionProxy')
-      allow(groups).to receive(:includes).with(:leader).and_return(1)
+      eager_loads = [:leader, :lottery_assignment, suite: :building]
+      allow(groups).to receive(:includes).with(*eager_loads).and_return(1)
       draw = instance_spy('draw', groups: groups)
       expect(described_class.new(draw).groups).to eq(1)
     end

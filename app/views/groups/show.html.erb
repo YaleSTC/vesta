@@ -90,8 +90,8 @@
 <% content_for :sidebar do %>
   <h1 class="h3">Compatible Suites</h1>
   <h2 class="h4"><%= @same_size_groups_count %> <%= 'group'.pluralize(@same_size_groups_count) %> of size <%= @group.size %></h2>
-  <h2 class="h4"><%= @compatible_suites.count %> available <%= size_str(@group.size).capitalize.pluralize(@compatible_suites.count) %></h2>
-  <% unless @compatible_suites.count.zero? %>
+  <h2 class="h4"><%= @compatible_suites_count %> available <%= size_str(@group.size).capitalize.pluralize(@compatible_suites_count) %></h2>
+  <% unless @compatible_suites_count.zero? %>
     <%= render 'groups/suites_table', suites: @compatible_suites.group_by(&:building) %>
   <% end %>
 <% end %>

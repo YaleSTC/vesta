@@ -149,7 +149,9 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def set_draw
-    @draw = Draw.includes(:groups, :suites).find(params[:id])
+    @draw = Draw.includes(:suites,
+                          groups: [:lottery_assignment, suite: :building])
+                .find(params[:id])
   end
 
   def calculate_metrics

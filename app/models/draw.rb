@@ -70,7 +70,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   #
   # @return [ActiveRecord::Relation] the suites without assigned groups
   def available_suites
-    suites.available
+    suites.includes(:rooms).available
   end
 
   # Query method to see if a draw has at least one student.

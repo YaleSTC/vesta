@@ -10,7 +10,8 @@ class ObjectsForLotteryQuery
   # Initialize a ObjectsForLotteryQuery
   def initialize
     @relation = LotteryBaseView.includes(
-      [group: :leader], [clip: [clip_memberships: [group: :leader]]]
+      [group: %i(leader lottery_assignment)],
+      [clip: [clip_memberships: [group: %i(leader lottery_assignment)]]]
     )
   end
 

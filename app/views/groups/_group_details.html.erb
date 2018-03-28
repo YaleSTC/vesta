@@ -7,7 +7,7 @@
   <dt>Members</dt>
   <dd>
     <ul>
-      <% group.members.each do |m| %>
+      <% group.members.includes(:membership).each do |m| %>
         <li class="group-member"><%= member_str(m, group) %></li>
       <% end %>
     </ul>

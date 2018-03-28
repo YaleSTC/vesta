@@ -2,8 +2,7 @@
 
 # Controller for LotteryAssignments
 class LotteryAssignmentsController < ApplicationController
-  prepend_before_action :set_draw_with_eager_load, only: %(index)
-  prepend_before_action :set_draw, except: %(index)
+  prepend_before_action :set_draw
   prepend_before_action :set_lottery_assignment, only: %i(update)
 
   def index
@@ -48,11 +47,6 @@ class LotteryAssignmentsController < ApplicationController
 
   def set_lottery_assignment
     @lottery = LotteryAssignment.includes(:groups).find(params[:id])
-  end
-
-  def set_draw_with_eager_load
-    @draw = Draw.includes(groups: :leader).includes(:lottery_assignments)
-                .find(params[:draw_id])
   end
 
   def set_draw

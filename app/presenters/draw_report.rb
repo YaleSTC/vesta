@@ -44,7 +44,8 @@ class DrawReport < SimpleDelegator
   # @return [ActiveRecord::Associations::CollectionProxy] The draw's groups
   def groups
     # call to #__getobj__ is necessary to avoid stack too deep errors
-    @groups ||= __getobj__.groups.includes(:leader)
+    @groups ||= __getobj__.groups.includes(:leader, :lottery_assignment,
+                                           suite: :building)
   end
 
   # Calculates the number of groups per size
@@ -60,7 +61,7 @@ class DrawReport < SimpleDelegator
   # @return [Hash{Integer => Integer}] A hash mapping group sizes to the number
   #   of locked groups of that size
   def locked_counts
-    @locked_counts ||= CountBySizeQuery.new(groups.where(status: 'locked')).call
+    @locked_counts ||= CountBySizeQuery.new(groups.locked).call
   end
 
   # Calculates the difference between the number of suites of a given size
@@ -111,8 +112,7 @@ class DrawReport < SimpleDelegator
   # @return Hash{Integer => Array<Suite>} a hash with the available suite sizes
   #   as keys and arrays of the corresponding suites ordered by number as values
   def suites_by_size
-    @suites_by_size ||=
-      SuitesBySizeQuery.new(available_suites).call
+    @suites_by_size ||= SuitesBySizeQuery.new(available_suites).call
   end
 
   # Gets the students in the draw without a group, grouped by intent,

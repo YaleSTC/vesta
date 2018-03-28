@@ -9,7 +9,7 @@ module GroupsHelper
   # @param group [Group] the user's group
   # @return [String] the user listing
   def member_str(member, group)
-    membership = group.memberships.find_by(user_id: member.id)
+    membership = member.membership
     locked_str = membership.locked? ? ' (locked)' : ''
     leader_str = group.leader == member ? ' (leader)' : ''
     link_to(member.full_name, user_path(member)) + leader_str + locked_str

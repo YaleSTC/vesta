@@ -1,12 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.0.5 - 2018-03-29
 ### Changed
 * Make UngroupedStudentsQuery sort by last name ([#756](https://gitlab.com/yale-sdmp/vesta/issues/756)).
 * Add TOS Acceptance to administrate dashboard ([#760](https://gitlab.com/yale-sdmp/vesta/issues/760)).
 * Rename home link in nav ([#753](https://gitlab.com/yale-sdmp/vesta/issues/753)).
 * Prevent deadline information from showing after pre-lottery ([#765](https://gitlab.com/yale-sdmp/vesta/issues/765)).
+
+### Fixed
+* Fix performance issues in certain views ([#764](https://gitlab.com/yale-sdmp/vesta/issues/764)).
 
 ## v1.0.4 - 2018-03-27
 ### Added

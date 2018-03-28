@@ -82,7 +82,7 @@
       <li class="accordion-item" data-accordion-item>
         <a href="#" class="accordion-title"><h2 class="h4">Clips</h2></a>
         <div class="accordion-content clip-report" data-tab-content>
-          <%= render 'clip_report', clips: @draw.clips %>
+          <%= render 'clip_report', clips: @draw.clips.includes(clip_memberships: :group) %>
         </div>
       </li>
     <% end %>
