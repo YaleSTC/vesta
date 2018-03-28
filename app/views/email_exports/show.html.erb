@@ -4,7 +4,7 @@
 <% if @email_export.leaders.empty? %>
   <p>No matching groups</p>
 <% else %>
-  <table>
+  <table role="presentation">
     <tbody>
       <% @email_export.leaders.each do |l| %>
         <tr>

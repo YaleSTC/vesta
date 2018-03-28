@@ -1,16 +1,16 @@
 <% provide(:title, "#{@group.name} - Confirm Room Assignments") %>
 <h1><%= @group.name %> - Confirm Room Assignments</h1>
-<table>
+<table aria-label="Room Assignments To Be Confirmed">
   <thead>
     <tr>
-      <td>Room Number</td>
-      <td>Students</td>
+      <th scope="col">Room Number</th>
+      <th scope="col">Students</th>
     </tr>
   </thead>
   <tbody>
     <% @room_assignment.assignment_hash.each do |room, members| %>
       <tr>
-        <td><%= room.number %></td>
+        <th scope="row"><%= room.number %></th>
         <td><%= members.map(&:full_name).join(', ') %></td>
       </tr>
     <% end %>
@@ -27,4 +27,3 @@
   <% end %>
 <% end %>
 <%= link_to 'Start over', new_group_room_assignment_path, class: 'button secondary' %>
-

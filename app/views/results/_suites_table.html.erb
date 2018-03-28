@@ -1,12 +1,12 @@
 <% if suites.empty? %>
   <p>No results yet - students must have rooms assigned before we can display results.</p>
 <% else %>
-<table>
+<table aria-label="Room Assignment Results">
   <thead>
     <tr>
-      <td>Suite</td>
-      <td>Room</td>
-      <td>Occupants</td>
+      <th scope="col">Suite</th>
+      <th scope="col">Room</th>
+      <th scope="col">Occupants</th>
     </tr>
   </thead>
   <tbody>
@@ -14,7 +14,7 @@
       <% suite.rooms.order(:number).each do |room| %>
         <% next if room.beds.zero? %>
         <tr class="result-room-<%= room.id %>">
-          <td><%= suite.number %></td>
+          <th scope="row"><%= suite.number %></td>
           <td><%= room.number %></td>
           <td class="student"><%= room_occupants(room) %></td>
         </tr>

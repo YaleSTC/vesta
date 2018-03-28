@@ -4,22 +4,22 @@
     <h3><%= headerize_size(size) %></h3>
     <p><%= render partial: 'suites/size_link', collection: sizes.select { |s| s != size }, spacer_template: 'shared/slash' %></p>
     <% unless suites[size].empty? %>
-      <table>
+      <table aria-label="Suite Summary">
         <thead>
           <tr>
-            <td>#</td>
-            <td># Singles</td>
-            <td># Doubles</td>
-            <td># Common</td>
-            <td>Draws</td>
-            <td></td>
+            <th scope="col">#</th>
+            <th scope="col"># Singles</th>
+            <th scope="col"># Doubles</th>
+            <th scope="col"># Common</th>
+            <th scope="col">Draws</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
           <% suites[size].each do |suite| %>
             <% next if suite.medical && !policy(suite).medical? %>
             <tr id="suite-<%= suite.id %>">
-              <td data-role="suite-number"><%= link_to suite.send(label_method), suite_path(suite) %></td>
+              <th scope="row" data-role="suite-number"><%= link_to suite.send(label_method), suite_path(suite) %></th>
               <td data-role="suite-singles"><%= suite.singles.count %></td>
               <td data-role="suite-doubles"><%= suite.doubles.count %></td>
               <td data-role="suite-common"><%= suite.common_rooms.count %></td>

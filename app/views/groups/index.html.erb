@@ -6,24 +6,24 @@
   <div class="printable-group-report">
     <% @groups.each do |size, group_array| %>
       <h2><%= headerize_size(size) %></h2>
-      <table>
+      <table aria-label="Group Report">
         <thead>
           <tr>
-            <td>Group Leader</td>
-            <td>Other Members</td>
+            <th scope="col">Group Leader</th>
+            <th scope="col">Other Members</th>
             <% if current_user.admin? %>
-              <td>Transfers</td>
+              <th scope="col">Transfers</th>
             <% end %>
           </tr>
         </thead>
         <tbody>
           <% group_array.each do |group| %>
             <tr>
-              <td data-role="group-leader">
+              <th scope="row" data-role="group-leader">
                 <% if policy(group).show? %>
                   <%= link_to group.leader.full_name, draw_group_path(@draw, group) %>
                 <% end %>
-              </td>
+              </th>
               <td data-role="group-members"><%= group.members.map(&:full_name).join(', ') %></td>
               <% if current_user.admin? %>
                 <td data-role="group-transfers"><%= group.transfers %></td>

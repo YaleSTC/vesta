@@ -1,22 +1,22 @@
 <% if draws.none? { |d| policy(d).show? } %>
   <p>There are currently no active draws.</p>
 <% else %>
-  <table>
+  <table aria-label="Draw Information">
     <thead>
       <tr>
-        <td>Name</td>
-        <td>Status</td>
-        <td># students</td>
-        <td># available suites</td>
-        <td># groups</td>
-        <td></td>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+        <th scope="col"># students</th>
+        <th scope="col"># available suites</th>
+        <th scope="col"># groups</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <% draws.each do |draw| %>
         <% next unless policy(draw).show? %>
         <tr id="draw-<%= draw.id %>">
-          <td data-role="draw-name"><%= link_to draw.name, draw_path(draw) %></td>
+          <th scope="row" data-role="draw-name"><%= link_to draw.name, draw_path(draw) %></th>
           <td data-role="draw-status"><%= draw.status.humanize %></td>
           <td data-role="draw-student-count"><%= draw.student_count %></td>
           <td data-role="draw-suite-count"><%= draw.available_suite_count %></td>

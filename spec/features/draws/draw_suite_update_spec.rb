@@ -52,7 +52,7 @@ RSpec.feature 'Draw suite update' do
 
   def page_has_correct_suites(page, expected_suites)
     expected_suites.all? do |suite|
-      page.assert_selector(:css, 'td[data-role="suite-number"]',
+      page.assert_selector(:css, 'th[data-role="suite-number"]',
                            text: suite.number)
     end
   end

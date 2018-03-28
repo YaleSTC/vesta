@@ -19,21 +19,21 @@
         <% if suites[size].empty? %>
           <p>No suites of size <%= size %></p>
         <% else %>
-          <table class="suite-report-1">
+          <table aria-label="Suite Report" class="suite-report-1">
             <thead>
               <tr>
-                <td>Name</td>
-                <td># Singles</td>
-                <td># Doubles</td>
-                <td># Common Rooms</td>
-                <td>Draw(s)</td>
-                <td></td>
+                <th scope="col">Name</th>
+                <th scope="col"># Singles</th>
+                <th scope="col"># Doubles</th>
+                <th scope="col"># Common Rooms</th>
+                <th scope="col">Draw(s)</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
               <% suites[size].each do |suite| %>
                 <tr id="suite-<%= suite.id %>">
-                  <td data-role="suite-name"> <%= suite.name %> </td>
+                  <th scope="row" data-role="suite-name"> <%= suite.name %> </th>
                   <td data-role="suite-singles"><%= suite.singles.count %></td>
                   <td data-role="suite-doubles"><%= suite.doubles.count %></td>
                   <td data-role="suite-commons"><%= suite.common_rooms.count %></td>

@@ -19,21 +19,21 @@
         <% if groups[size].empty? %>
           <p>No groups of size <%= size %></p>
         <% else %>
-          <table class="group-report-1">
+          <table aria-label="Group Report" class="group-report-1">
             <thead>
               <tr>
-                <td>Group Leader</td>
-                <td>Status</td>
+                <th scope="col">Group Leader</th>
+                <th scope="col">Status</th>
                 <% if current_user.admin? %>
-                  <td>Transfers</td>
+                  <th scope="col">Transfers</th>
                 <% end %>
-                <td></td>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
               <% groups[size].each do |group| %>
                 <tr id="group-<%= group.id %>">
-                  <td data-role="group-leader"> <%= group.leader.full_name %> </td>
+                  <th scope="row" data-role="group-leader"> <%= group.leader.full_name %> </th>
                   <td data-role="group-status"><%= display_group_status(group) %></td>
                   <% if current_user.admin? %>
                     <td data-role="group-transfers"><%= group.transfers %></td>

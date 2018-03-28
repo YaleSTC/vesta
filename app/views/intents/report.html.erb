@@ -29,18 +29,18 @@
       <% @intent_metrics.each do |intent, count| %>
         <div class="tabs-panel<%= @intent_metrics.keys.first == intent ? ' is-active' : '' %>" id="students-<%= intent %>">
           <h2><%= intent.humanize %> (<%= pluralize(count, 'student') %>)</h2>
-          <table>
+          <table aria-label="Student Intents">
             <thead>
               <tr>
-                <td>Last Name</td>
-                <td>First Name</td>
-                <td>Intent</td>
+                <th scope="col">Last Name</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Intent</th>
               </tr>
             </thead>
             <tbody>
               <% @students_by_intent[intent].each do |student| %>
                 <tr class="<%= student.intent %>">
-                  <td data-role="student-last_name"><%= student.last_name %></td>
+                  <th scope="row" data-role="student-last_name"><%= student.last_name %></th>
                   <td data-role="student-first_name"><%= student.first_name %></td>
                   <% if policy(student).update_intent? %>
                     <td class="intent-form" id="intent-form-<%= student.id %>" data-role="student-intent"><%= render 'intent_form', user: student %></td>

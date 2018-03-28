@@ -7,19 +7,19 @@
 
 <h2 class="h5">Group Formation</h2>
 <div class="oversub-report">
-<table>
+<table aria-label="Oversubscription Report">
   <thead>
     <tr>
-      <td>Suite Size</td>
-      <td>Suites</td>
-      <td>Groups</td>
-      <td>Locked Groups</td>
-      <td>Leftover Suites</td>
+      <th scope="col">Suite Size</th>
+      <th scope="col">Suites</th>
+      <th scope="col">Groups</th>
+      <th scope="col">Locked Groups</th>
+      <th scope="col">Leftover Suites</th>
   </thead>
   <tbody>
     <% draw.sizes.each do |size| %>
       <tr class="<%= diff_class(draw.oversubscription[size])%>"]>
-        <td data-role="suite-size"><%= size_str(size).capitalize.pluralize %></td>
+        <th scope="row" data-role="suite-size"><%= size_str(size).capitalize.pluralize %></th>
         <td data-role="suite-count"><%= draw.suite_counts[size] %></td]>
         <td data-role="group-count"><%= draw.group_counts[size] %></td]>
         <td data-role="locked-count"><%= draw.locked_counts[size] %></td]>

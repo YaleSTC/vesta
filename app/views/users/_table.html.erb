@@ -1,19 +1,19 @@
-<table class="users-table">
+<table aria-label="Users Information" class="users-table">
   <thead>
     <tr>
-      <td>Last Name</td>
-      <td>First Name</td>
-      <td>Username</td>
-      <td>Class Year</td>
+      <th scope="col">Last Name</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Username</th>
+      <th scope="col">Class Year</th>
       <% unless hide_actions %>
-        <td></td>
+        <th scope="col"></th>
       <% end %>
     </tr>
   </thead>
   <tbody>
     <% users.each do |user| %>
       <tr id="user-<%= user.id %>">
-        <td data-role="user-last_name"><%= user.last_name %></td>
+        <th scope="row" data-role="user-last_name"><%= user.last_name %></th>
         <td data-role="user-first_name"><%= user.first_name %></td>
         <td data-role="user-username"><%= user.username %></td>
         <td data-role="user-class_year"><%= user.class_year %></td>

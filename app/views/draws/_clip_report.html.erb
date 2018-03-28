@@ -1,18 +1,18 @@
 <% if clips.empty? %>
   <p>There are no clips yet.</p>
 <% else %>
-  <table>
+  <table aria-label="List of Clips">
     <thead>
       <tr>
-        <th>Clip ID</th>
-        <th>Groups</th>
-        <th></th>
+        <th scope="col">Clip ID</th>
+        <th scope="col">Groups</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <% clips.each do |clip| %>
         <tr>
-          <td><%= link_to clip.id, clip_path(clip) %></td>
+          <th scope="row"><%= link_to clip.id, clip_path(clip) %></th>
           <td>
             <ul style="list-style: none;">
               <% clip.groups.each do |group| %>

@@ -3,17 +3,17 @@
 <% if @students.empty? %>
   <p>No results yet - students must have rooms assigned before we can display results.</p>
 <% else %>
-  <table>
+  <table aria-label="Room Assignment Results">
     <thead>
       <tr>
-        <td>Student</td>
-        <td>Room</td>
+        <th scope="col">Student</th>
+        <th scope="col">Room</th>
       </tr>
     </thead>
     <tbody>
       <% @students.each do |student| %>
         <tr class="result-student-<%= student.id %>">
-          <td><%= student.full_name %></td>
+          <th scope="row"><%= student.full_name %></td>
           <td class="room"><%= student.room.number %></td>
         </tr>
       <% end %>

@@ -1,18 +1,21 @@
 <% suites.each do |building, suites_array| %>
+  <p id="table-description" class="visually-hidden">This table lists available suites of the same size as the current group.
+    The first column lists the suite number. The second column lists the number of singles in that suite. The third column
+    lists the number of doubles in that suite. The fourth column lists the number of common rooms in that suite.</p>
   <p class="h4"><em><%= building.name %></em></p>
-  <table>
+  <table aria-label="Compatible Suites" aria-describedby="table-description">
     <thead>
       <tr>
-        <td>Suite #</td>
-        <td>S</td>
-        <td>D</td>
-        <td>C</td>
+        <th scope="col">Suite #</th>
+        <th scope="col">S</th>
+        <th scope="col">D</th>
+        <th scope="col">C</th>
       </tr>
     </thead>
     <tbody>
       <% suites_array.each do |suite| %>
         <tr>
-          <td><%= link_to suite.number, suite_path(suite) %></td>
+          <th scope="row"><%= link_to suite.number, suite_path(suite) %></th>
           <td><%= suite.singles.count %></td>
           <td><%= suite.doubles.count %></td>
           <td><%= suite.common_rooms.count %></td>

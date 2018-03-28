@@ -46,7 +46,7 @@ RSpec.feature 'Draw group report' do
     edit_assert_method = edit ? :assert_selector : :refute_selector
     status_text = display_group_status(group)
     within(".group-report tr#group-#{group.id}") do
-      page.assert_selector(:css, 'td[data-role="group-leader"]',
+      page.assert_selector(:css, 'th[data-role="group-leader"]',
                            text: group.leader.full_name) &&
         page.assert_selector(:css, 'td[data-role="group-status"]',
                              text: status_text) &&

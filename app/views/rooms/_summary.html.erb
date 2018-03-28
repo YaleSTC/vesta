@@ -1,15 +1,15 @@
-<table>
+<table aria-label="Room Summary">
   <thead>
     <tr>
-      <td>#</td>
-      <td>Type</td>
-      <td></td>
+      <th scope="col">#</th>
+      <th scope="col">Type</th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     <% rooms.each do |room| %>
       <tr id="room-<%= room.id %>">
-        <td data-role="room-number"><%= link_to room.number, room_path(room) %></td>
+        <th scope="row" data-role="room-number"><%= link_to room.number, room_path(room) %></th>
         <td data-role="room-type"><%= room.type.capitalize %></td>
         <td class="actions" data-role="room-actions">
           <%= link_to 'View', room_path(room), class: 'button' %>
