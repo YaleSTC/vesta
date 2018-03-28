@@ -27,6 +27,7 @@ class UserDashboard < Administrate::BaseDashboard
     username: Field::String,
     class_year: Field::Number,
     old_draw_id: Field::Number,
+    tos_accepted: Field::DateTime,
     reset_password_sent_at: Field::DateTime,
     remember_created_at: Field::DateTime,
     sign_in_count: Field::Number,
@@ -68,6 +69,7 @@ class UserDashboard < Administrate::BaseDashboard
     membership
     memberships
     room
+    tos_accepted
     reset_password_sent_at
     remember_created_at
     sign_in_count
