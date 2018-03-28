@@ -24,6 +24,6 @@ class UngroupedStudentsQuery
   # @return [Array<User>] the ungrouped students in the relation
   def call
     @relation.where(role: %w(student rep)).includes(:membership)
-             .where(memberships: { user_id: nil })
+             .where(memberships: { user_id: nil }).order(:last_name)
   end
 end

@@ -33,6 +33,13 @@ RSpec.describe UngroupedStudentsQuery do
     expect(result).to eq([student2])
   end
 
+  it 'orders by last name' do
+    student1, student2 = FactoryGirl.create_pair(:student)
+    student1.update!(last_name: 'B')
+    student2.update!(last_name: 'A')
+    expect(described_class.call).to eq([student2, student1])
+  end
+
   def create_student_with_group
     draw = FactoryGirl.create(:draw)
     suite = FactoryGirl.create(:suite_with_rooms, rooms_count: 2)

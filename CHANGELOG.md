@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Changed
+* Make UngroupedStudentsQuery sort by last name ([#756](https://gitlab.com/yale-sdmp/vesta/issues/756)).
+
 ## v1.0.4 - 2018-03-27
 ### Added
 * Add suites table to draws#show view ([#751](https://gitlab.com/yale-sdmp/vesta/issues/751)).
