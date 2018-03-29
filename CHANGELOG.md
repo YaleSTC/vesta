@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Added
+* Add notification e-mails for group invitations and requests ([#767](https://gitlab.com/yale-sdmp/vesta/issues/767)).
+
 ## v1.0.5 - 2018-03-29
 ### Changed
 * Make UngroupedStudentsQuery sort by last name ([#756](https://gitlab.com/yale-sdmp/vesta/issues/756)).

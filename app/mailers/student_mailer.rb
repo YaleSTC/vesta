@@ -56,6 +56,33 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
          reply_to: @college.admin_email)
   end
 
+  # Send notification to a leader that a user has requested to join their group
+  #
+  # @param requested [User] the user requesting to join
+  # @param group [Group] the group the user wants to join
+  def requested_to_join_group(requested:, group:)
+    determine_college
+    @user = group.leader
+    @requested = requested
+    @group = group
+    mail(to: @user.email,
+         subject: "#{requested.full_name} wants to join your group",
+         reply_to: @college.admin_email)
+  end
+
+  # Send notification to a user that they have been invited to join a group
+  #
+  # @param invited [User] the user invited to join
+  # @param group [Group] the group the user wants to join
+  def invited_to_join_group(invited:, group:)
+    determine_college
+    @user = invited
+    @group = group
+    mail(to: @user.email,
+         subject: "#{@group.leader.full_name} invited you to join their group",
+         reply_to: @college.admin_email)
+  end
+
   # Send notification to a leader that a user joined their group
   #
   # @param user [User] the group leader to send the notification to
@@ -131,7 +158,7 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
 
   private
 
-  def determine_college(college)
+  def determine_college(college = nil)
     @college = college || College.current
   end
 

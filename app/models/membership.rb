@@ -42,6 +42,7 @@ class Membership < ApplicationRecord
   after_save :update_group_status
   after_destroy :update_group_status, if: ->(m) { m.group.present? }
 
+  after_create :send_create_email, unless: ->() { accepted? }
   after_save :send_joined_email,
              if: ->() { saved_change_to_status && accepted? }
   after_destroy :send_left_email, if: ->() { accepted? }
@@ -100,7 +101,16 @@ class Membership < ApplicationRecord
     errors.add :locked, 'must be a finalizing group' unless group.finalizing?
   end
 
+  def send_create_email
+    return if user == group.leader
+    mailer_method = "#{status}_to_join_group"
+    StudentMailer.send(mailer_method, status.to_sym => user, group: group)
+                 .deliver_later
+  end
+
   def send_joined_email
+    # leaders are the ones who accept requests so we don't need to e-mail them
+    return if status_before_last_save == 'requested'
     StudentMailer.joined_group(joined: user, group: group,
                                college: College.current).deliver_later
   end

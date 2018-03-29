@@ -1,0 +1,3 @@
+<p>Hi <%= @user.name %>,</p>
+<p><%= @group.leader.full_name %> has invited you to join their group! You can accept or reject their invitation by <%= link_to 'visiting Vesta', group_url(@group, host: @college.host) %>.</p>
+<p>Sincerely,<br /><%= @college.dean %></p>
