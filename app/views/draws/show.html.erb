@@ -96,7 +96,7 @@
         </div>
       </li>
     <% end %>
-    <% if @draw.intent_deadline.present? || @draw.locking_deadline.present? %>
+    <% if @draw.pre_lottery? && (@draw.intent_deadline.present? || @draw.locking_deadline.present?) %>
       <li class="accordion-item" data-accordion-item>
         <a href="#" class="accordion-title"><h2 class="h4">Deadlines</h2></a>
         <div class="accordion-content deadlines" data-tab-content>
