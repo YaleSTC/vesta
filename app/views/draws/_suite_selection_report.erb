@@ -1,0 +1,20 @@
+<table aria-label="Suite Selection Report">
+  <thead>
+    <tr>
+      <th scope="col">Size</th>
+      <th scope="col"># of groups remaining</th>
+      <th scope="col">Suites remaining</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% draw.sizes.each do |size| %>
+      <tr>
+        <th scope="row"><%= headerize_size(size) %></th>
+        <td><%= draw.groups_without_suites_by_size[size].count %></td>
+        <td>
+          <%= draw.suites_by_size[size].map { |suite| link_to suite.number, suite_path(suite) }.join(', ').html_safe %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

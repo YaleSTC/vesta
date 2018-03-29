@@ -7,21 +7,20 @@
   </div>
   <hr />
 <% else %>
-  <% if policy(@draw).oversub_report? %>
-      <div class="oversub-report">
-      <h2>Draw Summary</h2>
-        <%= render 'oversub_report', draw: @draw, path: draw_path(@draw) %>
-        <% if policy(@draw).lock_all_sizes? %>
-          <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
-        <% end %>
-      </div>
+  <% if @draw.suite_selection? %>
+    <div class="suite-selection-report">
+      <h2>Suite Selection Summary</h2>
+      <%= render 'suite_selection_report', draw: @draw %>
+    </div>
   <% end %>
-  <% if policy(@draw).group_report? && @draw.lottery_or_later? %>
-      <div class="secondary-group-report">
-        <h2>Group Report</h2>
-        <%= render 'groups/secondary_report', groups: @draw.groups_by_size, path: draw_path(@draw),
-            actions_partial: 'groups/actions' %>
-      </div>
+  <% if policy(@draw).oversub_report? %>
+    <div class="oversub-report">
+    <h2>Draw Summary</h2>
+      <%= render 'oversub_report', draw: @draw, path: draw_path(@draw) %>
+      <% if policy(@draw).lock_all_sizes? %>
+        <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
+      <% end %>
+    </div>
   <% end %>
   <ul class="accordion" data-accordion data-multi-expand="true" data-accordion data-allow-all-closed="true">
     <% if policy(:intent).report? && @draw.pre_lottery? %>
@@ -60,6 +59,15 @@
           <% if policy(Group).index? %>
             <%= link_to 'View printable group report', draw_groups_path(@draw), class: 'button secondary' %>
           <% end %>
+        </div>
+      </li>
+    <% end %>
+    <% if policy(@draw).group_report? && @draw.lottery_or_later? %>
+      <li class="accordion-item" data-accordion-item>
+        <a href="#" class="accordion-title"><h2 class="h4">Groups</h2></a>
+        <div class="accordion-content secondary-group-report" data-tab-content>
+            <%= render 'groups/secondary_report', groups: @draw.groups_by_size, path: draw_path(@draw),
+                actions_partial: 'groups/actions' %>
         </div>
       </li>
     <% end %>

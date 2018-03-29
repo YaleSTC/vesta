@@ -3,9 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Added
-* Add notification e-mails for group invitations and requests ([#767](https://gitlab.com/yale-sdmp/vesta/issues/767)).
+* Add an overview for suite selection ([#723](https://gitlab.com/yale-sdmp/vesta/issues/723)).
 
 ## v1.0.5 - 2018-03-30
+### Added
+* Add notification e-mails for group invitations and requests ([#767](https://gitlab.com/yale-sdmp/vesta/issues/767)).
+
 ### Changed
 * Make UngroupedStudentsQuery sort by last name ([#756](https://gitlab.com/yale-sdmp/vesta/issues/756)).
 * Add TOS Acceptance to administrate dashboard ([#760](https://gitlab.com/yale-sdmp/vesta/issues/760)).

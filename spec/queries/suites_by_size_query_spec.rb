@@ -26,6 +26,11 @@ RSpec.describe SuitesBySizeQuery do
     expect(result_numbers(result)).to eq(1 => [suite2.number, suite1.number])
   end
 
+  it 'returns an empty array by default' do
+    result = described_class.call
+    expect(result[1]).to eq([])
+  end
+
   def result_numbers(result)
     result.map { |size, suites| [size, suites.map(&:number)] }.to_h
   end

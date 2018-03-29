@@ -59,3 +59,9 @@ footer {
 .has-tip { font-weight: normal; }
 
 dd { margin-bottom: 0.6rem; }
+
+th[scope="row"] {
+  font-weight: normal;
+  font-style: italic;
+  text-align: left;
+}
