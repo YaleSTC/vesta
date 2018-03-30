@@ -324,6 +324,16 @@ RSpec.describe Group, type: :model do
       group.destroy!
       expect { m.reload } .to raise_error(ActiveRecord::RecordNotFound)
     end
+    it 'destroys the lottery assignment if not clipped' do
+      group = create(:lottery_assignment).groups.first
+      expect { group.destroy! }.to change { LotteryAssignment.count }.by(-1)
+    end
+    it 'does not destroy the lottery assignment if clipped' do
+      clip = create(:clip, draw: create(:draw, status: 'lottery'))
+      group = create(:lottery_assignment, :defined_by_clip, clip: clip).groups
+                                                                       .first
+      expect { group.destroy! }.not_to change { LotteryAssignment.count }
+    end
   end
 
   describe '#locked_members' do

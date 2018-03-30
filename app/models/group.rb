@@ -25,7 +25,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   has_one :clip, through: :clip_membership
   has_many :clip_memberships, dependent: :destroy
   has_one :suite, dependent: :nullify
-  belongs_to :lottery_assignment, dependent: :destroy
+  belongs_to :lottery_assignment
   accepts_nested_attributes_for :suite
 
   has_many :memberships, dependent: :delete_all
@@ -64,6 +64,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   before_destroy :remove_member_rooms
   after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
   after_destroy :notify_members_of_disband
+  after_destroy :destroy_lottery_assignment,
+                if: ->(g) { g.lottery_assignment.present? }
 
   attr_reader :remove_ids
 
@@ -309,5 +311,9 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
       self.status = 'closed' unless finalizing? || lockable?
       self.status = 'locked' if lockable?
     end
+  end
+
+  def destroy_lottery_assignment
+    lottery_assignment.process_group_destruction!
   end
 end

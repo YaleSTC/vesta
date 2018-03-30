@@ -12,7 +12,7 @@ class Clip < ApplicationRecord
   has_many :clip_memberships, dependent: :delete_all
   has_many :groups, -> { where(clip_memberships: { confirmed: true }) },
            through: :clip_memberships
-  has_one :lottery_assignment, dependent: :destroy
+  has_one :lottery_assignment, dependent: :nullify
 
   validate :draw_allows_clipping
 

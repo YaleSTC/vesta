@@ -67,6 +67,13 @@ class LotteryAssignment < ApplicationRecord
     leader.full_name + suffix
   end
 
+  # Utility method to destroy a lottery assignment following the destruction of
+  # its groups. Replaces a `dependent: :destroy` callback in Group since we
+  # only want this to happen if there are no groups left.
+  def process_group_destruction!
+    destroy! unless reload.groups.present?
+  end
+
   private
 
   def groups_presence

@@ -5,12 +5,13 @@ All notable changes to this project will be documented in this file.
 ### Added
 * Add notification e-mails for group invitations and requests ([#767](https://gitlab.com/yale-sdmp/vesta/issues/767)).
 
-## v1.0.5 - 2018-03-29
+## v1.0.5 - 2018-03-30
 ### Changed
 * Make UngroupedStudentsQuery sort by last name ([#756](https://gitlab.com/yale-sdmp/vesta/issues/756)).
 * Add TOS Acceptance to administrate dashboard ([#760](https://gitlab.com/yale-sdmp/vesta/issues/760)).
 * Rename home link in nav ([#753](https://gitlab.com/yale-sdmp/vesta/issues/753)).
 * Prevent deadline information from showing after pre-lottery ([#765](https://gitlab.com/yale-sdmp/vesta/issues/765)).
+* Allow admins to disband groups during selection regardless of suite availability ([#769](https://gitlab.com/yale-sdmp/vesta/issues/769)).
 
 ### Fixed
 * Fix performance issues in certain views ([#764](https://gitlab.com/yale-sdmp/vesta/issues/764)).

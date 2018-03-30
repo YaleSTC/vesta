@@ -5,11 +5,8 @@ require 'rails_helper'
 RSpec.feature 'Suite Selection' do
   context 'valid' do
     let(:leader) do
-      FactoryGirl.create(:draw_in_selection, suite_selection_mode:
-                  'student_selection')
-                 .next_groups.first.leader.tap do |l|
-        l.update(password: 'password')
-      end
+      create(:draw_in_selection,
+             suite_selection_mode: 'student_selection').next_groups.first.leader
     end
 
     it 'can be performed by group leaders' do
