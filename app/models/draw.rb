@@ -23,7 +23,7 @@
 # @attr allow_clipping [Boolean] True if the draw allows for clipping,
 #  false otherwise.
 class Draw < ApplicationRecord # rubocop:disable ClassLength
-  has_many :groups
+  has_many :groups, dependent: :destroy
   has_many :students, class_name: 'User', dependent: :nullify
   has_many :draw_suites, dependent: :delete_all
   has_many :suites, through: :draw_suites
