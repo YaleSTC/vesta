@@ -1,9 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.0.6 - 2018-04-02
 ### Added
 * Add an overview for suite selection ([#723](https://gitlab.com/yale-sdmp/vesta/issues/723)).
+* Add accessibility link to footer ([#772](https://gitlab.com/yale-sdmp/vesta/issues/772)).
 
 ## v1.0.5 - 2018-03-30
 ### Added
