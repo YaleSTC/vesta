@@ -4,7 +4,7 @@
 #
 # @attr number [Integer] the position in the lottery
 # @attr selected [Boolean] whether the associated group has selected a suite
-# @attr group [Group] the group the lottery number is for
+# @attr groups [Group] the groups the lottery number is for
 # @attr draw [Draw] the draw the lottery number is in
 class LotteryAssignment < ApplicationRecord
   belongs_to :draw

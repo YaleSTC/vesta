@@ -11,7 +11,7 @@ class Clip < ApplicationRecord
   belongs_to :draw
   has_many :clip_memberships, dependent: :delete_all
   has_many :groups, -> { where(clip_memberships: { confirmed: true }) },
-           through: :clip_memberships
+           through: :clip_memberships, source: :group
   has_one :lottery_assignment, dependent: :nullify
 
   validate :draw_allows_clipping

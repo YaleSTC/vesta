@@ -14,12 +14,14 @@ All notable changes to this project will be documented in this file.
 * Add dependent: :destroy for group in draw model ([#687](https://gitlab.com/yale-sdmp/vesta/issues/687)).
 * Remove db hit from DrawSuitesUpdate#find_suites_to_remove ([#206](https://gitlab.com/yale-sdmp/vesta/issues/206)).
 * Prevent admins from assigning special groups to suites that are in a draw in suite selection([#548](https://gitlab.com/yale-sdmp/vesta/issues/548)).
+* Add LotteryAssignments and Clips to the superuser dashboard ([#768](https://gitlab.com/yale-sdmp/vesta/issues/768)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600))
 * Loading users no longer fails because of missing class year ([#601](https://gitlab.com/yale-sdmp/vesta/issues/601)).
 * Remediate all tables for accessibility ([#745](https://gitlab.com/yale-sdmp/vesta/issues/745)).
 * Unmerging suites no longer fails if the merged suite had the same name as one of its constituent suites ([#790] https://gitlab.com/yale-sdmp/vesta/issues/790).
+* Fix updating groups through the superuser dashboard ([#775](https://gitlab.com/yale-sdmp/vesta/issues/775)).
 
 ## v1.0.8 - 2018-04-09
 ### Fixed

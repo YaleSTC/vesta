@@ -2,8 +2,8 @@
 
 require 'administrate/base_dashboard'
 
-# administrate dashboard for groups
-class GroupDashboard < Administrate::BaseDashboard
+# administrate dashboard for lottery assignments
+class LotteryAssignmentDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -11,22 +11,14 @@ class GroupDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    leader: Field::BelongsTo.with_options(class_name: 'User'),
-    draw: Field::BelongsTo,
-    clip: Field::BelongsTo,
-    lottery_assignment: Field::BelongsTo,
-    suite: Field::HasOne,
-    memberships: Field::HasMany,
-    full_memberships: Field::HasMany.with_options(class_name: 'Membership'),
-    members: Field::HasMany.with_options(class_name: 'User'),
     id: Field::Number,
-    size: Field::Number,
-    status: Field::String.with_options(searchable: false),
-    leader_id: Field::Number,
+    draw: Field::BelongsTo,
+    number: Field::Number,
+    selected: Field::Boolean,
+    groups: Field::HasMany,
+    clip: Field::BelongsTo,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
-    memberships_count: Field::Number,
-    transfers: Field::Number
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -35,29 +27,21 @@ class GroupDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i(
-    leader
-    size
-    status
     draw
-    suite
+    number
+    selected
+    groups
   ).freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i(
     id
-    leader
-    leader_id
-    size
-    status
-    memberships_count
-    transfers
-    lottery_assignment
     draw
+    number
+    selected
+    groups
     clip
-    suite
-    memberships
-    full_memberships
     created_at
     updated_at
   ).freeze
@@ -66,16 +50,16 @@ class GroupDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i(
-    leader
-    size
-    status
-    transfers
     draw
+    number
+    selected
+    groups
+    clip
   ).freeze
 
   # Overwrite this method to customize how groups are displayed
   # across all pages of the admin dashboard.
-  def display_resource(group)
-    group.name
+  def display_resource(lottery)
+    "Lottery \##{lottery.id}"
   end
 end
