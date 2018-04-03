@@ -14,11 +14,7 @@
         <div class="columns small-<%= @draw.present? ? 10 : 12 %>">
           <% if @suites_by_size[group.size].count >= @groups_by_size[group.size].count %>
             <%= f.label "suite_id_for_#{group.id}".to_sym, text: group.name, style: 'display: none;' %>
-            <% if policy(Suite).medical? %>
-              <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size], label_method: :name_with_medical %>
-            <% else %>
-              <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size], label_method: :name %>
-            <% end %>
+            <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size] %>
           <% else %>
             <p>There are not enough suites of size <%= group.size %> available. You must disband a group to proceed and its members will have to regroup following this draw.</p>
           <% end %>

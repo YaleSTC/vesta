@@ -61,14 +61,14 @@ class SuiteAssignmentsController < ApplicationController
   end
 
   def set_suites
-    base = if @group.draw
-             @group.draw.available_suites
-           else
-             Suite.available
-           end
-    @suites = base.where(size: @groups.map(&:size))
-                  .includes(:building, :rooms, :draws)
-    @suites_by_size = create_hash(SuitesBySizeQuery.new(@suites).call)
+    if @group.draw
+      @suites = @group.draw.available_suites.where(size: @groups.map(&:size))
+                      .includes(:building, :rooms, :draws)
+      @suites_by_size = create_hash(SuitesBySizeQuery.new(@suites).call)
+    else
+      @suites_by_size = create_hash(SuitesOutsideSuiteSelectionQuery.new
+                        .call(@group).group_by(&:size))
+    end
   end
 
   def set_suite_assignment
