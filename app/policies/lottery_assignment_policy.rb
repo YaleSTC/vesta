@@ -17,8 +17,4 @@ class LotteryAssignmentPolicy < ApplicationPolicy
   def automatic?
     user.admin? && record.draw.lottery?
   end
-
-  def export?
-    record.draw.lottery_or_later? && user_has_uber_permission?
-  end
 end

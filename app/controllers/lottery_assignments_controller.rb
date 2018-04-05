@@ -29,15 +29,6 @@ class LotteryAssignmentsController < ApplicationController
     handle_action(**result, action: 'index')
   end
 
-  def export
-    @lotteries = @draw.groups.includes(:lottery_assignment)
-                      .order('lottery_assignments.number')
-    attributes = %i(name lottery_number)
-    result = CSVGenerator.generate(data: @lotteries, attributes: attributes,
-                                   name: 'lotteries')
-    handle_file_action(**result)
-  end
-
   private
 
   def lottery_assignment_params

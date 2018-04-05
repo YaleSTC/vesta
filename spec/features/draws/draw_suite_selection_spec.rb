@@ -10,8 +10,8 @@ RSpec.feature 'Draw suite selection' do
     clip.groups.map { |g| create(:suite_with_rooms, rooms_count: g.size) }
   end
   let!(:other_suite) { create(:suite_with_rooms, rooms_count: group.size) }
-  let(:f) { "vesta_lotteries_export_#{Time.zone.today.to_s(:number)}.csv" }
-  let(:h_str) { 'name,lottery_number' }
+  let(:f) { "vesta_groups_export_#{Time.zone.today.to_s(:number)}.csv" }
+  let(:h_str) { 'name,lottery_number,suite_number' }
 
   before do
     draw.suites << clip_suites << other_suite
@@ -104,6 +104,6 @@ RSpec.feature 'Draw suite selection' do
   end
 
   def export_row_for(group)
-    [group.name, group.lottery_number].join(',')
+    [group.name, group.lottery_number, group.suite_number].join(',')
   end
 end

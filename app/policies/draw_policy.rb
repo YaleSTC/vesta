@@ -98,6 +98,10 @@ class DrawPolicy < ApplicationPolicy
     record.suite_selection? && user.draw == record && user.group.present?
   end
 
+  def group_export?
+    record.lottery_or_later? && user_has_uber_permission?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

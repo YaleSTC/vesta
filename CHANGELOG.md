@@ -1,13 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.0.7 - 2018-04-05
 ### Changed
 * Add restrictions to make sure lottery assignments don't exist without groups ([#780](https://gitlab.com/yale-sdmp/vesta/issues/780)).
 
 ### Fixed
 * Make converting groups to special groups more robust ([#783](https://gitlab.com/yale-sdmp/vesta/issues/783), [#781](https://gitlab.com/yale-sdmp/vesta/issues/781)).
 * Fix Draw#oversubscribed? to check only available suites  [#779](https://gitlab.com/yale-sdmp/vesta/issues/779)).
+
+### Added
+* Add suite assignment to group export for draw ([#785](https://gitlab.com/yale-sdmp/vesta/issues/785)).
 
 ## v1.0.6 - 2018-04-02
 ### Added

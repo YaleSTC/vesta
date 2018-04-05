@@ -73,6 +73,7 @@ Rails.application.routes.draw do
       delete 'prune_oversub/:prune_size', to: 'draws#prune', as: 'prune'
       patch 'start_selection'
       get 'results'
+      get 'group_export'
     end
 
     resources :draw_suites, only: %i(index), as: :suites do
@@ -85,7 +86,6 @@ Rails.application.routes.draw do
     resources :lottery_assignments, only: %i(update create index) do
       collection do
         post 'automatic'
-        get 'export'
       end
     end
 

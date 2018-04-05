@@ -91,6 +91,18 @@ RSpec.describe DrawPolicy do
     permissions :group_report? do
       it { is_expected.to permit(user, draw) }
     end
+
+    permissions :group_export? do
+      context 'when the draw is not lottery_or_later' do
+        before { allow(draw).to receive(:lottery_or_later?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'when the draw is lottery_or_later' do
+        before { allow(draw).to receive(:lottery_or_later?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
   end
 
   context 'housing rep' do
@@ -224,6 +236,18 @@ RSpec.describe DrawPolicy do
       context 'draw is not in results phase' do
         before { allow(draw).to receive(:results?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :group_export? do
+      context 'when the draw is not lottery_or_later' do
+        before { allow(draw).to receive(:lottery_or_later?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'when the draw is lottery_or_later' do
+        before { allow(draw).to receive(:lottery_or_later?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
       end
     end
   end
@@ -440,6 +464,18 @@ RSpec.describe DrawPolicy do
       context 'draw is not in results phase' do
         before { allow(draw).to receive(:results?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :group_export? do
+      context 'when the draw is not lottery_or_later' do
+        before { allow(draw).to receive(:lottery_or_later?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'when the draw is lottery_or_later' do
+        before { allow(draw).to receive(:lottery_or_later?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
       end
     end
   end
