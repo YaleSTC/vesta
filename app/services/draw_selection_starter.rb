@@ -7,7 +7,6 @@ class DrawSelectionStarter
   include ActiveModel::Model
   include Callable
 
-  # validates :draw, presence: :true
   validate :draw_in_lottery_phase
   validate :lottery_complete
 
@@ -52,6 +51,7 @@ class DrawSelectionStarter
   attr_accessor :draw
 
   def run!
+    destroy_invalid_lotteries
     draw.update!(status: 'suite_selection')
     notify_all_students
     notify_first_groups
@@ -77,6 +77,10 @@ class DrawSelectionStarter
 
   def notify_first_groups
     draw.notify_next_groups(mailer)
+  end
+
+  def destroy_invalid_lotteries
+    LotteriesWithoutGroupsQuery.call(draw: draw).destroy_all
   end
 
   def success

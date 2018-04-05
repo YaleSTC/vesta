@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe DrawSelectionStarter do
   describe '#start' do
+    before do
+      l = instance_spy('LotteryAssignment::ActiveRecord_Relation')
+      allow(LotteriesWithoutGroupsQuery).to receive(:call).and_return(l)
+    end
     it 'checks to make sure that the draw is in lottery' do
       draw = instance_spy('draw', lottery?: false)
       result = described_class.start(draw: draw)
@@ -61,6 +65,10 @@ RSpec.describe DrawSelectionStarter do
   end
 
   describe '#start!' do
+    before do
+      l = instance_spy('LotteryAssignment::ActiveRecord_Relation')
+      allow(LotteriesWithoutGroupsQuery).to receive(:call).and_return(l)
+    end
     it 'raises ActiveModel::ValidationError on validation failure' do
       draw = instance_spy('draw', lottery_complete?: false)
       expect { described_class.start!(draw: draw) }.to \
@@ -76,6 +84,16 @@ RSpec.describe DrawSelectionStarter do
       draw = instance_spy('draw', validity_stubs(valid: true))
       result = described_class.start!(draw: draw)
       expect(result[:redirect_object]).to eq(draw)
+    end
+  end
+
+  describe 'validations' do
+    it 'remove all lotteries without groups' do
+      l = instance_spy('LotteryAssignment::ActiveRecord_Relation')
+      allow(LotteriesWithoutGroupsQuery).to receive(:call).and_return(l)
+      draw = instance_spy('draw', validity_stubs(valid: true))
+      described_class.start!(draw: draw)
+      expect(l).to have_received(:destroy_all)
     end
   end
 
