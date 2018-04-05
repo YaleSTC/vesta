@@ -188,7 +188,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   # @return [Boolean] whether or not the draw is oversubscribed
   def oversubscribed?
     @oversubscribed ||= group_sizes.any? do |size|
-      groups.where(size: size).count > suites.where(size: size).count
+      groups.where(size: size).count > suites.available.where(size: size).count
     end
   end
 

@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 * Make converting groups to special groups more robust ([#783](https://gitlab.com/yale-sdmp/vesta/issues/783), [#781](https://gitlab.com/yale-sdmp/vesta/issues/781)).
+* Fix Draw#oversubscribed? to check only available suites  [#779](https://gitlab.com/yale-sdmp/vesta/issues/779)).
 
 ## v1.0.6 - 2018-04-02
 ### Added

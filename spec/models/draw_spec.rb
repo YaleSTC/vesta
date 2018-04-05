@@ -300,6 +300,14 @@ RSpec.describe Draw, type: :model do
       FactoryGirl.create(:locked_group, leader: draw.students.first)
       expect(draw).not_to be_oversubscribed
     end
+
+    it 'only counts avaiable suites' do
+      draw = FactoryGirl.create(:draw_with_members, status: 'pre_lottery')
+      FactoryGirl.create(:locked_group, leader: draw.students.first)
+      # this assigns a suite in this draw to a group in another draw
+      FactoryGirl.create(:group_with_suite, suite: draw.suites.last)
+      expect(draw).to be_oversubscribed
+    end
   end
 
   describe '#size_locked?' do
