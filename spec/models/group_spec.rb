@@ -135,8 +135,15 @@ RSpec.describe Group, type: :model do
 
     it 'cannot change a lottery_assignment once set' do
       lottery = create(:lottery_assignment)
+      new_lottery = create(:lottery_assignment)
       group = lottery.group
-      expect(group.update(lottery_assignment_id: nil)).to be_falsey
+      expect(group.update(lottery_assignment_id: new_lottery.id)).to be_falsey
+    end
+
+    it 'can remove a lottery assignment if set' do
+      lottery = create(:lottery_assignment)
+      group = lottery.group
+      expect(group.update(lottery_assignment_id: nil)).to be_truthy
     end
 
     it 'must be the only group unless in a clip' do

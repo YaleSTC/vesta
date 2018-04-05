@@ -14,6 +14,8 @@ class GroupDrawRemover
     @group = group
     @members = group.members
     @pending = group.pending_memberships
+    @clip_membership = group.clip_membership
+    @lottery = group.lottery_assignment
   end
 
   # Removes the draw_id from the group and makes other necessary changes
@@ -21,6 +23,8 @@ class GroupDrawRemover
   # @return [Hash{Symbol=>Group,Hash,Array}] the results hash
   def remove
     ActiveRecord::Base.transaction do
+      handle_clip_membership
+      handle_lottery_assignment
       group.update!(draw_id: nil)
       members.each { |s| s.remove_draw.update!(intent: 'on_campus') }
       pending.each(&:destroy!)
@@ -34,7 +38,21 @@ class GroupDrawRemover
 
   private
 
-  attr_reader :group, :members, :pending
+  attr_reader :group, :members, :pending, :clip_membership, :lottery
+
+  def handle_clip_membership
+    return unless clip_membership.present?
+    clip_membership.destroy!
+  end
+
+  def handle_lottery_assignment
+    return unless lottery.present?
+    if lottery.groups.count == 1
+      lottery.destroy!
+    else
+      group.update!(lottery_assignment_id: nil)
+    end
+  end
 
   def success
     {

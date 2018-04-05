@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Add restrictions to make sure lottery assignments don't exist without groups ([#780](https://gitlab.com/yale-sdmp/vesta/issues/780)).
 
+### Fixed
+* Make converting groups to special groups more robust ([#783](https://gitlab.com/yale-sdmp/vesta/issues/783), [#781](https://gitlab.com/yale-sdmp/vesta/issues/781)).
+
 ## v1.0.6 - 2018-04-02
 ### Added
 * Add an overview for suite selection ([#723](https://gitlab.com/yale-sdmp/vesta/issues/723)).

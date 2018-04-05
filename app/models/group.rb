@@ -296,8 +296,10 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   end
 
   def freeze_lottery
-    return unless lottery_assignment_id_in_database.present?
-    throw(:abort)
+    if lottery_assignment_id_in_database.present? &&
+       lottery_assignment_id.present?
+      throw(:abort)
+    end
   end
 
   def changed_draw_with_clip_memberships?
