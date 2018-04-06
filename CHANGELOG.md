@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 * Add more attributes to the results export ([#789](https://gitlab.com/yale-sdmp/vesta/issues/789)).
+* Fix room assignment nullification when groups disband ([#784](https://gitlab.com/yale-sdmp/vesta/issues/784)).
 
 ## v1.0.7 - 2018-04-05
 ### Changed
