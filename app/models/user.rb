@@ -45,8 +45,11 @@ class User < ApplicationRecord
 
   belongs_to :room
 
+  delegate :name, to: :draw, prefix: :draw, allow_nil: true
+  delegate :name, to: :group, prefix: :group, allow_nil: true
   delegate :number, to: :room, prefix: :room, allow_nil: true
   delegate :suite_number, to: :group, allow_nil: true
+  delegate :lottery_number, to: :group, allow_nil: true
 
   validates :email, uniqueness: true
   validates :username, presence: true, if: :cas_auth?

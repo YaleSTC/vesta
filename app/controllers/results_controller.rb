@@ -2,19 +2,22 @@
 
 # Controller for housing results
 class ResultsController < ApplicationController
-  before_action :collect_student_data, only: %i(students export)
-
   def suites
     @suites = SuitesWithRoomsAssignedQuery.call
   end
 
-  def students; end
+  def students
+    @students = User.includes(room: :suite).where(role: %w(student rep))
+                    .where.not(room_id: nil).order(:last_name)
+  end
 
   def export
-    attributes = %I[#{User.login_attr} last_name first_name suite_number
-                    room_number]
-    result = CSVGenerator.generate(data: @students, attributes: attributes,
-                                   name: 'results')
+    s = User.where(role: %w(student rep))
+            .includes(draw: [groups: [{ suite: :rooms }, :lottery_assignment]])
+            .order(:last_name)
+    a = %I[#{User.login_attr} last_name first_name draw_name intent group_name
+           lottery_number suite_number room_number]
+    result = CSVGenerator.generate(data: s, attributes: a, name: 'students')
     handle_file_action(**result)
   end
 
@@ -22,15 +25,5 @@ class ResultsController < ApplicationController
 
   def authorize!
     authorize :results, :show?
-  end
-
-  def collect_student_data
-    base = User.includes(room: :suite).where(role: %w(student rep))
-               .where.not(room_id: nil)
-    @students = if params['sort_by_suite']
-                  base.order(%w(suites.number rooms.number users.last_name))
-                else
-                  base.order(:last_name)
-                end
   end
 end

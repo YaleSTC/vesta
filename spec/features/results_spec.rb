@@ -4,8 +4,11 @@ require 'rails_helper'
 
 RSpec.feature 'Results' do
   let!(:data) { create_data }
-  let(:f) { "vesta_results_export_#{Time.zone.today.to_s(:number)}.csv" }
-  let(:h_str) { 'email,last_name,first_name,suite_number,room_number' }
+  let(:f) { "vesta_students_export_#{Time.zone.today.to_s(:number)}.csv" }
+  let(:h_str) do
+    'email,last_name,first_name,draw_name,intent,group_name,lottery_number,'\
+    'suite_number,room_number'
+  end
 
   before { log_in create(:admin) }
 
@@ -55,7 +58,8 @@ RSpec.feature 'Results' do
 
   def export_row_for(student)
     [
-      student.email, student.last_name, student.first_name,
+      student.email, student.last_name, student.first_name, student.draw_name,
+      student.intent, student.group_name, student.lottery_number,
       student.suite_number, student.room_number
     ].join(',')
   end

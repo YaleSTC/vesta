@@ -1,4 +1,4 @@
 <% provide(:title, 'Results by Suite') %>
 <h1>Results by Suite</h1>
 <%= render 'suites_table', suites: @suites %>
-<%= link_to 'Export CSV', export_results_path(sort_by_suite: true), class: 'button' %>
+<%= link_to 'Export CSV', export_results_path, class: 'button' %>

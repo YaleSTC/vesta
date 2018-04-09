@@ -2,7 +2,8 @@
 
 # Users Controller class
 class UsersController < ApplicationController
-  prepend_before_action :set_user, except: %i(index new build create)
+  prepend_before_action :set_user,
+                        except: %i(index new build create full_export)
 
   def index
     @users = User.includes(:draw).all.order(:class_year, :last_name)
