@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Fixed
+* Groups of locked sizes can now finalize ([#788](https://gitlab.com/yale-sdmp/vesta/issues/788)).
+
 ## v1.0.7 - 2018-04-05
 ### Changed
 * Add restrictions to make sure lottery assignments don't exist without groups ([#780](https://gitlab.com/yale-sdmp/vesta/issues/780)).

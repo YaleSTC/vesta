@@ -56,16 +56,6 @@ RSpec.describe GroupFinalizer do
     end
   end
 
-  context 'size no longer open' do
-    it 'fails' do
-      group = instance_spy('Group', full?: true, draw: instance_spy('Draw'),
-                                    size: 3)
-      allow(group.draw).to receive(:open_suite_sizes).and_return([])
-      results = described_class.finalize(group: group)
-      expect(results[:msg].keys).to eq([:error])
-    end
-  end
-
   context 'not full' do
     it 'fails' do
       group = instance_spy('Group', full?: false, draw: instance_spy('Draw'),

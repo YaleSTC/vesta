@@ -7,7 +7,6 @@ class GroupFinalizer
   include Callable
 
   validate :group_full
-  validate :suite_size_open
 
   # Initialize a GroupFinalizer
   #
@@ -41,11 +40,6 @@ class GroupFinalizer
 
   def group_full
     errors.add(:group, 'must be full') unless group.full?
-  end
-
-  def suite_size_open
-    return if group.draw.open_suite_sizes.include? group.size
-    errors.add(:group, 'size must be open')
   end
 
   def error(error_obj)
