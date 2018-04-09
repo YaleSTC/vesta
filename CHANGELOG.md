@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 * Renamed DrawReport#ungrouped_students to #ungrouped_students_by_intent ([#793](https://gitlab.com/yale-sdmp/vesta/issues/793)).
 
 ### Added
+* Add flash to warn of oversubscription in suite update ([#670](https://gitlab.com/yale-sdmp/vesta/issues/670)).
 * Add dependent: :destroy for group in draw model ([#687](https://gitlab.com/yale-sdmp/vesta/issues/687)).
 * Remove db hit from DrawSuitesUpdate#find_suites_to_remove ([#206](https://gitlab.com/yale-sdmp/vesta/issues/206)).
 * Prevent admins from assigning special groups to suites that are in a draw in suite selection([#548](https://gitlab.com/yale-sdmp/vesta/issues/548)).

@@ -19,6 +19,14 @@ RSpec.feature 'Draw suite update' do
     expect(page_has_correct_suites(page, expected_suites)).to be_truthy
   end
 
+  it 'warns against oversubscription' do
+    visit_update_suite_page
+    remove_suite(removed_suite)
+    click_on 'Update'
+    expect(page).to have_content('Warning:
+      There are no longer enough beds for every student in this draw.')
+  end
+
   def visit_update_suite_page
     visit draw_path(draw)
     click_on 'Add or edit suites'

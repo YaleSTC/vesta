@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Form / service object to handle the updating of draw suites
-class DrawSuitesUpdate
+class DrawSuitesUpdate # rubocop:disable ClassLength
   include ActiveModel::Model
   include Callable
 
@@ -102,8 +102,13 @@ class DrawSuitesUpdate
   def success
     {
       redirect_object: nil, update_object: nil,
-      msg: { success: 'Suites successfully updated' }
+      msg: { success: 'Suites successfully updated',
+             alert: @draw.enough_beds? ? nil : alert_msg }
     }
+  end
+
+  def alert_msg
+    'Warning: There are no longer enough beds for every student in this draw.'
   end
 
   def error(e)
