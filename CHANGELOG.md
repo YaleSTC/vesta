@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v1.0.8 - 2018-04-09
 ### Fixed
 * Groups of locked sizes can now finalize ([#788](https://gitlab.com/yale-sdmp/vesta/issues/788)).
 
