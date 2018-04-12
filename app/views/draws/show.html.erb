@@ -32,9 +32,9 @@
             <li class="h5"><%= @draw.intent_metrics['off_campus'] %> off campus students</li>
             <li class="h5"><%= @draw.intent_metrics['undeclared'] %> undeclared students</li>
           </ul>
-          <% if @draw.ungrouped_students.key?('undeclared') %>
+          <% if @draw.ungrouped_students_by_intent.key?('undeclared') %>
             <ul style="columns: 4; list-style-type: none; padding-bottom: 1em;">
-              <% @draw.ungrouped_students['undeclared'].each do |student| %>
+              <% @draw.ungrouped_students_by_intent['undeclared'].each do |student| %>
                 <li><%= link_to student.full_name, user_path(student) %></li>
               <% end %>
             </ul>

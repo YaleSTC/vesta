@@ -1,19 +1,19 @@
 <h3 class="h4">Students without Groups</h3>
-<% if @draw.ungrouped_students.all? { |_s, students| students.empty? } %>
+<% if @draw.ungrouped_students_by_intent.all? { |_s, students| students.empty? } %>
   <p>All students are either off-campus or in groups</p>
 <% else %>
-  <% if @draw.ungrouped_students.key?('on_campus') %>
+  <% if @draw.ungrouped_students_by_intent.key?('on_campus') %>
     <h4 class="h5">On Campus</h4>
     <ul style="columns: 4; list-style-type: none;">
-      <% @draw.ungrouped_students['on_campus'].each do |student| %>
+      <% @draw.ungrouped_students_by_intent['on_campus'].each do |student| %>
         <li><%= link_to student.full_name, user_path(student) %></li>
       <% end %>
     </ul>
   <% end %>
-  <% if @draw.ungrouped_students.key?('undeclared') %>
+  <% if @draw.ungrouped_students_by_intent.key?('undeclared') %>
     <h4 class="h5">Undeclared Intent</h4>
     <ul style="columns: 4; list-style-type: none;">
-      <% @draw.ungrouped_students['undeclared'].each do |student| %>
+      <% @draw.ungrouped_students_by_intent['undeclared'].each do |student| %>
         <li><%= link_to student.full_name, user_path(student) %></li>
       <% end %>
     </ul>

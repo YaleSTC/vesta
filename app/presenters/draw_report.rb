@@ -120,7 +120,7 @@ class DrawReport < SimpleDelegator
   #
   # @return [Hash{String => ActiveRecord::Associations::CollectionProxy}] A hash
   #   with the ungrouped on campus and undeclared students in the draw
-  def ungrouped_students
+  def ungrouped_students_by_intent
     @ungrouped_students ||= UngroupedStudentsQuery.new(students).call
                                                   .group_by(&:intent)
     @ungrouped_students.delete('off_campus')

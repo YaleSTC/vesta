@@ -60,7 +60,7 @@ RSpec.describe 'draws/show.html.erb' do
     assign(:groups_by_size, {})
     assign(:group_sizes, {})
     assign(:suite_sizes, {})
-    assign(:ungrouped_students, {})
+    assign(:ungrouped_students_by_intent, {})
   end
 
   # rubocop: disable AbcSize

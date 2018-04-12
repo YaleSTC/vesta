@@ -115,18 +115,18 @@ RSpec.describe DrawReport do
     end
   end
 
-  describe '#ungrouped_students' do
+  describe '#ungrouped_students_by_intent' do
     it 'calls the ungrouped students query' do
       draw = FactoryGirl.create(:draw_with_members)
       allow(UngroupedStudentsQuery).to receive(:new).and_call_original
-      described_class.new(draw).ungrouped_students
+      described_class.new(draw).ungrouped_students_by_intent
       expect(UngroupedStudentsQuery).to have_received(:new).with(draw.students)
     end
     it 'groups by intent and removes off campus' do
       draw = FactoryGirl.create(:draw_with_members)
       draw.students << FactoryGirl.create(:student, intent: 'off_campus')
       on_campus = draw.students.where(intent: 'on_campus')
-      expect(described_class.new(draw).ungrouped_students).to \
+      expect(described_class.new(draw).ungrouped_students_by_intent).to \
         eq('on_campus' => on_campus)
     end
   end
