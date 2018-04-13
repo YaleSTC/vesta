@@ -13,7 +13,7 @@ class ResultsController < ApplicationController
 
   def export
     s = User.where(role: %w(student rep))
-            .includes(draw: [groups: [{ suite: :rooms }, :lottery_assignment]])
+            .includes(:draw, :room, group: %i(lottery_assignment suite))
             .order(:last_name)
     a = %I[#{User.login_attr} last_name first_name draw_name intent group_name
            lottery_number suite_number room_number]
