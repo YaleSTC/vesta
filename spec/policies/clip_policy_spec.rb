@@ -26,11 +26,15 @@ RSpec.describe ClipPolicy do
         before { allow(user).to receive(:group).and_return(group) }
 
         context 'but does not lead the group' do
-          before { allow(group).to receive(:leader).and_return(nil) }
+          before do
+            allow(user).to receive(:leader_of?).with(group).and_return(false)
+          end
           it { is_expected.not_to permit(user, clip) }
         end
         context 'and leads it' do
-          before { allow(group).to receive(:leader).and_return(user) }
+          before do
+            allow(user).to receive(:leader_of?).with(group).and_return(true)
+          end
 
           context 'but is in a clip' do
             before do

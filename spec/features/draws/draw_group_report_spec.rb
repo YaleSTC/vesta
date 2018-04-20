@@ -27,7 +27,7 @@ RSpec.feature 'Draw group report' do
       visit draw_path(draw)
       groups.each do |group|
         expect(page_has_group_report(page: page, group: group,
-                                     edit: user == group.leader)).to be_truthy
+                                     edit: user.leader_of?(group))).to be_truthy
       end
     end
   end

@@ -66,6 +66,6 @@ class ApplicationPolicy
   end
 
   def user_is_a_group_leader(user)
-    user.group.present? && user.group.leader == user
+    user.group.present? && user.leader_of?(user.group)
   end
 end

@@ -72,8 +72,8 @@ RSpec.describe GroupPolicy do
       context 'in group, not leader' do
         before do
           allow(other_group).to receive(:members).and_return([user])
-          allow(other_group).to receive(:leader)
-            .and_return(instance_spy('user'))
+          allow(user).to receive(:leader_of?).with(other_group)
+                                             .and_return(false)
         end
         it { is_expected.to permit(user, other_group) }
       end

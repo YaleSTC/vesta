@@ -102,7 +102,7 @@ class Membership < ApplicationRecord
   end
 
   def send_create_email
-    return if user == group.leader
+    return if user.leader_of?(group)
     mailer_method = "#{status}_to_join_group"
     StudentMailer.send(mailer_method, status.to_sym => user, group: group)
                  .deliver_later

@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 * Remove login workarounds from suite_selection_spec.rb ([#122](https://gitlab.com/yale-sdmp/vesta/issues/122)).
 * Make sure all relevant links are behind authorization checks ([#553](https://gitlab.com/yale-sdmp/vesta/issues/553)).
 * Fix Results#export eager loading ([#794](https://gitlab.com/yale-sdmp/vesta/issues/794)).
+* Refactor policies with User#leader_of? ([#417]https://gitlab.com/yale-sdmp/vesta/issues/417).
 
 ### Added
 * Add flash to warn of oversubscription in suite update ([#670](https://gitlab.com/yale-sdmp/vesta/issues/670)).

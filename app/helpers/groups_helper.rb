@@ -11,7 +11,7 @@ module GroupsHelper
   def member_str(member, group)
     membership = member.membership
     locked_str = membership.locked? ? ' (locked)' : ''
-    leader_str = group.leader == member ? ' (leader)' : ''
+    leader_str = member.leader_of?(group) ? ' (leader)' : ''
     link_to(member.full_name, user_path(member)) + leader_str + locked_str
   end
 

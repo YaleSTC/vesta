@@ -27,7 +27,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def update?
-    (record.leader == user && group_can_be_edited_by_leader?(record)) ||
+    (user.leader_of?(record) && group_can_be_edited_by_leader?(record)) ||
       user_has_uber_permission?
   end
 
@@ -44,7 +44,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def invite?
-    (record.leader == user || user_has_uber_permission?) && record.open?
+    (user.leader_of?(record) || user_has_uber_permission?) && record.open?
   end
 
   def reject_pending?
@@ -56,7 +56,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def leave?
-    !record.locked? && record.members.include?(user) && record.leader != user
+    !record.locked? && record.members.include?(user) && !user.leader_of?(record)
   end
 
   def finalize?
