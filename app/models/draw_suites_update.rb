@@ -12,11 +12,12 @@ class DrawSuitesUpdate
   # Initialize a new DrawSuitesUpdate
   #
   # @param draw [Draw] the draw to be updated
+  # @param current_suites [Array<Integer>] current suite numbers in this draw
   # @param params [#to_h] the parameters from the form
-  def initialize(draw:, params: nil)
+  def initialize(draw:, current_suites:, params: nil)
     @draw = draw
+    @current_suites = current_suites
     prepare_current_suite_attrs
-    @suite_ids = draw.suites.available.map(&:id)
     process_params(params) if params
   end
 
@@ -41,7 +42,7 @@ class DrawSuitesUpdate
 
   private
 
-  attr_reader :draw, :params, :suites_to_add, :suites_to_remove
+  attr_reader :draw, :params, :suites_to_add, :suites_to_remove, :current_suites
 
   def prepare_current_suite_attrs
     suites_by_size = draw.suites.available.group_by(&:size)
@@ -76,11 +77,8 @@ class DrawSuitesUpdate
 
   def find_suites_to_remove
     return [] unless params[:suite_ids]
-    # TODO: refactor not to require an extra db hit here, also makes testing
-    # better
-    current_suite_ids = draw.suites.available.map(&:id)
     passed_suite_ids = params[:suite_ids].map(&:to_i)
-    Suite.find(current_suite_ids - passed_suite_ids)
+    Suite.find(current_suites - passed_suite_ids)
   end
 
   def find_suites_to_add

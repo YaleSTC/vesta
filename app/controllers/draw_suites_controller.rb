@@ -16,11 +16,12 @@ class DrawSuitesController < ApplicationController
     prepare_suites_edit_data
   end
 
-  def update_collection
-    result = DrawSuitesUpdate.update(draw: @draw, params: suites_update_params)
+  def update_collection # robocop: disable MethodLength
+    result = DrawSuitesUpdate.update(draw: @draw, current_suites:
+      @draw.suites.available.map(&:id), params: suites_update_params)
     @suites_update = result[:update_object]
     if @suites_update
-      prepare_suites_edit_data
+      sort_all_suites
       result[:action] = 'edit_collection'
     else
       result[:path] = draw_suites_path(@draw)
@@ -48,9 +49,20 @@ class DrawSuitesController < ApplicationController
     end
   end
 
-  def prepare_suites_edit_data # rubocop: disable MethodLength
+  def prepare_suites_edit_data
+    set_suites_update
+    sort_all_suites
+  end
+
+  def set_suites_update
+    @suites_update ||= DrawSuitesUpdate.new(
+      draw: @draw,
+      current_suites: @draw.suites.available.map(&:id)
+    )
+  end
+
+  def sort_all_suites
     all_suites = ValidSuitesQuery.call
-    @suites_update ||= DrawSuitesUpdate.new(draw: @draw)
     @current_suites = suite_hash_merge(
       ValidSuitesQuery.new(@draw.suites.includes(:draws)).call
     )
@@ -61,8 +73,6 @@ class DrawSuitesController < ApplicationController
       SuitesInOtherDrawsQuery.new(all_suites).call(draw: @draw)
     )
   end
-
-  # rubocop: enable MethodLength
 
   def suite_hash_merge(queried_suites)
     @suite_sizes ||= SuiteSizesQuery.new(ValidSuitesQuery.call).call
