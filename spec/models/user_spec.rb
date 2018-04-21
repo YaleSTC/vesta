@@ -23,6 +23,30 @@ RSpec.describe User, type: :model do
     it { is_expected.to delegate_method(:lottery_number).to(:group) }
   end
 
+  describe 'class_year' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it 'is required for students' do
+      user.role = 'student'
+      expect(user).to validate_presence_of(:class_year)
+    end
+
+    it 'is required for reps' do
+      user.role = 'rep'
+      expect(user).to validate_presence_of(:class_year)
+    end
+
+    it 'is not required for admins' do
+      user.role = 'admin'
+      expect(user).not_to validate_presence_of(:class_year)
+    end
+
+    it 'is not required for superusers' do
+      user.role = 'superuser'
+      expect(user).not_to validate_presence_of(:class_year)
+    end
+  end
+
   describe 'other validations' do
     xit 'checks to make sure an assigned room belongs to the right group'
 
