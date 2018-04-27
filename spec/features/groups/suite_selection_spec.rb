@@ -24,32 +24,27 @@ RSpec.feature 'Suite Selection' do
   end
 
   context 'draw not in suite selection' do
-    let(:leader) do
-      FactoryGirl.create(:open_group).leader.tap do |l|
-        l.update(password: 'password')
-        l.reload
-      end
+    let(:group) do
+      FactoryGirl.create(:open_group)
     end
 
     it 'link does not show' do
-      log_in leader
+      log_in group.leader
       expect(page).not_to have_content('Select Suite')
     end
 
     it 'cannot reach page' do
-      log_in leader
-      visit new_group_suite_assignment_path(leader.group)
+      log_in group.leader
+      visit new_group_suite_assignment_path(group)
       expect(page).to have_content("don't have permission")
     end
   end
 
   context 'admin mode' do
     let(:leader) do
-      FactoryGirl.create(:draw_in_selection, suite_selection_mode:
-                  'admin_selection')
-                 .next_groups.first.leader.tap do |l|
-        l.update(password: 'password')
-      end
+      FactoryGirl.create(:draw_in_selection,
+                         suite_selection_mode: 'admin_selection')
+                 .next_groups.first.leader
     end
 
     it 'link does not show' do
