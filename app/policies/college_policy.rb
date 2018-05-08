@@ -13,4 +13,8 @@ class CollegePolicy < ApplicationPolicy
   def destroy?
     false
   end
+
+  def access?
+    user.superadmin? || user.college_id == record.id
+  end
 end

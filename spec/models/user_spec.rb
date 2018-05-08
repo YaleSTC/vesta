@@ -11,6 +11,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
     it { is_expected.to validate_presence_of(:intent) }
+    it { is_expected.to belong_to(:college) }
     it { is_expected.to belong_to(:draw) }
     it { is_expected.to have_one(:membership) }
     it { is_expected.to have_many(:memberships) }
@@ -45,6 +46,35 @@ RSpec.describe User, type: :model do
     it 'is not required for superusers' do
       user.role = 'superuser'
       expect(user).not_to validate_presence_of(:class_year)
+    end
+  end
+
+  describe 'college_id' do
+    let(:user) { build(:user) }
+
+    it 'is required for students' do
+      user.role = 'student'
+      expect(user).to validate_presence_of(:college_id)
+    end
+
+    it 'is required for reps' do
+      user.role = 'rep'
+      expect(user).to validate_presence_of(:college_id)
+    end
+
+    it 'is required for admins' do
+      user.role = 'admin'
+      expect(user).to validate_presence_of(:college_id)
+    end
+
+    it 'is not required for superadmins' do
+      user.role = 'superadmin'
+      expect(user).not_to validate_presence_of(:college_id)
+    end
+
+    it 'is not required for superusers' do
+      user.role = 'superuser'
+      expect(user).not_to validate_presence_of(:college_id)
     end
   end
 
@@ -273,17 +303,50 @@ RSpec.describe User, type: :model do
   describe '#admin?' do
     let(:user) { build(:user) }
 
+    it 'returns true for superusers' do
+      user.role = 'superuser'
+      expect(user.admin?).to be(true)
+    end
+    it 'returns true for superadmins' do
+      user.role = 'superadmin'
+      expect(user.admin?).to be(true)
+    end
     it 'returns true for admins' do
       user.role = 'admin'
       expect(user.admin?).to be(true)
     end
+    it 'returns false for reps' do
+      user.role = 'rep'
+      expect(user.admin?).to be(false)
+    end
+    it 'returns false for students' do
+      user.role = 'student'
+      expect(user.admin?).to be(false)
+    end
+  end
+
+  describe '#superadmin?' do
+    let(:user) { build(:user) }
+
     it 'returns true for superusers' do
       user.role = 'superuser'
-      allow(user).to receive(:role).and_return('superuser')
-      expect(user.admin?).to be(true)
+      expect(user.superadmin?).to be(true)
     end
-    it 'returns false for others' do
-      expect(user.admin?).to be(false)
+    it 'returns true for superadmins' do
+      user.role = 'superadmin'
+      expect(user.superadmin?).to be(true)
+    end
+    it 'returns false for admins' do
+      user.role = 'admin'
+      expect(user.superadmin?).to be(false)
+    end
+    it 'returns false for reps' do
+      user.role = 'rep'
+      expect(user.superadmin?).to be(false)
+    end
+    it 'returns false for students' do
+      user.role = 'student'
+      expect(user.superadmin?).to be(false)
     end
   end
 

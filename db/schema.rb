@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180514515049) do
+ActiveRecord::Schema.define(version: 20180611183201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -180,6 +180,8 @@ ActiveRecord::Schema.define(version: 20180514515049) do
     t.integer "class_year"
     t.integer "old_draw_id"
     t.datetime "tos_accepted"
+    t.bigint "college_id"
+    t.index ["college_id"], name: "index_users_on_college_id"
     t.index ["draw_id"], name: "index_users_on_draw_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -191,8 +193,10 @@ ActiveRecord::Schema.define(version: 20180514515049) do
   add_foreign_key "groups", "lottery_assignments"
   add_foreign_key "lottery_assignments", "clips"
   add_foreign_key "lottery_assignments", "draws"
+  add_foreign_key "memberships", "shared.users", column: "user_id"
   add_foreign_key "room_assignments", "rooms"
-  add_foreign_key "room_assignments", "users"
+  add_foreign_key "room_assignments", "shared.users", column: "user_id"
+  add_foreign_key "users", "colleges"
 
   create_view "lottery_base_views",  sql_definition: <<-SQL
       SELECT clips.draw_id,

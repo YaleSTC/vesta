@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, unless: :unauthenticated?
   before_action :authorize!, unless: :unauthenticated?
   before_action :set_current_college
+  before_action :authorize_current_college, unless: :unauthenticated?
   before_action :verify_tos_accepted, unless: :unauthenticated?
   after_action :verify_authorized, unless: :unauthenticated?
 
@@ -80,6 +81,16 @@ class ApplicationController < ActionController::Base
   rescue ActiveRecord::RecordNotFound
     flash[:error] = 'Please select a valid college to proceed.'
     redirect_to colleges_path
+  end
+
+  def authorize_current_college
+    return if policy(@current_college).access?
+    flash[:error] = 'You do not have permission to access this college.'
+    if current_user.college.present?
+      redirect_to root_url(host: current_user.college.host)
+    else
+      redirect_to colleges_path
+    end
   end
 
   def verify_tos_accepted

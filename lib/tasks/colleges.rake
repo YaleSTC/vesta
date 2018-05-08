@@ -11,9 +11,4 @@ namespace :colleges do
     filename = FileFetcher.fetch(url: args.url)
     CollegeProvisioner.provision(filename: filename, seed: env?('SEED'))
   end
-
-  desc 'Clone a user from the first college to all others'
-  task :clone_user, [:username] => [:environment] do |_, args|
-    UserCloner.clone(username: args.username)
-  end
 end

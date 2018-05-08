@@ -3,13 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe MembershipDestroyer do
-  describe '.destroy' do
-    xit 'calls :destroy on an instance of MembershipDestroyer'
-  end
   describe '#destroy' do
     it 'sucessfully destroys a membership' do
-      m = instance_spy('Membership', destroy: true, user: instance_spy('User'))
-      allow(m).to receive(:destroy)
+      m = instance_spy('Membership', destroy: true, locked?: false,
+                                     user: instance_spy('User'))
       described_class.destroy(membership: m)
       expect(m).to have_received(:destroy)
     end
@@ -23,6 +20,15 @@ RSpec.describe MembershipDestroyer do
       allow(StudentMailer).to receive(:left_group).and_return(msg)
       described_class.destroy(membership: m)
       expect(StudentMailer).to have_received(:left_group)
+    end
+  end
+
+  describe 'validations' do
+    it 'prevent locked memberships from being destroyed' do
+      m = create(:locked_group).leader.memberships.first
+      result = described_class.destroy(membership: m)
+      expect(result[:msg][:error]).to \
+        match(/cannot be destroyed if it is locked/)
     end
   end
 end

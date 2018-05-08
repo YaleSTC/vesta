@@ -11,6 +11,8 @@ class UserGenerator
   def initialize(overrides: {})
     gen_params(overrides: overrides)
     @params.delete(:password) if User.cas_auth?
+    return if Apartment::Tenant.current == 'public' || user_with_no_college?
+    @params[:college] = College.current
   end
 
   def generate
@@ -37,5 +39,9 @@ class UserGenerator
 
   def random_class_year
     Time.zone.today.year + (1..3).to_a.sample
+  end
+
+  def user_with_no_college?
+    %w(superuser superadmin).include?(@params[:role])
   end
 end

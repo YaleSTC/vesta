@@ -33,7 +33,7 @@ class UserBuilder
     return invalid_error if id_attr.empty?
     return duplicate_error if exists?
     return invalid_role_error unless role.in?(User.roles.keys)
-    assign_login_and_role
+    assign_login_college_and_role
     assign_profile_attrs
     success
   end
@@ -79,7 +79,7 @@ class UserBuilder
                       msg: { error: 'Invalid role provided' })
   end
 
-  def assign_login_and_role
+  def assign_login_college_and_role
     assign_method = "#{id_symbol}=".to_sym
     user.send(assign_method, id_attr)
     unless User.cas_auth?
@@ -88,6 +88,7 @@ class UserBuilder
       user.password_confirmation = password
     end
     user.role = role
+    user.college = College.current
   end
 
   def assign_profile_attrs

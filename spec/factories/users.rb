@@ -11,6 +11,7 @@ FactoryBot.define do
     class_year { Time.zone.today.year }
     username { first_name.downcase if env? 'CAS_BASE_URL' }
     tos_accepted { Time.zone.now }
+    college_id { College.current.id }
 
     factory :student_in_draw do
       after(:build) do |user|

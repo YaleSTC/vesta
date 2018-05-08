@@ -2,7 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Notes for upgrade:
+### When upgrading from v1.0.8 or earlier to 2.0.0 or later you _must_ initially upgrade to v1.0.9.
+### Once upgraded to v1.0.9 you must run `rails db:create_shared_schema` to create the new schema
+### that will contain all users and colleges post v2.0. After that you can upgrade as normal.
+
 ### Changed
+* Updated multitenancy to allow for all users of all tenants to be held in one canonical table in one shared schema [#802](https://gitlab.com/yale-sdmp/vesta/issues/802), [#803](https://gitlab.com/yale-sdmp/vesta/issues/803), [#804](https://gitlab.com/yale-sdmp/vesta/issues/804), [#805](https://gitlab.com/yale-sdmp/vesta/issues/805), [#806](https://gitlab.com/yale-sdmp/vesta/issues/806).
 * Bulk user add instructions are now auth-dependent and no longer Yale specific ([#157](https://gitlab.com/yale-sdmp/vesta/issues/157)).
 * Rename DrawReport#ungrouped_students to #ungrouped_students_by_intent ([#793](https://gitlab.com/yale-sdmp/vesta/issues/793)).
 * Remove login workarounds from suite_selection_spec.rb ([#122](https://gitlab.com/yale-sdmp/vesta/issues/122)).
@@ -45,6 +51,10 @@ All notable changes to this project will be documented in this file.
 * Fix simple_form buttons not being focused ([821](https://gitlab.com/yale-sdmp/vesta/issues/812)).
 * Fix duplicate flash message in application([#603](https://gitlab.com/yale-sdmp/vesta/issues/603)).
 * Clarify error message when trying to add a student that doesn't exist to a draw ([#490](https://gitlab.com/yale-sdmp/vesta/issues/490)).
+
+## v1.0.9 - 2018-08-30
+### Added
+* Add a rake task that creates a shared schema in preparation for the multitenancy update ([#806](https://gitlab.com/yale-sdmp/vesta/issues/806)).
 
 ## v1.0.8 - 2018-04-09
 ### Fixed

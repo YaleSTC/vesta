@@ -3,6 +3,8 @@
 #
 # Class to destroy memberships
 class MembershipDestroyer < Destroyer
+  validate :membership_is_not_locked
+
   # Initialize a new MembershipsDestroyer.
   #
   # @param [ApplicationRecord] object The model object to be destroyed
@@ -19,7 +21,17 @@ class MembershipDestroyer < Destroyer
   end
 
   def error
-    { redirect_object: nil, msg: { error: "#{name} couldn't be deleted." } }
+    msg = if errors.present?
+            ErrorHandler.format(error_object: self)
+          else
+            "#{name} couldn't be deleted."
+          end
+    { redirect_object: nil, msg: { error: msg } }
+  end
+
+  def membership_is_not_locked
+    return unless object.locked?
+    errors.add(:base, "#{name} cannot be destroyed if it is locked.")
   end
 
   def send_left_email

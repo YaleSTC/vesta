@@ -14,6 +14,7 @@ class UserCreator
     @mailer = mailer
     @user = User.new(@params)
     set_password unless User.cas_auth?
+    set_college unless user.superadmin?
   end
 
   # Attempt to create a new user. If CAS auth is NOT enabled, autogenerates a
@@ -41,6 +42,10 @@ class UserCreator
     @password ||= User.random_password
     user.password = @password
     user.password_confirmation = @password
+  end
+
+  def set_college
+    user.college = College.current
   end
 
   def success

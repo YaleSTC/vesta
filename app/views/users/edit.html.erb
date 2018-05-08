@@ -6,6 +6,9 @@
     <%= f.input :last_name %>
     <%= f.input :email %>
     <%= f.input :role, collection: User.roles.keys %>
+    <% unless @user.superadmin? %>
+      <%= f.input :college_id, label: 'College', collection: College.all, default: @user.college %>
+    <% end %>
     <%= f.submit 'Save' %>
   <% end %>
 <% end %>

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 # Users Controller class
-class UsersController < ApplicationController
+class UsersController < ApplicationController # rubocop:disable ClassLength
   prepend_before_action :set_user,
                         except: %i(index new build create full_export)
 
   def index
-    @users = User.includes(:draw).all.order(:class_year, :last_name)
-                 .group_by(&:role)
+    @users = policy_scope(User).includes(:draw).order(:class_year, :last_name)
+                               .group_by(&:role)
     if @users['student']
       @users['student'] = @users['student'].group_by(&:class_year)
     end
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     result = UserUpdater.new(user: @user, params: user_params,
                              editing_self: current_user.id == @user.id).update
     @user = result[:record]
-    handle_action(action: 'edit', **result)
+    handle_user_updater_result(result)
   end
 
   def destroy
@@ -89,7 +89,7 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    @user = User.find(params[:id])
+    @user = policy_scope(User).find(params[:id])
   end
 
   def build_user_params
@@ -99,7 +99,7 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:first_name, :last_name, :role, :email,
                                  :intent, :gender, :username, :class_year,
-                                 :college, :password, :password_confirmation,
+                                 :college_id, :password, :password_confirmation,
                                  :current_password).tap { |p| proc_params(p) }
   end
 
@@ -123,5 +123,15 @@ class UsersController < ApplicationController
   def valid_user_roles
     return User.roles.keys if current_user.superuser?
     User.roles.keys - %w(superuser)
+  end
+
+  def handle_user_updater_result(result)
+    if result.delete(:redirect_object).present?
+      host = @user.college&.host || College.current.host
+      handle_action(redirect_object: nil,
+                    path: user_url(@user, host: host), **result)
+    else
+      handle_action(action: 'edit', redirect_object: nil, **result)
+    end
   end
 end

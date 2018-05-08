@@ -29,10 +29,7 @@ class CollegeCreator
   #   the :path
   def create!
     return error(self) unless valid?
-    ActiveRecord::Base.transaction do
-      college.save!
-      clone_user_for_access
-    end
+    college.save!
     success
   rescue ActiveRecord::RecordInvalid => e
     error(e)
@@ -47,14 +44,6 @@ class CollegeCreator
   def superuser_is_granted_access
     return if user_for_access.superuser?
     errors.add(:base, 'You must grant access the new college to a superuser')
-  end
-
-  def clone_user_for_access
-    # Note that this runs in a transaction
-    current_college = College.current
-    UserCloner.clone(username: user_for_access.login_attr,
-                     from: current_college, to: college, io: StringIO.new)
-    current_college.activate!
   end
 
   def success

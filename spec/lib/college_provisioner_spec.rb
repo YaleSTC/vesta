@@ -12,19 +12,12 @@ RSpec.describe CollegeProvisioner do
     context 'valid' do
       before do
         stub_csv_reader(filename: 'foo.csv', out: VALID_CSV_LINES)
-        allow(UserCloner).to receive(:clone)
         allow(CollegeSeeder).to receive(:seed)
       end
 
       it 'creates a college for each row in the CSV file' do
         expect { described_class.provision(filename: 'foo.csv', io: io) }.to \
           change { College.count }.by(2)
-      end
-      it 'clones the first superuser in the first college to new colleges' do
-        create_superuser(email: 'foo@example.com')
-        described_class.provision(filename: 'foo.csv', io: io)
-        expect(UserCloner).to have_received(:clone)
-          .with(username: 'foo@example.com', io: io)
       end
       it 'optionally seeds each new college' do
         described_class.provision(filename: 'foo.csv', io: io, seed: true)

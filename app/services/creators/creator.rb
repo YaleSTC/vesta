@@ -6,6 +6,7 @@
 #
 # @abstract
 class Creator
+  include ActiveModel::Model
   include Callable
 
   # Initialize a new Creator.

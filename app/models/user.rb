@@ -35,6 +35,7 @@ class User < ApplicationRecord
            :validatable
   end
 
+  belongs_to :college
   belongs_to :draw
   has_one :led_group, inverse_of: :leader, dependent: :destroy,
                       class_name: 'Group', foreign_key: :leader_id
@@ -61,14 +62,17 @@ class User < ApplicationRecord
   validates :intent, presence: true
   validates :class_year, presence: true,
                          if: ->() { role == 'student' || role == 'rep' }
+  validates :college_id, presence: true, unless: :superadmin?
 
-  enum role: %w(student admin rep superuser)
+  enum role: %w(student admin rep superuser superadmin)
   enum intent: %w(undeclared on_campus off_campus)
 
   before_update :freeze_tos_acceptance,
                 if: ->() { will_save_change_to_tos_accepted? }
 
   before_save :downcase_username, if: :cas_auth?
+
+  self.table_name = 'shared.users'
 
   # Return a symbol representing the attribute that represents a user's login
   # credential
@@ -152,9 +156,16 @@ class User < ApplicationRecord
 
   # Override #admin? to also return true for superusers
   #
-  # @return [Boolean] True for admins and superusers
+  # @return [Boolean] True for admins, superadmins, and superusers
   def admin?
-    role == 'admin' || role == 'superuser'
+    super || superadmin?
+  end
+
+  # Override #superadmin? to also return true for superusers
+  #
+  # @return [Boolean] True for superadmins and superusers
+  def superadmin?
+    super || superuser?
   end
 
   # Return the login attribute for a user; the username if using CAS or the

@@ -40,7 +40,7 @@ class UserPolicy < ApplicationPolicy
 
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
-      scope
+      scope.where(college: College.current)
     end
   end
 

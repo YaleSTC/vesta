@@ -3,6 +3,7 @@
 #
 # Base class for destroyer service objects. Provides default messages.
 class Destroyer
+  include ActiveModel::Model
   include Callable
 
   # Initialize a new Destroyer.
@@ -22,6 +23,7 @@ class Destroyer
   #   A results hash with a message to set in the flash and either `nil`
   #   or the object that was not destroyed
   def destroy
+    return error unless valid?
     if object.destroy
       success
     else

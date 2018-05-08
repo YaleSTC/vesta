@@ -4,7 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Manual user creation', type: :request do
   let(:admin) { create(:admin) }
-  let(:attrs) { %i(first_name last_name role email username class_year) }
+  let(:attrs) do
+    %i(first_name last_name role email username class_year college_id)
+  end
 
   before do
     post user_session_path,

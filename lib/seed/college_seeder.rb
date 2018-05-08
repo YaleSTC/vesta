@@ -18,8 +18,8 @@ class CollegeSeeder
 
   # Seed the college with housing inventory and students
   def seed
-    college.activate!
     generate_users
+    college.activate!
     generate_housing_inventory
     io.puts "Seeded #{college.name} college!"
   end

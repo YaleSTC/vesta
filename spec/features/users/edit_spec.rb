@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.feature 'User Editing' do
   let(:user) { create(:student) }
 
-  before { log_in create(:admin) }
+  before { log_in create(:admin, role: 'superadmin') }
   it 'can update role' do
     visit_edit_form(user)
     select('rep', from: 'user_role')
@@ -23,6 +23,18 @@ RSpec.feature 'User Editing' do
     fill_in 'Email', with: 'foo@foo.com'
     click_on 'Save'
     expect(page).to have_css('.user-email', text: 'foo@foo.com')
+  end
+  it 'changes tenant when changing college' do
+    new_college = create(:college)
+    visit_edit_form(user)
+    select(new_college.name.to_s, from: 'College')
+    click_on 'Save'
+    expect(page.current_url).to match(new_college.name.downcase)
+  end
+  it 'will not let you edit users from other colleges' do
+    new_user = create(:user, college_id: create(:college).id)
+    expect { visit_edit_form(new_user) }.to \
+      raise_error(ActiveRecord::RecordNotFound)
   end
 
   def visit_edit_form(user)

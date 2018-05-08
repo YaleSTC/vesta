@@ -23,4 +23,13 @@ RSpec.describe Destroyer do
     destroyer = described_class.new(object: suite, name_method: :number)
     expect(destroyer.destroy[:msg]).to have_key(:error)
   end
+
+  context 'validations' do
+    it 'returns an error flash if the validations do not pass' do
+      suite = instance_spy('Suite', destroy: true)
+      destroyer = described_class.new(object: suite, name_method: :number)
+      allow(destroyer).to receive(:valid?).and_return(false)
+      expect(destroyer.destroy[:msg]).to have_key(:error)
+    end
+  end
 end

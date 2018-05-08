@@ -45,6 +45,9 @@ RSpec.configure do |config|
     # setup for Apartment
     # see: https://github.com/influitive/apartment/wiki/Testing-Your-Application
     DatabaseCleaner.clean_with :truncation
+    ActiveRecord::Base.connection.schema_search_path = 'shared'
+    DatabaseCleaner.clean_with :truncation, only: %w(users colleges)
+    ActiveRecord::Base.connection.schema_search_path = 'public'
     DatabaseCleaner.strategy = :transaction
     # rubocop:disable RescueModifier
     Apartment::Tenant.drop('college') rescue nil

@@ -26,8 +26,6 @@ class CollegeProvisioner
     CSV.parse(lines.join("\n"), headers: true).each do |row|
       provision_and_optionally_seed_college(row)
     end
-    # Clone the first superuser, slightly redundant lookup
-    UserCloner.clone(username: superuser_username, io: io)
     io.puts 'College provisioning finished!'
   end
 
