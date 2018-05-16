@@ -14,4 +14,6 @@
     </tbody>
   </table>
 <% end %>
-<%= link_to 'New email export', new_email_export_path, class: 'button secondary' %>
+<% if policy(@email_export).create? %>
+  <%= link_to 'New email export', new_email_export_path, class: 'button secondary' %>
+<% end %>

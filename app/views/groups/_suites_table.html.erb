@@ -14,12 +14,14 @@
     </thead>
     <tbody>
       <% suites_array.each do |suite| %>
-        <tr>
-          <th scope="row"><%= link_to suite.number, suite_path(suite) %></th>
-          <td><%= suite.singles.count %></td>
-          <td><%= suite.doubles.count %></td>
-          <td><%= suite.common_rooms.count %></td>
-        </tr>
+        <% if policy(suite).show? %>
+          <tr>
+            <th scope="row"><%= link_to suite.number, suite_path(suite) %></th>
+            <td><%= suite.singles.count %></td>
+            <td><%= suite.doubles.count %></td>
+            <td><%= suite.common_rooms.count %></td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>

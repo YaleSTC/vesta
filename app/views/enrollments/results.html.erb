@@ -27,4 +27,6 @@
     <% end %>
   </tbody>
 </table>
-<%= link_to 'Import more students', new_enrollment_path %>
+<% if policy(@enrollment).new? %>
+  <%= link_to 'Import more students', new_enrollment_path %>
+<% end %>

@@ -1,4 +1,6 @@
-<%= link_to 'View', draw_group_path(group.draw, group), class: 'button' %>
+<% if policy(group).show? %>
+	<%= link_to 'View', draw_group_path(group.draw, group), class: 'button' %>
+<% end %>
 <% if policy(group).edit? %>
   <%= link_to 'Edit', edit_draw_group_path(group.draw, group), class: 'button' %>
 <% end %>

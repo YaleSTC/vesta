@@ -6,7 +6,7 @@
     <h4 class="h5">On Campus</h4>
     <ul style="columns: 4; list-style-type: none;">
       <% @draw.ungrouped_students_by_intent['on_campus'].each do |student| %>
-        <li><%= link_to student.full_name, user_path(student) %></li>
+        <li><%= link_to student.full_name, user_path(student) if policy(student).show? %></li>
       <% end %>
     </ul>
   <% end %>
@@ -14,7 +14,7 @@
     <h4 class="h5">Undeclared Intent</h4>
     <ul style="columns: 4; list-style-type: none;">
       <% @draw.ungrouped_students_by_intent['undeclared'].each do |student| %>
-        <li><%= link_to student.full_name, user_path(student) %></li>
+        <li><%= link_to student.full_name, user_path(student) if policy(student).show? %></li>
       <% end %>
     </ul>
   <% end %>

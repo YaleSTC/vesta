@@ -41,7 +41,7 @@
                     <%= render partial: 'suites/draw_link', collection: suite.draws, spacer_template: 'shared/comma' %>
                   </td>
                   <td class="actions" data-role="suite-actions">
-                    <%= link_to 'View', suite_path(suite), class: 'button' %>
+                    <%= link_to 'View', suite_path(suite), class: 'button' if policy(suite).show? %>
                     <% if policy(suite).edit? %>
                       <%= link_to 'Edit', edit_suite_path(suite), class: 'button' %>
                     <% end %>

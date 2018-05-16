@@ -5,7 +5,7 @@
     <% if g == group %>
       <li>Your group!</li>
     <% else %>
-      <li><%= link_to g.name, draw_group_path(draw, g) %></li>
+      <li><%= link_to g.name, draw_group_path(draw, g) if policy(g).show? %></li>
     <% end %>
   <% end %>
 </ol>

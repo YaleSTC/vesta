@@ -5,7 +5,7 @@
   <%= f.submit 'Update room assignments' %>
 <% end %>
 <% if @group.draw %>
-  <%= link_to 'Back to group', draw_group_path(@group.draw, @group) %>
+  <%= link_to 'Back to group', draw_group_path(@group.draw, @group) if policy(@group).show? %>
 <% else %>
-  <%= link_to 'Back to group', group_path(@group) %>
+  <%= link_to 'Back to group', group_path(@group) if policy(@group).show? %>
 <% end %>

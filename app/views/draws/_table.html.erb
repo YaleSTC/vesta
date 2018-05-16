@@ -22,7 +22,7 @@
           <td data-role="draw-suite-count"><%= draw.available_suite_count %></td>
           <td data-role="draw-group-count"><%= draw.group_count %></td>
           <td class="actions" data-role="draw-actions">
-            <%= link_to 'View', draw_path(draw), class: 'button' %>
+            <%= link_to 'View', draw_path(draw), class: 'button' if policy(draw).show? %>
             <% if policy(draw).edit? %>
               <%= link_to 'Edit', edit_draw_path(draw), class: 'button' %>
             <% end %>

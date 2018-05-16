@@ -20,7 +20,7 @@
 </div>
 
 <% unless current_user.admin? %>
-  <% if @draw.present? && !@draw.draft? %>
+  <% if @draw.present? && !@draw.draft? && policy(@draw).show? %>
     <div class="card">
       <div class="card-divider">
         <h1 class="h4">Your draw: <%= link_to @draw.name, draw_path(@draw) %></h1>
@@ -40,7 +40,7 @@
         <% if @locking_deadline.present? %>
           <p>Deadline to form a group: <%= @locking_deadline.strftime('%B %e') %></p>
         <% end %>
-        <% if @group.present? %>
+        <% if @group.present? && policy(@group).show? %>
           <p><%= link_to 'Your group', draw_group_path(@draw, @group) %>
         (<%= size_str(@group.size).capitalize %>, <%= display_group_status(@group) %>)</p>
         <% elsif @pending.present? && !@pending.empty? %>
@@ -48,14 +48,14 @@
           <p>Your membership invitations and requests:</p>
           <ul>
             <% @pending.each do |m| %>
-              <li><%= link_to m.group.name, draw_group_path(@draw, m.group) %> (<%= m.status %>)</li>
+              <li><%= link_to m.group.name, draw_group_path(@draw, m.group) if policy(m.group).show? %> (<%= m.status %>)</li>
             <% end %>
           </ul>
         <% end %>
       </div>
     </div>
   <% end %>
-  <% if @suite.present? %>
+  <% if @suite.present? && policy(@suite).show? %>
     <div class="card">
       <div class="card-divider">
         <h1 class="h4">Your suite: <%= link_to @suite.number, suite_path(@suite) %></h1>
@@ -74,14 +74,16 @@
 <% unless current_user.student? %>
   <% if @draws.present? %>
     <% @draws.each do |draw| %>
-      <div class="card">
-        <div class="card-divider">
-          <h1 class="h4"><%= link_to draw.name, draw_path(draw) %> (<%= draw.status.humanize %>)</h1>
+      <% if policy(draw).show? %>
+        <div class="card">
+          <div class="card-divider">
+            <h1 class="h4"><%= link_to draw.name, draw_path(draw) %> (<%= draw.status.humanize %>)</h1>
+          </div>
+          <div class="card-section">
+            <%= render draw.status, draw: draw %>
+          </div>
         </div>
-        <div class="card-section">
-          <%= render draw.status, draw: draw %>
-        </div>
-      </div>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

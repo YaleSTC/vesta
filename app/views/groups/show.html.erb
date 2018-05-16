@@ -5,17 +5,19 @@
     <h2 class="group-requests h4">Requests</h2>
     <ul>
       <% @group.requests.each do |r| %>
-        <li class="group-request">
-          <%= link_to r.full_name, user_path(r) %>
-          <% if policy(@group).accept_request? %>
-            (<%= link_to 'accept',
-                         accept_request_draw_group_path(@draw, @group, params: { 'user_id' => r.id }),
-                         method: :put %><%= policy(@group).reject_pending? ? ' / ' : ')' %>
-          <% end %>
-          <% if policy(@group).reject_pending? %>
-            <%= '(' unless policy(@group).accept_request? %><%= link_to 'reject', reject_pending_draw_group_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %>)
-          <% end %>
-        </li>
+        <% if policy(r).show? %>
+          <li class="group-request">
+            <%= link_to r.full_name, user_path(r) %>
+            <% if policy(@group).accept_request? %>
+              (<%= link_to 'accept',
+                           accept_request_draw_group_path(@draw, @group, params: { 'user_id' => r.id }),
+                           method: :put %><%= policy(@group).reject_pending? ? ' / ' : ')' %>
+            <% end %>
+            <% if policy(@group).reject_pending? %>
+              <%= '(' unless policy(@group).accept_request? %><%= link_to 'reject', reject_pending_draw_group_path(@draw, @group, params: { 'user_id' => r.id }), method: :put %>)
+            <% end %>
+          </li>
+        <% end %>
       <% end %>
     </ul>
   <% end %>
@@ -24,7 +26,7 @@
     <ul>
       <% @group.invitations.each do |i| %>
         <li class="group-invitation">
-          <%= link_to i.full_name, user_path(i) %>
+          <%= link_to i.full_name, user_path(i) if policy(i).show? %>
           <% if policy(@group).reject_pending? %>
             (<%= link_to 'rescind', reject_pending_draw_group_path(@draw, @group, params: { 'user_id' => i.id }), method: :put %>)
           <% end %>
@@ -43,7 +45,7 @@
   <ul>
     <% @clip_invites.each do |m| %>
       <li class="clip-invitation" id="clip-membership-<%= m.id %>">
-        <%= link_to m.clip.name, clip_path(m.clip) %>
+        <%= link_to m.clip.name, clip_path(m.clip) if policy(m.clip).show? %>
         <% if policy(m).accept? %>
           (<%= link_to 'Accept Invitation', clip_membership_path(m), method: :patch %><%= policy(m).reject? ? ' / ' : ')' %>
         <% end %>

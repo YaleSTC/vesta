@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 * Bulk user add instructions are now auth-dependent and no longer Yale specific ([#157](https://gitlab.com/yale-sdmp/vesta/issues/157)).
 * Rename DrawReport#ungrouped_students to #ungrouped_students_by_intent ([#793](https://gitlab.com/yale-sdmp/vesta/issues/793)).
 * Remove login workarounds from suite_selection_spec.rb ([#122](https://gitlab.com/yale-sdmp/vesta/issues/122)).
+* Make sure all relevant links are behind authorization checks ([#553](https://gitlab.com/yale-sdmp/vesta/issues/553)).
 
 ### Added
 * Add flash to warn of oversubscription in suite update ([#670](https://gitlab.com/yale-sdmp/vesta/issues/670)).

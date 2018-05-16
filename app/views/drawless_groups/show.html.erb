@@ -6,14 +6,20 @@
       <dt>Suite</dt>
       <dd><%= @group.suite.name %></dd>
     </dl>
-    <%= link_to 'Remove suite', group_suite_assignment_path(@group), method: :delete, class: 'button alert' %>
+    <% if policy(SuiteAssignment.new(groups: [@group])).destroy? %>
+      <%= link_to 'Remove suite', group_suite_assignment_path(@group), method: :delete, class: 'button alert' %>
+    <% end %>
   <% else %>
-    <%= link_to 'Assign suite', new_group_suite_assignment_path(@group), class: 'button' %>
+    <% if policy(SuiteAssignment.new(groups: [@group])).new? %>
+      <%= link_to 'Assign suite', new_group_suite_assignment_path(@group), class: 'button' %>
+    <% end %>
   <% end %>
 <% end %>
 <hr />
 <div>
-  <%= link_to 'Edit', edit_group_path(@group), class: 'button secondary' if policy(@group).edit? %>
+  <% if policy(@group).edit? %>
+    <%= link_to 'Edit', edit_group_path(@group), class: 'button secondary' %>
+  <% end %>
   <% if policy(@group).lock? %>
     <%= link_to 'Lock Group', lock_group_path(@group), method: :put, class: 'button alert' %>
   <% end %>
@@ -26,10 +32,14 @@
   <% if policy(@group).edit_room_assignment? %>
     <%= link_to 'Edit room assignments', edit_group_room_assignment_path(@group), class: 'button' %>
   <% end %>
-  <%= link_to('Disband', group_path(@group), method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert') if policy(@group).destroy? %>
+  <% if policy(@group).destroy? %>
+    <%= link_to('Disband', group_path(@group), method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert') %>
+  <% end %>
 </div>
 
-<%= link_to 'View all special groups', groups_path %>
+<% if policy(@group).index? %>
+  <%= link_to 'View all special groups', groups_path %>
+<% end %>
 
 <% content_for :sidebar do %>
   <h1 class="h3">Compatible Suites</h1>

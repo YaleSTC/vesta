@@ -2,7 +2,7 @@
   <dt>Members</dt>
     <ul>
     <% clip.clip_memberships.each do |m| %>
-      <li class="clip-member"><%= link_to clipping_name(m.group), draw_group_path(clip.draw, m.group) %></li>
+      <li class="clip-member"><%= link_to clipping_name(m.group), draw_group_path(clip.draw, m.group) if policy(m.group).show? %></li>
     <% end %>
   </ul>
 </dl>

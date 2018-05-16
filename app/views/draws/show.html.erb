@@ -35,7 +35,7 @@
           <% if @draw.ungrouped_students_by_intent.key?('undeclared') %>
             <ul style="columns: 4; list-style-type: none; padding-bottom: 1em;">
               <% @draw.ungrouped_students_by_intent['undeclared'].each do |student| %>
-                <li><%= link_to student.full_name, user_path(student) %></li>
+                <li><%= link_to student.full_name, user_path(student) if policy(student).show? %></li>
               <% end %>
             </ul>
           <% end %>

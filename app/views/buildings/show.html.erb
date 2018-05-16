@@ -32,4 +32,6 @@
     <%= link_to 'Delete', building_path(@building), method: :delete, data: { confirm: 'Are you sure you want to delete this building?' }, class: 'button alert' %>
   <% end %>
 </div>
-<%= link_to 'View all buildings', buildings_path %>
+<% if policy(@building).index? %>
+  <%= link_to 'View all buildings', buildings_path %>
+<% end %>

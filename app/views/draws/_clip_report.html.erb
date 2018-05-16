@@ -16,14 +16,12 @@
           <td>
             <ul style="list-style: none;">
               <% clip.groups.each do |group| %>
-                <li><%= link_to group.name(:with_size), group_path(group) %></li>
+                <li><%= link_to group.name(:with_size), group_path(group) if policy(group).show? %></li>
               <% end %>
             </ul>
           </td>
           <td class="actions">
-            <% if policy(clip).show? %>
-              <%= link_to 'View', clip_path(clip), class: 'button' %>
-            <% end %>
+            <%= link_to 'View', clip_path(clip), class: 'button' %>
             <% if policy(clip).edit? %>
               <%= link_to 'Edit', edit_clip_path(clip), class: 'button' %>
             <% end %>

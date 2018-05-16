@@ -3,8 +3,8 @@
 <h2 class="clip-size">Confirmed Members: <%= @clip.size %></h2>
 <%= render 'clip_details', clip: @clip %>
 <p>
-<% if @current_user.group.present? %>
-  <%= link_to 'Return to group', draw_group_path(@current_user.group.draw, @current_user.group) %>
+<% if @current_user.group.present? && policy(@current_user.group).show? %>
+  	<%= link_to 'Return to group', draw_group_path(@current_user.group.draw, @current_user.group) %>
 <% else %>
   <%= link_to 'Return to draw', draw_path(@clip.draw) %>
 <% end %>
