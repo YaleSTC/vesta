@@ -61,7 +61,7 @@ class Enrollment
 
   attr_reader :querier
   attr_writer :successes
-  attr_accessor :failures, :failed_query_ids
+  attr_accessor :failures, :failed_query_ids, :existing_ids
 
   def process_ids_str(str)
     str.split(delimiter(str)).map(&:strip).map(&:downcase).uniq
@@ -75,7 +75,7 @@ class Enrollment
   def process_id(id)
     ub = UserBuilder.new(id_attr: id, role: role, querier: querier)
     user = ub.build[:user]
-    return if ub.exists?
+    return existing_ids << id if ub.exists?
     return failed_query_ids << id if user.first_name.nil?
     save_user(user, id)
   end
@@ -115,9 +115,19 @@ class Enrollment
   end
 
   def failure_msg
-    return nil if failures.empty?
+    return nil if failures.empty? && existing_ids.empty?
+    unsaved_msg + existing_msg
+  end
+
+  def unsaved_msg
+    return '' if failures.empty?
     'The following users could not be saved: '\
       "#{failures.map { |f| f[:id] }.join(', ')}"
+  end
+
+  def existing_msg
+    return '' if existing_ids.empty?
+    "The following users already exist: #{existing_ids.join(', ')}"
   end
 
   def action_to_render

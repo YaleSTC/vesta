@@ -51,6 +51,16 @@ RSpec.describe Enrollment do
         expect(result[:msg][:error]).to include('invalidid')
       end
     end
+    context 'existing user error' do
+      it 'notes the id of the already existing user' do
+        # forcing it to use username because fakequerier won't work with email
+        allow(User).to receive(:login_attr).and_return(:username)
+        ids = %w(id1).join(', ')
+        described_class.enroll(ids: ids, querier: FakeProfileQuerier)
+        result = described_class.enroll(ids: ids, querier: FakeProfileQuerier)
+        expect(result[:msg][:error]).to include('exist: id1')
+      end
+    end
   end
 
   describe '#username?' do

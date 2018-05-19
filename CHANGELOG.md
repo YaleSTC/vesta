@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 * Remediate all tables for accessibility ([#745](https://gitlab.com/yale-sdmp/vesta/issues/745)).
 * Unmerging suites no longer fails if the merged suite had the same name as one of its constituent suites ([#790] https://gitlab.com/yale-sdmp/vesta/issues/790).
 * Fix updating groups through the superuser dashboard ([#775](https://gitlab.com/yale-sdmp/vesta/issues/775)).
+* Bulk user enrollment no longer fails silently when users exist and now flashes an error message ([#156](https://gitlab.com/yale-sdmp/vesta/issues/156)).
 
 ## v1.0.8 - 2018-04-09
 ### Fixed
