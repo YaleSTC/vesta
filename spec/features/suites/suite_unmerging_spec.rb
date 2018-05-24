@@ -3,19 +3,26 @@
 require 'rails_helper'
 
 RSpec.feature 'Suite unmerging' do
-  let(:numbers) { %w(L01 I33) }
   let(:suite) do
-    FactoryGirl.create(:suite).tap do |s|
-      rooms = numbers.map { |n| FactoryGirl.create(:room, original_suite: n) }
-      s.rooms << rooms.flatten
-    end
+    FactoryGirl.create(:suite_with_rooms)
+  end
+  let!(:other_suite) do
+    FactoryGirl.create(:suite_with_rooms, building: suite.building)
   end
 
   before { log_in FactoryGirl.create(:admin) }
 
-  it 'can be performed' do
+  it 'can be performed after a merge' do
     visit suite_path(suite)
+    perform_merge
     click_on 'Unmerge suite'
     expect(page).to have_content('Suite successfully split')
+  end
+
+  def perform_merge
+    fill_in 'suite_merger_form_other_suite_number', with: other_suite.number
+    click_on 'Merge'
+    fill_in 'suite_merger_form_number', with: suite.number
+    click_on 'Merge'
   end
 end

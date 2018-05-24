@@ -27,8 +27,9 @@ class SuiteUnmerger
   def unmerge
     return error(self) unless valid?
     ActiveRecord::Base.transaction do
-      create_new_suites!
+      original_suites = rooms.group_by(&:original_suite)
       suite.destroy!
+      create_new_suites!(original_suites)
     end
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -41,8 +42,8 @@ class SuiteUnmerger
 
   attr_reader :rooms, :building
 
-  def create_new_suites!
-    rooms.group_by(&:original_suite).each do |suite_number, original_rooms|
+  def create_new_suites!(original_suites)
+    original_suites.each do |suite_number, original_rooms|
       Suite.create!(number: suite_number, rooms: original_rooms,
                     building: building)
     end
