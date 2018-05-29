@@ -70,15 +70,30 @@ RSpec.describe LotteryAssignment, type: :model do
   end
 
   describe 'frozen attributes' do
+    let(:lottery) { FactoryGirl.create(:lottery_assignment) }
+
     it "can't change draw" do
-      lottery = FactoryGirl.create(:lottery_assignment)
       draw = FactoryGirl.create(:draw_in_lottery)
+      # skips the group must be in draw test
+      lottery.group.draw = draw
       expect(lottery.update(draw: draw)).to be_falsey
     end
+    it 'raises error if draw is changed' do
+      draw = FactoryGirl.create(:draw_in_lottery)
+      lottery.group.draw = draw
+      lottery.update(draw: draw)
+      expect(lottery.errors[:base])
+        .to include('Draw cannot be changed inside lottery')
+    end
     it "can't change number after lottery phase is over" do
-      lottery = FactoryGirl.create(:lottery_assignment)
       lottery.draw.suite_selection!
       expect(lottery.update(number: lottery.number + 1)).to be_falsey
+    end
+    it 'raises an error if number is changed' do
+      lottery.draw.suite_selection!
+      lottery.update(number: lottery.number + 1)
+      expect(lottery.errors[:base])
+        .to include('Lottery number cannot be changed')
     end
   end
 

@@ -60,7 +60,7 @@ class College < ApplicationRecord
 
   def freeze_subdomain
     return unless will_save_change_to_subdomain?
-    throw(:abort)
+    handle_abort('Cannot change college subdomain')
   end
 
   def create_schema!

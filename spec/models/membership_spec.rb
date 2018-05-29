@@ -42,30 +42,55 @@ RSpec.describe Membership, type: :model do
   end
 
   describe 'cannot change group' do
+    let(:group) { FactoryGirl.create(:full_group) }
+    let(:membership) { group.memberships.last }
+    let(:msg) { 'Cannot change group or user associated with this membership' }
+
     it do
-      group = FactoryGirl.create(:full_group)
-      membership = group.memberships.last
       new_leader = FactoryGirl.create(:student, draw: group.draw)
       membership.group = FactoryGirl.create(:open_group, leader: new_leader)
       expect(membership.save).to be_falsey
     end
+    it 'raises error if group changed' do
+      new_leader = FactoryGirl.create(:student, draw: group.draw)
+      membership.update(group: FactoryGirl
+        .create(:open_group, leader: new_leader))
+      expect(membership.errors[:base]).to include(msg)
+    end
   end
 
   describe 'cannot change user' do
+    let(:group) { FactoryGirl.create(:full_group) }
+    let(:msg) { 'Cannot change group or user associated with this membership' }
+
     it do
-      group = FactoryGirl.create(:full_group)
       membership = group.memberships.last
       membership.user = FactoryGirl.create(:student, draw: group.draw)
       expect(membership.save).to be_falsey
     end
+    it 'raises error if user changed' do
+      membership = group.memberships.last
+      membership.user = FactoryGirl.create(:student, draw: group.draw)
+      membership.save
+      expect(membership.errors[:base]).to include(msg)
+    end
   end
 
   describe 'cannot change accepted status' do
+    let(:msg) { 'Cannot change membership status after acceptance' }
+
     it do
       group = FactoryGirl.create(:full_group)
       membership = group.memberships.last
       membership.status = 'requested'
       expect(membership.save).to be_falsey
+    end
+    it 'raises error if status changed' do
+      group = FactoryGirl.create(:full_group)
+      membership = group.memberships.last
+      membership.status = 'requested'
+      membership.save
+      expect(membership.errors[:base]).to include(msg)
     end
   end
 
@@ -143,6 +168,20 @@ RSpec.describe Membership, type: :model do
       group = FactoryGirl.create(:finalizing_group)
       membership = group.memberships.first
       expect { membership.destroy }.not_to change { group.memberships_count }
+    end
+    it 'raises error if attempted destruction' do
+      group = FactoryGirl.create(:finalizing_group)
+      membership = group.memberships.first
+      membership.destroy
+      expect(membership.errors[:base])
+        .to include('Cannot destroy locked membership')
+    end
+    it 'cannot be changed while locked' do
+      group = FactoryGirl.create(:finalizing_group)
+      membership = group.memberships.first
+      membership.update(group_id: nil)
+      expect(membership.errors[:base])
+        .to include('Cannot edit locked membership')
     end
     it 'must be accepted' do
       group = FactoryGirl.create(:finalizing_group)

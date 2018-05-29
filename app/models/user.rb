@@ -174,6 +174,6 @@ class User < ApplicationRecord
 
   def freeze_tos_acceptance
     return if tos_accepted_in_database.nil?
-    throw(:abort)
+    handle_abort('Terms of Service acceptance cannot be changed')
   end
 end

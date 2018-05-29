@@ -273,7 +273,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
       end
     end
   rescue
-    throw(:abort)
+    handle_abort("Unable to remove all member's rooms")
   end
 
   def validate_locked
@@ -306,7 +306,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   def freeze_lottery
     if lottery_assignment_id_in_database.present? &&
        lottery_assignment_id.present?
-      throw(:abort)
+      handle_abort('Cannot edit lottery assignment once set')
     end
   end
 

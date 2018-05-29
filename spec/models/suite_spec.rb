@@ -37,19 +37,51 @@ RSpec.describe Suite, type: :model do
     end
   end
 
-  it 'clears room ids when group assignment changes' do
-    group = FactoryGirl.create(:lottery_assignment).group
-    suite = FactoryGirl.create(:suite_with_rooms, group_id: group.id).reload
-    RoomAssignment.create!(user: group.leader, room: suite.rooms.first)
-    expect { group.suite.update!(group_id: nil) }.to \
-      change { group.leader.reload.room }.from(suite.rooms.first).to(nil)
-  end
+  describe 'before_save callbacks' do
+    context 'if group assignment changes' do
+      let(:group) { FactoryGirl.create(:lottery_assignment).group }
+      let!(:suite) do
+        FactoryGirl.create(:suite_with_rooms, group_id: group.id).reload
+      end
 
-  it 'removes draws if changed to a medical suite' do
-    draw = FactoryGirl.create(:draw)
-    suite = FactoryGirl.create(:suite, draws: [draw])
-    expect { suite.update!(medical: true) }.to \
-      change { suite.draws.to_a }.to([])
+      it 'clears room ids when group assignment changes' do
+        RoomAssignment.create!(user: group.leader, room: suite.rooms.first)
+        expect { group.suite.update!(group_id: nil) }.to \
+          change { group.leader.reload.room }.from(suite.rooms.first).to(nil)
+      end
+      it 'raises an error when unable to clear room ids' do
+        RoomAssignment.create!(user: group.leader, room: suite.rooms.first)
+        stub_room_assignments
+        suite.update(group_id: nil)
+        expect(suite.errors[:base])
+          .to include('Unable to clear room assignments')
+      end
+      def stub_room_assignments
+        suite.rooms.map do |v|
+          v.room_assignments.map do |d|
+            allow(d).to receive(:destroy!)
+              .and_raise(ActiveRecord::RecordInvalid)
+          end
+        end
+      end
+    end
+    context 'if medical status changes' do
+      let(:suite) { FactoryGirl.create(:suite) }
+
+      it 'removes draws if changed to a medical suite' do
+        draw = FactoryGirl.create(:draw)
+        suite.update(draws: [draw])
+        expect { suite.update!(medical: true) }.to \
+          change { suite.draws.to_a }.to([])
+      end
+      it 'raises an error when unable to remove draw from medical suites' do
+        draw = instance_spy('draw', update: ActiveRecord::RecordInvalid.new)
+        allow(suite).to receive(:draws).and_return([draw])
+        suite.update(medical: true)
+        expect(suite.errors[:base])
+          .to include('Unable to clear draws from medical suites')
+      end
+    end
   end
 
   describe '.size_str' do

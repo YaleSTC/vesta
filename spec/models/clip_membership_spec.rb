@@ -9,70 +9,80 @@ RSpec.describe ClipMembership, type: :model do
     it { is_expected.to validate_presence_of(:group) }
     it { is_expected.to validate_presence_of(:clip) }
   end
+  let(:clip) { FactoryGirl.create(:clip) }
+  let(:group) { FactoryGirl.create(:group) }
+  let(:membership) { clip.clip_memberships.last }
 
   describe 'group uniqueness' do
     it 'is scoped to clip' do
-      clip = FactoryGirl.create(:clip)
-      membership = ClipMembership.new(clip: clip, group: clip.groups.first)
+      membership = ClipMembership.new(clip: clip, group: group)
+      expect(membership).not_to be_valid
+    end
+    it 'group can only have one accepted clip membership' do
+      other_clip = FactoryGirl.create(:clip)
+      m = ClipMembership.new(clip: other_clip, group: clip.groups.first)
+      expect(m).not_to be_valid
+    end
+    it 'group draw and clip draw must match' do
+      membership = FactoryGirl.build(:clip_membership, clip: clip, group: group)
       expect(membership).not_to be_valid
     end
   end
 
-  it 'group can only have one accepted clip membership' do
-    clip, other_clip = FactoryGirl.create_pair(:clip)
-    m = ClipMembership.new(clip: other_clip, group: clip.groups.first)
-    expect(m).not_to be_valid
+  describe 'freeze clip before update' do
+    it 'cannot change clip' do
+      membership.clip = FactoryGirl.create(:clip, draw: clip.draw)
+      expect(membership.save).to be_falsey
+    end
+    it 'cannot remove clip' do
+      membership.clip_id = nil
+      expect(membership.save).to be_falsey
+    end
+    it 'returns error if clip is updated' do
+      membership.clip = FactoryGirl.create(:clip, draw: clip.draw)
+      membership.save
+      expect(membership.errors[:base])
+        .to include('Cannot change clip inside clip membership')
+    end
   end
 
-  it 'group draw and clip draw must match' do
-    clip = FactoryGirl.create(:clip)
-    group = FactoryGirl.create(:group)
-    membership = FactoryGirl.build(:clip_membership, clip: clip, group: group)
-    expect(membership).not_to be_valid
+  describe 'freeze group before update' do
+    it 'cannot change group' do
+      membership.group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
+      expect(membership.save).to be_falsey
+    end
+    it 'cannot remove group' do
+      membership.group_id = nil
+      expect(membership.save).to be_falsey
+    end
+    it 'returns error if group is updated' do
+      membership.group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
+      membership.save
+      expect(membership.errors[:base])
+        .to include('Cannot change group inside clip membership')
+    end
   end
 
-  it 'cannot change clip' do
-    clip = FactoryGirl.create(:clip)
-    membership = clip.clip_memberships.last
-    membership.clip = FactoryGirl.create(:clip, draw: clip.draw)
-    expect(membership.save).to be_falsey
-  end
+  describe 'freeze confirm unless pre-lottery' do
+    let(:msg) { 'Cannot confirm clip membership outside of pre-lottery phase' }
 
-  it 'cannot change group' do
-    clip = FactoryGirl.create(:clip)
-    membership = clip.clip_memberships.last
-    membership.group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
-    expect(membership.save).to be_falsey
-  end
-
-  it 'cannot remove clip' do
-    clip = FactoryGirl.create(:clip)
-    membership = clip.clip_memberships.last
-    membership.clip_id = nil
-    expect(membership.save).to be_falsey
-  end
-
-  it 'cannot remove group' do
-    clip = FactoryGirl.create(:clip)
-    membership = clip.clip_memberships.last
-    membership.group_id = nil
-    expect(membership.save).to be_falsey
-  end
-
-  it 'cannot change confirmation if not pre-lottery' do
-    clip = FactoryGirl.create(:clip)
-    clip.draw.update(status: 'draft')
-    membership = clip.clip_memberships.last
-    membership.confirmed = false
-    expect(membership.save).to be_falsey
-  end
-
-  it 'can change confirmation if the draw is pre-lottery' do
-    clip = FactoryGirl.create(:clip)
-    clip.draw.update(status: 'pre_lottery')
-    membership = clip.clip_memberships.last
-    membership.confirmed = false
-    expect(membership.save).to be_truthy
+    it 'cannot change confirmation if not pre-lottery' do
+      clip.draw.update(status: 'draft')
+      membership.confirmed = false
+      expect(membership.save).to be_falsey
+    end
+    it 'can change confirmation if the draw is pre-lottery' do
+      clip.draw.update(status: 'pre_lottery')
+      membership.confirmed = false
+      expect(membership.save).to be_truthy
+    end
+    it 'returns error if confirmation changed in not pre-lottery' do
+      clip.draw.update(status: 'draft')
+      membership.confirmed = false
+      membership.save
+      expect(membership.errors[:base])
+        .to include(msg)
+    end
   end
 
   # rubocop:disable RSpec/ExampleLength
@@ -92,11 +102,12 @@ RSpec.describe ClipMembership, type: :model do
     end
   end
 
-  it 'runs clip#cleanup! after destruction' do
-    clip = FactoryGirl.create(:clip)
-    m = clip.clip_memberships.first
-    allow(clip).to receive(:cleanup!)
-    m.destroy!
-    expect(clip).to have_received(:cleanup!)
+  describe 'clip membership cleanup' do
+    it 'runs clip#cleanup! after destruction' do
+      m = clip.clip_memberships.first
+      allow(clip).to receive(:cleanup!)
+      m.destroy!
+      expect(clip).to have_received(:cleanup!)
+    end
   end
 end

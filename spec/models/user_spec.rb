@@ -63,6 +63,12 @@ RSpec.describe User, type: :model do
         user.tos_accepted = Time.current
         expect { user.save! }.to raise_error(ActiveRecord::RecordNotSaved)
       end
+      it 'raises an error if changed once accepted' do
+        user = create(:user, tos_accepted: Time.current)
+        user.update(tos_accepted: Time.current)
+        expect(user.errors[:base])
+          .to include('Terms of Service acceptance cannot be changed')
+      end
     end
   end
 

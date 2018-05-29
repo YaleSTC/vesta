@@ -123,14 +123,14 @@ class Suite < ApplicationRecord
   def remove_room_assignments
     rooms.map(&:room_assignments).map(&:destroy_all)
   rescue
-    throw(:abort)
+    handle_abort('Unable to clear room assignments')
   end
 
   def remove_draw_from_medical_suites
     return unless medical
     ActiveRecord::Base.transaction { draws.delete_all }
   rescue
-    throw(:abort)
+    handle_abort('Unable to clear draws from medical suites')
   end
 
   def update_lottery_assignment

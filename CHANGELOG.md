@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 * Prevent admins from assigning special groups to suites that are in a draw in suite selection([#548](https://gitlab.com/yale-sdmp/vesta/issues/548)).
 * Add LotteryAssignments and Clips to the superuser dashboard ([#768](https://gitlab.com/yale-sdmp/vesta/issues/768)).
 * Add separate RoomAssignments model ([#690](https://gitlab.com/yale-sdmp/vesta/issues/690)).
+* Add error messages to throw_abort ([#792](https://gitlab.com/yale-sdmp/vesta/issues/792)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600))

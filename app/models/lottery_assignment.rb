@@ -93,12 +93,12 @@ class LotteryAssignment < ApplicationRecord
 
   def freeze_draw
     return unless will_save_change_to_draw_id?
-    throw(:abort)
+    handle_abort('Draw cannot be changed inside lottery')
   end
 
   def freeze_number
     return unless will_save_change_to_number?
-    throw(:abort)
+    handle_abort('Lottery number cannot be changed')
   end
 
   def assign_groups_if_clipped!

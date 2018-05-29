@@ -34,7 +34,9 @@ RSpec.describe College do
     it 'does not permit editing the subdomain' do
       college = FactoryGirl.create(:college, subdomain: 'foo')
       college.subdomain = 'bar'
-      expect { college.save! }.to raise_error(ActiveRecord::RecordNotSaved)
+      college.save
+      expect(college.errors[:base])
+        .to include('Cannot change college subdomain')
     end
   end
 

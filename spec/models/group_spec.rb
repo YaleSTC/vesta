@@ -140,6 +140,14 @@ RSpec.describe Group, type: :model do
       expect(group.update(lottery_assignment_id: new_lottery.id)).to be_falsey
     end
 
+    it 'raises an error if attempt to edit lottery_assignment' do
+      lottery, new_lottery = FactoryGirl.create_pair(:lottery_assignment)
+      group = lottery.group
+      group.update(lottery_assignment_id: new_lottery.id)
+      expect(group.errors[:base])
+        .to include('Cannot edit lottery assignment once set')
+    end
+
     it 'can remove a lottery assignment if set' do
       lottery = create(:lottery_assignment)
       group = lottery.group
@@ -175,11 +183,27 @@ RSpec.describe Group, type: :model do
     expect(group.reload).to be_full
   end
 
-  it 'removes member room ids when disbanding' do
-    group = FactoryGirl.create(:locked_group, size: 1).reload
-    suite = FactoryGirl.create(:suite_with_rooms, group_id: group.id)
-    RoomAssignment.create!(user: group.leader, room: suite.rooms.reload.first)
-    expect { group.destroy! }.to change { RoomAssignment.count }.by(-1)
+  describe 'disbanding group' do
+    let(:group) { FactoryGirl.create(:locked_group, size: 1).reload }
+    let(:suite) { FactoryGirl.create(:suite_with_rooms, group_id: group.id) }
+
+    it 'removes member room ids when disbanding' do
+      RoomAssignment.create!(user: group.leader, room: suite.rooms.reload.first)
+      expect { group.destroy! }.to change { RoomAssignment.count }.by(-1)
+    end
+    it 'raises an error if cannot remove room id' do
+      RoomAssignment.create!(user: group.leader, room: suite.rooms.reload.first)
+      stub_room_assignment
+      group.destroy
+      expect(group.errors[:base])
+        .to include('Unable to remove all member\'s rooms')
+    end
+    def stub_room_assignment
+      group.members.each do |member|
+        allow(member.room_assignment).to receive(:destroy!)
+          .and_raise(ActiveRecord::RecordNotDestroyed)
+      end
+    end
   end
 
   describe 'leader is included as a member' do

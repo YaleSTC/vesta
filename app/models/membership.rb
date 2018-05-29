@@ -27,8 +27,12 @@ class Membership < ApplicationRecord
   validate :user_not_in_group, if: ->(m) { m.user.present? }, on: :create
   validate :lockable?, if: ->(m) { m.group.present? }
 
-  before_destroy ->(m) { throw(:abort) if m.readonly? }
-  before_update ->(m) { throw(:abort) if m.readonly? }
+  before_destroy do |m|
+    handle_abort('Cannot destroy locked membership') if m.locked?
+  end
+  before_update do |m|
+    handle_abort('Cannot edit locked membership') if m.locked?
+  end
   before_update :freeze_group_and_user
   before_update :freeze_accepted_status
 
@@ -49,7 +53,7 @@ class Membership < ApplicationRecord
 
   after_save :destroy_pending, if: ->() { accepted? }
 
-  def readonly?
+  def locked?
     if will_save_change_to_locked?
       # we need to allow the membership to be locked
       false
@@ -71,13 +75,13 @@ class Membership < ApplicationRecord
 
   def freeze_group_and_user
     return unless will_save_change_to_group_id? || will_save_change_to_user_id?
-    throw(:abort)
+    handle_abort('Cannot change group or user associated with this membership')
   end
 
   def freeze_accepted_status
     return unless will_save_change_to_status? &&
                   status_in_database == 'accepted'
-    throw(:abort)
+    handle_abort('Cannot change membership status after acceptance')
   end
 
   def matching_draw
