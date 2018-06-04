@@ -85,6 +85,8 @@ class GroupUpdater
 
   def update_added_user(user)
     user.update!(intent: 'on_campus')
+    m = group.memberships.find { |i| i.user_id == user.id }
+    m.update!(status: 'accepted') if m.present?
   end
 
   def update_size

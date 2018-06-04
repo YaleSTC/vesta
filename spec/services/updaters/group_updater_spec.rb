@@ -4,35 +4,51 @@ require 'rails_helper'
 
 RSpec.describe GroupUpdater do
   describe '#update' do
-    # rubocop:disable RSpec/ExampleLength
     context 'group is full' do
+      let(:group) { FactoryGirl.create(:open_group, size: 2) }
+      let(:to_remove) do
+        FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      end
+
       it 'deletes memberships for users being removed before updating' do
-        group = FactoryGirl.create(:open_group, size: 2)
-        to_remove = FactoryGirl.create(:student, intent: 'on_campus',
-                                                 draw: group.draw)
+        p = mock_remove_parameters(to_remove)
         group.members << to_remove
-        p = instance_spy('ActionController::Parameters',
-                         to_h: { 'remove_ids' => [to_remove.id.to_s] })
         expect { described_class.update(group: group, params: p) }.to \
           change(Membership, :count).by(-1)
+      end
+      def mock_remove_parameters(to_remove)
+        instance_spy('ActionController::Parameters',
+                     to_h: { 'remove_ids' => [to_remove.id.to_s] })
       end
     end
 
     context 'users being added' do
+      let(:group) { FactoryGirl.create(:open_group, size: 2) }
+      let(:to_add) { FactoryGirl.create(:student, draw: group.draw) }
+
       it 'updates their intent to on_campus if necessary' do
-        group = FactoryGirl.create(:open_group, size: 2)
-        to_add = FactoryGirl.create(:student, intent: 'undeclared',
-                                              draw: group.draw)
-        p = instance_spy('ActionController::Parameters',
-                         to_h: { 'member_ids' => [to_add.id.to_s] })
+        to_add.update!(intent: 'undeclared')
+        p = mock_add_parameters(to_add)
         described_class.update(group: group, params: p)
         expect(to_add.reload.intent).to eq('on_campus')
+      end
+      it 'updates even if user has pending invitations' do
+        FactoryGirl.create(:membership, user_id: to_add.id,
+                                        status: 'invited', group: group)
+        p = mock_add_parameters(to_add)
+        described_class.update(group: group, params: p)
+        expect(group.members).to include(to_add)
+      end
+      def mock_add_parameters(to_add)
+        instance_spy('ActionController::Parameters',
+                     to_h: { 'member_ids' => [to_add.id.to_s] })
       end
     end
 
     context 'size is locked' do
+      let(:group) { FactoryGirl.create(:full_group, size: 2) }
+
       it 'deletes the empty size key from the params' do
-        group = FactoryGirl.create(:full_group, size: 2)
         p = instance_spy('ActionController::Parameters',
                          to_h: { 'leader_id' => group.members.last.id.to_s,
                                  'size' => '' })
@@ -50,7 +66,7 @@ RSpec.describe GroupUpdater do
           change(Membership, :count)
       end
     end
-    # rubocop:enable RSpec/ExampleLength
+
     context 'success' do
       it 'sets to the :redirect_object to the group and draw' do
         group = instance_spy('group', update!: true)
