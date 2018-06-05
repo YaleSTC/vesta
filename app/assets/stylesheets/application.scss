@@ -62,6 +62,16 @@ dd { margin-bottom: 0.6rem; }
 
 th[scope="row"] {
   font-weight: normal;
-  font-style: italic;
   text-align: left;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
