@@ -35,4 +35,13 @@ RSpec.describe RoomAssignment, type: :model do
       expect(ra).not_to be_valid
     end
   end
+
+  describe '.from_group' do
+    it 'instantiates a new room assignment' do
+      allow(RoomAssignment).to receive(:new)
+      g = instance_spy('group', leader: instance_spy('user'))
+      RoomAssignment.from_group(g)
+      expect(RoomAssignment).to have_received(:new).with(user: g.leader)
+    end
+  end
 end
