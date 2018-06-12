@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v1.0.9 - 2018-08-30
+### Added
+* Add a rake task that creates a shared schema in preparation for the multitenancy update ([#806](https://gitlab.com/yale-sdmp/vesta/issues/806)).
+
 ## v1.0.8 - 2018-04-09
 ### Fixed
 * Groups of locked sizes can now finalize ([#788](https://gitlab.com/yale-sdmp/vesta/issues/788)).
