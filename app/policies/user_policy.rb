@@ -6,6 +6,22 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
+  def edit?
+    update?
+  end
+
+  def update?
+    user.admin?
+  end
+
+  def edit_password?
+    update_password?
+  end
+
+  def update_password?
+    (record == user) && !User.cas_auth?
+  end
+
   def edit_intent?
     update_intent?
   end

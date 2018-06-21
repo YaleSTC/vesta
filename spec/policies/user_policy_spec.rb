@@ -15,8 +15,17 @@ RSpec.describe UserPolicy do
       it { is_expected.to permit(user, user) }
       it { is_expected.to permit(user, other_user) }
     end
-    permissions :edit?, :update? do
-      it { is_expected.not_to permit(user, user) }
+    context 'profile attribute changing' do
+      permissions :edit?, :update? do
+        it { is_expected.not_to permit(user, user) }
+        it { is_expected.not_to permit(user, other_user) }
+      end
+    end
+    context 'password changing' do
+      permissions :edit_password?, :update_password? do
+        it { is_expected.not_to permit(user, other_user) }
+        it { is_expected.to permit(user, user) }
+      end
     end
 
     permissions :edit_intent?, :update_intent? do
@@ -98,13 +107,16 @@ RSpec.describe UserPolicy do
     let(:user) { build_stubbed(:user, role: 'rep') }
 
     permissions :show? do
-      it { is_expected.to permit(user, user) }
       it { is_expected.to permit(user, other_user) }
     end
     permissions :edit?, :update? do
       it { is_expected.not_to permit(user, user) }
     end
-    permissions :destroy?, :update?, :edit? do
+    permissions :show?, :edit_password?, :update_password? do
+      it { is_expected.to permit(user, user) }
+    end
+    permissions :destroy?, :update?, :edit?, :edit_password?,
+                :update_password? do
       it { is_expected.not_to permit(user, other_user) }
     end
     permissions :index?, :build?, :create?, :new? do
@@ -230,6 +242,10 @@ RSpec.describe UserPolicy do
     end
     permissions :index?, :build?, :create?, :new? do
       it { is_expected.to permit(user, User) }
+    end
+    permissions :edit_password?, :update_password? do
+      it { is_expected.not_to permit(user, other_user) }
+      it { is_expected.to permit(user, user) }
     end
 
     permissions :edit_intent?, :update_intent? do

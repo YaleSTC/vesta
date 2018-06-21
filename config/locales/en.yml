@@ -22,3 +22,19 @@ en:
     submit:
       create: 'Create'
       update: 'Save'
+
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            current_password:
+              blank: "Please Enter your Current Password"
+              invalid: "Invalid Password, Please Try Again"
+            password:
+              blank: "Please Specify a Password"
+              confirmation: "Password does not match"
+              short: "New Password must be at least 6 characters"
+            password_confirmation:
+              blank: "Please Specify a Password Confirmation"
+              confirmation: "Password does not match"

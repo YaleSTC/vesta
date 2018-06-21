@@ -1,10 +1,13 @@
 <% provide(:title, "Edit #{@user.name}") %>
 <h1>Edit <%= @user.name %></h1>
-<%= simple_form_for @user do |f| %>
-  <%= f.input :first_name %>
-  <%= f.input :last_name %>
-  <%= f.input :email %>
-  <%= f.input :role, collection: User.roles.keys %>
-  <%= f.submit 'Save' %>
+<% if policy(@user).edit? %>
+  <%= simple_form_for @user do |f| %>
+    <%= f.input :first_name %>
+    <%= f.input :last_name %>
+    <%= f.input :email %>
+    <%= f.input :role, collection: User.roles.keys %>
+    <%= f.submit 'Save' %>
+  <% end %>
 <% end %>
+
 <%= link_to 'Cancel', user_path(@user) %>

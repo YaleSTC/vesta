@@ -50,6 +50,8 @@ Rails.application.routes.draw do
     member do
       get 'intent', to: 'users#edit_intent', as: 'edit_intent'
       patch 'intent', to: 'users#update_intent', as: 'update_intent'
+      get 'edit_password'
+      patch 'update_password'
     end
 
     collection do

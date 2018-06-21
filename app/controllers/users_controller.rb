@@ -65,6 +65,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit_password; end
+
+  def update_password
+    @user = current_user
+    if @user.update_with_password(user_params)
+      msg = { notice: 'Password successfully changed' }
+      bypass_sign_in @user, scope: :user
+      handle_action(redirect_object: user_path, msg: msg)
+    else
+      render 'edit_password'
+    end
+  end
+
   private
 
   def authorize!
@@ -86,10 +99,11 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:first_name, :last_name, :role, :email,
                                  :intent, :gender, :username, :class_year,
-                                 :college).tap { |p| process_params(p) }
+                                 :college, :password, :password_confirmation,
+                                 :current_password).tap { |p| proc_params(p) }
   end
 
-  def process_params(p)
+  def proc_params(p)
     p[:role] = 'student' if p[:role] == 'superuser' && !current_user.superuser?
   end
 

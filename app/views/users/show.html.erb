@@ -20,6 +20,11 @@
     <% end %>
   </div>
 <% end %>
+<% if policy(@user).edit_password? %>
+  <div>
+    <%= link_to 'Change Password', edit_password_user_path(@user), class: 'button' %>
+  </div>
+<% end %>
 <% if policy(User).index? %>
   <%= link_to 'View all users', users_path %>
 <% end %>

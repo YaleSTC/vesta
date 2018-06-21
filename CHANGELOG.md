@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file.
 * Add group#cleanup! ([#808](https://gitlab.com/yale-sdmp/vesta/issues/808)).
 * Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333))
 * Add button to lock all groups on the admin view for a draw ([#786](https://gitlab.com/yale-sdmp/vesta/issues/786))
+* Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333)).
+* Allow users to edit their passwords ([#131](https://gitlab.com/yale-sdmp/vesta/issues/131)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600))
