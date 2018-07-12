@@ -7,21 +7,35 @@ RSpec.feature 'Results' do
   let(:f) { "vesta_students_export_#{Time.zone.today.to_s(:number)}.csv" }
   let(:h_str) do
     'email,last_name,first_name,draw_name,intent,group_name,lottery_number,'\
-    'suite_number,room_number'
+    'building_name,suite_number,room_number'
   end
 
   before { log_in create(:admin) }
 
-  it 'can be listed by student' do
-    visit root_path
-    click_on 'Results by student'
-    expect(page_has_student_results(page)).to be_truthy
+  context 'when listed by student' do
+    it 'can view students' do
+      visit root_path
+      click_on 'Results by student'
+      expect(page_has_student_results(page)).to be_truthy
+    end
+    it 'can view buildings' do
+      visit root_path
+      click_on 'Results by student'
+      expect(student_page_has_building_results(page)).to be_truthy
+    end
   end
 
-  it 'can be listed by suite' do
-    visit root_path
-    click_on 'Results by suite'
-    expect(page_has_room_results(page)).to be_truthy
+  context 'when listed by suite' do
+    it 'can view suites' do
+      visit root_path
+      click_on 'Results by suite'
+      expect(page_has_room_results(page)).to be_truthy
+    end
+    it 'can view buildings' do
+      visit root_path
+      click_on 'Results by suite'
+      expect(suite_page_has_building_results(page)).to be_truthy
+    end
   end
 
   it 'can be viewed for specific draws' do
@@ -56,11 +70,25 @@ RSpec.feature 'Results' do
     end
   end
 
+  def suite_page_has_building_results(page)
+    data[:rooms].all? do |room|
+      page.assert_selector("tr.result-room-#{room.id} td.building",
+                           text: room.building_name)
+    end
+  end
+
+  def student_page_has_building_results(page)
+    data[:members].all? do |member|
+      page.assert_selector("tr.result-student-#{member.id} td.building",
+                           text: member.building_name)
+    end
+  end
+
   def export_row_for(student)
     [
       student.email, student.last_name, student.first_name, student.draw_name,
       student.intent, student.group_name, student.lottery_number,
-      student.suite_number, student.room_number
+      student.building_name, student.suite_number, student.room_number
     ].join(',')
   end
 

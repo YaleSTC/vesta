@@ -20,6 +20,8 @@ class Suite < ApplicationRecord
   has_many :draw_suites, dependent: :delete_all
   has_many :draws, through: :draw_suites
 
+  delegate :name, to: :building, prefix: :building, allow_nil: true
+
   validates :building, presence: true
   validates :number, presence: true, uniqueness: { scope: :building }
   validates :size, presence: true,

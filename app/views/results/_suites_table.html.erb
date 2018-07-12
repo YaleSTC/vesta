@@ -4,6 +4,7 @@
 <table aria-label="Room Assignment Results">
   <thead>
     <tr>
+      <th scope="col">Building</th>
       <th scope="col">Suite</th>
       <th scope="col">Room</th>
       <th scope="col">Occupants</th>
@@ -14,6 +15,7 @@
       <% suite.rooms.order(:number).each do |room| %>
         <% next if room.beds.zero? %>
         <tr class="result-room-<%= room.id %>">
+          <td class="building"><%= suite.building_name %></td>
           <th scope="row"><%= suite.number %></td>
           <td><%= room.number %></td>
           <td class="student"><%= room_occupants(room) %></td>

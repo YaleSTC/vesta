@@ -14,6 +14,8 @@ class Room < ApplicationRecord
   has_many :room_assignments, dependent: :destroy
   has_many :users, through: :room_assignments
 
+  delegate :building_name, to: :suite, allow_nil: true
+
   validates :suite, presence: true
   validates :number, presence: true, allow_blank: false,
                      uniqueness: { scope: :suite, case_sensitive: false }
