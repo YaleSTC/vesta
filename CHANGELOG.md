@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 * Remove login workarounds from suite_selection_spec.rb ([#122](https://gitlab.com/yale-sdmp/vesta/issues/122)).
 * Make sure all relevant links are behind authorization checks ([#553](https://gitlab.com/yale-sdmp/vesta/issues/553)).
 * Fix Results#export eager loading ([#794](https://gitlab.com/yale-sdmp/vesta/issues/794)).
-* Refactor policies with User#leader_of? ([#417]https://gitlab.com/yale-sdmp/vesta/issues/417).
+* Refactor policies with User#leader_of? ([#417](https://gitlab.com/yale-sdmp/vesta/issues/417)).
 
 ### Added
 * Add flash to warn of oversubscription in suite update ([#670](https://gitlab.com/yale-sdmp/vesta/issues/670)).
@@ -19,12 +19,13 @@ All notable changes to this project will be documented in this file.
 * Add separate RoomAssignments model ([#690](https://gitlab.com/yale-sdmp/vesta/issues/690)).
 * Add error messages to throw_abort ([#792](https://gitlab.com/yale-sdmp/vesta/issues/792)).
 * Add a new DrawStudentsController to handle actions that involve student enrollment in draws ([#620](https://gitlab.com/yale-sdmp/vesta/issues/620)).
+* Add group#cleanup! ([#808](https://gitlab.com/yale-sdmp/vesta/issues/808)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600))
 * Loading users no longer fails because of missing class year ([#601](https://gitlab.com/yale-sdmp/vesta/issues/601)).
 * Remediate all tables for accessibility ([#745](https://gitlab.com/yale-sdmp/vesta/issues/745)).
-* Unmerging suites no longer fails if the merged suite had the same name as one of its constituent suites ([#790] https://gitlab.com/yale-sdmp/vesta/issues/790).
+* Unmerging suites no longer fails if the merged suite had the same name as one of its constituent suites ([#790]( https://gitlab.com/yale-sdmp/vesta/issues/790)).
 * Fix updating groups through the superuser dashboard ([#775](https://gitlab.com/yale-sdmp/vesta/issues/775)).
 * Bulk user enrollment no longer fails silently when users exist and now flashes an error message ([#156](https://gitlab.com/yale-sdmp/vesta/issues/156)).
 * Admins can add users to groups even if users have pending invitations ([#773](https://gitlab.com/yale-sdmp/vesta/issues/773)).

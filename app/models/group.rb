@@ -183,6 +183,14 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     clip_memberships.where(clip_id: clip.id, confirmed: false).present?
   end
 
+  # Destroys the group if it contains no members. It is called
+  # automatically after a membership in the group is destroyed.
+  #
+  # @return [Group] the group destroyed or nil if no change
+  def cleanup!
+    destroy! if existing_memberships.length <= 0
+  end
+
   private
 
   def name_str(opt)
@@ -325,5 +333,9 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
 
   def destroy_lottery_assignment
     lottery_assignment.process_group_destruction!
+  end
+
+  def existing_memberships
+    memberships.to_a.keep_if(&:persisted?)
   end
 end

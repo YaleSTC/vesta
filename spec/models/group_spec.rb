@@ -366,6 +366,21 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '#cleanup!' do
+    it 'deletes the group if there is no member left' do
+      group = FactoryGirl.create(:group, size: 1)
+      group.memberships.first.delete
+      group.reload.cleanup!
+      expect { group.reload } .to raise_error(ActiveRecord::RecordNotFound)
+    end
+    it 'does nothing if there is at least one member left' do
+      group = FactoryGirl.create(:full_group, size: 2)
+      group.memberships.first.delete
+      group.reload.cleanup!
+      expect(group.reload).to eq(group)
+    end
+  end
+
   describe '#locked_members' do
     it 'returns memberships that are locked' do
       group = FactoryGirl.create(:finalizing_group)

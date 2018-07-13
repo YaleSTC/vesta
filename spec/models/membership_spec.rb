@@ -285,4 +285,12 @@ RSpec.describe Membership, type: :model do
       end
     end
   end
+
+  it 'runs group#cleanup! after destruction' do
+    group = FactoryGirl.create(:group)
+    m = group.memberships.first
+    allow(group).to receive(:cleanup!)
+    m.destroy!
+    expect(group).to have_received(:cleanup!)
+  end
 end

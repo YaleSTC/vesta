@@ -50,16 +50,12 @@ class Membership < ApplicationRecord
   after_save :send_joined_email,
              if: ->() { saved_change_to_status && accepted? }
   after_destroy :send_left_email, if: ->() { accepted? }
-
+  after_destroy :run_group_cleanup
   after_save :destroy_pending, if: ->() { accepted? }
 
   def locked?
-    if will_save_change_to_locked?
-      # we need to allow the membership to be locked
-      false
-    else
-      locked
-    end
+    # we need to allow the membership to be locked
+    will_save_change_to_locked? ? false : locked
   end
 
   private
@@ -143,4 +139,8 @@ class Membership < ApplicationRecord
     group.decrement!(:memberships_count) if accepted?
   end
   # rubocop:enable Rails/SkipsModelValidations
+
+  def run_group_cleanup
+    group.cleanup!
+  end
 end
