@@ -28,6 +28,15 @@ FactoryBot.define do
         end
       end
 
+      factory :draw_with_groups do
+        after(:create) do |draw|
+          create(:full_group, :defined_by_draw, draw: draw)
+          create(:finalizing_group, :defined_by_draw, draw: draw)
+          create(:locked_group, :defined_by_draw, draw: draw)
+          create(:open_group, :defined_by_draw, draw: draw)
+        end
+      end
+
       factory :draw_in_lottery do
         after(:create) do |draw, e|
           suites = create_list(:suite_with_rooms, e.groups_count, draws: [draw])

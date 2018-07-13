@@ -75,6 +75,11 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                                   path: params[:redirect_path]))
   end
 
+  def lock_all_groups
+    result = BulkGroupLocker.update(draw: @draw)
+    handle_action(**result)
+  end
+
   def prune
     sizes = if prune_params[:prune_size] == 'all'
               @draw.oversubscribed_sizes

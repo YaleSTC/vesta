@@ -72,6 +72,10 @@ class DrawPolicy < ApplicationPolicy
     edit?
   end
 
+  def lock_all_groups?
+    edit?
+  end
+
   def prune?
     # the #oversubscribed? comes from the DrawReport -- this will fail
     # if a plain draw object is passed

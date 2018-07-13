@@ -60,6 +60,9 @@
       <% if @draw.oversubscribed? && policy(@draw).oversubscription? %>
         <%= link_to 'Handle oversubscription', oversub_draw_path(@draw), class: 'button secondary' %>
       <% end %>
+      <% if policy(@draw).lock_all_groups? %>
+          <%= link_to 'Lock all full groups', lock_all_groups_draw_path(@draw), method: :patch, class: 'button secondary' %>
+      <% end %>
       <% if policy(@draw).start_lottery? %>
         <%= link_to 'Proceed to lottery', lottery_confirmation_draw_path(@draw), class: start_lottery_btn_class(@draw) %>
       <% end %>
