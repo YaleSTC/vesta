@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Fix Results#export eager loading ([#794](https://gitlab.com/yale-sdmp/vesta/issues/794)).
 * Refactor policies with User#leader_of? ([#417](https://gitlab.com/yale-sdmp/vesta/issues/417)).
 * Include building as a column in results views([#572](https://gitlab.com/yale-sdmp/vesta/issues/572)).
+* Restrict intent actions to draft or pre-lottery phases of a draw ([740](https://gitlab.com/yale-sdmp/vesta/issues/740)).
 
 ### Added
 * Add flash to warn of oversubscription in suite update ([#670](https://gitlab.com/yale-sdmp/vesta/issues/670)).

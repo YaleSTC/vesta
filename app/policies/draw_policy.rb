@@ -19,7 +19,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def intent_actions?
-    user.admin? || user.rep?
+    (user.admin? || user.rep?) && record.before_lottery?
   end
 
   def reminder?
