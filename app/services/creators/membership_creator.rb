@@ -9,16 +9,21 @@ class MembershipCreator < Creator
   # @param [Group] group The group to create the membership in
   # @param [String] action The action creating the membership (ie. 'request')
   def initialize(user:, group:, action:)
-    set_params(user, group, action)
-    super(klass: Membership, name_method: nil, params: params)
+    @klass = Membership
+    @user = user
+    @group = group
+    process_params(action)
   end
 
   private
 
+  attr_reader :user, :group, :status
+
   def success
-    { redirect_object: [obj.group.draw, obj.group], membership: obj,
-      msg: { success: "Membership in #{obj.group.name} created for "\
-        "#{obj.user.name}." } }
+    send_create_email unless status == 'accepted'
+    { redirect_object: [group.draw, group], membership: obj,
+      msg: { success: "Membership in #{group.name} created for "\
+        "#{user.name}." } }
   end
 
   def error(e)
@@ -31,12 +36,19 @@ class MembershipCreator < Creator
     }
   end
 
-  def set_params(user, group, action)
-    status = if action == 'request'
-               'requested'
-             elsif action == 'invite'
-               'invited'
-             end
+  def process_params(action)
+    @status = if action == 'request'
+                'requested'
+              elsif action == 'invite'
+                'invited'
+              end
     @params = { user: user, group: group, status: status }
+  end
+
+  def send_create_email
+    return if user.leader_of?(group)
+    mailer_method = "#{status}_to_join_group"
+    StudentMailer.send(mailer_method, status.to_sym => user,
+                                      group: group).deliver_later
   end
 end

@@ -17,6 +17,7 @@ class MembershipUpdater < Updater
   private
 
   def success
+    send_joined_email if user_has_accepted?
     { redirect_object: [object.group.draw, object.group],
       msg: { success: "#{object.user.full_name} joined group "\
              "#{object.group.name}." } }
@@ -33,5 +34,16 @@ class MembershipUpdater < Updater
   def params_are_correct
     return if params.present?
     errors.add(:base, 'Memberships can only be accepted or finalized.')
+  end
+
+  def send_joined_email
+    # leaders are the ones who accept requests so we don't need to e-mail them
+    return if object.status_before_last_save == 'requested'
+    StudentMailer.joined_group(joined: object.user, group: object.group,
+                               college: College.current).deliver_later
+  end
+
+  def user_has_accepted?
+    object.saved_change_to_status && object.accepted?
   end
 end

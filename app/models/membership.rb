@@ -45,11 +45,6 @@ class Membership < ApplicationRecord
   # Group status callbacks
   after_save :update_group_status
   after_destroy :update_group_status, if: ->(m) { m.group.present? }
-
-  after_create :send_create_email, unless: ->() { accepted? }
-  after_save :send_joined_email,
-             if: ->() { saved_change_to_status && accepted? }
-  after_destroy :send_left_email, if: ->() { accepted? }
   after_destroy :run_group_cleanup
   after_save :destroy_pending, if: ->() { accepted? }
 
@@ -99,25 +94,6 @@ class Membership < ApplicationRecord
     return unless will_save_change_to_locked? && locked
     errors.add :locked, 'must be an accepted membership' unless accepted?
     errors.add :locked, 'must be a finalizing group' unless group.finalizing?
-  end
-
-  def send_create_email
-    return if user.leader_of?(group)
-    mailer_method = "#{status}_to_join_group"
-    StudentMailer.send(mailer_method, status.to_sym => user, group: group)
-                 .deliver_later
-  end
-
-  def send_joined_email
-    # leaders are the ones who accept requests so we don't need to e-mail them
-    return if status_before_last_save == 'requested'
-    StudentMailer.joined_group(joined: user, group: group,
-                               college: College.current).deliver_later
-  end
-
-  def send_left_email
-    StudentMailer.left_group(left: user, group: group,
-                             college: College.current).deliver_later
   end
 
   def destroy_pending

@@ -44,7 +44,7 @@ class GroupsController < ApplicationController
   end
 
   def destroy
-    result = Destroyer.new(object: @group, name_method: :name).destroy
+    result = GroupDestroyer.new(group: @group).destroy
     path = params[:redirect_path] || draw_path(@draw)
     handle_action(**result, path: path)
   end

@@ -41,9 +41,10 @@ class GroupSuiteSelector < SuiteSelector
   end
 
   def notify_next_groups
-    return if draw.next_groups.empty?
-    return if draw.next_groups.first.lottery_number == group.lottery_number
-    draw.notify_next_groups(mailer)
+    return unless send_notification?(next_groups: draw.next_groups)
+    draw.next_groups.each do |group|
+      StudentMailer.selection_invite(user: group.leader).deliver_later
+    end
   end
 
   def success
@@ -51,5 +52,11 @@ class GroupSuiteSelector < SuiteSelector
       redirect_object: [group.draw, group],
       msg: { success: "Suite #{suite.number} assigned to #{group.name}" }
     }
+  end
+
+  def send_notification?(next_groups:)
+    return false if next_groups.empty?
+    return false if next_groups.first.lottery_number == group.lottery_number
+    draw.student_selection?
   end
 end

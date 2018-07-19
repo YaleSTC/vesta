@@ -67,7 +67,6 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   after_update :remove_clip_memberships,
                if: ->() { changed_draw_with_clip_memberships? }
   after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
-  after_destroy :notify_members_of_disband
   after_destroy :destroy_lottery_assignment,
                 if: ->(g) { g.lottery_assignment.present? }
 
@@ -93,7 +92,6 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     assign_new_status
     return unless status && valid?
     update_columns(status: status) # rubocop:disable Rails/SkipsModelValidations
-    send_locked_email if locked?
   end
 
   # Get the group's membership requests
@@ -202,20 +200,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     end
   end
 
-  def notify_members_of_disband
-    members.each do |m|
-      StudentMailer.disband_notification(user: m).deliver_later
-    end
-  end
-
   def remove_clip_memberships
     clip_memberships.each(&:destroy)
-  end
-
-  def send_locked_email
-    members.each do |m|
-      StudentMailer.group_locked(user: m).deliver_later
-    end
   end
 
   # override default attribute getter to include transfers

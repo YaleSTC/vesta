@@ -76,7 +76,10 @@ class DrawSelectionStarter
   end
 
   def notify_first_groups
-    draw.notify_next_groups(mailer)
+    return unless draw.student_selection?
+    draw.next_groups.each do |group|
+      StudentMailer.selection_invite(user: group.leader).deliver_later
+    end
   end
 
   def destroy_invalid_lotteries

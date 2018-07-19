@@ -20,6 +20,7 @@ class GroupLocker
       group.update!(status: 'finalizing')
       group.full_memberships.reject(&:locked).each do |m|
         m.update!(locked: true)
+        StudentMailer.group_locked(user: m.user).deliver_later
       end
     end
     success

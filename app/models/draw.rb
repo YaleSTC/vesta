@@ -216,16 +216,6 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
     next_groups.include? group
   end
 
-  # Email the leaders of the next groups to select suites.
-  #
-  # @param [Mailer] The mailer to use
-  def notify_next_groups(mailer = StudentMailer)
-    return unless student_selection?
-    next_groups.each do |group|
-      mailer.selection_invite(user: group.leader).deliver_later
-    end
-  end
-
   # Query param to check whether or not all groups have selected suites
   #
   # @return [Boolean] whether or not all groups have selected suites

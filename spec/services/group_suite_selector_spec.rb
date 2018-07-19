@@ -5,43 +5,46 @@ require 'rails_helper'
 RSpec.describe GroupSuiteSelector do
   describe '#select' do
     context 'failure' do
+      let(:msg) do
+        instance_spy(ActionMailer::MessageDelivery, deliver_later: 1)
+      end
+      let(:draw) { instance_spy('draw', next_groups: []) }
+      let(:group) { instance_spy('group', suite: nil, draw: draw) }
+      let(:suite) { mock_suite(id: 123, present: false) }
+
       it 'does not send emails' do
-        draw = instance_spy('draw', next_groups: [])
-        group = instance_spy('group', suite: nil, draw: draw)
-        suite = mock_suite(id: 123, present: false)
+        allow(StudentMailer).to receive(:selection_invite).and_return(msg)
         described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(group.draw).not_to have_received(:notify_next_groups)
+        expect(StudentMailer).not_to have_received(:selection_invite)
       end
       it 'sets an error message in the flash' do
-        draw = instance_spy('draw', next_groups: [])
-        group = instance_spy('group', suite: nil, draw: draw)
-        suite = mock_suite(id: 123, present: false)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
         expect(result[:msg].keys).to include(:error)
       end
     end
     context ' success' do
-      # rubocop:disable RSpec/ExampleLength
+      let(:msg) do
+        instance_spy(ActionMailer::MessageDelivery, deliver_later: 1)
+      end
+      let(:suite) { mock_suite(id: 123) }
+      let(:next_group) { instance_spy('group', lottery_number: 12) }
+
       it 'sends emails to the next groups' do
-        next_group = instance_spy('group', lottery_number: 12)
         draw = instance_spy('draw', next_groups: [next_group])
         group = instance_spy('group', suite: nil, draw: draw)
-        suite = mock_suite(id: 123)
+        allow(StudentMailer).to receive(:selection_invite).and_return(msg)
         described_class.select(group: group, suite_id: suite.id.to_s)
-        expect(group.draw).to have_received(:notify_next_groups)
+        expect(StudentMailer).to have_received(:selection_invite)
       end
-      # rubocop:enable RSpec/ExampleLength
       it 'sets the object to the group and draw' do
         draw = instance_spy('draw', next_groups: [])
         group = instance_spy('group', suite: nil, draw: draw)
-        suite = mock_suite(id: 123)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
         expect(result[:redirect_object]).to eq([group.draw, group])
       end
       it 'sets a success message in the flash' do
         draw = instance_spy('draw', next_groups: [])
         group = instance_spy('group', suite: nil, draw: draw)
-        suite = mock_suite(id: 123)
         result = described_class.select(group: group, suite_id: suite.id.to_s)
         expect(result[:msg].keys).to include(:success)
       end

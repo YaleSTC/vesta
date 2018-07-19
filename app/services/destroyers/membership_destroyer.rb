@@ -14,10 +14,16 @@ class MembershipDestroyer < Destroyer
   private
 
   def success
+    send_left_email if object.status == 'accepted'
     { redirect_object: nil, msg: { notice: "#{name} deleted." } }
   end
 
   def error
     { redirect_object: nil, msg: { error: "#{name} couldn't be deleted." } }
+  end
+
+  def send_left_email
+    StudentMailer.left_group(left: object.user, group: object.group,
+                             college: College.current).deliver_later
   end
 end

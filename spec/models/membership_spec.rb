@@ -206,56 +206,6 @@ RSpec.describe Membership, type: :model do
     end
   end
 
-  describe 'email callbacks' do
-    let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
-
-    # rubocop:disable RSpec/ExampleLength
-    it 'emails leader on request creation' do
-      g = create(:open_group)
-      m = Membership.new(user: create(:student, draw: g.draw), group: g,
-                         status: 'requested')
-      allow(StudentMailer).to receive(:requested_to_join_group).and_return(msg)
-      m.save
-      expect(StudentMailer).to have_received(:requested_to_join_group)
-    end
-
-    it 'emails student on invitation creation' do
-      g = create(:open_group)
-      m = Membership.new(user: create(:student, draw: g.draw), group: g,
-                         status: 'invited')
-      allow(StudentMailer).to receive(:invited_to_join_group).and_return(msg)
-      m.save
-      expect(StudentMailer).to have_received(:invited_to_join_group)
-    end
-
-    it 'emails leader on invitation acceptance' do
-      g = create(:open_group)
-      m = Membership.create(user: create(:student, draw: g.draw),
-                            group: g, status: 'invited')
-      allow(StudentMailer).to receive(:joined_group).and_return(msg)
-      m.update(status: 'accepted')
-      expect(StudentMailer).to have_received(:joined_group)
-    end
-
-    it 'does not email leaders on request acceptance' do
-      g = create(:open_group)
-      m = Membership.create(user: create(:student, draw: g.draw),
-                            group: g, status: 'requested')
-      allow(StudentMailer).to receive(:joined_group).and_return(msg)
-      m.update(status: 'accepted')
-      expect(StudentMailer).not_to have_received(:joined_group)
-    end
-    # rubocop:enable RSpec/ExampleLength
-
-    it 'emails leader when someone leaves' do
-      group = create(:full_group)
-      m = group.memberships.last
-      allow(StudentMailer).to receive(:left_group).and_return(msg)
-      m.destroy
-      expect(StudentMailer).to have_received(:left_group)
-    end
-  end
-
   describe 'pending membership destruction' do
     context 'on the user creating their own group' do
       it do

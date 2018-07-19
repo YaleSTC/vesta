@@ -44,9 +44,11 @@ RSpec.describe DrawSelectionStarter do
     end
 
     it 'sends invitations to the first group(s) to select' do
+      msg = instance_spy(ActionMailer::MessageDelivery, deliver_later: 1)
       draw = valid_mock_draw_with_group
+      allow(StudentMailer).to receive(:selection_invite).and_return(msg)
       described_class.start(draw: draw)
-      expect(draw).to have_received(:notify_next_groups).once
+      expect(StudentMailer).to have_received(:selection_invite)
     end
 
     it 'sends a notification to all students in the draw' do

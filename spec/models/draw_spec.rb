@@ -374,29 +374,6 @@ RSpec.describe Draw, type: :model do
     end
   end
 
-  describe '#notify_next_groups' do
-    # rubocop:disable RSpec/ExampleLength
-    it 'sends a selection invite to the leaders of the next groups' do
-      draw = build_stubbed(:draw, suite_selection_mode: 'student_selection')
-      group = instance_spy('Group', leader: instance_spy('User'))
-      allow(draw).to receive(:next_groups).and_return([group])
-      msg = instance_spy(ActionMailer::MessageDelivery, deliver_later: true)
-      allow(StudentMailer).to receive(:selection_invite).and_return(msg)
-      draw.notify_next_groups(StudentMailer)
-      expect(StudentMailer).to \
-        have_received(:selection_invite).with(user: group.leader)
-    end
-    it 'does not send emails when admin selection mode is enabled' do
-      draw = build_stubbed(:draw, suite_selection_mode: 'admin_selection')
-      group = instance_spy('Group', leader: instance_spy('User'))
-      allow(draw).to receive(:next_groups).and_return([group])
-      allow(StudentMailer).to receive(:selection_invite)
-      draw.notify_next_groups(StudentMailer)
-      expect(StudentMailer).not_to have_received(:selection_invite)
-    end
-    # rubocop:enable RSpec/ExampleLength
-  end
-
   describe '#all_groups_have_suites?' do
     let(:draw) { create(:draw_in_selection, groups_count: 2) }
 

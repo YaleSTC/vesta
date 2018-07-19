@@ -36,6 +36,27 @@ RSpec.describe MembershipCreator do
       be_instance_of(Membership)
   end
 
+  describe 'email' do
+    let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
+    let(:g) { create(:open_group) }
+
+    it 'is sent to leader on request creation' do
+      m = described_class.new(user: create(:student, draw: g.draw), group: g,
+                              action: 'request')
+      allow(StudentMailer).to receive(:requested_to_join_group).and_return(msg)
+      m.create!
+      expect(StudentMailer).to have_received(:requested_to_join_group)
+    end
+
+    it 'is sent to student on invitation creation' do
+      m = described_class.new(user: create(:student, draw: g.draw), group: g,
+                              action: 'invite')
+      allow(StudentMailer).to receive(:invited_to_join_group).and_return(msg)
+      m.create!
+      expect(StudentMailer).to have_received(:invited_to_join_group)
+    end
+  end
+
   # rubocop:disable RSpec/InstanceVariable
   def params_hash(action = 'invite')
     @group ||= create(:open_group)
