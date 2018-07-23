@@ -44,6 +44,7 @@ class ApplicationController < ActionController::Base
       redirect_to path
     elsif action
       render action: action
+      flash.discard
     else
       redirect_to root_path
     end

@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 * Properly handle a failed result in IDRProfileQuerier ([#689](https://gitlab.com/yale-sdmp/vesta/issues/689)).
 * Fix sorting students by draw in Administrate ([#700](https://gitlab.com/yale-sdmp/vesta/issues/700)).
 * Fix simple_form buttons not being focused ([821](https://gitlab.com/yale-sdmp/vesta/issues/812)).
+* Fix duplicate flash message in application([#603](https://gitlab.com/yale-sdmp/vesta/issues/603)).
 
 ## v1.0.8 - 2018-04-09
 ### Fixed
