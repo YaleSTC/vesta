@@ -13,6 +13,8 @@ class UserDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     draw: Field::BelongsTo,
+    draw_name: Field::String,
+    draw_id: Field::Number,
     membership: Field::HasOne,
     group: Field::HasOne,
     memberships: Field::HasMany,
@@ -48,7 +50,8 @@ class UserDashboard < Administrate::BaseDashboard
     first_name
     last_name
     role
-    draw
+    draw_id
+    draw_name
     group
   ).freeze
 

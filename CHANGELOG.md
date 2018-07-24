@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 * Unhidden table caption is now hidden ([#800](https://gitlab.com/yale-sdmp/vesta/issues/800)).
 * Fix NoMethodError in creating new user in admin dashboard ([#810](https://gitlab.com/yale-sdmp/vesta/issues/810))
 * Properly handle a failed result in IDRProfileQuerier ([#689](https://gitlab.com/yale-sdmp/vesta/issues/689)).
+* Fix sorting students by draw in Administrate ([#700](https://gitlab.com/yale-sdmp/vesta/issues/700)).
 
 ## v1.0.8 - 2018-04-09
 ### Fixed
