@@ -13,8 +13,8 @@ RSpec.describe Membership, type: :model do
 
   describe 'user uniqueness' do
     it 'is scoped to group' do
-      user = FactoryGirl.create(:student_in_draw)
-      group = FactoryGirl.create(:group, leader: user, draw: user.draw)
+      user = create(:student_in_draw)
+      group = create(:group, leader: user, draw: user.draw)
       membership = Membership.new(group: group, user: user)
       expect(membership).not_to be_valid
     end
@@ -22,10 +22,10 @@ RSpec.describe Membership, type: :model do
 
   describe 'user can only have one accepted membership' do
     it do # rubocop:disable RSpec/ExampleLength
-      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
+      draw = create(:draw_with_members, students_count: 2)
       leader = draw.students.first
-      FactoryGirl.create(:group, leader: leader)
-      other_group = FactoryGirl.create(:open_group, leader: draw.students.last)
+      create(:group, leader: leader)
+      other_group = create(:open_group, leader: draw.students.last)
       m = Membership.new(user_id: leader.id, status: 'accepted',
                          group: other_group)
       expect(m).not_to be_valid
@@ -34,43 +34,42 @@ RSpec.describe Membership, type: :model do
 
   describe 'group draw and user draw must match' do
     it do
-      user = FactoryGirl.create(:student_in_draw)
-      group = FactoryGirl.create(:open_group)
-      membership = FactoryGirl.build(:membership, user: user, group: group)
+      user = create(:student_in_draw)
+      group = create(:open_group)
+      membership = build(:membership, user: user, group: group)
       expect(membership.valid?).to be_falsey
     end
   end
 
   describe 'cannot change group' do
-    let(:group) { FactoryGirl.create(:full_group) }
+    let(:group) { create(:full_group) }
     let(:membership) { group.memberships.last }
     let(:msg) { 'Cannot change group or user associated with this membership' }
 
     it do
-      new_leader = FactoryGirl.create(:student, draw: group.draw)
-      membership.group = FactoryGirl.create(:open_group, leader: new_leader)
+      new_leader = create(:student, draw: group.draw)
+      membership.group = create(:open_group, leader: new_leader)
       expect(membership.save).to be_falsey
     end
     it 'raises error if group changed' do
-      new_leader = FactoryGirl.create(:student, draw: group.draw)
-      membership.update(group: FactoryGirl
-        .create(:open_group, leader: new_leader))
+      new_leader = create(:student, draw: group.draw)
+      membership.update(group: create(:open_group, leader: new_leader))
       expect(membership.errors[:base]).to include(msg)
     end
   end
 
   describe 'cannot change user' do
-    let(:group) { FactoryGirl.create(:full_group) }
+    let(:group) { create(:full_group) }
     let(:msg) { 'Cannot change group or user associated with this membership' }
 
     it do
       membership = group.memberships.last
-      membership.user = FactoryGirl.create(:student, draw: group.draw)
+      membership.user = create(:student, draw: group.draw)
       expect(membership.save).to be_falsey
     end
     it 'raises error if user changed' do
       membership = group.memberships.last
-      membership.user = FactoryGirl.create(:student, draw: group.draw)
+      membership.user = create(:student, draw: group.draw)
       membership.save
       expect(membership.errors[:base]).to include(msg)
     end
@@ -80,13 +79,13 @@ RSpec.describe Membership, type: :model do
     let(:msg) { 'Cannot change membership status after acceptance' }
 
     it do
-      group = FactoryGirl.create(:full_group)
+      group = create(:full_group)
       membership = group.memberships.last
       membership.status = 'requested'
       expect(membership.save).to be_falsey
     end
     it 'raises error if status changed' do
-      group = FactoryGirl.create(:full_group)
+      group = create(:full_group)
       membership = group.memberships.last
       membership.status = 'requested'
       membership.save
@@ -96,28 +95,28 @@ RSpec.describe Membership, type: :model do
 
   context 'non-open group' do
     it 'cannot be created' do
-      group = FactoryGirl.create(:finalizing_group)
-      user = FactoryGirl.create(:student, draw: group.draw)
-      membership = FactoryGirl.build(:membership, user: user, group: group)
+      group = create(:finalizing_group)
+      user = create(:student, draw: group.draw)
+      membership = build(:membership, user: user, group: group)
       expect(membership).not_to be_valid
     end
   end
 
   describe 'updates the group status' do
     it 'updates to full on creation' do
-      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
-      draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: 2)
-      group = FactoryGirl.create(:group, leader: draw.students.first, size: 2)
+      draw = create(:draw_with_members, students_count: 2)
+      draw.suites << create(:suite_with_rooms, rooms_count: 2)
+      group = create(:group, leader: draw.students.first, size: 2)
       expect { group.members << draw.students.last }.to \
         change { group.status }.from('open').to('closed')
     end
     it 'updates to open on deletion' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = create(:full_group, size: 2)
       expect { group.memberships.last.destroy }.to \
         change { group.status }.from('closed').to('open')
     end
     it 'updates to locked when the last membership locks' do
-      group = FactoryGirl.create(:full_group, size: 1)
+      group = create(:full_group, size: 1)
       group.finalizing!
       expect { group.memberships.first.update(locked: true) }.to \
         change { group.locked? }.from(false).to(true)
@@ -126,15 +125,15 @@ RSpec.describe Membership, type: :model do
 
   describe 'counter cache' do
     it 'increments on creation of accepted membership' do
-      group = FactoryGirl.create(:open_group)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       expect { group.members << user }.to \
         change { group.memberships_count }.by(1)
     end
     # rubocop:disable RSpec/ExampleLength
     it 'increments on change to accepted status' do
-      group = FactoryGirl.create(:open_group)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       membership = Membership.create(group: group, user: user,
                                      status: 'requested')
       expect { membership.update(status: 'accepted') }.to \
@@ -142,21 +141,21 @@ RSpec.describe Membership, type: :model do
     end
     # rubocop:enable RSpec/ExampleLength
     it 'does nothing on creation of request' do
-      group = FactoryGirl.create(:open_group)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       expect do
         Membership.create(group: group, user: user, status: 'requested')
       end.not_to change { group.memberships_count }
     end
     it 'decrements on destruction of accepted membership' do
-      group = FactoryGirl.create(:open_group)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       membership = Membership.create(group: group, user: user)
       expect { membership.destroy }.to change { group.memberships_count }.by(-1)
     end
     it 'does not decrement on destruction of request' do
-      group = FactoryGirl.create(:open_group)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       membership = Membership.create(group: group, user: user,
                                      status: 'requested')
       expect { membership.destroy }.not_to change { group.memberships_count }
@@ -165,33 +164,33 @@ RSpec.describe Membership, type: :model do
 
   context 'locked membership' do
     it 'cannot be destroyed' do
-      group = FactoryGirl.create(:finalizing_group)
+      group = create(:finalizing_group)
       membership = group.memberships.first
       expect { membership.destroy }.not_to change { group.memberships_count }
     end
     it 'raises error if attempted destruction' do
-      group = FactoryGirl.create(:finalizing_group)
+      group = create(:finalizing_group)
       membership = group.memberships.first
       membership.destroy
       expect(membership.errors[:base])
         .to include('Cannot destroy locked membership')
     end
     it 'cannot be changed while locked' do
-      group = FactoryGirl.create(:finalizing_group)
+      group = create(:finalizing_group)
       membership = group.memberships.first
       membership.update(group_id: nil)
       expect(membership.errors[:base])
         .to include('Cannot edit locked membership')
     end
     it 'must be accepted' do
-      group = FactoryGirl.create(:finalizing_group)
-      user = FactoryGirl.create(:student, draw: group.draw)
+      group = create(:finalizing_group)
+      user = create(:student, draw: group.draw)
       membership = Membership.new(group: group, user: user, status: 'requested')
       membership.locked = true
       expect(membership).not_to be_valid
     end
     it 'must belong to a finalizing group' do
-      group = FactoryGirl.create(:full_group)
+      group = create(:full_group)
       membership = group.memberships.first
       membership.locked = true
       expect(membership).not_to be_valid
@@ -200,10 +199,9 @@ RSpec.describe Membership, type: :model do
 
   context 'user has not declared on_campus intent' do
     it 'cannot be created' do
-      group = FactoryGirl.create(:open_group)
-      user = FactoryGirl.create(:student, draw: group.draw,
-                                          intent: 'undeclared')
-      membership = FactoryGirl.build(:membership, user: user, group: group)
+      group = create(:open_group)
+      user = create(:student, draw: group.draw, intent: 'undeclared')
+      membership = build(:membership, user: user, group: group)
       expect(membership).not_to be_valid
     end
   end
@@ -231,8 +229,8 @@ RSpec.describe Membership, type: :model do
     end
 
     it 'emails leader on invitation acceptance' do
-      g = FactoryGirl.create(:open_group)
-      m = Membership.create(user: FactoryGirl.create(:student, draw: g.draw),
+      g = create(:open_group)
+      m = Membership.create(user: create(:student, draw: g.draw),
                             group: g, status: 'invited')
       allow(StudentMailer).to receive(:joined_group).and_return(msg)
       m.update(status: 'accepted')
@@ -240,8 +238,8 @@ RSpec.describe Membership, type: :model do
     end
 
     it 'does not email leaders on request acceptance' do
-      g = FactoryGirl.create(:open_group)
-      m = Membership.create(user: FactoryGirl.create(:student, draw: g.draw),
+      g = create(:open_group)
+      m = Membership.create(user: create(:student, draw: g.draw),
                             group: g, status: 'requested')
       allow(StudentMailer).to receive(:joined_group).and_return(msg)
       m.update(status: 'accepted')
@@ -250,7 +248,7 @@ RSpec.describe Membership, type: :model do
     # rubocop:enable RSpec/ExampleLength
 
     it 'emails leader when someone leaves' do
-      group = FactoryGirl.create(:full_group)
+      group = create(:full_group)
       m = group.memberships.last
       allow(StudentMailer).to receive(:left_group).and_return(msg)
       m.destroy
@@ -261,18 +259,18 @@ RSpec.describe Membership, type: :model do
   describe 'pending membership destruction' do
     context 'on the user creating their own group' do
       it do
-        inv_group = FactoryGirl.create(:open_group, size: 2)
-        u = FactoryGirl.create(:user, draw: inv_group.draw)
+        inv_group = create(:open_group, size: 2)
+        u = create(:user, draw: inv_group.draw)
         invite = Membership.create(group: inv_group, user: u, status: 'invited')
-        FactoryGirl.create(:group, leader: u)
+        create(:group, leader: u)
         expect { invite.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
     context 'on the user accepting another membership' do
       it do # rubocop:disable RSpec/ExampleLength
-        inv_group = FactoryGirl.create(:open_group, size: 2)
+        inv_group = create(:open_group, size: 2)
         req_group = create_group_in_draw(inv_group.draw)
-        u = FactoryGirl.create(:user, draw: inv_group.draw)
+        u = create(:user, draw: inv_group.draw)
         inv = Membership.create(group: inv_group, user: u, status: 'invited')
         req = Membership.create(group: req_group, user: u, status: 'requested')
         inv.update(status: 'accepted')
@@ -280,14 +278,14 @@ RSpec.describe Membership, type: :model do
       end
 
       def create_group_in_draw(draw)
-        l = FactoryGirl.create(:user, draw: draw)
-        FactoryGirl.create(:open_group, size: 2, leader: l)
+        l = create(:user, draw: draw)
+        create(:open_group, size: 2, leader: l)
       end
     end
   end
 
   it 'runs group#cleanup! after destruction' do
-    group = FactoryGirl.create(:group)
+    group = create(:group)
     m = group.memberships.first
     allow(group).to receive(:cleanup!)
     m.destroy!

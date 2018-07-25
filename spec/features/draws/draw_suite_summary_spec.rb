@@ -4,13 +4,12 @@ require 'rails_helper'
 
 RSpec.feature 'Draw suite summary' do
   let(:draw) do
-    FactoryGirl.create(:draw_with_members, suites_count: 1,
-                                           status: 'pre_lottery')
+    create(:draw_with_members, suites_count: 1, status: 'pre_lottery')
   end
   let(:draw_suite) { draw.suites.first }
-  let(:other_suite) { FactoryGirl.create(:suite) }
+  let(:other_suite) { create(:suite) }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'displays correctly' do
     visit draw_path(draw)

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RoomAssignment, type: :model do
   describe 'basic validations' do
-    subject { FactoryGirl.build(:room_assignment) }
+    subject { build(:room_assignment) }
 
     it { is_expected.to validate_presence_of(:user) }
     it { is_expected.to validate_uniqueness_of(:user) }

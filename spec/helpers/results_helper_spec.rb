@@ -18,7 +18,7 @@ RSpec.describe ResultsHelper, type: :helper do
     end
     it 'returns the combined string when appropriate' do
       allow(room).to receive(:students)
-        .and_return([FactoryGirl.build(:student)])
+        .and_return([build(:student)])
       allow(room).to receive(:beds).and_return(2)
       expect(helper.room_occupants(room)).to eq('John Doe, 1 transfer')
     end

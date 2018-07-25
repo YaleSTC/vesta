@@ -66,14 +66,14 @@ RSpec.describe Enrollment do
   describe '#username?' do
     it 'returns true if the first successful user has a username' do
       enrollment = described_class.new
-      user_hash = { user: FactoryGirl.build_stubbed(:user, username: 'foo') }
+      user_hash = { user: build_stubbed(:user, username: 'foo') }
       allow(enrollment).to receive(:successes).and_return([user_hash])
       expect(enrollment.username?).to be_truthy
     end
     it 'returns false if the first successful user does not have a username' do
       enrollment = described_class.new
       allow(enrollment).to receive(:successes)
-      user_hash = { user: FactoryGirl.build_stubbed(:user, username: nil) }
+      user_hash = { user: build_stubbed(:user, username: nil) }
       allow(enrollment).to receive(:successes).and_return([user_hash])
       expect(enrollment.username?).to be_falsey
     end

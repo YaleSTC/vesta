@@ -8,7 +8,7 @@ RSpec.feature 'Authentication' do
     expect(page).to have_content('sign in')
   end
   it 'allows users to log in' do
-    user = FactoryGirl.create(:user)
+    user = create(:user)
     log_in user
     expect(page).to have_content('Vesta')
   end

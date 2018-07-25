@@ -25,7 +25,7 @@ RSpec.feature 'Suite Selection' do
 
   context 'draw not in suite selection' do
     let(:group) do
-      FactoryGirl.create(:open_group)
+      create(:open_group)
     end
 
     it 'link does not show' do
@@ -42,9 +42,8 @@ RSpec.feature 'Suite Selection' do
 
   context 'admin mode' do
     let(:leader) do
-      FactoryGirl.create(:draw_in_selection,
-                         suite_selection_mode: 'admin_selection')
-                 .next_groups.first.leader
+      create(:draw_in_selection, suite_selection_mode: 'admin_selection')
+        .next_groups.first.leader
     end
 
     it 'link does not show' do

@@ -11,28 +11,28 @@ RSpec.describe SuiteMergerForm, type: :model do
       expect(object).not_to be_valid
     end
     it 'requires a number' do
-      suite = FactoryGirl.build(:suite, number: nil)
+      suite = build(:suite, number: nil)
       params = mock_params(other_suite_number: '1234', number: nil)
       allow(Suite).to receive(:find_by).and_return(instance_spy('Suite'))
       object = described_class.new(suite: suite, params: params)
       expect(object).not_to be_valid
     end
     it 'requires a valid other_suite' do
-      suite = FactoryGirl.build(:suite)
+      suite = build(:suite)
       params = mock_params(other_suite_number: '1234', number: 'foo')
       allow(Suite).to receive(:find_by).and_return(nil)
       object = described_class.new(suite: suite, params: params)
       expect(object).not_to be_valid
     end
     it 'validates that both suites are different' do
-      suite = FactoryGirl.build(:suite, id: 1234)
+      suite = build(:suite, id: 1234)
       params = mock_params(other_suite_number: '1234', number: 'foo')
       allow(Suite).to receive(:find_by).and_return(suite)
       object = described_class.new(suite: suite, params: params)
       expect(object).not_to be_valid
     end
     it 'validates that both suites are in the same building' do
-      suite, other_suite = FactoryGirl.build_pair(:suite)
+      suite, other_suite = build_pair(:suite)
       params = mock_params(other_suite_number: '1234', number: 'foo')
       allow(Suite).to receive(:find_by).and_return(other_suite)
       object = described_class.new(suite: suite, params: params)
@@ -40,16 +40,16 @@ RSpec.describe SuiteMergerForm, type: :model do
     end
     # rubocop:disable RSpec/ExampleLength
     it 'validates that the suite is available' do
-      suite = FactoryGirl.build(:suite, group_id: 123, id: 123)
-      other_suite = FactoryGirl.build(:suite, building: suite.building, id: 124)
+      suite = build(:suite, group_id: 123, id: 123)
+      other_suite = build(:suite, building: suite.building, id: 124)
       params = mock_params(other_suite_number: '124', number: 'foo')
       allow(Suite).to receive(:find_by).and_return(other_suite)
       object = described_class.new(suite: suite, params: params)
       expect(object).not_to be_valid
     end
     it 'validates that the other_suite is available' do
-      suite = FactoryGirl.build(:suite, group_id: 123, id: 123)
-      other_suite = FactoryGirl.build(:suite, building: suite.building, id: 124)
+      suite = build(:suite, group_id: 123, id: 123)
+      other_suite = build(:suite, building: suite.building, id: 124)
       params = mock_params(other_suite_number: '124', number: 'foo')
       allow(Suite).to receive(:find_by).and_return(suite)
       object = described_class.new(suite: other_suite, params: params)
@@ -59,15 +59,15 @@ RSpec.describe SuiteMergerForm, type: :model do
   end
 
   describe '#submit' do
-    let(:suite) { FactoryGirl.create(:suite_with_rooms) }
+    let(:suite) { create(:suite_with_rooms) }
 
     context 'success' do
       let(:other_suite) do
-        FactoryGirl.create(:suite_with_rooms, building: suite.building)
+        create(:suite_with_rooms, building: suite.building)
       end
 
       let(:params) do
-        other = FactoryGirl.create(:suite_with_rooms, building: suite.building)
+        other = create(:suite_with_rooms, building: suite.building)
         mock_params(other_suite_number: other.number, number: 'foo')
       end
 
@@ -88,7 +88,7 @@ RSpec.describe SuiteMergerForm, type: :model do
         expect(result[:record].building).to eq(suite.building)
       end
       it 'creates a new suite with the correct draw' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         draw.suites << suite
         result = described_class.submit(suite: suite, params: params)
         expect(result[:record].draws.map(&:id)).to include(draw.id)
@@ -131,7 +131,7 @@ RSpec.describe SuiteMergerForm, type: :model do
       end
       # rubocop:disable ExampleLength
       it 'fails if any update fails' do
-        other_suite = FactoryGirl.create(:suite, building: suite.building)
+        other_suite = create(:suite, building: suite.building)
         params = mock_params(other_suite_number: other_suite.number)
         allow(Suite).to receive(:create!)
           .and_raise(ActiveRecord::RecordInvalid.new(other_suite))

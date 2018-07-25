@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Room editing' do
-  before { log_in FactoryGirl.create(:admin) }
-  let(:room) { FactoryGirl.create(:room) }
+  before { log_in create(:admin) }
+  let(:room) { create(:room) }
 
   it 'succeeds' do
     new_number = 'L01B'

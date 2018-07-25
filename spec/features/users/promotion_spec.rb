@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'User Promotion' do
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   it 'can be performed' do
-    user = FactoryGirl.create(:user)
+    user = create(:user)
     visit edit_user_path(user)
     select('rep', from: 'user_role')
     click_on 'Save'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :user, aliases: %i(student) do
     sequence(:email) { |n| "email#{n}@email.com" }
     password { 'passw0rd' }
@@ -14,10 +14,10 @@ FactoryGirl.define do
 
     factory :student_in_draw do
       after(:build) do |user|
-        user.draw = FactoryGirl.build(:draw)
+        user.draw = build(:draw)
       end
       after(:create) do |user|
-        user.update_attributes(draw: FactoryGirl.create(:draw_with_members))
+        user.update_attributes(draw: create(:draw_with_members))
       end
     end
 

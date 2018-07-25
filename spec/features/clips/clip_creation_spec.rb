@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Clip creation' do
-  let(:draw) { FactoryGirl.create(:draw, status: 'pre_lottery') }
-  let(:groups) { FactoryGirl.create_pair(:group_from_draw, draw: draw) }
+  let(:draw) { create(:draw, status: 'pre_lottery') }
+  let(:groups) { create_pair(:group_from_draw, draw: draw) }
 
   context 'as a leader' do
     before { log_in groups.first.leader }
@@ -42,7 +42,7 @@ RSpec.feature 'Clip creation' do
   end
 
   context 'as an admin' do
-    before { log_in FactoryGirl.create(:admin) }
+    before { log_in create(:admin) }
 
     it 'succeeds' do
       visit draw_path(groups.first.draw)

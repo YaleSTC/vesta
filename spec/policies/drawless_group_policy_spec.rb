@@ -6,8 +6,8 @@ RSpec.describe DrawlessGroupPolicy do
   subject { described_class }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
-    let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    let(:user) { build_stubbed(:user, role: 'student') }
+    let(:group) { build_stubbed(:drawless_group) }
 
     before { allow(Group).to receive(:find).and_return(group) }
 
@@ -32,8 +32,8 @@ RSpec.describe DrawlessGroupPolicy do
   end
 
   context 'housing rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
-    let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    let(:user) { build_stubbed(:user, role: 'rep') }
+    let(:group) { build_stubbed(:drawless_group) }
 
     before { allow(Group).to receive(:find).and_return(group) }
 
@@ -58,8 +58,8 @@ RSpec.describe DrawlessGroupPolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
-    let(:group) { FactoryGirl.build_stubbed(:drawless_group) }
+    let(:user) { build_stubbed(:user, role: 'admin') }
+    let(:group) { build_stubbed(:drawless_group) }
 
     before { allow(Group).to receive(:find).and_return(group) }
 

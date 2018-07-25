@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.feature 'College creation' do
-  before { log_in FactoryGirl.create(:user, role: 'superuser') }
+  before { log_in create(:user, role: 'superuser') }
   it 'succeeds' do
     visit root_path
     click_on 'New College'
-    submit_college_info(FactoryGirl.attributes_for(:college,
-                                                   subdomain: 'newcollege'))
+    submit_college_info(FactoryBot.attributes_for(:college,
+                                                  subdomain: 'newcollege'))
     expect(page).to have_css('.flash-success', text: /College.+created/)
   end
 

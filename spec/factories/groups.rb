@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :group do
     size 1
 
@@ -57,8 +57,7 @@ FactoryGirl.define do
           after(:create) do |g, e|
             if g.draw.present?
               g.draw.lottery!
-              FactoryGirl.create(:lottery_assignment, :defined_by_group,
-                                 group: g)
+              create(:lottery_assignment, :defined_by_group, group: g)
             end
             # ideally this gets the last suite added to the draw which SHOULD
             # be the one created in the above after(:build) callback

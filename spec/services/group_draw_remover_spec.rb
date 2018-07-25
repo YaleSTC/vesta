@@ -70,7 +70,7 @@ RSpec.describe GroupDrawRemover do
     end
 
     context 'failure' do
-      let(:group) { FactoryGirl.build_stubbed(:group) }
+      let(:group) { build_stubbed(:group) }
       let(:draw) { group.draw }
 
       before do

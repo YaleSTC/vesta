@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.feature 'Draw group report' do
   include GroupsHelper # for status-displaying
 
-  let(:draw) { FactoryGirl.create(:draw, status: 'pre_lottery') }
+  let(:draw) { create(:draw, status: 'pre_lottery') }
   let!(:groups) { create_groups(draw: draw, statuses: %w(full open locked)) }
 
   context 'as admin' do
-    before { log_in FactoryGirl.create(:admin) }
+    before { log_in create(:admin) }
     it 'displays a table with edit links for all groups' do
       visit draw_path(draw)
       groups.each do |group|
@@ -33,7 +33,7 @@ RSpec.feature 'Draw group report' do
   end
 
   context 'printable report' do
-    before { log_in FactoryGirl.create(:student, role: 'rep') }
+    before { log_in create(:student, role: 'rep') }
 
     it 'can be viewed by reps' do
       visit draw_path(draw)
@@ -57,8 +57,8 @@ RSpec.feature 'Draw group report' do
   def create_groups(draw:, statuses:)
     statuses.map do |status|
       factory = "#{status}_group".to_sym
-      leader = FactoryGirl.create(:student, draw: draw, intent: 'on_campus')
-      FactoryGirl.create(factory, leader: leader)
+      leader = create(:student, draw: draw, intent: 'on_campus')
+      create(factory, leader: leader)
     end
   end
 end

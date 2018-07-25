@@ -11,14 +11,14 @@ RSpec.describe DrawSizesQuery do
   end
 
   it 'restricts group query to specific draw if passed' do
-    draw = FactoryGirl.create(:draw)
+    draw = create(:draw)
     create_groups([1, 2], draw)
     create_groups([3])
     expect(described_class.call(draw: draw)).to eq([1, 2])
   end
 
   it 'restricts suite query to specific draw if passed' do
-    draw = FactoryGirl.create(:draw)
+    draw = create(:draw)
     create_suites([1, 2], draw)
     create_suites([3])
     expect(described_class.call(draw: draw)).to eq([1, 2])
@@ -31,7 +31,7 @@ RSpec.describe DrawSizesQuery do
 
   def create_groups(sizes, draw = nil)
     sizes.each do |size|
-      group = FactoryGirl.create(:full_group, size: size)
+      group = create(:full_group, size: size)
       next unless draw
       group.members.each { |u| u.update(draw_id: draw.id) }
       # rubocop:disable Rails/SkipsModelValidations
@@ -42,7 +42,7 @@ RSpec.describe DrawSizesQuery do
 
   def create_suites(sizes, draw = nil)
     sizes.each do |size|
-      suite = FactoryGirl.create(:suite_with_rooms, rooms_count: size)
+      suite = create(:suite_with_rooms, rooms_count: size)
       draw.suites << suite if draw
     end
   end

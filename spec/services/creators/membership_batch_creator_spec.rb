@@ -50,17 +50,15 @@ RSpec.describe MembershipBatchCreator do
 
   # rubocop:disable RSpec/InstanceVariable
   def params_hash
-    @group ||= FactoryGirl.create(:open_group, size: 3)
+    @group ||= create(:open_group, size: 3)
     { group: @group, action: 'request' }
   end
 
   def users
     # generate params hash
     params_hash
-    @users ||= [FactoryGirl.create(:student, intent: 'on_campus',
-                                             draw: @group.draw),
-                FactoryGirl.create(:student, intent: 'undeclared',
-                                             draw: @group.draw)]
+    @users ||= [create(:student, intent: 'on_campus', draw: @group.draw),
+                create(:student, intent: 'undeclared', draw: @group.draw)]
   end
   # rubocop:enable RSpec/InstanceVariable
 end

@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw student assignment' do
-  let(:draw) { FactoryGirl.create(:draw) }
+  let(:draw) { create(:draw) }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   describe 'bulk adding' do
-    before { FactoryGirl.create_pair(:student, class_year: 2016) }
+    before { create_pair(:student, class_year: 2016) }
     it 'can be performed' do
       visit draw_path(draw)
       click_on 'Add or edit students'
@@ -24,7 +24,7 @@ RSpec.feature 'Draw student assignment' do
   end
 
   describe 'single user adding' do
-    let!(:student) { FactoryGirl.create(:student, username: 'foo') }
+    let!(:student) { create(:student, username: 'foo') }
 
     it 'can be performed' do
       visit edit_draw_students_path(draw, student)
@@ -36,7 +36,7 @@ RSpec.feature 'Draw student assignment' do
   end
 
   describe 'single user removing' do
-    let(:student) { FactoryGirl.create(:student, username: 'foo') }
+    let(:student) { create(:student, username: 'foo') }
 
     before { draw.students << student }
     it 'can be performed' do

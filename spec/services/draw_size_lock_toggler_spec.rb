@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe DrawSizeLockToggler do
   describe '#toggle' do
-    let(:draw) { FactoryGirl.create(:draw_with_members) }
+    let(:draw) { create(:draw_with_members) }
 
     context 'success' do
       it 'locks the size when unlocked' do

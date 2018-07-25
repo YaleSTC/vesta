@@ -75,6 +75,6 @@ RSpec.describe DrawActivator do
   end
 
   def error
-    ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
+    ActiveRecord::RecordInvalid.new(build_stubbed(:draw))
   end
 end

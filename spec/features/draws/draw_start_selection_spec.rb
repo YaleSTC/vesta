@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw start selection' do
-  let(:draw) { FactoryGirl.create(:draw_in_lottery) }
+  let(:draw) { create(:draw_in_lottery) }
 
   before do
-    FactoryGirl.create(:college)
-    log_in FactoryGirl.create(:admin)
+    create(:college)
+    log_in create(:admin)
     draw.groups.each do |g|
-      FactoryGirl.create(:lottery_assignment, groups: [g], draw: draw)
+      create(:lottery_assignment, groups: [g], draw: draw)
     end
   end
 

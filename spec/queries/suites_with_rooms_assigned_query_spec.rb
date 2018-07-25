@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe SuitesWithRoomsAssignedQuery do
   it 'returns all suites with rooms assigned' do
     assigned = create_suite_with_rooms_assigned
-    _unassigned = FactoryGirl.create(:suite_with_rooms)
+    _unassigned = create(:suite_with_rooms)
     expect(described_class.call).to match_array([assigned])
   end
 
@@ -30,8 +30,8 @@ RSpec.describe SuitesWithRoomsAssignedQuery do
                  else
                    base_suite_hash
                  end
-    suite = FactoryGirl.create(:suite_with_rooms, **suite_hash)
-    group = FactoryGirl.create(:drawless_group, size: size)
+    suite = create(:suite_with_rooms, **suite_hash)
+    group = create(:drawless_group, size: size)
     suite.update!(group_id: group.id)
     group.members.each_with_index do |student, i|
       RoomAssignment.create!(user: student.reload,

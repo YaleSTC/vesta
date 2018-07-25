@@ -82,13 +82,13 @@ RSpec.describe OversubscriptionPruner do
   end
 
   def oversubscribed_draw(sizes: [1])
-    draw = FactoryGirl.create(:draw, status: 'pre_lottery')
+    draw = create(:draw, status: 'pre_lottery')
     sizes.each do |s|
       2.times { create(:locked_group, :defined_by_draw, draw: draw, size: s) }
     end
     draw.suites.delete_all
     sizes.each do |s|
-      draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: s)
+      draw.suites << create(:suite_with_rooms, rooms_count: s)
     end
     DrawReport.new(draw)
   end

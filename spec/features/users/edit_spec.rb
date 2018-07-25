@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'User Editing' do
-  let(:user) { FactoryGirl.create(:student) }
+  let(:user) { create(:student) }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   it 'can update role' do
     visit_edit_form(user)
     select('rep', from: 'user_role')

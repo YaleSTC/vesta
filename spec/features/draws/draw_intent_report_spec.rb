@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw intent report' do
-  let(:draw) { FactoryGirl.create(:draw, status: 'pre_lottery') }
+  let(:draw) { create(:draw, status: 'pre_lottery') }
   let(:f) { "vesta_intents_export_#{Time.zone.today.to_s(:number)}.csv" }
   let(:h_str) { 'email,last_name,first_name,intent' }
 
   context 'as an admin' do
-    before { log_in(FactoryGirl.create(:admin)) }
+    before { log_in(create(:admin)) }
 
     it 'displays a table with intent data' do
       student = create_student_data(draw: draw, intents: %w(on_campus))
@@ -50,7 +50,7 @@ RSpec.feature 'Draw intent report' do
   end
 
   context 'as a rep' do
-    before { log_in(FactoryGirl.create(:student, role: 'rep')) }
+    before { log_in(create(:student, role: 'rep')) }
 
     it 'does not display form' do
       create_student_data(draw: draw, intents: %w(on_campus))
@@ -62,7 +62,7 @@ RSpec.feature 'Draw intent report' do
 
   def create_student_data(draw:, intents: %w(on_campus))
     students = intents.map do |intent|
-      FactoryGirl.create(:student, draw: draw, intent: intent)
+      create(:student, draw: draw, intent: intent)
     end
     return students.first if students.length == 1
     students

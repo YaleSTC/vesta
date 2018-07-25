@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Group, type: :model do
   describe 'basic validations' do
-    subject { FactoryGirl.build(:group) }
+    subject { build(:group) }
 
     it { is_expected.to validate_presence_of(:size) }
     it { is_expected.to allow_value(1).for(:size) }
@@ -35,68 +35,68 @@ RSpec.describe Group, type: :model do
   describe 'size validations' do
     context 'for regular groups' do
       it 'must be available in the draw' do
-        group = FactoryGirl.build(:group)
+        group = build(:group)
         allow(group.draw).to receive(:open_suite_sizes).and_return([1])
         group.size = 2
         expect(group.valid?).to be_falsey
       end
       it 'only runs on changing size' do
-        group = FactoryGirl.create(:full_group, size: 2)
+        group = create(:full_group, size: 2)
         allow(group.draw).to receive(:open_suite_sizes).and_return([1])
         expect(group.valid?).to be_truthy
       end
     end
     context 'for drawless groups' do
       it 'must be an existing suite size' do
-        group = FactoryGirl.build(:drawless_group)
+        group = build(:drawless_group)
         allow(SuiteSizesQuery).to receive(:call).and_return([1])
         group.size = 2
         expect(group).not_to be_valid
       end
     end
     it 'must not have more members than the size' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = create(:full_group, size: 2)
       allow(group.draw).to receive(:suite_sizes).and_return([1, 2])
       group.size = 1
       expect(group.valid?).to be_falsey
     end
     it 'also validates during creation' do
-      leader, student = FactoryGirl.create_pair(:student)
+      leader, student = create_pair(:student)
       group = described_class.new(size: 1, leader_id: leader.id,
                                   member_ids: [student.id])
       group.save
       expect(group.persisted?).to be_falsey
     end
     it 'takes transfers into account' do
-      group = FactoryGirl.create(:open_group, size: 2, transfers: 1)
+      group = create(:open_group, size: 2, transfers: 1)
       expect(group).to be_closed
     end
   end
 
   describe 'status validations' do
     it 'can only be locked if the number of members match the size' do
-      group = FactoryGirl.build(:open_group)
+      group = build(:open_group)
       group.status = 'locked'
       expect(group.valid?).to be_falsey
     end
     it 'can only be locked if all memberships are locked' do
       # finalizing locks the leader only, not any of the members
-      group = FactoryGirl.create(:finalizing_group, size: 2)
+      group = create(:finalizing_group, size: 2)
       group.status = 'locked'
       expect(group.valid?).to be_falsey
     end
     it 'cannot be closed when there are less members than the size' do
-      group = FactoryGirl.build(:open_group)
+      group = build(:open_group)
       group.status = 'closed'
       expect(group.valid?).to be_falsey
     end
     it 'takes transfers into account' do
-      group = FactoryGirl.create(:open_group, size: 2, transfers: 1)
+      group = create(:open_group, size: 2, transfers: 1)
       group.status = 'open'
       expect(group).not_to be_valid
     end
     it 'cannot be open when members match the size' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = create(:full_group, size: 2)
       group.status = 'open'
       expect(group.valid?).to be_falsey
     end
@@ -141,7 +141,7 @@ RSpec.describe Group, type: :model do
     end
 
     it 'raises an error if attempt to edit lottery_assignment' do
-      lottery, new_lottery = FactoryGirl.create_pair(:lottery_assignment)
+      lottery, new_lottery = create_pair(:lottery_assignment)
       group = lottery.group
       group.update(lottery_assignment_id: new_lottery.id)
       expect(group.errors[:base])
@@ -155,16 +155,15 @@ RSpec.describe Group, type: :model do
     end
 
     it 'must be the only group unless in a clip' do
-      lottery = FactoryGirl.create(:lottery_assignment)
-      group = FactoryGirl.create(:locked_group, :defined_by_draw,
-                                 draw: lottery.draw)
+      lottery = create(:lottery_assignment)
+      group = create(:locked_group, :defined_by_draw, draw: lottery.draw)
       group.lottery_assignment_id = lottery.id
       expect(group.valid?).to be_falsey
     end
   end
 
   it 'destroys dependent memberships on destruction' do
-    group = FactoryGirl.create(:drawless_group)
+    group = create(:drawless_group)
     membership_ids = group.memberships.map(&:id)
     group.destroy
     expect { Membership.find(membership_ids) }.to \
@@ -172,20 +171,20 @@ RSpec.describe Group, type: :model do
   end
 
   it 'clears suite assignments on destruction' do
-    group = FactoryGirl.create(:locked_group)
-    suite = FactoryGirl.create(:suite, group_id: group.id)
+    group = create(:locked_group)
+    suite = create(:suite, group_id: group.id)
     expect { group.destroy }.to change { suite.reload.group }.to(nil)
   end
 
   it 'updates status when changing transfer students' do
-    group = FactoryGirl.create(:open_group, size: 2)
+    group = create(:open_group, size: 2)
     group.update(transfers: 1)
     expect(group.reload).to be_full
   end
 
   describe 'disbanding group' do
-    let(:group) { FactoryGirl.create(:locked_group, size: 1).reload }
-    let(:suite) { FactoryGirl.create(:suite_with_rooms, group_id: group.id) }
+    let(:group) { create(:locked_group, size: 1).reload }
+    let(:suite) { create(:suite_with_rooms, group_id: group.id) }
 
     it 'removes member room ids when disbanding' do
       RoomAssignment.create!(user: group.leader, room: suite.rooms.reload.first)
@@ -208,7 +207,7 @@ RSpec.describe Group, type: :model do
 
   describe 'leader is included as a member' do
     it do
-      group = FactoryGirl.create(:group)
+      group = create(:group)
       expect(group.members).to include(group.leader)
     end
   end
@@ -259,8 +258,8 @@ RSpec.describe Group, type: :model do
 
   describe '#requests' do
     it 'returns an array of users who have requested to join' do
-      group = FactoryGirl.create(:open_group)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       m = Membership.create(group: group, user: user, status: 'requested')
       expect(group.requests).to eq([m])
     end
@@ -268,23 +267,23 @@ RSpec.describe Group, type: :model do
 
   describe '#invitations' do
     it 'returns an array of users who have been invited to join' do
-      group = FactoryGirl.create(:open_group)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       m = Membership.create(group: group, user: user, status: 'invited')
       expect(group.invitations).to eq([m])
     end
   end
 
   describe '#pending_memberships' do
-    let(:group) { FactoryGirl.create(:open_group) }
+    let(:group) { create(:open_group) }
 
     it 'returns invitations but not accepted memberships' do
-      user = FactoryGirl.create(:student, draw: group.draw, intent: 'on_campus')
+      user = create(:student, draw: group.draw, intent: 'on_campus')
       m = Membership.create(group: group, user: user, status: 'invited')
       expect(group.pending_memberships).to match([m])
     end
     it 'returns requests but not accepted memberships' do
-      user = FactoryGirl.create(:student, draw: group.draw, intent: 'on_campus')
+      user = create(:student, draw: group.draw, intent: 'on_campus')
       m = Membership.create(group: group, user: user, status: 'requested')
       expect(group.pending_memberships).to match([m])
     end
@@ -292,14 +291,14 @@ RSpec.describe Group, type: :model do
 
   describe '#members' do
     it 'returns only members with an accepted membership' do
-      group = FactoryGirl.create(:open_group)
+      group = create(:open_group)
       create_potential_member(status: 'invited', group: group)
       create_potential_member(status: 'requested', group: group)
       expect(group.reload.members.map(&:id)).to eq([group.leader.id])
     end
 
     def create_potential_member(status:, group:)
-      u = FactoryGirl.create(:student, draw: group.draw, intent: 'on_campus')
+      u = create(:student, draw: group.draw, intent: 'on_campus')
       Membership.create(user: u, group: group, status: status)
       u
     end
@@ -307,26 +306,26 @@ RSpec.describe Group, type: :model do
 
   describe '#removable_members' do
     it 'returns all accepted members except for the leader' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = create(:full_group, size: 2)
       expect(group.removable_members.map(&:id)).not_to include(group.leader_id)
     end
   end
 
   describe '#remove_members!' do
     it 'removes members except leader' do
-      group = FactoryGirl.create(:full_group, size: 3)
+      group = create(:full_group, size: 3)
       ids = group.members.map(&:id)
       expect { group.remove_members!(ids: ids) }.to \
         change { group.memberships_count }.from(3).to(1)
     end
     it 'changes the group status from full to open' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = create(:full_group, size: 2)
       ids = group.members.map(&:id)
       expect { group.remove_members!(ids: ids) }.to \
         change { group.status }.from('closed').to('open')
     end
     it 'deletes membership object' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = create(:full_group, size: 2)
       last_membership_id = group.memberships.last.id
       group.remove_members!(ids: [group.members.last.id])
       expect { Membership.find(last_membership_id) }.to \
@@ -336,20 +335,20 @@ RSpec.describe Group, type: :model do
 
   describe '#destroy' do
     it 'restores members to their original draws if drawless' do
-      group = FactoryGirl.create(:drawless_group)
+      group = create(:drawless_group)
       allow(group.leader).to receive(:restore_draw)
         .and_return(instance_spy('user', save: true))
       group.destroy
       expect(group.leader).to have_received(:restore_draw)
     end
     it 'does nothing if group belongs to a draw' do
-      group = FactoryGirl.create(:group)
+      group = create(:group)
       allow(group.leader).to receive(:restore_draw)
       group.destroy
       expect(group.leader).not_to have_received(:restore_draw)
     end
     it 'removes clip_memberships if they exist' do
-      group = FactoryGirl.create(:clip, groups_count: 3).groups.first
+      group = create(:clip, groups_count: 3).groups.first
       m = group.clip_membership
       group.destroy!
       expect { m.reload } .to raise_error(ActiveRecord::RecordNotFound)
@@ -368,13 +367,13 @@ RSpec.describe Group, type: :model do
 
   describe '#cleanup!' do
     it 'deletes the group if there is no member left' do
-      group = FactoryGirl.create(:group, size: 1)
+      group = create(:group, size: 1)
       group.memberships.first.delete
       group.reload.cleanup!
       expect { group.reload } .to raise_error(ActiveRecord::RecordNotFound)
     end
     it 'does nothing if there is at least one member left' do
-      group = FactoryGirl.create(:full_group, size: 2)
+      group = create(:full_group, size: 2)
       group.memberships.first.delete
       group.reload.cleanup!
       expect(group.reload).to eq(group)
@@ -383,14 +382,14 @@ RSpec.describe Group, type: :model do
 
   describe '#locked_members' do
     it 'returns memberships that are locked' do
-      group = FactoryGirl.create(:finalizing_group)
+      group = create(:finalizing_group)
       expect(group.locked_members).to eq([group.leader])
     end
   end
 
   describe '#lockable?' do
     it 'returns true when all members are locked, and group is full' do
-      group = FactoryGirl.create(:finalizing_group)
+      group = create(:finalizing_group)
       group.full_memberships.reject(&:locked).each do |m|
         m.update(locked: true)
       end
@@ -400,44 +399,44 @@ RSpec.describe Group, type: :model do
 
   describe '#unlockable?' do
     it 'returns true when there are _any_ locked members and no suite' do
-      group = FactoryGirl.create(:finalizing_group)
+      group = create(:finalizing_group)
       group.update!(status: 'closed')
       expect(group.reload).to be_unlockable
     end
     it 'returns false if the group has a suite assigned' do
-      group = FactoryGirl.create(:locked_group)
+      group = create(:locked_group)
       allow(group).to receive(:suite)
         .and_return(instance_spy('suite', nil?: false))
       expect(group).not_to be_unlockable
     end
     it 'returns false if there are no locked members' do
-      group = FactoryGirl.create(:open_group)
+      group = create(:open_group)
       expect(group).not_to be_unlockable
     end
   end
 
   describe '#invited_to_clip?' do
     it 'returns true if there is an open invite' do
-      clip = FactoryGirl.create(:clip)
+      clip = create(:clip)
       group = clip.groups.first
       group.clip_membership.update!(confirmed: false)
       expect(group.invited_to_clip?(clip)).to eq(true)
     end
     it 'returns false if there is an accepted invite' do
-      clip = FactoryGirl.create(:clip)
+      clip = create(:clip)
       group = clip.groups.first
       expect(group.invited_to_clip?(clip)).to eq(false)
     end
     it 'returns false if there is no invite' do
-      group = FactoryGirl.create(:group)
-      clip = FactoryGirl.create(:clip)
+      group = create(:group)
+      clip = create(:clip)
       expect(group.invited_to_clip?(clip)).to eq(false)
     end
   end
 
   describe 'clip association' do
     it 'only joins on confirmed memberships' do
-      clip = FactoryGirl.create(:clip)
+      clip = create(:clip)
       group = clip.groups.first
       create_unconfirmed_clip_membership(group: group)
       expect(group.reload.clip).to eq(clip)
@@ -446,7 +445,7 @@ RSpec.describe Group, type: :model do
 
   describe 'clip_memberships' do
     it 'are cleared on draw change' do
-      clip = FactoryGirl.create(:clip, groups_count: 3)
+      clip = create(:clip, groups_count: 3)
       group = clip.groups.first
       create_unconfirmed_clip_membership(group: group)
       group.update!(draw_id: nil)
@@ -458,7 +457,7 @@ RSpec.describe Group, type: :model do
     let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
 
     it 'notifies members' do
-      group = FactoryGirl.create(:full_group)
+      group = create(:full_group)
       allow(StudentMailer).to receive(:disband_notification).and_return(msg)
       group.destroy
       expect(StudentMailer).to \
@@ -470,7 +469,7 @@ RSpec.describe Group, type: :model do
     let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
 
     it 'notifies members' do
-      group = FactoryGirl.create(:finalizing_group, size: 2)
+      group = create(:finalizing_group, size: 2)
       allow(StudentMailer).to receive(:group_locked).and_return(msg)
       group.memberships.last.update(locked: true)
       expect(StudentMailer).to \
@@ -481,25 +480,25 @@ RSpec.describe Group, type: :model do
   describe 'group factories' do
     context 'create valid groups' do
       it 'and defaults to :defined_by_leader with the :group factory' do
-        group = FactoryGirl.create(:group)
+        group = create(:group)
         expect(group).to be_persisted
       end
       it 'and uses :defined_by_draw trait in :group_from_draw factory' do
-        group = FactoryGirl.create(:group_from_draw)
+        group = create(:group_from_draw)
         expect(group).to be_persisted
       end
     end
   end
 
   it 'deletes the lottery assignment on group deletion' do
-    lottery = FactoryGirl.create(:lottery_assignment)
+    lottery = create(:lottery_assignment)
     expect { lottery.group.destroy }.to \
       change { LotteryAssignment.count }.by(-1)
   end
 
   describe '.order_by_lottery' do
     it 'orders the collection of groups by their lottery numbers' do
-      groups = FactoryGirl.create(:draw_in_selection, groups_count: 3).groups
+      groups = create(:draw_in_selection, groups_count: 3).groups
       lottery = groups.map(&:lottery_number).sort!
       expect(groups.order_by_lottery.map(&:lottery_number)).to eq(lottery)
     end
@@ -507,19 +506,18 @@ RSpec.describe Group, type: :model do
 
   describe '#lottery_number' do
     it 'is nil when no lottery assignment' do
-      group = FactoryGirl.build_stubbed(:group)
+      group = build_stubbed(:group)
       expect(group.lottery_number).to be_nil
     end
     it 'returns the number of the lottery assignment' do
-      lottery = FactoryGirl.create(:lottery_assignment)
+      lottery = create(:lottery_assignment)
       group = lottery.group
       expect(group.lottery_number).to eq(lottery.number)
     end
   end
 
   def create_unconfirmed_clip_membership(group:)
-    new_clip = FactoryGirl.create(:clip, draw: group.draw)
-    FactoryGirl.create(:clip_membership, clip: new_clip, group: group,
-                                         confirmed: false)
+    new_clip = create(:clip, draw: group.draw)
+    create(:clip_membership, clip: new_clip, group: group, confirmed: false)
   end
 end

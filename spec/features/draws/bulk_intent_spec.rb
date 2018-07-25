@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.feature 'Bulk intent assignment' do
-  let(:draw) { FactoryGirl.create(:draw_with_members, status: 'pre_lottery') }
+  let(:draw) { create(:draw_with_members, status: 'pre_lottery') }
 
   before do
-    log_in FactoryGirl.create(:admin)
-    FactoryGirl.create(:student, intent: 'undeclared', draw_id: draw.id)
+    log_in create(:admin)
+    create(:student, intent: 'undeclared', draw_id: draw.id)
   end
 
   it 'can be performed' do

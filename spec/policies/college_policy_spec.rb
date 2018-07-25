@@ -10,7 +10,7 @@ RSpec.describe CollegePolicy do
   let(:superuser) { instance_spy('user', admin?: true, superuser?: true) }
   let(:admin) { instance_spy('user', admin?: true, superuser?: false) }
   let(:non_admin) { instance_spy('user', admin?: false, superuser?: false) }
-  let(:college) { FactoryGirl.build_stubbed(:college) }
+  let(:college) { build_stubbed(:college) }
 
   permissions :new?, :create? do
     it { is_expected.to permit(superuser, described_class) }

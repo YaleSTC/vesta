@@ -6,7 +6,7 @@ RSpec.describe ApplicationPolicy do
   subject { described_class }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+    let(:user) { build_stubbed(:user, role: 'student') }
 
     permissions :superuser_dash? do
       it { is_expected.not_to permit(user) }
@@ -14,7 +14,7 @@ RSpec.describe ApplicationPolicy do
   end
 
   context 'rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:user, role: 'rep') }
 
     permissions :superuser_dash? do
       it { is_expected.not_to permit(user) }
@@ -22,7 +22,7 @@ RSpec.describe ApplicationPolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
 
     permissions :superuser_dash? do
       it { is_expected.not_to permit(user) }
@@ -30,7 +30,7 @@ RSpec.describe ApplicationPolicy do
   end
 
   context 'superuser' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'superuser') }
+    let(:user) { build_stubbed(:user, role: 'superuser') }
 
     permissions :superuser_dash? do
       it { is_expected.to permit(user) }

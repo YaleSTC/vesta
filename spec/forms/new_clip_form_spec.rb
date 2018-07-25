@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe NewClipForm do
   # This will create a clip of length 2 by default or a clip of length 3
   # if the value '1' is passed into the `add_self` variable
-  let(:draw) { FactoryGirl.create(:draw) }
-  let(:groups) { FactoryGirl.create_pair(:group_from_draw, draw: draw) }
+  let(:draw) { create(:draw) }
+  let(:groups) { create_pair(:group_from_draw, draw: draw) }
   let(:group_ids) { groups.map(&:id).map(&:to_s) }
   let(:group) { create(:group_from_draw, draw: draw) }
 

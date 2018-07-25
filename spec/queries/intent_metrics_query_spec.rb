@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 RSpec.describe IntentMetricsQuery do
-  let(:draw) { FactoryGirl.create(:draw) }
+  let(:draw) { create(:draw) }
 
   it 'returns a hash with metric values for all intent strings' do
     expected = { 'off_campus' => 1, 'on_campus' => 2, 'undeclared' => 3 }
@@ -20,14 +20,14 @@ RSpec.describe IntentMetricsQuery do
   end
 
   it 'ignores students from other draws' do
-    FactoryGirl.create(:user, intent: 'off_campus')
+    create(:user, intent: 'off_campus')
     result = described_class.call(draw)
     expect(result).to eq({})
   end
 
   def create_intent_data(draw, metrics)
     metrics.each do |status, count|
-      FactoryGirl.create_list(:user, count, draw: draw, intent: status)
+      create_list(:user, count, draw: draw, intent: status)
     end
   end
 end

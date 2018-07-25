@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe BulkOnCampusUpdater do
-  let(:draw) { FactoryGirl.create(:draw_with_members, students_count: 2) }
+  let(:draw) { create(:draw_with_members, students_count: 2) }
 
   describe '#update' do
     it 'assigns all students intent to on_campus' do

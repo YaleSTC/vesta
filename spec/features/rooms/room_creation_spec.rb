@@ -3,16 +3,16 @@
 require 'rails_helper'
 
 RSpec.feature 'Room Creation' do
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   it 'succeeds' do
-    suite = FactoryGirl.create(:suite)
+    suite = create(:suite)
     visit new_suite_room_path(suite)
     fill_in_room_info(room_number: 'L01A', room_beds: 2)
     click_on 'Create'
     expect(page).to have_css('.room-number', text: 'L01A')
   end
   it 'redirects to /new on failure' do
-    suite = FactoryGirl.create(:suite)
+    suite = create(:suite)
     visit new_suite_room_path(suite)
     click_on 'Create'
     expect(page).to have_content('errors')

@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Suite editing' do
-  before { log_in FactoryGirl.create(:admin) }
-  let(:suite) { FactoryGirl.create(:suite) }
+  before { log_in create(:admin) }
+  let(:suite) { create(:suite) }
 
   it 'succeeds' do
     new_number = 'F32'

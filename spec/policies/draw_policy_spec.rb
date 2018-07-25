@@ -7,10 +7,10 @@ require 'rails_helper'
 RSpec.describe DrawPolicy do
   subject { described_class }
 
-  let(:draw) { FactoryGirl.build_stubbed(:draw) }
+  let(:draw) { build_stubbed(:draw) }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+    let(:user) { build_stubbed(:user, role: 'student') }
 
     permissions :show? do
       context 'not draft' do
@@ -105,7 +105,7 @@ RSpec.describe DrawPolicy do
   end
 
   context 'housing rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:user, role: 'rep') }
 
     permissions :show?, :toggle_size_lock?, :group_report? do
       it { is_expected.to permit(user, draw) }
@@ -259,7 +259,7 @@ RSpec.describe DrawPolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
 
     permissions :show?, :edit?, :update?, :destroy?, :toggle_size_lock?,
                 :lock_all_sizes?, :group_report? do
@@ -484,7 +484,7 @@ RSpec.describe DrawPolicy do
   end
 
   context 'role-agnostic permissions' do
-    let(:user) { FactoryGirl.build_stubbed(:user) }
+    let(:user) { build_stubbed(:user) }
 
     permissions :selection_metrics? do
       context 'in suite selection' do

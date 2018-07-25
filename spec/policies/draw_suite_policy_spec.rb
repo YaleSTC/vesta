@@ -8,7 +8,7 @@ RSpec.describe DrawSuitePolicy do
   let(:draw_suite) { instance_spy('draw_suite') }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+    let(:user) { build_stubbed(:user, role: 'student') }
 
     permissions :index? do
       context 'not draft' do
@@ -33,7 +33,7 @@ RSpec.describe DrawSuitePolicy do
   end
 
   context 'housing rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:user, role: 'rep') }
 
     permissions :index? do
       it { is_expected.to permit(user, draw_suite) }
@@ -57,7 +57,7 @@ RSpec.describe DrawSuitePolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
 
     permissions :index? do
       it { is_expected.to permit(user, draw_suite) }

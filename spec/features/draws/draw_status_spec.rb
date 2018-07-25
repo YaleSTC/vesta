@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw status' do
-  let(:draw) { FactoryGirl.create(:draw) }
+  let(:draw) { create(:draw) }
 
   it 'displays intent metrics' do
     metrics = { 'off_campus' => 0, 'on_campus' => 2, 'undeclared' => 1 }
     create_intent_data(draw, metrics)
 
-    log_in(FactoryGirl.create(:user))
+    log_in(create(:user))
     visit draw_path(draw)
 
     expect(page_has_intent_metrics(page, metrics))
@@ -17,7 +17,7 @@ RSpec.feature 'Draw status' do
 
   def create_intent_data(draw, metrics)
     metrics.each do |status, count|
-      FactoryGirl.create_list(:user, count, draw: draw, intent: status)
+      create_list(:user, count, draw: draw, intent: status)
     end
   end
 

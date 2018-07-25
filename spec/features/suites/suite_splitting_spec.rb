@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'Suite splitting' do
-  let(:suite) { FactoryGirl.create(:suite_with_rooms, rooms_count: 2) }
+  let(:suite) { create(:suite_with_rooms, rooms_count: 2) }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'can be performed' do
     initiate_suite_split

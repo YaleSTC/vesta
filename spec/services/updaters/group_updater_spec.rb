@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe GroupUpdater do
   describe '#update' do
     context 'group is full' do
-      let(:group) { FactoryGirl.create(:open_group, size: 2) }
+      let(:group) { create(:open_group, size: 2) }
       let(:to_remove) do
-        FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+        create(:student, intent: 'on_campus', draw: group.draw)
       end
 
       it 'deletes memberships for users being removed before updating' do
@@ -23,8 +23,8 @@ RSpec.describe GroupUpdater do
     end
 
     context 'users being added' do
-      let(:group) { FactoryGirl.create(:open_group, size: 2) }
-      let(:to_add) { FactoryGirl.create(:student, draw: group.draw) }
+      let(:group) { create(:open_group, size: 2) }
+      let(:to_add) { create(:student, draw: group.draw) }
 
       it 'updates their intent to on_campus if necessary' do
         to_add.update!(intent: 'undeclared')
@@ -33,8 +33,7 @@ RSpec.describe GroupUpdater do
         expect(to_add.reload.intent).to eq('on_campus')
       end
       it 'updates even if user has pending invitations' do
-        FactoryGirl.create(:membership, user_id: to_add.id,
-                                        status: 'invited', group: group)
+        create(:membership, user_id: to_add.id, status: 'invited', group: group)
         p = mock_add_parameters(to_add)
         described_class.update(group: group, params: p)
         expect(group.members).to include(to_add)
@@ -46,7 +45,7 @@ RSpec.describe GroupUpdater do
     end
 
     context 'size is locked' do
-      let(:group) { FactoryGirl.create(:full_group, size: 2) }
+      let(:group) { create(:full_group, size: 2) }
 
       it 'deletes the empty size key from the params' do
         p = instance_spy('ActionController::Parameters',
@@ -59,7 +58,7 @@ RSpec.describe GroupUpdater do
 
     context 'users being removed' do
       it 'does not remove the leader if passed' do
-        group = FactoryGirl.create(:open_group, size: 2)
+        group = create(:open_group, size: 2)
         p = instance_spy('ActionController::Parameters',
                          to_h: { 'remove_ids' => [group.leader_id.to_s] })
         expect { described_class.update(group: group, params: p) }.not_to \
@@ -88,7 +87,7 @@ RSpec.describe GroupUpdater do
       end
       it 'can add members and increase the size' do
         group = expandable_group(size: 1)
-        user = FactoryGirl.create(:user, draw: group.draw, intent: 'on_campus')
+        user = create(:user, draw: group.draw, intent: 'on_campus')
         params = { size: 2, member_ids: [user.id.to_s] }
         described_class.update(group: group, params: params)
         expect(group.members).to include(user)
@@ -96,7 +95,7 @@ RSpec.describe GroupUpdater do
     end
     context 'failure' do
       let!(:group) do
-        FactoryGirl.build_stubbed(:group).tap do |g|
+        build_stubbed(:group).tap do |g|
           memberships = instance_spy('ActiveRecord::CollectionProxy',
                                      where: true)
           allow(g).to receive(:memberships).and_return(memberships)
@@ -119,9 +118,8 @@ RSpec.describe GroupUpdater do
     end
   end
   def expandable_group(size: 1)
-    FactoryGirl.create(:full_group, size: size).tap do |g|
-      g.draw.suites << FactoryGirl.create(:suite_with_rooms,
-                                          rooms_count: size + 1)
+    create(:full_group, size: size).tap do |g|
+      g.draw.suites << create(:suite_with_rooms, rooms_count: size + 1)
     end
   end
 end

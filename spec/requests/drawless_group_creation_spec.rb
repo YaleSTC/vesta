@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Special group creation', type: :request do
-  let!(:leader) { FactoryGirl.create(:student, intent: 'on_campus') }
-  let(:admin) { FactoryGirl.create(:admin) }
+  let!(:leader) { create(:student, intent: 'on_campus') }
+  let(:admin) { create(:admin) }
 
   before do
-    FactoryGirl.create(:college)
-    FactoryGirl.create(:suite_with_rooms, rooms_count: 1)
+    create(:college)
+    create(:suite_with_rooms, rooms_count: 1)
     post user_session_path,
          params: { user: { email: admin.email, password: 'passw0rd' } }
   end

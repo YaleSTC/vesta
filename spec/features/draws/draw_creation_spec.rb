@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw Creation' do
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   it 'succeeds' do
     name = 'Sophomore Draw'
     create_draw(name: name)

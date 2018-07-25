@@ -5,8 +5,8 @@ require 'rails_helper'
 describe GroupGenerator do
   describe '.generate' do
     it 'makes a new group' do
-      draw = FactoryGirl.create(:draw)
-      draw.suites << FactoryGirl.create(:suite, size: 3)
+      draw = create(:draw)
+      draw.suites << create(:suite, size: 3)
       expect { described_class.generate(draw: draw) }.to \
         change { Group.count }.by(1)
     end

@@ -10,14 +10,14 @@ RSpec.describe SuiteSplitForm, type: :model do
       expect(object).not_to be_valid
     end
     it 'validates that the suite has at least two rooms' do
-      suite = FactoryGirl.create(:suite_with_rooms, rooms_count: 1)
+      suite = create(:suite_with_rooms, rooms_count: 1)
       room = suite.rooms.first
       params = mock_params(room.id.to_s => 'foo')
       object = described_class.new(suite: suite, params: params)
       expect(object).not_to be_valid
     end
     it 'validates that all rooms have a new suite assigned' do
-      suite = FactoryGirl.create(:suite_with_rooms, rooms_count: 2)
+      suite = create(:suite_with_rooms, rooms_count: 2)
       room = suite.rooms.first
       params = mock_params(room.id.to_s => 'foo')
       object = described_class.new(suite: suite, params: params)
@@ -26,7 +26,7 @@ RSpec.describe SuiteSplitForm, type: :model do
   end
 
   describe '#submit' do
-    let(:suite) { FactoryGirl.create(:suite_with_rooms, rooms_count: 2) }
+    let(:suite) { create(:suite_with_rooms, rooms_count: 2) }
 
     context 'success' do
       let(:params) { valid_params(suite) }
@@ -45,7 +45,7 @@ RSpec.describe SuiteSplitForm, type: :model do
         expect(result[:suites].first.building_id).to eq(building_id)
       end
       it 'assigns the suites to the correct draws' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         suite.draws << draw
         result = described_class.submit(suite: suite, params: params)
         expect(result[:suites].first.draws).to eq([draw])

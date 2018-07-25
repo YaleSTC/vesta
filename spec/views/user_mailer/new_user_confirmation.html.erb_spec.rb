@@ -32,7 +32,7 @@ RSpec.describe 'user_mailer/new_user_confirmation.html.erb' do
   end
 
   def mock_assigns
-    assign(:user, FactoryGirl.build_stubbed(:user))
-    assign(:res_college, FactoryGirl.build_stubbed(:college))
+    assign(:user, build_stubbed(:user))
+    assign(:res_college, build_stubbed(:college))
   end
 end

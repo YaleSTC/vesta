@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'College editing' do
-  before { log_in FactoryGirl.create(:admin) }
-  let(:college) { FactoryGirl.create(:college) }
+  before { log_in create(:admin) }
+  let(:college) { create(:college) }
 
   it 'succeeds' do
     new_name = 'TD'

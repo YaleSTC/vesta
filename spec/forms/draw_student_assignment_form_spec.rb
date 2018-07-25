@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DrawStudentAssignmentForm, type: :model do
-  let(:draw) { FactoryGirl.create(:draw) }
+  let(:draw) { create(:draw) }
 
   describe 'validations' do
     subject(:form_object) { described_class.new(draw: draw) }
@@ -24,31 +24,31 @@ RSpec.describe DrawStudentAssignmentForm, type: :model do
   describe '#submit' do
     context 'adding a user success' do
       it 'takes a username and adds the user' do
-        FactoryGirl.create(:student, username: 'foo')
+        create(:student, username: 'foo')
         params = mock_params(username: 'foo', adding: 'true')
         expect { described_class.submit(draw: draw, params: params) }.to \
           change { draw.students.count }.by(1)
       end
       it 'ignores grouped users' do
-        FactoryGirl.create(:drawless_group).leader.update(username: 'foo')
+        create(:drawless_group).leader.update(username: 'foo')
         params = mock_params(username: 'foo', adding: 'true')
         expect { described_class.submit(draw: draw, params: params) }.to \
           change { draw.students.count }.by(0)
       end
       it 'sets :redirect_object as nil' do
-        FactoryGirl.create(:student, username: 'foo')
+        create(:student, username: 'foo')
         params = mock_params(username: 'foo', adding: 'true')
         result = described_class.submit(draw: draw, params: params)
         expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object as nil' do
-        FactoryGirl.create(:student, username: 'foo')
+        create(:student, username: 'foo')
         params = mock_params(username: 'foo', adding: 'true')
         result = described_class.submit(draw: draw, params: params)
         expect(result[:update_object]).to be_nil
       end
       it 'sets a success message' do
-        FactoryGirl.create(:student, username: 'foo')
+        create(:student, username: 'foo')
         params = mock_params(username: 'foo', adding: 'true')
         result = described_class.submit(draw: draw, params: params)
         expect(result[:msg]).to have_key(:success)
@@ -57,19 +57,19 @@ RSpec.describe DrawStudentAssignmentForm, type: :model do
 
     context 'failure' do
       it 'sets :redirect_object as nil' do
-        FactoryGirl.create(:student, username: 'foo')
+        create(:student, username: 'foo')
         params = mock_params(username: '', adding: 'true')
         result = described_class.submit(draw: draw, params: params)
         expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to the form object' do
-        FactoryGirl.create(:student, username: 'foo')
+        create(:student, username: 'foo')
         params = mock_params(username: '', adding: 'true')
         object = described_class.new(draw: draw, params: params)
         expect(object.submit[:update_object]).to eq(object)
       end
       it 'sets an error message' do
-        FactoryGirl.create(:student, username: 'foo')
+        create(:student, username: 'foo')
         params = mock_params(username: '', adding: 'true')
         result = described_class.submit(draw: draw, params: params)
         expect(result[:msg]).to have_key(:error)

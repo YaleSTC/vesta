@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'Medical suites' do
-  let(:suite) { FactoryGirl.create(:suite) }
+  let(:suite) { create(:suite) }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'can be toggled from the edit form' do
     visit edit_suite_path(suite)

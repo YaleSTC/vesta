@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe SuitePolicy do
   subject { described_class }
 
-  let(:suite) { FactoryGirl.build_stubbed(:suite) }
+  let(:suite) { build_stubbed(:suite) }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+    let(:user) { build_stubbed(:user, role: 'student') }
 
     permissions :show? do
       context 'non-medical suite' do
@@ -30,7 +30,7 @@ RSpec.describe SuitePolicy do
   end
 
   context 'housing rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:user, role: 'rep') }
 
     permissions :show? do
       context 'non-medical suite' do
@@ -52,7 +52,7 @@ RSpec.describe SuitePolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
 
     permissions :show?, :edit?, :update?, :destroy?, :merge?, :perform_merge?,
                 :medical? do

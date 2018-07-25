@@ -10,7 +10,7 @@ RSpec.feature 'Draw lottery assignment', js: true do
   before { draw.lottery! }
 
   context 'as admin' do
-    before { log_in FactoryGirl.create(:admin) }
+    before { log_in create(:admin) }
 
     xit 'can be performed' do # rubocop:disable RSpec/ExampleLength
       visit draw_path(draw)
@@ -24,7 +24,7 @@ RSpec.feature 'Draw lottery assignment', js: true do
     end
 
     xit 'can be changed' do
-      FactoryGirl.create(:lottery_assignment, draw: draw, groups: [group])
+      create(:lottery_assignment, draw: draw, groups: [group])
       visit draw_lottery_assignments_path(draw)
       assign_lottery_number(object: group, number: 6)
       reload

@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.feature 'Suite merging' do
-  let(:suite) { FactoryGirl.create(:suite_with_rooms) }
+  let(:suite) { create(:suite_with_rooms) }
   let!(:other_suite) do
-    FactoryGirl.create(:suite_with_rooms, building: suite.building)
+    create(:suite_with_rooms, building: suite.building)
   end
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'can be performed' do
     initiate_suite_merger

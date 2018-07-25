@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw activation' do
-  let(:draw) { FactoryGirl.create(:draw_with_members, status: 'draft') }
+  let(:draw) { create(:draw_with_members, status: 'draft') }
 
   context 'as admin' do
     before do
-      FactoryGirl.create(:college)
-      log_in(FactoryGirl.create(:admin))
+      create(:college)
+      log_in(create(:admin))
     end
 
     it 'can be initiated' do
@@ -19,7 +19,7 @@ RSpec.feature 'Draw activation' do
     end
 
     it 'redirects on failure' do
-      draw = FactoryGirl.create(:draw, status: 'draft')
+      draw = create(:draw, status: 'draft')
       visit draw_path(draw)
       click_link('Begin draw process')
       expect(page).to have_css('.flash-error')
@@ -27,7 +27,7 @@ RSpec.feature 'Draw activation' do
   end
 
   context 'as student' do
-    before { log_in(FactoryGirl.create(:student)) }
+    before { log_in(create(:student)) }
 
     it 'cannot see the start button' do
       visit draw_path(draw)

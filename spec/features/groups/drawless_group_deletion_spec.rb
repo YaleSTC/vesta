@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'Special group deletion' do
-  let(:group) { FactoryGirl.create(:drawless_group) }
+  let(:group) { create(:drawless_group) }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'succeeds' do
     msg = "Group #{group.name} deleted."

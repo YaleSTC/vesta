@@ -9,8 +9,8 @@ RSpec.describe ClipMembership, type: :model do
     it { is_expected.to validate_presence_of(:group) }
     it { is_expected.to validate_presence_of(:clip) }
   end
-  let(:clip) { FactoryGirl.create(:clip) }
-  let(:group) { FactoryGirl.create(:group) }
+  let(:clip) { create(:clip) }
+  let(:group) { create(:group) }
   let(:membership) { clip.clip_memberships.last }
 
   describe 'group uniqueness' do
@@ -19,19 +19,19 @@ RSpec.describe ClipMembership, type: :model do
       expect(membership).not_to be_valid
     end
     it 'group can only have one accepted clip membership' do
-      other_clip = FactoryGirl.create(:clip)
+      other_clip = create(:clip)
       m = ClipMembership.new(clip: other_clip, group: clip.groups.first)
       expect(m).not_to be_valid
     end
     it 'group draw and clip draw must match' do
-      membership = FactoryGirl.build(:clip_membership, clip: clip, group: group)
+      membership = build(:clip_membership, clip: clip, group: group)
       expect(membership).not_to be_valid
     end
   end
 
   describe 'freeze clip before update' do
     it 'cannot change clip' do
-      membership.clip = FactoryGirl.create(:clip, draw: clip.draw)
+      membership.clip = create(:clip, draw: clip.draw)
       expect(membership.save).to be_falsey
     end
     it 'cannot remove clip' do
@@ -39,7 +39,7 @@ RSpec.describe ClipMembership, type: :model do
       expect(membership.save).to be_falsey
     end
     it 'returns error if clip is updated' do
-      membership.clip = FactoryGirl.create(:clip, draw: clip.draw)
+      membership.clip = create(:clip, draw: clip.draw)
       membership.save
       expect(membership.errors[:base])
         .to include('Cannot change clip inside clip membership')
@@ -48,7 +48,7 @@ RSpec.describe ClipMembership, type: :model do
 
   describe 'freeze group before update' do
     it 'cannot change group' do
-      membership.group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
+      membership.group = create(:group_from_draw, draw: clip.draw)
       expect(membership.save).to be_falsey
     end
     it 'cannot remove group' do
@@ -56,7 +56,7 @@ RSpec.describe ClipMembership, type: :model do
       expect(membership.save).to be_falsey
     end
     it 'returns error if group is updated' do
-      membership.group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
+      membership.group = create(:group_from_draw, draw: clip.draw)
       membership.save
       expect(membership.errors[:base])
         .to include('Cannot change group inside clip membership')
@@ -88,8 +88,8 @@ RSpec.describe ClipMembership, type: :model do
   # rubocop:disable RSpec/ExampleLength
   describe 'pending clip membership destruction' do
     it 'on the group accepting another clip' do
-      group = FactoryGirl.create(:locked_group)
-      clip1, clip2 = FactoryGirl.create_pair(:clip, draw: group.draw)
+      group = create(:locked_group)
+      clip1, clip2 = create_pair(:clip, draw: group.draw)
       inv = create_membership(clip: clip1, group: group)
       req = create_membership(clip: clip2, group: group)
       inv.update(confirmed: true)
@@ -97,8 +97,7 @@ RSpec.describe ClipMembership, type: :model do
     end # rubocop:enable RSpec/ExampleLength
 
     def create_membership(clip:, group:, confirmed: false)
-      FactoryGirl.create(:clip_membership, clip: clip, group: group,
-                                           confirmed: confirmed)
+      create(:clip_membership, clip: clip, group: group, confirmed: confirmed)
     end
   end
 

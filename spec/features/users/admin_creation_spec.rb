@@ -5,7 +5,7 @@ require 'support/fake_profile_querier'
 require 'rack-timeout'
 
 RSpec.feature 'Admin creation' do
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   it 'can be performed by other admins' do
     visit build_users_path
     submit_username('foo@example.com')

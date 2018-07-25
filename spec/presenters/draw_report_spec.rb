@@ -32,7 +32,7 @@ RSpec.describe DrawReport do
 
   describe '#group_counts' do
     it 'returns a hash of size => # of groups' do
-      group = FactoryGirl.create(:open_group)
+      group = create(:open_group)
       draw = group.draw
       expect(described_class.new(draw).group_counts).to eq(group.size => 1)
     end
@@ -41,16 +41,15 @@ RSpec.describe DrawReport do
   describe '#locked_counts' do
     it 'returns a hash of size => # of locked groups' do
       size = 2
-      draw = FactoryGirl.create(:locked_group, size: size).draw
-      FactoryGirl.create(:group, leader: FactoryGirl.create(:user, draw: draw),
-                                 size: size)
+      draw = create(:locked_group, size: size).draw
+      create(:group, leader: create(:user, draw: draw), size: size)
       expect(described_class.new(draw).locked_counts).to eq(size => 1)
     end
   end
 
   describe '#oversubscription' do
     it 'returns a hash of size => difference between # groups & # suites' do
-      draw = FactoryGirl.create(:oversubscribed_draw)
+      draw = create(:oversubscribed_draw)
       size = draw.groups.first.size
       expect(described_class.new(draw).oversubscription).to eq(size => -1)
     end
@@ -58,7 +57,7 @@ RSpec.describe DrawReport do
 
   describe '#oversubscribed_sizes' do
     it 'returns an array of over subscribed sizes' do
-      draw = FactoryGirl.create(:oversubscribed_draw)
+      draw = create(:oversubscribed_draw)
       size = draw.groups.first.size
       expect(described_class.new(draw).oversubscribed_sizes).to eq([size])
     end
@@ -66,11 +65,11 @@ RSpec.describe DrawReport do
 
   describe '#oversubscribed?' do
     it 'returns true when > 0 oversubscribed sizes' do
-      draw = FactoryGirl.create(:oversubscribed_draw)
+      draw = create(:oversubscribed_draw)
       expect(described_class.new(draw).oversubscribed?).to be(true)
     end
     it 'returns false when no oversubscribed sizes' do
-      draw = FactoryGirl.create(:draw)
+      draw = create(:draw)
       expect(described_class.new(draw).oversubscribed?).to be(false)
     end
   end
@@ -78,8 +77,8 @@ RSpec.describe DrawReport do
   describe '#suite_counts' do
     it 'returns the number of available suites grouped by size ' do
       size = 2
-      draw = FactoryGirl.create(:group_with_suite, size: size).draw
-      FactoryGirl.create(:suite_with_rooms, rooms_count: size, draws: [draw])
+      draw = create(:group_with_suite, size: size).draw
+      create(:suite_with_rooms, rooms_count: size, draws: [draw])
       # 1 => 1 created during draw creation
       expect(described_class.new(draw).suite_counts).to eq(size => 1, 1 => 1)
     end
@@ -88,20 +87,17 @@ RSpec.describe DrawReport do
   describe '#valid_suites' do
     it 'excludes non-valid suites' do # rubocop:disable RSpec/ExampleLength
       size = 2
-      draw = FactoryGirl.create(:group_with_suite, size: size).draw
+      draw = create(:group_with_suite, size: size).draw
       create_invalid_suites(draw: draw, size: size)
-      valid_suite = FactoryGirl.create(:suite_with_rooms, rooms_count: size,
-                                                          draws: [draw])
+      valid_suite = create(:suite_with_rooms, rooms_count: size, draws: [draw])
       expect(described_class.new(draw).valid_suites(size: size)).to \
         eq(valid_suite.building => [valid_suite])
     end
 
     def create_invalid_suites(draw:, size:)
-      FactoryGirl.create(:suite_with_rooms, draws: [draw], medical: true,
-                                            rooms_count: size)
-      FactoryGirl.create(:suite_with_rooms, draws: [draw],
-                                            rooms_count: size + 1)
-      FactoryGirl.create(:suite_with_rooms, rooms_count: size)
+      create(:suite_with_rooms, draws: [draw], medical: true, rooms_count: size)
+      create(:suite_with_rooms, draws: [draw], rooms_count: size + 1)
+      create(:suite_with_rooms, rooms_count: size)
     end
   end
 
@@ -117,14 +113,14 @@ RSpec.describe DrawReport do
 
   describe '#ungrouped_students_by_intent' do
     it 'calls the ungrouped students query' do
-      draw = FactoryGirl.create(:draw_with_members)
+      draw = create(:draw_with_members)
       allow(UngroupedStudentsQuery).to receive(:new).and_call_original
       described_class.new(draw).ungrouped_students_by_intent
       expect(UngroupedStudentsQuery).to have_received(:new).with(draw.students)
     end
     it 'groups by intent and removes off campus' do
-      draw = FactoryGirl.create(:draw_with_members)
-      draw.students << FactoryGirl.create(:student, intent: 'off_campus')
+      draw = create(:draw_with_members)
+      draw.students << create(:student, intent: 'off_campus')
       on_campus = draw.students.where(intent: 'on_campus')
       expect(described_class.new(draw).ungrouped_students_by_intent).to \
         eq('on_campus' => on_campus)
@@ -139,10 +135,10 @@ RSpec.describe DrawReport do
     end
 
     it 'returns a count of each intent' do
-      draw = FactoryGirl.create(:draw)
-      draw.students << FactoryGirl.create(:student, intent: 'on_campus')
-      draw.students << FactoryGirl.create(:student, intent: 'off_campus')
-      draw.students << FactoryGirl.create(:student, intent: 'undeclared')
+      draw = create(:draw)
+      draw.students << create(:student, intent: 'on_campus')
+      draw.students << create(:student, intent: 'off_campus')
+      draw.students << create(:student, intent: 'undeclared')
       expect(described_class.new(draw).intent_metrics.values).to eq([1, 1, 1])
     end
   end

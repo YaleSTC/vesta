@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe NextGroupsQuery do
-  let(:draw) { FactoryGirl.create(:draw_in_lottery, groups_count: 2) }
+  let(:draw) { create(:draw_in_lottery, groups_count: 2) }
 
   before do
     draw.groups.each do |group|
-      FactoryGirl.create(:lottery_assignment, :defined_by_group, group: group)
+      create(:lottery_assignment, :defined_by_group, group: group)
     end
   end
 
@@ -51,10 +51,9 @@ RSpec.describe NextGroupsQuery do
   end
 
   def triple_in_draw(draw:)
-    draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: 3)
-    FactoryGirl.create(:locked_group, :defined_by_draw,
-                       draw: draw, size: 3).tap do |g|
-      FactoryGirl.create(:lottery_assignment, draw: draw, groups: [g])
+    draw.suites << create(:suite_with_rooms, rooms_count: 3)
+    create(:locked_group, :defined_by_draw, draw: draw, size: 3).tap do |g|
+      create(:lottery_assignment, draw: draw, groups: [g])
     end
   end
 end

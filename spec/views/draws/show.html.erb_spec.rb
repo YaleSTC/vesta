@@ -8,7 +8,7 @@ RSpec.describe 'draws/show.html.erb' do
 
   context 'link to intent report' do
     let(:draw) do
-      DrawReport.new(FactoryGirl.build(:draw, id: 1, status: 'pre_lottery'))
+      DrawReport.new(build(:draw, id: 1, status: 'pre_lottery'))
     end
 
     it 'is displayed with the appropriate permissions' do
@@ -32,7 +32,7 @@ RSpec.describe 'draws/show.html.erb' do
 
   context 'link to activate draw' do
     let(:draw) do
-      DrawReport.new(FactoryGirl.build(:draw, id: 1, status: 'draft'))
+      DrawReport.new(build(:draw, id: 1, status: 'draft'))
     end
 
     it 'is displayed with the appropriate permissions' do

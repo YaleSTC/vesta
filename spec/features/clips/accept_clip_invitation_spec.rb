@@ -12,10 +12,9 @@ RSpec.feature 'Students accepting clip invitations' do
   end
 
   def create_clip_with_invitation
-    clip = FactoryGirl.create(:clip)
-    group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
-    FactoryGirl.create(:clip_membership, clip: clip, group: group,
-                                         confirmed: false)
+    clip = create(:clip)
+    group = create(:group_from_draw, draw: clip.draw)
+    create(:clip_membership, clip: clip, group: group, confirmed: false)
     [clip, group.leader]
   end
 end

@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Building editing' do
-  before { log_in FactoryGirl.create(:admin) }
-  let(:building) { FactoryGirl.create(:building) }
+  before { log_in create(:admin) }
+  let(:building) { create(:building) }
 
   it 'succeeds' do
     new_name = 'TD'

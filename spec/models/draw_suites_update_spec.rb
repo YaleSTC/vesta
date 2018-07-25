@@ -12,8 +12,8 @@ RSpec.describe DrawSuitesUpdate do
     context 'success' do
       # rubocop:disable RSpec/ExampleLength
       it 'removes current suites of all sizes' do
-        draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
-        draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: 2)
+        draw = create(:draw_with_members, suites_count: 1)
+        draw.suites << create(:suite_with_rooms, rooms_count: 2)
         current_suites = draw.suites.available.map(&:id)
         params = mock_params(suite_ids_1: [])
         expect do
@@ -22,19 +22,19 @@ RSpec.describe DrawSuitesUpdate do
         end.to change { draw.suites.count }.by(-2)
       end
       it 'does not remove suites with groups' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         current_suites = draw.suites.available.map(&:id)
         params = mock_params(suite_ids_1: [])
-        FactoryGirl.create(:group_with_suite, :defined_by_draw, draw: draw)
+        create(:group_with_suite, :defined_by_draw, draw: draw)
         expect do
           described_class.update(draw: draw, current_suites: current_suites,
                                  params: params)
         end.to change { draw.suites.count }.by(0)
       end
       it 'adds suites from both drawn_ids and drawless_ids' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         current_suites = draw.suites.available.map(&:id)
-        drawless_suite = FactoryGirl.create(:suite)
+        drawless_suite = create(:suite)
         drawn_suite = create_drawn_suite
         params = mock_params(drawn_ids_1: [drawn_suite.id.to_s],
                              drawless_ids_1: [drawless_suite.id.to_s])
@@ -44,10 +44,10 @@ RSpec.describe DrawSuitesUpdate do
         end.to change { draw.suites.count }.by(2)
       end
       it 'handles multiple suite sizes' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         current_suites = draw.suites.available.map(&:id)
-        drawless1 = FactoryGirl.create(:suite)
-        drawless2 = FactoryGirl.create(:suite)
+        drawless1 = create(:suite)
+        drawless2 = create(:suite)
         params = mock_params(drawless_ids_1: [drawless1.id.to_s],
                              drawless_ids_2: [drawless2.id.to_s])
         expect do
@@ -58,21 +58,21 @@ RSpec.describe DrawSuitesUpdate do
       end
       # rubocop:enable RSpec/ExampleLength
       it 'sets :redirect_object to nil' do
-        draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
+        draw = create(:draw_with_members, suites_count: 1)
         params = mock_params(suite_ids_1: [])
         result = described_class.update(draw: draw, current_suites:
           draw.suites.available.map(&:id), params: params)
         expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to nil' do
-        draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
+        draw = create(:draw_with_members, suites_count: 1)
         params = mock_params(suite_ids_1: [])
         result = described_class.update(draw: draw, current_suites:
           draw.suites.available.map(&:id), params: params)
         expect(result[:update_object]).to be_nil
       end
       it 'sets a success message' do
-        draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
+        draw = create(:draw_with_members, suites_count: 1)
         params = mock_params(suite_ids_1: [])
         result = described_class.update(draw: draw, current_suites:
           draw.suites.available.map(&:id), params: params)
@@ -82,19 +82,19 @@ RSpec.describe DrawSuitesUpdate do
 
     context 'warning' do
       it 'sets :redirect_object to nil' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         result = described_class.update(draw: draw, current_suites:
           draw.suites.available.map(&:id), params: mock_params)
         expect(result[:redirect_object]).to be_nil
       end
       it 'sets :update_object to the update object' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         update_object = described_class.new(draw: draw, current_suites:
           draw.suites.available.map(&:id), params: mock_params)
         expect(update_object.update[:update_object]).to eq(update_object)
       end
       it 'sets an alert message' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         result = described_class.update(draw: draw, current_suites:
           draw.suites.available.map(&:id), params: mock_params)
         expect(result[:msg]).to have_key(:alert)
@@ -102,7 +102,7 @@ RSpec.describe DrawSuitesUpdate do
     end
 
     context 'error' do
-      let(:draw) { FactoryGirl.create(:draw_with_members, suites_count: 1) }
+      let(:draw) { create(:draw_with_members, suites_count: 1) }
       let(:params) { mock_params(suite_ids_1: []) }
       let(:current_suites) { draw.suites.available.map(&:id) }
 
@@ -152,7 +152,7 @@ RSpec.describe DrawSuitesUpdate do
     end
 
     def create_drawn_suite
-      draw = FactoryGirl.create(:draw_with_members, suites_count: 1)
+      draw = create(:draw_with_members, suites_count: 1)
       draw.suites.first
     end
   end

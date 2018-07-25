@@ -6,10 +6,10 @@ require 'rails_helper'
 RSpec.describe UserPolicy do
   subject { described_class }
 
-  let(:other_user) { FactoryGirl.build_stubbed(:user) }
+  let(:other_user) { build_stubbed(:user) }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+    let(:user) { build_stubbed(:user, role: 'student') }
 
     permissions :show? do
       it { is_expected.to permit(user, user) }
@@ -95,7 +95,7 @@ RSpec.describe UserPolicy do
   end
 
   context 'housing rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:user, role: 'rep') }
 
     permissions :show? do
       it { is_expected.to permit(user, user) }
@@ -223,7 +223,7 @@ RSpec.describe UserPolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
 
     permissions :show?, :destroy?, :update?, :edit? do
       it { is_expected.to permit(user, other_user) }

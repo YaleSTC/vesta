@@ -17,6 +17,6 @@ class FakeProfileQuerier < ProfileQuerier
   private
 
   def fg_attrs
-    FactoryGirl.attributes_for(:student).slice(*PROFILE_FIELDS)
+    FactoryBot.attributes_for(:student).slice(*PROFILE_FIELDS)
   end
 end

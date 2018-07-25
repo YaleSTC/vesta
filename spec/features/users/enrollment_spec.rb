@@ -6,7 +6,7 @@ require 'rack-timeout'
 
 RSpec.feature 'User enrollment' do
   before do
-    log_in(FactoryGirl.create(:admin))
+    log_in(create(:admin))
     allow(ENV).to receive(:[]).and_return(nil)
     allow(ENV).to receive(:[]).with('QUERIER').and_return('FakeProfileQuerier')
   end

@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe ClipUpdater do
-  let(:clip) { FactoryGirl.create(:clip, groups_count: 3) }
+  let(:clip) { create(:clip, groups_count: 3) }
   let(:group_ids) { clip.clip_memberships.map(&:group_id).map(&:to_s) }
 
   context 'successfully' do
     context 'when adding a group' do
-      let(:new_group) { FactoryGirl.create(:group_from_draw, draw: clip.draw) }
+      let(:new_group) { create(:group_from_draw, draw: clip.draw) }
       let(:params) { { group_ids: group_ids << new_group.id.to_s } }
 
       it 'adds a member to the clip' do

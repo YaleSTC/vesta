@@ -12,10 +12,9 @@ RSpec.feature 'Students leaving clips' do
   end
 
   def create_clip_and_leader
-    clip = FactoryGirl.create(:clip)
-    group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
-    FactoryGirl.create(:clip_membership, clip: clip, group: group,
-                                         confirmed: true)
+    clip = create(:clip)
+    group = create(:group_from_draw, draw: clip.draw)
+    create(:clip_membership, clip: clip, group: group, confirmed: true)
     [clip, group.leader]
   end
 end

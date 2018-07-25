@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe LotteryAssignment, type: :model do
   describe 'basic validations' do
-    subject { FactoryGirl.build(:lottery_assignment) }
+    subject { build(:lottery_assignment) }
 
     it { is_expected.to validate_presence_of(:number) }
     it { is_expected.to validate_numericality_of(:number) }
@@ -21,27 +21,25 @@ RSpec.describe LotteryAssignment, type: :model do
 
   describe 'factories' do
     it 'has a basic factory' do
-      expect(FactoryGirl.build(:lottery_assignment)).to be_valid
+      expect(build(:lottery_assignment)).to be_valid
     end
     it 'can be defined by a group' do
-      group = FactoryGirl.create(:draw_in_lottery).groups.first
-      lottery = FactoryGirl.build(:lottery_assignment, :defined_by_group,
-                                  group: group)
+      group = create(:draw_in_lottery).groups.first
+      lottery = build(:lottery_assignment, :defined_by_group, group: group)
       expect(lottery).to be_valid
     end
   end
 
   describe 'draw must be in lottery on create' do
     it do
-      draw = FactoryGirl.create(:draw_in_lottery)
-      lottery = FactoryGirl.build(:lottery_assignment, draw: draw)
+      draw = create(:draw_in_lottery)
+      lottery = build(:lottery_assignment, draw: draw)
       expect(lottery).to be_valid
     end
     it 'fails in other states' do
-      draw = FactoryGirl.create(:draw_with_members, status: 'pre_lottery')
-      group = FactoryGirl.create(:group, :defined_by_draw, draw: draw)
-      lottery = FactoryGirl.build(:lottery_assignment, draw: draw,
-                                                       groups: [group])
+      draw = create(:draw_with_members, status: 'pre_lottery')
+      group = create(:group, :defined_by_draw, draw: draw)
+      lottery = build(:lottery_assignment, draw: draw, groups: [group])
       expect(lottery).not_to be_valid
     end
   end
@@ -55,31 +53,30 @@ RSpec.describe LotteryAssignment, type: :model do
   end
 
   it 'number must be unique within a draw' do
-    existing = FactoryGirl.create(:lottery_assignment)
-    lottery = FactoryGirl.build(:lottery_assignment, draw: existing.draw,
-                                                     number: existing.number)
+    existing = create(:lottery_assignment)
+    lottery = build(:lottery_assignment, draw: existing.draw,
+                                         number: existing.number)
     expect(lottery).not_to be_valid
   end
 
   it 'draw must match group draw' do
-    groups = FactoryGirl.create(:draw_in_lottery).groups
-    lottery = FactoryGirl.build(:lottery_assignment,
-                                draw: FactoryGirl.create(:draw_in_lottery),
-                                groups: groups)
+    groups = create(:draw_in_lottery).groups
+    lottery = build(:lottery_assignment, draw: create(:draw_in_lottery),
+                                         groups: groups)
     expect(lottery).not_to be_valid
   end
 
   describe 'frozen attributes' do
-    let(:lottery) { FactoryGirl.create(:lottery_assignment) }
+    let(:lottery) { create(:lottery_assignment) }
 
     it "can't change draw" do
-      draw = FactoryGirl.create(:draw_in_lottery)
+      draw = create(:draw_in_lottery)
       # skips the group must be in draw test
       lottery.group.draw = draw
       expect(lottery.update(draw: draw)).to be_falsey
     end
     it 'raises error if draw is changed' do
-      draw = FactoryGirl.create(:draw_in_lottery)
+      draw = create(:draw_in_lottery)
       lottery.group.draw = draw
       lottery.update(draw: draw)
       expect(lottery.errors[:base])
@@ -98,7 +95,7 @@ RSpec.describe LotteryAssignment, type: :model do
   end
 
   it 'can be destroyed' do
-    lottery = FactoryGirl.create(:lottery_assignment)
+    lottery = create(:lottery_assignment)
     expect { lottery.destroy }.to change { described_class.count }.by(-1)
   end
 
@@ -112,19 +109,19 @@ RSpec.describe LotteryAssignment, type: :model do
 
   describe '#update_selected!' do
     it 'updates selected to true when group has suite' do
-      group = FactoryGirl.create(:group_with_suite)
+      group = create(:group_with_suite)
       lottery = group.lottery_assignment
       lottery.update(selected: false)
       expect { lottery.update_selected! }.to \
         change { lottery.selected }.from(false).to(true)
     end
     it 'updates selected to false when group has no suite' do
-      lottery = FactoryGirl.create(:lottery_assignment, selected: true)
+      lottery = create(:lottery_assignment, selected: true)
       expect { lottery.update_selected! }.to \
         change { lottery.selected }.from(true).to(false)
     end
     it 'does nothing when selected matches the status' do
-      lottery = FactoryGirl.create(:lottery_assignment)
+      lottery = create(:lottery_assignment)
       expect { lottery.update_selected! }.not_to change { lottery.selected }
     end
   end
@@ -132,7 +129,7 @@ RSpec.describe LotteryAssignment, type: :model do
   describe '#group' do
     context 'when single group' do
       it 'returns the group' do
-        lottery = FactoryGirl.create(:lottery_assignment)
+        lottery = create(:lottery_assignment)
         expect(lottery.group).to eq(lottery.groups.first)
       end
     end

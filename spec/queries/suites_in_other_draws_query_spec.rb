@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe SuitesInOtherDrawsQuery do
   it 'returns all suites without a draw' do
     drawn = create_suite_with_draw
-    _undrawn = FactoryGirl.create(:suite)
+    _undrawn = create(:suite)
     result = described_class.call
     expect(result.map(&:id)).to eq([drawn.id])
   end
@@ -26,8 +26,8 @@ RSpec.describe SuitesInOtherDrawsQuery do
   end
 
   def create_suite_with_draw
-    draw = FactoryGirl.create(:draw)
-    suite = FactoryGirl.create(:suite)
+    draw = create(:draw)
+    suite = create(:suite)
     draw.suites << suite
     suite
   end

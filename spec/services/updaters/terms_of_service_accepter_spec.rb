@@ -55,6 +55,6 @@ RSpec.describe TermsOfServiceAccepter do
   end
 
   def error
-    ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:user))
+    ActiveRecord::RecordInvalid.new(build_stubbed(:user))
   end
 end

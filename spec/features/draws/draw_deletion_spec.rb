@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw deletion' do
-  before { log_in FactoryGirl.create(:admin) }
-  let(:draw) { FactoryGirl.create(:draw_with_members) }
+  before { log_in create(:admin) }
+  let(:draw) { create(:draw_with_members) }
 
   it 'succeeds' do
     msg = "Draw #{draw.name} deleted."

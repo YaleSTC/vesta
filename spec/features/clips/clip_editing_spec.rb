@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.feature 'Clip editing' do
-  let(:clip) { FactoryGirl.create(:clip, groups_count: 3) }
+  let(:clip) { create(:clip, groups_count: 3) }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'succeeds in adding a group' do
-    new_group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
+    new_group = create(:group_from_draw, draw: clip.draw)
     visit edit_clip_path(clip)
     check "clip_group_ids_#{new_group.id}"
     click_on 'Save'

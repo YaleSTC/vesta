@@ -6,7 +6,7 @@ RSpec.describe TermsOfServicePolicy do
   subject { described_class }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+    let(:user) { build_stubbed(:user, role: 'student') }
 
     permissions :show? do
       it { is_expected.to permit(user) }
@@ -28,7 +28,7 @@ RSpec.describe TermsOfServicePolicy do
   end
 
   context 'housing rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:user, role: 'rep') }
 
     permissions :show? do
       it { is_expected.to permit(user) }
@@ -50,7 +50,7 @@ RSpec.describe TermsOfServicePolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
 
     permissions :show? do
       it { is_expected.to permit(user) }

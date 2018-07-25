@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Clip Deletion' do
-  before { log_in FactoryGirl.create(:admin) }
-  let(:clip) { FactoryGirl.create(:clip) }
+  before { log_in create(:admin) }
+  let(:clip) { create(:clip) }
 
   it 'succeeds' do
     visit clip_path(clip)

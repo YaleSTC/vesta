@@ -9,7 +9,7 @@ RSpec.describe SuiteAssignmentPolicy do
   context 'student' do
     let(:draw) { instance_spy('draw', present?: true) }
     let(:user) do
-      FactoryGirl.build_stubbed(:user, role: 'student').tap do |u|
+      build_stubbed(:user, role: 'student').tap do |u|
         allow(u).to receive(:draw).and_return(draw)
       end
     end
@@ -128,7 +128,7 @@ RSpec.describe SuiteAssignmentPolicy do
     let(:draw) { instance_spy('draw', present?: true) }
     let(:other_draw) { instance_spy('draw', present?: true) }
     let(:user) do
-      FactoryGirl.build_stubbed(:user, role: 'rep').tap do |u|
+      build_stubbed(:user, role: 'rep').tap do |u|
         allow(u).to receive(:draw).and_return(draw)
       end
     end
@@ -250,7 +250,7 @@ RSpec.describe SuiteAssignmentPolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
     let(:draw) { instance_spy('draw', present?: true) }
 
     permissions :new?, :create? do

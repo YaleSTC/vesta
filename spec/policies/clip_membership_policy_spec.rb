@@ -6,12 +6,12 @@ require 'rails_helper'
 RSpec.describe ClipMembershipPolicy do
   subject { described_class }
 
-  let(:record) { FactoryGirl.build_stubbed(:clip_membership) }
+  let(:record) { build_stubbed(:clip_membership) }
   let(:draw) { instance_spy('Draw', pre_lottery?: true) }
   let(:group) { instance_spy('Group', present?: true, draw: draw) }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
+    let(:user) { build_stubbed(:user, role: 'student') }
 
     permissions :update?, :destroy? do
       context 'not in a group' do
@@ -171,7 +171,7 @@ RSpec.describe ClipMembershipPolicy do
   end
 
   context 'housing rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:user, role: 'rep') }
 
     permissions :update?, :destroy? do
       context 'not in a group' do
@@ -330,7 +330,7 @@ RSpec.describe ClipMembershipPolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
 
     permissions :update?, :destroy?, :accept?, :reject?, :leave? do
       it { is_expected.not_to permit(user, record) }

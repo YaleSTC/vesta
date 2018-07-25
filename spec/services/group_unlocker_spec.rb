@@ -17,15 +17,15 @@ RSpec.describe GroupUnlocker do
       end
 
       it_behaves_like 'unlocks groups' do
-        let(:group) { FactoryGirl.create(:locked_group) }
+        let(:group) { create(:locked_group) }
       end
       it_behaves_like 'unlocks groups' do
-        let(:group) { FactoryGirl.create(:finalizing_group) }
+        let(:group) { create(:finalizing_group) }
       end
     end
 
     context 'failure' do
-      let(:group) { FactoryGirl.create(:open_group) }
+      let(:group) { create(:open_group) }
 
       it 'returns an error flash' do
         expect(described_class.unlock(group: group)[:msg].keys).to eq([:error])

@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.feature 'Students Joining Groups' do
   context 'inviting to join open group' do
     it 'succeeds' do
-      group = FactoryGirl.create(:open_group, size: 2)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group, size: 2)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       log_in group.leader
       invite_member(user: user, group: group)
       expect(page).to have_content('Successfully created memberships')
@@ -22,8 +22,8 @@ RSpec.feature 'Students Joining Groups' do
 
   context 'rescinding invitation' do
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength
-      group = FactoryGirl.create(:open_group, size: 2)
-      user = FactoryGirl.create(:student, intent: 'on_campus', draw: group.draw)
+      group = create(:open_group, size: 2)
+      user = create(:student, intent: 'on_campus', draw: group.draw)
       Membership.create(user: user, group: group, status: 'invited')
       log_in group.leader
       visit draw_group_path(group.draw, group)

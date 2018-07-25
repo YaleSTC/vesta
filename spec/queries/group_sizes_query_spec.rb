@@ -23,7 +23,7 @@ RSpec.describe GroupSizesQuery do
 
   def create_groups(sizes)
     sizes.each do |size|
-      FactoryGirl.create(:full_group, size: size)
+      create(:full_group, size: size)
     end
   end
 end

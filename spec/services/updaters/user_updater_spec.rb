@@ -33,7 +33,7 @@ describe UserUpdater do
   end
 
   def create_admin(params)
-    FactoryGirl.build_stubbed(:admin).tap do |user|
+    build_stubbed(:admin).tap do |user|
       response = user.assign_attributes(params)
       allow(user).to receive(:update!).with(params).and_return(response)
       allow(user).to receive(:admin?).and_return(true)

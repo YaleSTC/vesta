@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'User deletion' do
-  before { log_in FactoryGirl.create(:admin) }
-  let!(:user) { FactoryGirl.create(:user) }
+  before { log_in create(:admin) }
+  let!(:user) { create(:user) }
 
   it 'succeeds' do
     msg = "User #{user.full_name} deleted."

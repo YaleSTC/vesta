@@ -24,7 +24,7 @@ RSpec.describe Clip, type: :model do
 
   describe '#name' do
     it 'displays the name' do
-      clip = FactoryGirl.create(:clip)
+      clip = create(:clip)
       expected = "#{clip.leader.full_name}'s Clip"
       expect(clip.name).to eq(expected)
     end
@@ -32,29 +32,28 @@ RSpec.describe Clip, type: :model do
 
   describe 'groups association' do
     it 'joins on confirmed memberships' do
-      clip = FactoryGirl.create(:clip)
-      group = FactoryGirl.create(:group_from_draw, draw: clip.draw)
-      FactoryGirl.create(:clip_membership, clip: clip, group: group,
-                                           confirmed: false)
+      clip = create(:clip)
+      group = create(:group_from_draw, draw: clip.draw)
+      create(:clip_membership, clip: clip, group: group, confirmed: false)
       expect(clip.reload.groups.length).to eq(2)
     end
   end
 
   describe '#cleanup!' do
     it 'deletes the clip if there are not enough groups left' do
-      clip = FactoryGirl.create(:clip, groups_count: 2)
+      clip = create(:clip, groups_count: 2)
       clip.clip_memberships.first.delete
       clip.reload.cleanup!
       expect { clip.reload } .to raise_error(ActiveRecord::RecordNotFound)
     end
     it 'does nothing if there are more groups left' do
-      clip = FactoryGirl.create(:clip, groups_count: 3)
+      clip = create(:clip, groups_count: 3)
       clip.clip_memberships.first.delete
       clip.reload.cleanup!
       expect(clip.reload).to eq(clip)
     end
     it 'all clip_memberships are deleted on clip destruction' do
-      clip = FactoryGirl.create(:clip)
+      clip = create(:clip)
       clip_memberships = clip.clip_memberships
       clip.destroy!
       expect(clip_memberships).to eq([])
@@ -63,14 +62,14 @@ RSpec.describe Clip, type: :model do
 
   describe '#leader' do
     it 'provides a leader' do
-      draw = FactoryGirl.create(:draw)
-      groups = FactoryGirl.create_pair(:group_from_draw, draw: draw)
+      draw = create(:draw)
+      groups = create_pair(:group_from_draw, draw: draw)
       leader = groups.first.leader
-      clip = FactoryGirl.create(:clip, groups: groups, draw: draw)
+      clip = create(:clip, groups: groups, draw: draw)
       expect(clip.leader).to eq(leader)
     end
     it 'provides the first unconfirmed leader if no confirmed groups exist' do
-      clip = FactoryGirl.create(:clip)
+      clip = create(:clip)
       leader = clip.groups.first.leader
       clip.clip_memberships.each { |m| m.update!(confirmed: false) }
       expect(clip.leader).to eq(leader)
@@ -79,7 +78,7 @@ RSpec.describe Clip, type: :model do
 
   describe '#size' do
     it 'counts the number of groups in the clip' do
-      clip = FactoryGirl.create(:clip, groups_count: 3)
+      clip = create(:clip, groups_count: 3)
       clip.clip_memberships.last.update!(confirmed: false)
       expect(clip.size).to eq(2)
     end

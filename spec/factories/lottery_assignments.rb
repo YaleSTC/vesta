@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :lottery_assignment do
     sequence(:number) { |n| n }
     selected false
 
     trait :defined_by_draw do
-      draw { FactoryGirl.create(:draw_in_lottery, groups_count: 1) }
+      draw { create(:draw_in_lottery, groups_count: 1) }
       groups { [draw.groups.first] }
     end
 

@@ -9,7 +9,7 @@ RSpec.feature 'Draw automatic lottery assignment' do
 
   it 'can be performed by admins' do
     draw.lottery!
-    log_in FactoryGirl.create(:admin)
+    log_in create(:admin)
     visit draw_path(draw)
     click_on 'Automatically assign lottery numbers'
     expect(page).to have_css('.flash-success', text: /selection started/)

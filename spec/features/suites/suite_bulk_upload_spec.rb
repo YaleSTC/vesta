@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.feature 'Suite CSV Import' do
   context 'admin' do
-    before { log_in FactoryGirl.create(:admin) }
+    before { log_in create(:admin) }
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength
-      building = FactoryGirl.create(:building)
+      building = create(:building)
       visit building_path(building)
       attach_file('suite_import_form[file]',
                   Rails.root.join('spec', 'fixtures', 'suite_upload.csv'))
@@ -16,9 +16,9 @@ RSpec.feature 'Suite CSV Import' do
   end
 
   context 'student' do
-    before { log_in FactoryGirl.create(:student_in_draw) }
+    before { log_in create(:student_in_draw) }
     it 'does not show suite_import_form' do
-      building = FactoryGirl.create(:building)
+      building = create(:building)
       visit building_path(building)
       expect(page).not_to have_content('Import')
     end

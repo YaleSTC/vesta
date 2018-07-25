@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe SuiteUnmerger do
   context 'suite that was not previously merged' do
-    let(:suite) { FactoryGirl.create(:suite, size: 2) }
+    let(:suite) { create(:suite, size: 2) }
 
     it 'returns an error flash' do
       result = described_class.unmerge(suite: suite)
@@ -17,9 +17,9 @@ RSpec.describe SuiteUnmerger do
   end
   context 'merged suite' do
     let(:numbers) { %w(L01 I33) }
-    let(:l_room) { FactoryGirl.create(:room, original_suite: 'L01') }
-    let(:i_room) { FactoryGirl.create(:room, original_suite: 'I33') }
-    let!(:suite) { FactoryGirl.create(:suite, rooms: [l_room, i_room]) }
+    let(:l_room) { create(:room, original_suite: 'L01') }
+    let(:i_room) { create(:room, original_suite: 'I33') }
+    let!(:suite) { create(:suite, rooms: [l_room, i_room]) }
     let(:building) { suite.building }
 
     context 'success' do
@@ -47,14 +47,12 @@ RSpec.describe SuiteUnmerger do
     end
     context 'failure' do
       it 'returns an error flash' do
-        FactoryGirl.create(:suite, number: numbers.first,
-                                   building: suite.building)
+        create(:suite, number: numbers.first, building: suite.building)
         result = described_class.unmerge(suite: suite)
         expect(result[:msg].keys).to match_array([:error])
       end
       it 'redirects to the suite' do
-        FactoryGirl.create(:suite, number: numbers.first,
-                                   building: suite.building)
+        create(:suite, number: numbers.first, building: suite.building)
         result = described_class.unmerge(suite: suite)
         expect(result[:redirect_object]).to eq([suite.building, suite])
       end

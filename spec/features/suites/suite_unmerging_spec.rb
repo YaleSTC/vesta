@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.feature 'Suite unmerging' do
   let(:suite) do
-    FactoryGirl.create(:suite_with_rooms)
+    create(:suite_with_rooms)
   end
   let!(:other_suite) do
-    FactoryGirl.create(:suite_with_rooms, building: suite.building)
+    create(:suite_with_rooms, building: suite.building)
   end
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'can be performed after a merge' do
     visit suite_path(suite)

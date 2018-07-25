@@ -3,16 +3,16 @@
 require 'rails_helper'
 
 RSpec.feature 'Suite Creation' do
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   it 'succeeds' do
-    building = FactoryGirl.create(:building)
+    building = create(:building)
     visit new_building_suite_path(building)
     fill_in_suite_info(suite_number: 'L01')
     click_on 'Create'
     expect(page).to have_content('L01')
   end
   it 'redirects to /new on failure' do
-    visit new_building_suite_path(FactoryGirl.create(:building))
+    visit new_building_suite_path(create(:building))
     click_on 'Create'
     expect(page).to have_content('errors')
   end

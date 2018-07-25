@@ -21,7 +21,7 @@ RSpec.describe DrawResultsStarter do
     end
     it 'rescues update! exceptions' do
       draw = instance_spy('draw', validity_stubs(valid: true))
-      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
+      error = ActiveRecord::RecordInvalid.new(build_stubbed(:draw))
       allow(draw).to receive(:update!).and_raise(error)
       result = described_class.start(draw: draw)
       expect(result[:msg][:error]).to include('There was a problem')
@@ -40,7 +40,7 @@ RSpec.describe DrawResultsStarter do
     end
 
     context 'secondary draw creation' do
-      let(:draw) { FactoryGirl.create(:draw_in_selection, groups_count: 2) }
+      let(:draw) { create(:draw_in_selection, groups_count: 2) }
 
       before do
         draw.groups.first.destroy!

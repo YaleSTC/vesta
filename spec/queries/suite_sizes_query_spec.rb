@@ -23,7 +23,7 @@ RSpec.describe SuiteSizesQuery do
 
   def create_suites(sizes)
     sizes.each do |size|
-      FactoryGirl.create(:suite_with_rooms, rooms_count: size)
+      create(:suite_with_rooms, rooms_count: size)
     end
   end
 end

@@ -49,7 +49,7 @@ RSpec.configure do |config|
     # rubocop:disable RescueModifier
     Apartment::Tenant.drop('college') rescue nil
     # rubocop:enable RescueModifier
-    FactoryGirl.create(:college, subdomain: 'college')
+    FactoryBot.create(:college, subdomain: 'college')
   end
 
   config.before(:each, type: :request) { host! 'college.lvh.me' }

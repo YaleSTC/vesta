@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'Housing Group Creation' do
   context 'as student' do
-    let!(:leader) { FactoryGirl.create(:student_in_draw) }
+    let!(:leader) { create(:student_in_draw) }
 
     it 'succeeds' do
       leader.draw.update(status: 'pre_lottery')
@@ -24,15 +24,15 @@ RSpec.feature 'Housing Group Creation' do
 
   context 'as rep' do
     let(:draw) do
-      FactoryGirl.create(:draw_with_members, students_count: 3,
-                                             status: 'pre_lottery')
+      create(:draw_with_members, students_count: 3,
+                                 status: 'pre_lottery')
     end
     let(:leader) { draw.students.first }
     let!(:suite) do
-      FactoryGirl.create(:suite_with_rooms, rooms_count: 2, draws: [draw])
+      create(:suite_with_rooms, rooms_count: 2, draws: [draw])
     end
 
-    before { log_in FactoryGirl.create(:user, role: 'rep') }
+    before { log_in create(:user, role: 'rep') }
 
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength
       visit draw_path(draw)
@@ -46,15 +46,15 @@ RSpec.feature 'Housing Group Creation' do
 
   context 'as admin' do
     let(:draw) do
-      FactoryGirl.create(:draw_with_members, students_count: 3,
-                                             status: 'pre_lottery')
+      create(:draw_with_members, students_count: 3,
+                                 status: 'pre_lottery')
     end
     let(:leader) { draw.students.first }
     let!(:suite) do
-      FactoryGirl.create(:suite_with_rooms, rooms_count: 2, draws: [draw])
+      create(:suite_with_rooms, rooms_count: 2, draws: [draw])
     end
 
-    before { log_in FactoryGirl.create :admin }
+    before { log_in create :admin }
 
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength
       visit draw_path(draw)

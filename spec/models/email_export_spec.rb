@@ -21,9 +21,9 @@ RSpec.describe EmailExport do
 
   describe '#generate' do
     context 'success' do
-      let(:group) { FactoryGirl.create(:locked_group, size: 1) }
-      let(:group2) { FactoryGirl.create(:locked_group, size: 2) }
-      let(:drawless) { FactoryGirl.create(:drawless_group, size: 1) }
+      let(:group) { create(:locked_group, size: 1) }
+      let(:group2) { create(:locked_group, size: 2) }
+      let(:drawless) { create(:drawless_group, size: 1) }
       let!(:leaders) { [group.leader, group2.leader, drawless.leader] }
 
       it 'returns all leaders without any scoping' do

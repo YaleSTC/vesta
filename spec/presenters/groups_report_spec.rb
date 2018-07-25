@@ -19,7 +19,7 @@ RSpec.describe GroupsReport do
     # rubocop:disable RSpec/InstanceVariable
     def groups_of_each_status(size:)
       return @groups if @groups
-      draw = FactoryGirl.create(:draw_with_members, status: 'pre_lottery')
+      draw = create(:draw_with_members, status: 'pre_lottery')
       group_in_draw(factory: :open_group, draw: draw, size: size)
       group_in_draw(factory: :full_group, draw: draw, size: size)
       group_in_draw(factory: :locked_group, draw: draw, size: size)
@@ -79,7 +79,7 @@ RSpec.describe GroupsReport do
     # Creates one group with a suite and one group without a suite
     def groups(with_count: 1, total_count: 2)
       return @groups if @groups
-      draw = FactoryGirl.create(:draw_in_selection, groups_count: total_count)
+      draw = create(:draw_in_selection, groups_count: total_count)
       with_count.times do |i|
         group = draw.groups[i]
         suite = draw.available_suites.where(size: group.size).first
@@ -91,7 +91,6 @@ RSpec.describe GroupsReport do
   end
 
   def group_in_draw(factory:, draw:, size:, **attrs)
-    FactoryGirl.create(factory, :defined_by_draw, draw: draw, size: size,
-                                                  **attrs)
+    create(factory, :defined_by_draw, draw: draw, size: size, **attrs)
   end
 end

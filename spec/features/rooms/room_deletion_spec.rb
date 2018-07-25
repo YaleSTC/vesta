@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Room deletion' do
-  before { log_in FactoryGirl.create(:admin) }
-  let(:room) { FactoryGirl.create(:room) }
+  before { log_in create(:admin) }
+  let(:room) { create(:room) }
 
   it 'succeeds' do
     msg = "Room #{room.number} deleted."

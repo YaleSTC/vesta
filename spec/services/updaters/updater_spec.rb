@@ -48,7 +48,7 @@ RSpec.describe Updater do
   def mock_suite(valid:)
     instance_spy('Suite').tap do |suite|
       return suite if valid
-      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:suite))
+      error = ActiveRecord::RecordInvalid.new(build_stubbed(:suite))
       allow(suite).to receive(:update!).and_raise(error)
     end
   end

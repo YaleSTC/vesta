@@ -23,7 +23,7 @@ RSpec.describe ReminderQueuer do
     end
   end
   context 'draw update failure' do
-    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+    let(:draw) { build_stubbed(:draw) }
     let(:type) { 'intent' }
 
     before do

@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw suite update' do
-  let(:draw) { FactoryGirl.create(:draw_with_members, suites_count: 1) }
+  let(:draw) { create(:draw_with_members, suites_count: 1) }
   let!(:removed_suite) { draw.suites.first }
-  let(:other_draw) { FactoryGirl.create(:draw_with_members, suites_count: 1) }
+  let(:other_draw) { create(:draw_with_members, suites_count: 1) }
   let!(:other_draw_suite) { other_draw.suites.first }
-  let!(:undrawn_suite) { FactoryGirl.create(:suite_with_rooms, rooms_count: 1) }
+  let!(:undrawn_suite) { create(:suite_with_rooms, rooms_count: 1) }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'can be performed' do
     visit_update_suite_page

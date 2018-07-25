@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw suite size locking' do
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   let(:draw) do
-    FactoryGirl.create(:draw, status: 'pre_lottery').tap do |d|
+    create(:draw, status: 'pre_lottery').tap do |d|
       d.suites << Array.new(3) do |i|
-        FactoryGirl.create(:suite_with_rooms, rooms_count: i + 1)
+        create(:suite_with_rooms, rooms_count: i + 1)
       end
       d.locked_sizes << 1
     end

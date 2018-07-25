@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Room Selection' do
-  let(:group) { FactoryGirl.create(:group_with_suite, size: 2) }
+  let(:group) { create(:group_with_suite, size: 2) }
 
   context 'as group leader' do
     before { log_in group.leader }
@@ -17,7 +17,7 @@ RSpec.feature 'Room Selection' do
   end
 
   context 'as admin' do
-    before { log_in FactoryGirl.create(:admin) }
+    before { log_in create(:admin) }
     context 'assignment editing' do
       before do
         group.members.each_with_index do |m, i|

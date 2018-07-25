@@ -31,7 +31,7 @@ RSpec.describe DrawSelectionStarter do
 
     it 'checks to see if the update works' do
       draw = instance_spy('draw', validity_stubs(valid: true))
-      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
+      error = ActiveRecord::RecordInvalid.new(build_stubbed(:draw))
       allow(draw).to receive(:update!).and_raise(error)
       result = described_class.start(draw: draw)
       expect(result[:msg][:error]).to include('There was a problem')
@@ -76,7 +76,7 @@ RSpec.describe DrawSelectionStarter do
     end
     it 'raises ActiveRecord::RecordInvalid on update failure' do
       draw = instance_spy('draw', validity_stubs(valid: true))
-      error = ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:draw))
+      error = ActiveRecord::RecordInvalid.new(build_stubbed(:draw))
       allow(draw).to receive(:update!).and_raise(error)
       expect { described_class.start!(draw: draw) }.to raise_error(error)
     end

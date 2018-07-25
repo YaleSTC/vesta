@@ -22,7 +22,7 @@ RSpec.feature 'Draw suite selection' do
   end
 
   context 'as admin' do
-    before { log_in FactoryGirl.create(:admin) }
+    before { log_in create(:admin) }
 
     it 'can be done' do
       visit draw_path(draw)
@@ -86,7 +86,7 @@ RSpec.feature 'Draw suite selection' do
   end
 
   context 'as rep' do
-    before { log_in FactoryGirl.create(:user, role: 'rep') }
+    before { log_in create(:user, role: 'rep') }
 
     it 'can view draw page' do
       visit draw_path(draw)

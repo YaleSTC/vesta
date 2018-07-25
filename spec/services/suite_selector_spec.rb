@@ -102,6 +102,6 @@ RSpec.describe SuiteSelector do
   # rubocop:enable AbcSize
 
   def error
-    ActiveRecord::RecordInvalid.new(FactoryGirl.build_stubbed(:suite))
+    ActiveRecord::RecordInvalid.new(build_stubbed(:suite))
   end
 end

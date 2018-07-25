@@ -14,14 +14,14 @@ RSpec.describe Suite, type: :model do
     describe 'number uniqueness' do
       it 'allows duplicates that belong to separate buildings' do
         number = 'L01'
-        FactoryGirl.create(:suite, number: number)
-        suite = FactoryGirl.build(:suite, number: number)
+        create(:suite, number: number)
+        suite = build(:suite, number: number)
         expect(suite.valid?).to be_truthy
       end
       it 'does not allow duplicates in the same building' do
-        attrs = { number: 'L01', building: FactoryGirl.create(:building) }
-        FactoryGirl.create(:suite, **attrs)
-        suite = FactoryGirl.build(:suite, **attrs)
+        attrs = { number: 'L01', building: create(:building) }
+        create(:suite, **attrs)
+        suite = build(:suite, **attrs)
         expect(suite.valid?).to be_falsey
       end
     end
@@ -30,8 +30,8 @@ RSpec.describe Suite, type: :model do
   context 'scopes' do
     describe '.available' do
       it 'returns all suites not assigned to groups' do
-        available = FactoryGirl.create(:suite)
-        FactoryGirl.create(:group_with_suite, :defined_by_draw, draw: nil)
+        available = create(:suite)
+        create(:group_with_suite, :defined_by_draw, draw: nil)
         expect(described_class.available).to eq([available])
       end
     end
@@ -39,9 +39,9 @@ RSpec.describe Suite, type: :model do
 
   describe 'before_save callbacks' do
     context 'if group assignment changes' do
-      let(:group) { FactoryGirl.create(:lottery_assignment).group }
+      let(:group) { create(:lottery_assignment).group }
       let!(:suite) do
-        FactoryGirl.create(:suite_with_rooms, group_id: group.id).reload
+        create(:suite_with_rooms, group_id: group.id).reload
       end
 
       it 'clears room ids when group assignment changes' do
@@ -66,10 +66,10 @@ RSpec.describe Suite, type: :model do
       end
     end
     context 'if medical status changes' do
-      let(:suite) { FactoryGirl.create(:suite) }
+      let(:suite) { create(:suite) }
 
       it 'removes draws if changed to a medical suite' do
-        draw = FactoryGirl.create(:draw)
+        draw = create(:draw)
         suite.update(draws: [draw])
         expect { suite.update!(medical: true) }.to \
           change { suite.draws.to_a }.to([])
@@ -113,35 +113,35 @@ RSpec.describe Suite, type: :model do
     it { is_expected.to allow_value(0).for(:size) }
     it 'equals the number of beds in all rooms' do
       size = 2
-      suite = FactoryGirl.create(:suite)
-      size.times { FactoryGirl.create(:room, beds: 1, suite: suite) }
+      suite = create(:suite)
+      size.times { create(:room, beds: 1, suite: suite) }
       expect(suite.size).to eq(size)
     end
   end
 
   describe '#name_with_draws' do
     it 'returns the name if the suite belongs to no draws' do
-      suite = FactoryGirl.build_stubbed(:suite)
+      suite = build_stubbed(:suite)
       allow(suite).to receive(:draws).and_return([])
       expect(suite.name_with_draws).to eq(suite.name)
     end
     it 'returns the name if the suite only belongs to the passed draw' do
-      suite = FactoryGirl.create(:suite)
-      draw = FactoryGirl.create(:draw)
+      suite = create(:suite)
+      draw = create(:draw)
       suite.draws << draw
       expect(suite.name_with_draws(draw)).to eq(suite.name)
     end
     it 'returns the name with other draw names' do
-      suite = FactoryGirl.create(:suite)
-      draw = FactoryGirl.create(:draw)
+      suite = create(:suite)
+      draw = create(:draw)
       suite.draws << draw
       expected = "#{suite.name} (#{draw.name})"
       expect(suite.name_with_draws).to eq(expected)
     end
     it 'excludes the passed draw' do
-      draw = FactoryGirl.create(:draw_with_members, suites_count: 1,
-                                                    students_count: 0)
-      draw2 = FactoryGirl.create(:draw)
+      draw = create(:draw_with_members, suites_count: 1,
+                                        students_count: 0)
+      draw2 = create(:draw)
       expected = "#{draw.suites.first.name} (#{draw.name})"
       expect(draw.suites.first.name_with_draws(draw2)).to eq(expected)
     end
@@ -149,20 +149,20 @@ RSpec.describe Suite, type: :model do
 
   describe '#available?' do
     it 'returns true if the suite has no group assigned' do
-      suite = FactoryGirl.build(:suite, group_id: nil)
+      suite = build(:suite, group_id: nil)
       expect(suite).to be_available
     end
     it 'returns false if the suite has a group assigned' do
-      suite = FactoryGirl.build(:suite, group_id: 123)
+      suite = build(:suite, group_id: 123)
       expect(suite).not_to be_available
     end
   end
 
   describe 'room helpers' do
-    let(:suite) { FactoryGirl.create(:suite) }
-    let(:single) { FactoryGirl.create(:single) }
-    let(:double) { FactoryGirl.create(:double) }
-    let(:common) { FactoryGirl.create(:room, beds: 0) }
+    let(:suite) { create(:suite) }
+    let(:single) { create(:single) }
+    let(:double) { create(:double) }
+    let(:common) { create(:room, beds: 0) }
 
     before do
       suite.rooms << single
@@ -189,21 +189,21 @@ RSpec.describe Suite, type: :model do
 
   describe '#selectable?' do
     it "returns true if the suite isn't selectable in another draw" do
-      suite = FactoryGirl.build_stubbed(:suite)
+      suite = build_stubbed(:suite)
       allow(suite).to receive(:draws)
         .and_return(mock_draws(%i(pre_lottery? draft?)))
       expect(suite).to be_selectable
     end
 
     it "returns false if one of the suite's draws is in the lottery phase" do
-      suite = FactoryGirl.build_stubbed(:suite)
+      suite = build_stubbed(:suite)
       allow(suite).to receive(:draws)
         .and_return(mock_draws(%i(pre_lottery? draft? lottery?)))
       expect(suite).not_to be_selectable
     end
 
     it 'returns false if a draw is in the suite_selection phase' do
-      suite = FactoryGirl.build_stubbed(:suite)
+      suite = build_stubbed(:suite)
       allow(suite).to receive(:draws)
         .and_return(mock_draws(%i(pre_lottery? draft? suite_selection?)))
       expect(suite).not_to be_selectable
@@ -220,7 +220,7 @@ RSpec.describe Suite, type: :model do
   end
 
   describe '#number_with_medical' do
-    let(:suite) { FactoryGirl.build_stubbed(:suite) }
+    let(:suite) { build_stubbed(:suite) }
 
     it 'returns the number if not a medical suite' do
       allow(suite).to receive(:medical).and_return(false)
@@ -234,7 +234,7 @@ RSpec.describe Suite, type: :model do
   end
 
   describe '#name' do
-    let(:suite) { FactoryGirl.build_stubbed(:suite) }
+    let(:suite) { build_stubbed(:suite) }
     let(:building) { suite.building }
 
     it 'returns the building name and suite number' do
@@ -244,7 +244,7 @@ RSpec.describe Suite, type: :model do
   end
 
   describe '#name_with_medical' do
-    let(:suite) { FactoryGirl.build_stubbed(:suite) }
+    let(:suite) { build_stubbed(:suite) }
     let(:building) { suite.building }
 
     it 'returns the building name and suite number' do
@@ -261,7 +261,7 @@ RSpec.describe Suite, type: :model do
   describe 'lottery assignment callbacks' do
     # really don't like this but it's the simplest place for it to go
     it 'updates the selected attr on the lottery assignment' do
-      lottery = FactoryGirl.create(:lottery_assignment)
+      lottery = create(:lottery_assignment)
       group = lottery.groups.first
       suite = group.draw.suites.first
       expect { suite.update(group: group) }.to \

@@ -28,7 +28,7 @@ RSpec.describe GroupLocker do
     context 'some memberships locked' do
       it_behaves_like 'success' do
         let(:group) do
-          FactoryGirl.create(:finalizing_group, size: 3).tap do |group|
+          create(:finalizing_group, size: 3).tap do |group|
             group.full_memberships.last.update(locked: true)
           end
         end
@@ -37,7 +37,7 @@ RSpec.describe GroupLocker do
 
     context 'group not full' do
       it_behaves_like 'failure' do
-        let(:group) { FactoryGirl.create(:open_group) }
+        let(:group) { create(:open_group) }
       end
     end
   end

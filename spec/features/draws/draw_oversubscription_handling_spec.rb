@@ -4,19 +4,18 @@ require 'rails_helper'
 
 RSpec.feature 'Draw oversubscription handling' do
   let(:draw) do
-    FactoryGirl.create(:draw_with_members, students_count: 2,
-                                           status: 'pre_lottery')
+    create(:draw_with_members, students_count: 2, status: 'pre_lottery')
   end
   let!(:group) do
-    FactoryGirl.create(:locked_group, leader: draw.students.first, size: 1)
+    create(:locked_group, leader: draw.students.first, size: 1)
   end
 
   before do
-    FactoryGirl.create(:locked_group, leader: draw.students.last, size: 1)
+    create(:locked_group, leader: draw.students.last, size: 1)
     draw.suites.delete_all
-    draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: 1)
-    draw.suites << FactoryGirl.create(:suite_with_rooms, rooms_count: 2)
-    log_in FactoryGirl.create(:admin)
+    draw.suites << create(:suite_with_rooms, rooms_count: 1)
+    draw.suites << create(:suite_with_rooms, rooms_count: 2)
+    log_in create(:admin)
   end
 
   it 'is used as a confirmation for lottery assignment' do

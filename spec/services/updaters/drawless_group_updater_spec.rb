@@ -12,8 +12,8 @@ RSpec.describe DrawlessGroupUpdater do
     # rubocop:disable RSpec/ExampleLength
     context 'group is full' do
       it 'deletes memberships for users being removed before updating' do
-        group = FactoryGirl.create(:drawless_group, size: 2)
-        to_remove = FactoryGirl.create(:student, intent: 'on_campus')
+        group = create(:drawless_group, size: 2)
+        to_remove = create(:student, intent: 'on_campus')
         group.members << to_remove
         p = instance_spy('ActionController::Parameters',
                          to_h: { 'remove_ids' => [to_remove.id.to_s] })
@@ -24,16 +24,16 @@ RSpec.describe DrawlessGroupUpdater do
 
     context 'users being added' do
       it 'moves the draw_id attribute to old_draw_id' do
-        group = FactoryGirl.create(:drawless_group, size: 2)
-        to_add = FactoryGirl.create(:student, draw_id: 1)
+        group = create(:drawless_group, size: 2)
+        to_add = create(:student, draw_id: 1)
         p = instance_spy('ActionController::Parameters',
                          to_h: { 'member_ids' => [to_add.id.to_s] })
         described_class.update(group: group, params: p)
         expect(to_add.reload.old_draw_id).to eq(1)
       end
       it 'updates their intent to on_campus if necessary' do
-        group = FactoryGirl.create(:drawless_group, size: 2)
-        to_add = FactoryGirl.create(:student, intent: 'undeclared')
+        group = create(:drawless_group, size: 2)
+        to_add = create(:student, intent: 'undeclared')
         p = instance_spy('ActionController::Parameters',
                          to_h: { 'member_ids' => [to_add.id.to_s] })
         described_class.update(group: group, params: p)
@@ -43,9 +43,8 @@ RSpec.describe DrawlessGroupUpdater do
 
     context 'users being removed' do
       it 'moves the old_draw_id attribute to draw_id' do
-        group = FactoryGirl.create(:drawless_group, size: 2)
-        to_remove = FactoryGirl.create(:student, intent: 'on_campus',
-                                                 old_draw_id: 1)
+        group = create(:drawless_group, size: 2)
+        to_remove = create(:student, intent: 'on_campus', old_draw_id: 1)
         group.members << to_remove
         p = instance_spy('ActionController::Parameters',
                          to_h: { 'remove_ids' => [to_remove.id.to_s] })
@@ -53,7 +52,7 @@ RSpec.describe DrawlessGroupUpdater do
         expect(to_remove.reload.draw_id).to eq(1)
       end
       it 'does not remove the leader if passed' do
-        group = FactoryGirl.create(:drawless_group, size: 2)
+        group = create(:drawless_group, size: 2)
         p = instance_spy('ActionController::Parameters',
                          to_h: { 'remove_ids' => [group.leader_id.to_s] })
         expect { described_class.update(group: group, params: p) }.not_to \

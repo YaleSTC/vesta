@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw editing' do
-  before { log_in FactoryGirl.create(:admin) }
-  let(:draw) { FactoryGirl.create(:draw) }
+  before { log_in create(:admin) }
+  let(:draw) { create(:draw) }
 
   it 'succeeds' do
     new_name = 'Froco Draw'

@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'Group deletion' do
-  let(:group) { FactoryGirl.create(:group).tap { |g| g.draw.pre_lottery! } }
+  let(:group) { create(:group).tap { |g| g.draw.pre_lottery! } }
 
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
 
   it 'succeeds' do
     msg = "Group #{group.name} deleted."

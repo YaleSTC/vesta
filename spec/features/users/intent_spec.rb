@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.feature 'Housing Intent' do
   context 'student' do
     it 'can be indicated' do
-      student = FactoryGirl.create(:student_in_draw)
+      student = create(:student_in_draw)
       student.draw.update(status: 'pre_lottery')
       log_in student
       declare_off_campus student
@@ -20,17 +20,17 @@ RSpec.feature 'Housing Intent' do
   end
 
   context 'admin' do
-    let!(:draw) { FactoryGirl.create(:draw, status: 'pre_lottery') }
+    let!(:draw) { create(:draw, status: 'pre_lottery') }
 
     it 'can lock intent changes on a per draw basis' do
-      student = FactoryGirl.create(:student, draw: draw)
+      student = create(:student, draw: draw)
       lock_intent(draw)
       log_in student
       expect(page).not_to have_content('Update Housing Intent')
     end
 
     def lock_intent(draw)
-      log_in FactoryGirl.create(:admin)
+      log_in create(:admin)
       visit draw_path(draw)
       click_on 'Lock Intents'
       click_on 'Logout'

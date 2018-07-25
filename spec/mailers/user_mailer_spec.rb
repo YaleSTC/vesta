@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe UserMailer, type: :mailer do
   # This tests inherited functionality from ApplicationMailer
-  let(:user) { FactoryGirl.build_stubbed(:user) }
+  let(:user) { build_stubbed(:user) }
 
   it 'sends a multipart email(html and text)' do
     message = described_class.new_user_confirmation(user: user)

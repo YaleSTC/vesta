@@ -15,16 +15,16 @@ RSpec.describe Draw, type: :model do
     it { is_expected.to validate_presence_of(:suite_selection_mode) }
 
     it 'cannot set intent dealine in the past' do
-      draw = FactoryGirl.build(:draw, intent_deadline: Time.zone.today - 1)
+      draw = build(:draw, intent_deadline: Time.zone.today - 1)
       expect(draw).not_to be_valid
     end
     it 'cannot set locking deadline in the past' do
-      draw = FactoryGirl.build(:draw, locking_deadline: Time.zone.today - 1)
+      draw = build(:draw, locking_deadline: Time.zone.today - 1)
       expect(draw).not_to be_valid
     end
     it 'cannot lock intent if undeclared students' do
-      draw = FactoryGirl.create(:draw, status: 'pre_lottery')
-      draw.students << FactoryGirl.create(:student, intent: 'undeclared')
+      draw = create(:draw, status: 'pre_lottery')
+      draw.students << create(:student, intent: 'undeclared')
       draw.intent_locked = true
       expect(draw).not_to be_valid
     end
@@ -32,27 +32,27 @@ RSpec.describe Draw, type: :model do
 
   describe 'callbacks' do
     it 'nullifies the draw_id field on users in the draw after destroy' do
-      draw = FactoryGirl.create(:draw_with_members)
+      draw = create(:draw_with_members)
       students = draw.students
       draw.destroy
       expect(students.map(&:reload).map(&:draw_id).all?(&:nil?)).to be_truthy
     end
     it 'clears old_draw_id when necessary' do
-      draw = FactoryGirl.create(:draw)
-      student = FactoryGirl.create(:student, old_draw_id: draw.id)
+      draw = create(:draw)
+      student = create(:student, old_draw_id: draw.id)
       draw.destroy
       expect(student.reload.old_draw_id).to be_nil
     end
     it 'clears groups on destruction' do
-      group = FactoryGirl.create(:group)
-      draw = FactoryGirl.create(:draw, group_ids: group.id)
+      group = create(:group)
+      draw = create(:draw, group_ids: group.id)
       draw.destroy
       expect { group.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
   describe '#suite_sizes' do
-    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+    let(:draw) { build_stubbed(:draw) }
 
     it 'returns an array of all the available suite sizes in the draw' do
       instance_spy('SuiteSizesQuery', call: [1, 2]).tap do |q|
@@ -64,7 +64,7 @@ RSpec.describe Draw, type: :model do
   end
 
   describe '#group_sizes' do
-    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+    let(:draw) { build_stubbed(:draw) }
 
     it 'returns an array of group sizes in the draw' do
       instance_spy('group_sizes_query', call: [1, 2]).tap do |q|
@@ -79,7 +79,7 @@ RSpec.describe Draw, type: :model do
   describe '#student_count' do
     it 'returns the number of students in the draw' do
       students = Array.new(3) { instance_spy('User') }
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:students).and_return(students)
       expect(draw.send(:student_count)).to eq(3)
     end
@@ -87,13 +87,13 @@ RSpec.describe Draw, type: :model do
 
   describe '#students?' do
     it 'returns true if the student_count is greater than zero' do
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:student_count).and_return(1)
       expect(draw.students?).to be_truthy
     end
 
     it 'returns false if the student_count is zero' do
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:student_count).and_return(0)
       expect(draw.students?).to be_falsey
     end
@@ -101,13 +101,13 @@ RSpec.describe Draw, type: :model do
 
   describe '#groups?' do
     it 'returns true if the group_count is greater than zero' do
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:group_count).and_return(1)
       expect(draw.groups?).to be_truthy
     end
 
     it 'returns false if the group_count is zero' do
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:group_count).and_return(0)
       expect(draw.groups?).to be_falsey
     end
@@ -115,14 +115,14 @@ RSpec.describe Draw, type: :model do
 
   describe '#enough_beds?' do
     it 'returns true if bed_count >= on_campus_student_count' do
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:bed_count).and_return(2)
       allow(draw).to receive(:on_campus_student_count).and_return(1)
       expect(draw.enough_beds?).to be_truthy
     end
 
     it 'returns false if bed_count < on_campus_student_count' do
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:bed_count).and_return(1)
       allow(draw).to receive(:on_campus_student_count).and_return(2)
       expect(draw.enough_beds?).to be_falsey
@@ -131,7 +131,7 @@ RSpec.describe Draw, type: :model do
 
   describe '#open_suite_sizes' do
     it 'returns suite sizes in the draw minus locked sizes' do
-      draw = FactoryGirl.build_stubbed(:draw, locked_sizes: [1])
+      draw = build_stubbed(:draw, locked_sizes: [1])
       all_sizes = [1, 2]
       allow(draw).to receive(:suite_sizes).and_return(all_sizes)
       expect(draw.open_suite_sizes).to eq([2])
@@ -140,8 +140,8 @@ RSpec.describe Draw, type: :model do
 
   describe '#bed_count' do
     it 'returns the number of beds across all available suites' do
-      draw = FactoryGirl.create(:draw_with_members, suites_count: 2)
-      group = FactoryGirl.create(:locked_group, :defined_by_draw, draw: draw)
+      draw = create(:draw_with_members, suites_count: 2)
+      group = create(:locked_group, :defined_by_draw, draw: draw)
       draw.reload.suites.last.update(group: group)
       available_beds = draw.suites.sum(&:size) - draw.suites.last.size
       expect(draw.send(:bed_count)).to eq(available_beds)
@@ -150,43 +150,43 @@ RSpec.describe Draw, type: :model do
 
   describe '#available_suites' do
     it 'returns suites without associated groups' do
-      available = FactoryGirl.create(:suite)
-      taken = FactoryGirl.create(:group_with_suite).suite
-      draw = FactoryGirl.create(:draw, suites: [available, taken])
+      available = create(:suite)
+      taken = create(:group_with_suite).suite
+      draw = create(:draw, suites: [available, taken])
       expect(draw.available_suites).to eq([available])
     end
   end
 
   describe '#all_students_grouped?' do
     it 'returns false if there are students in the draw not in a group' do
-      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
-      FactoryGirl.create(:group, leader: draw.students.first)
+      draw = create(:draw_with_members, students_count: 2)
+      create(:group, leader: draw.students.first)
       expect(draw.all_students_grouped?).to be_falsey
     end
     it 'checks undeclared students' do
-      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
-      FactoryGirl.create(:group, leader: draw.students.first)
+      draw = create(:draw_with_members, students_count: 2)
+      create(:group, leader: draw.students.first)
       draw.students.last.update(intent: 'undeclared')
       expect(draw.all_students_grouped?).to be_falsey
     end
     it 'ignores off_campus students' do
-      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
-      FactoryGirl.create(:group, leader: draw.students.first)
+      draw = create(:draw_with_members, students_count: 2)
+      create(:group, leader: draw.students.first)
       draw.students.last.update(intent: 'off_campus')
       expect(draw.all_students_grouped?).to be_truthy
     end
     it 'returns true if there are no students in the draw not in a group' do
-      draw = FactoryGirl.create(:draw_with_members, students_count: 1)
-      FactoryGirl.create(:group, leader: draw.students.first)
+      draw = create(:draw_with_members, students_count: 1)
+      create(:group, leader: draw.students.first)
       expect(draw.all_students_grouped?).to be_truthy
     end
   end
 
   describe '#ungrouped_students' do
-    let(:draw) { FactoryGirl.create(:draw_with_members, students_count: 4) }
+    let(:draw) { create(:draw_with_members, students_count: 4) }
 
     before do
-      FactoryGirl.create(:group, leader: draw.students.first)
+      create(:group, leader: draw.students.first)
       draw.students[1].update!(intent: 'off_campus')
       draw.students[2].update!(intent: 'undeclared')
     end
@@ -202,7 +202,7 @@ RSpec.describe Draw, type: :model do
   end
 
   describe '#all_intents_declared?' do
-    let(:draw) { FactoryGirl.create(:draw_with_members) }
+    let(:draw) { create(:draw_with_members) }
 
     it 'returns false if there are any undeclared students in the draw' do
       draw.students.first.update(intent: 'undeclared')
@@ -216,14 +216,14 @@ RSpec.describe Draw, type: :model do
 
   describe '#all_groups_locked?' do
     it 'returns true if all groups in the draw are locked' do
-      draw = FactoryGirl.create(:draw_with_members, students_count: 1)
-      FactoryGirl.create(:locked_group, leader: draw.students.first)
+      draw = create(:draw_with_members, students_count: 1)
+      create(:locked_group, leader: draw.students.first)
       expect(draw.all_groups_locked?).to be_truthy
     end
     it 'returns false if not all groups in the draw are locked' do
-      draw = FactoryGirl.create(:draw_with_members, students_count: 2)
-      FactoryGirl.create(:locked_group, leader: draw.students.first)
-      FactoryGirl.create(:full_group, leader: draw.students.second)
+      draw = create(:draw_with_members, students_count: 2)
+      create(:locked_group, leader: draw.students.first)
+      create(:full_group, leader: draw.students.second)
       expect(draw.all_groups_locked?).to be_falsey
     end
   end
@@ -239,22 +239,22 @@ RSpec.describe Draw, type: :model do
 
   describe '#group_count' do
     it 'returns the number of groups in the draw' do
-      draw = FactoryGirl.create(:draw_with_members)
-      FactoryGirl.create(:group, leader: draw.students.first)
+      draw = create(:draw_with_members)
+      create(:group, leader: draw.students.first)
       expect(draw.group_count).to eq(1)
     end
   end
 
   describe '#available_suite_count' do
     it 'returns number of available suites' do
-      draw = FactoryGirl.create(:draw_with_members, suites_count: 2)
-      draw.suites.first.update!(group_id: FactoryGirl.create(:group).id)
+      draw = create(:draw_with_members, suites_count: 2)
+      draw.suites.first.update!(group_id: create(:group).id)
       expect(draw.available_suite_count).to eq(1)
     end
   end
 
   describe '#before_lottery?' do
-    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+    let(:draw) { build_stubbed(:draw) }
 
     it 'returns true if draw is a draft' do
       draw.status = 'draft'
@@ -279,7 +279,7 @@ RSpec.describe Draw, type: :model do
   end
 
   describe '#lottery_or_later?' do
-    let(:draw) { FactoryGirl.build_stubbed(:draw) }
+    let(:draw) { build_stubbed(:draw) }
 
     it 'returns true if draw is a draft' do
       draw.status = 'draft'
@@ -305,43 +305,43 @@ RSpec.describe Draw, type: :model do
 
   describe '#oversubscribed?' do
     it 'returns true if the draw is oversubscribed' do
-      draw = FactoryGirl.create(:oversubscribed_draw)
+      draw = create(:oversubscribed_draw)
       expect(draw).to be_oversubscribed
     end
 
     it 'returns false if the draw is not oversubscribed' do
-      draw = FactoryGirl.create(:draw_with_members, status: 'pre_lottery')
-      FactoryGirl.create(:locked_group, leader: draw.students.first)
+      draw = create(:draw_with_members, status: 'pre_lottery')
+      create(:locked_group, leader: draw.students.first)
       expect(draw).not_to be_oversubscribed
     end
 
     it 'only counts avaiable suites' do
-      draw = FactoryGirl.create(:draw_with_members, status: 'pre_lottery')
-      FactoryGirl.create(:locked_group, leader: draw.students.first)
+      draw = create(:draw_with_members, status: 'pre_lottery')
+      create(:locked_group, leader: draw.students.first)
       # this assigns a suite in this draw to a group in another draw
-      FactoryGirl.create(:group_with_suite, suite: draw.suites.last)
+      create(:group_with_suite, suite: draw.suites.last)
       expect(draw).to be_oversubscribed
     end
   end
 
   describe '#size_locked?' do
     it 'returns true if the suite size is locked' do
-      draw = FactoryGirl.build_stubbed(:draw, locked_sizes: [1])
+      draw = build_stubbed(:draw, locked_sizes: [1])
       expect(draw.size_locked?(1)).to be_truthy
     end
 
     it 'returns false if the suite size is unlocked' do
-      draw = FactoryGirl.build_stubbed(:draw, locked_sizes: [])
+      draw = build_stubbed(:draw, locked_sizes: [])
       expect(draw.size_locked?(1)).to be_falsey
     end
   end
 
   describe '#lottery_complete?' do
-    let(:draw) { FactoryGirl.create(:draw_in_lottery) }
+    let(:draw) { create(:draw_in_lottery) }
 
     it 'returns true if all groups have lottery numbers assigned' do
       draw.groups.each do |g|
-        FactoryGirl.create(:lottery_assignment, :defined_by_group, group: g)
+        create(:lottery_assignment, :defined_by_group, group: g)
       end
       expect(draw.lottery_complete?).to be_truthy
     end
@@ -352,7 +352,7 @@ RSpec.describe Draw, type: :model do
 
   describe '#next_groups' do
     it 'calls NextGroupQuery' do
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(NextGroupsQuery).to receive(:call).with(draw: draw)
       draw.next_groups
       expect(NextGroupsQuery).to have_received(:call).with(draw: draw)
@@ -362,13 +362,13 @@ RSpec.describe Draw, type: :model do
   describe '#next_group?' do
     it 'returns true when group is in next groups' do
       group = instance_spy('Group')
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:next_groups).and_return([group])
       expect(draw.next_group?(group)).to be_truthy
     end
     it 'returns false when group is not in next groups' do
       group = instance_spy('Group')
-      draw = FactoryGirl.build_stubbed(:draw)
+      draw = build_stubbed(:draw)
       allow(draw).to receive(:next_groups).and_return([])
       expect(draw.next_group?(group)).to be_falsey
     end
@@ -398,7 +398,7 @@ RSpec.describe Draw, type: :model do
   end
 
   describe '#all_groups_have_suites?' do
-    let(:draw) { FactoryGirl.create(:draw_in_selection, groups_count: 2) }
+    let(:draw) { create(:draw_in_selection, groups_count: 2) }
 
     before { draw.suites.last.update!(group_id: draw.groups.last.id) }
     it 'returns true if all groups have suites assigned' do

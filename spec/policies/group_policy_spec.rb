@@ -8,9 +8,9 @@ RSpec.describe GroupPolicy do
   subject { described_class }
 
   context 'student' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'student') }
-    let(:group) { FactoryGirl.build_stubbed(:group, leader: user) }
-    let(:other_group) { FactoryGirl.build_stubbed(:group) }
+    let(:user) { build_stubbed(:user, role: 'student') }
+    let(:group) { build_stubbed(:group, leader: user) }
+    let(:other_group) { build_stubbed(:group) }
 
     permissions :create? do
       context 'in pre_lottery draw, not in group, on_campus' do
@@ -157,10 +157,9 @@ RSpec.describe GroupPolicy do
   end
 
   context 'housing rep' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:user, role: 'rep') }
     let(:group) do
-      FactoryGirl.build_stubbed(:group,
-                                draw: FactoryGirl.build_stubbed(:draw))
+      build_stubbed(:group, draw: build_stubbed(:draw))
     end
 
     permissions :create? do
@@ -235,10 +234,9 @@ RSpec.describe GroupPolicy do
   end
 
   context 'admin' do
-    let(:user) { FactoryGirl.build_stubbed(:user, role: 'admin') }
+    let(:user) { build_stubbed(:user, role: 'admin') }
     let(:group) do
-      FactoryGirl.build_stubbed(:group,
-                                draw: FactoryGirl.build_stubbed(:draw))
+      build_stubbed(:group, draw: build_stubbed(:draw))
     end
 
     permissions :create? do

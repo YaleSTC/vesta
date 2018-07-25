@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.feature 'Special housing group creation' do
   context 'as admin' do
-    let!(:leader) { FactoryGirl.create(:student, intent: 'on_campus') }
+    let!(:leader) { create(:student, intent: 'on_campus') }
 
-    before { log_in(FactoryGirl.create(:admin)) }
+    before { log_in(create(:admin)) }
 
     it 'succeeds' do
-      FactoryGirl.create(:suite_with_rooms, rooms_count: 1)
+      create(:suite_with_rooms, rooms_count: 1)
       visit new_group_path
       create_group(leader: leader, size: 1)
       expect(page).to have_css('.group-name',

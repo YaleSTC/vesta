@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Building Creation' do
-  before { log_in FactoryGirl.create(:admin) }
+  before { log_in create(:admin) }
   it 'succeeds' do
     visit 'buildings/new'
     name = 'Silliman'

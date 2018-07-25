@@ -58,7 +58,7 @@ RSpec.describe DrawlessGroupCreator do
       be_instance_of(Group)
   end
   it 'does not persist changes to members if save fails' do
-    student = FactoryGirl.create(:student, intent: 'undeclared')
+    student = create(:student, intent: 'undeclared')
     params = instance_spy('ActionController::Parameters',
                           to_h: invalid_params_hash_with_draw_student(student))
     expect { described_class.create(params: params) }.not_to \
@@ -67,21 +67,21 @@ RSpec.describe DrawlessGroupCreator do
 
   # rubocop:disable RSpec/InstanceVariable
   def params_hash(leader = nil)
-    @suite ||= FactoryGirl.create(:suite_with_rooms, rooms_count: 2)
-    @leader ||= leader || FactoryGirl.create(:student)
+    @suite ||= create(:suite_with_rooms, rooms_count: 2)
+    @leader ||= leader || create(:student)
     { size: @suite.size, leader_id: @leader.id }
   end
   # rubocop:enable RSpec/InstanceVariable
 
   def params_hash_with_draw_students
-    params_hash(FactoryGirl.create(:student_in_draw)).merge(
-      member_ids: [FactoryGirl.create(:student_in_draw).id.to_s]
+    params_hash(create(:student_in_draw)).merge(
+      member_ids: [create(:student_in_draw).id.to_s]
     )
   end
 
   def params_hash_with_undeclared_intent_student
     params_hash.merge(
-      member_ids: [FactoryGirl.create(:student, intent: 'undeclared').id.to_s]
+      member_ids: [create(:student, intent: 'undeclared').id.to_s]
     )
   end
 

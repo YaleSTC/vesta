@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.feature 'Drawless group suite assignment' do
-  let(:group) { FactoryGirl.create(:drawless_group) }
+  let(:group) { create(:drawless_group) }
   let(:suite) { Suite.where(size: group.size).first }
 
   before do
     GroupLocker.lock(group: group)
-    log_in(FactoryGirl.create(:admin))
+    log_in(create(:admin))
   end
 
   it 'can be performed' do
