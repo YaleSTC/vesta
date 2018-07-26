@@ -94,7 +94,6 @@ class UserDashboard < Administrate::BaseDashboard
     class_year
     draw
     old_draw_id
-    room
   ).freeze
 
   # Overwrite this method to customize how users are displayed

@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 * Bulk user enrollment no longer fails silently when users exist and now flashes an error message ([#156](https://gitlab.com/yale-sdmp/vesta/issues/156)).
 * Admins can add users to groups even if users have pending invitations ([#773](https://gitlab.com/yale-sdmp/vesta/issues/773)).
 * Unhidden table caption is now hidden ([#800](https://gitlab.com/yale-sdmp/vesta/issues/800)).
+* Fix NoMethodError in creating new user in admin dashboard ([#810](https://gitlab.com/yale-sdmp/vesta/issues/810))
 
 ## v1.0.8 - 2018-04-09
 ### Fixed
