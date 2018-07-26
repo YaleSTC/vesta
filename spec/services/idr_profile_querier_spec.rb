@@ -29,7 +29,7 @@ RSpec.describe IDRProfileQuerier do
     context 'success' do
       before do
         assign_required_attributes
-        stub_profile_request
+        stub_profile_request(DUMMY_XML_RESPONSE)
       end
       it 'returns full profile data with CAS' do
         allow(User).to receive(:cas_auth?).and_return(true)
@@ -51,6 +51,19 @@ RSpec.describe IDRProfileQuerier do
           result = described_class.query(id: 'foo')
           expect(result).to eq({})
         end
+      end
+    end
+
+    context 'failed result' do
+      before do
+        assign_required_attributes
+        stub_profile_request(DUMMY_XML_RESPONSE
+          .gsub('<FirstName>Jane</FirstName>', ''))
+      end
+      it 'removes a param key if its value is nil' do
+        allow(User).to receive(:cas_auth?).and_return(true)
+        result = described_class.query(id: 'bar')
+        expect(result).to eq(DUMMY_PROFILE_HASH.except(:first_name))
       end
     end
   end
@@ -80,9 +93,9 @@ RSpec.describe IDRProfileQuerier do
     param.gsub('PROFILE_REQUEST_', '').split('_').map(&:capitalize).join('')
   end
 
-  def stub_profile_request(id: 'bar')
+  def stub_profile_request(xml_response, id: 'bar')
     stub_request(:get, 'https://foo.example.com')
       .with(query: { 'foo' => id })
-      .to_return(body: DUMMY_XML_RESPONSE)
+      .to_return(body: xml_response)
   end
 end

@@ -23,6 +23,7 @@ class IDRProfileQuerier < ProfileQuerier
     build_request
     issue_request
     parse_results
+    clean_up_results
     attr_hash
   end
 
@@ -92,6 +93,10 @@ class IDRProfileQuerier < ProfileQuerier
   def extract_data(xml, field_key)
     tag = env(config_var(field_key.to_s.upcase))
     xml.at_xpath("//#{tag}")&.content
+  end
+
+  def clean_up_results
+    attr_hash.delete_if { |_attr_key, attr_value| attr_value.nil? }
   end
 
   def profile_fields
