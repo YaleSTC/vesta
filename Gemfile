@@ -49,7 +49,7 @@ group :development, :test do
   gem "bullet", "~> 5.5.1"
   gem "bundler-audit", ">= 0.5.0", require: false
   gem "dotenv-rails", "~> 2.2.1"
-  gem "factory_bot_rails", "~> 4.8.2"
+  gem "factory_bot_rails", "~> 4.10.0"
   gem "pry-byebug", "~> 3.4.2"
   gem "pry-rails", "~> 0.3.6"
   gem "rspec-rails", "~> 3.6.0"

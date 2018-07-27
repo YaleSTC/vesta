@@ -117,10 +117,10 @@ GEM
       railties (>= 3.2, < 5.2)
     erubi (1.6.0)
     execjs (2.7.0)
-    factory_bot (4.8.2)
+    factory_bot (4.10.0)
       activesupport (>= 3.0.0)
-    factory_bot_rails (4.8.2)
-      factory_bot (~> 4.8.2)
+    factory_bot_rails (4.10.0)
+      factory_bot (~> 4.10.0)
       railties (>= 3.0.0)
     ffaker (2.5.0)
     ffi (1.9.18)
@@ -364,7 +364,7 @@ DEPENDENCIES
   devise (~> 4.3.0)
   devise_cas_authenticatable (~> 1.10.0)
   dotenv-rails (~> 2.2.1)
-  factory_bot_rails (~> 4.8.2)
+  factory_bot_rails (~> 4.10.0)
   ffaker (~> 2.5.0)
   flutie
   formulaic (~> 0.4.0)
@@ -412,4 +412,4 @@ RUBY VERSION
    ruby 2.4.3p205
 
 BUNDLED WITH
-   1.16.1
+   1.16.3
