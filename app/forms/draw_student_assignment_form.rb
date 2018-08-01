@@ -67,7 +67,17 @@ class DrawStudentAssignmentForm
 
   def student_found
     return if student
-    errors.add(:username, 'must belong to a student not in a group')
+    # This query is needed to find out if a student record exists in our db
+    #   but has a group already assigned to it.
+    if User.find_by(username: username).present?
+      errors.add(
+        :username,
+        'cannot be added to this draw because they are already in a group.'
+      )
+    else
+      errors.add(:username,
+                 "cannot be found. Maybe you haven't imported them yet?")
+    end
   end
 
   def student_valid

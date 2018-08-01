@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 * Fix sorting students by draw in Administrate ([#700](https://gitlab.com/yale-sdmp/vesta/issues/700)).
 * Fix simple_form buttons not being focused ([821](https://gitlab.com/yale-sdmp/vesta/issues/812)).
 * Fix duplicate flash message in application([#603](https://gitlab.com/yale-sdmp/vesta/issues/603)).
+* Clarify error message when trying to add a student that doesn't exist to a draw ([#490](https://gitlab.com/yale-sdmp/vesta/issues/490)).
 
 ## v1.0.8 - 2018-04-09
 ### Fixed

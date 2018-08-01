@@ -25,6 +25,9 @@ RSpec.feature 'Draw student assignment' do
 
   describe 'single user adding' do
     let!(:student) { create(:student, username: 'foo') }
+    let!(:student_in_group) { create(:student, username: 'stu') }
+
+    before { create(:group, leader: student_in_group) }
 
     it 'can be performed' do
       visit edit_draw_students_path(draw, student)
@@ -32,6 +35,22 @@ RSpec.feature 'Draw student assignment' do
       click_on 'Process'
       message = "#{student.full_name} successfully added"
       expect(page).to have_css('.flash-success', text: message)
+    end
+
+    it 'displays user not found error if user is not imported' do
+      visit edit_draw_students_path(draw)
+      fill_in 'draw_student_assignment_form_username', with: 'bar'
+      click_on 'Process'
+      message = "Username cannot be found. Maybe you haven't imported them yet?"
+      expect(page).to have_css('.flash-error', text: message)
+    end
+
+    it 'displays user in group error if user is already in a group' do
+      visit edit_draw_students_path(draw)
+      fill_in 'draw_student_assignment_form_username', with: 'stu'
+      click_on 'Process'
+      msg = 'cannot be added to this draw because they are already in a group.'
+      expect(page).to have_css('.flash-error', text: msg)
     end
   end
 
