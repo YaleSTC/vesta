@@ -1,3 +1,7 @@
 .simple_form input[type='submit'] {
   @extend .button;
 }
+
+.simple_form input[type='submit']:focus {
+  outline: $body-font-color auto 5px;
+}

@@ -24,7 +24,6 @@ All notable changes to this project will be documented in this file.
 * Add error messages to throw_abort ([#792](https://gitlab.com/yale-sdmp/vesta/issues/792)).
 * Add a new DrawStudentsController to handle actions that involve student enrollment in draws ([#620](https://gitlab.com/yale-sdmp/vesta/issues/620)).
 * Add group#cleanup! ([#808](https://gitlab.com/yale-sdmp/vesta/issues/808)).
-* Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333))
 * Add button to lock all groups on the admin view for a draw ([#786](https://gitlab.com/yale-sdmp/vesta/issues/786))
 * Allow users to edit their passwords ([#131](https://gitlab.com/yale-sdmp/vesta/issues/131)).
 * Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333)).
@@ -42,6 +41,7 @@ All notable changes to this project will be documented in this file.
 * Fix NoMethodError in creating new user in admin dashboard ([#810](https://gitlab.com/yale-sdmp/vesta/issues/810)).
 * Properly handle a failed result in IDRProfileQuerier ([#689](https://gitlab.com/yale-sdmp/vesta/issues/689)).
 * Fix sorting students by draw in Administrate ([#700](https://gitlab.com/yale-sdmp/vesta/issues/700)).
+* Fix simple_form buttons not being focused ([821](https://gitlab.com/yale-sdmp/vesta/issues/812)).
 
 ## v1.0.8 - 2018-04-09
 ### Fixed
