@@ -26,11 +26,12 @@ All notable changes to this project will be documented in this file.
 * Add group#cleanup! ([#808](https://gitlab.com/yale-sdmp/vesta/issues/808)).
 * Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333))
 * Add button to lock all groups on the admin view for a draw ([#786](https://gitlab.com/yale-sdmp/vesta/issues/786))
-* Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333)).
 * Allow users to edit their passwords ([#131](https://gitlab.com/yale-sdmp/vesta/issues/131)).
+* Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333)).
+* Add ARIA labels and update forms([#747](https://gitlab.com/yale-sdmp/vesta/issues/747)]).
 
 ### Fixed
-* Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600))
+* Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600)).
 * Loading users no longer fails because of missing class year ([#601](https://gitlab.com/yale-sdmp/vesta/issues/601)).
 * Remediate all tables for accessibility ([#745](https://gitlab.com/yale-sdmp/vesta/issues/745)).
 * Unmerging suites no longer fails if the merged suite had the same name as one of its constituent suites ([#790]( https://gitlab.com/yale-sdmp/vesta/issues/790)).
@@ -38,7 +39,7 @@ All notable changes to this project will be documented in this file.
 * Bulk user enrollment no longer fails silently when users exist and now flashes an error message ([#156](https://gitlab.com/yale-sdmp/vesta/issues/156)).
 * Admins can add users to groups even if users have pending invitations ([#773](https://gitlab.com/yale-sdmp/vesta/issues/773)).
 * Unhidden table caption is now hidden ([#800](https://gitlab.com/yale-sdmp/vesta/issues/800)).
-* Fix NoMethodError in creating new user in admin dashboard ([#810](https://gitlab.com/yale-sdmp/vesta/issues/810))
+* Fix NoMethodError in creating new user in admin dashboard ([#810](https://gitlab.com/yale-sdmp/vesta/issues/810)).
 * Properly handle a failed result in IDRProfileQuerier ([#689](https://gitlab.com/yale-sdmp/vesta/issues/689)).
 * Fix sorting students by draw in Administrate ([#700](https://gitlab.com/yale-sdmp/vesta/issues/700)).
 

@@ -11,10 +11,10 @@
         </div>
       <% end %>
       <div class="row">
-        <div class="columns small-<%= @draw.present? ? 10 : 12 %>">
+        <div class="columns small-<%= @draw.present? ? 10 : 12 %>" >
           <% if @suites_by_size[group.size].count >= @groups_by_size[group.size].count %>
             <%= f.label "suite_id_for_#{group.id}".to_sym, text: group.name, style: 'display: none;' %>
-            <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size] %>
+            <%= f.input "suite_id_for_#{group.id}".to_sym, label: false, as: :select, collection: @suites_by_size[group.size], input_html: {'aria-label' => "Select suite for #{group.name}" } %>
           <% else %>
             <p>There are not enough suites of size <%= group.size %> available. You must disband a group to proceed and its members will have to regroup following this draw.</p>
           <% end %>
