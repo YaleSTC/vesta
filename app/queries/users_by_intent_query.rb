@@ -20,6 +20,8 @@ class UsersByIntentQuery
   # @return [Hash{String=>Array<User>}] the users in the relation gathered by
   #   intent
   def call
-    @relation.order(:intent, :last_name).group_by(&:intent)
+    @relation.includes(:draw_membership)
+             .order('draw_memberships.intent', :last_name)
+             .group_by { |s| s.draw_membership.intent }
   end
 end

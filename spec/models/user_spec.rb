@@ -6,23 +6,27 @@ RSpec.describe User, type: :model do
   describe 'basic validations' do
     subject { build(:user) }
 
+    it { is_expected.to have_many(:draw_memberships) }
+    it { is_expected.to have_many(:draws).through(:draw_memberships) }
+    it { is_expected.to have_one(:draw_membership).conditions(active: true) }
+    it { is_expected.to have_one(:draw).through(:draw_membership) }
+    it { is_expected.to have_many(:memberships).through(:draw_memberships) }
+    it { is_expected.to have_one(:membership).through(:draw_membership) }
+    it { is_expected.to have_one(:room_assignment).through(:draw_membership) }
+    it { is_expected.to have_one(:room).through(:draw_membership) }
+
     it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
     it { is_expected.to validate_presence_of(:role) }
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
-    it { is_expected.to validate_presence_of(:intent) }
     it { is_expected.to belong_to(:college) }
-    it { is_expected.to belong_to(:draw) }
-    it { is_expected.to have_one(:membership) }
-    it { is_expected.to have_many(:memberships) }
-    it { is_expected.to have_one(:group).through(:membership) }
-    it { is_expected.to have_one(:room_assignment) }
-    it { is_expected.to have_one(:room).through(:room_assignment) }
+
     it { is_expected.to delegate_method(:draw_name).to(:draw).as(:name) }
     it { is_expected.to delegate_method(:group_name).to(:group).as(:name) }
     it { is_expected.to delegate_method(:room_number).to(:room).as(:number) }
     it { is_expected.to delegate_method(:suite_number).to(:group) }
     it { is_expected.to delegate_method(:lottery_number).to(:group) }
+    it { is_expected.to delegate_method(:intent).to(:draw_membership) }
   end
 
   describe 'class_year' do
@@ -125,10 +129,10 @@ RSpec.describe User, type: :model do
 
   # rubocop:disable RSpec/ExampleLength
   it 'destroys a dependent membership on destruction' do
-    user = create(:student, intent: 'on_campus')
+    dm = create(:draw_membership, draw: nil)
     group = create(:drawless_group, size: 2)
-    m = Membership.create!(user: user, group: group).id
-    user.destroy
+    m = Membership.create!(draw_membership: dm, group: group).id
+    dm.user.destroy
     expect { Membership.find(m) }.to \
       raise_error(ActiveRecord::RecordNotFound)
   end
@@ -191,15 +195,19 @@ RSpec.describe User, type: :model do
   describe '#full_name_with_intent' do
     it 'is the full name with the intent in parentheses' do
       full_name_with_intent = 'Sydney Young (on campus)'
-      user = build_stubbed(:user, first_name: 'Sydney', last_name: 'Young',
-                                  intent: 'on_campus')
+      user = build_stubbed(:user, first_name: 'Sydney', last_name: 'Young')
+      allow(user).to receive(:draw_membership)
+        .and_return(build_stubbed(:draw_membership, intent: 'on_campus'))
       expect(user.full_name_with_intent).to eq(full_name_with_intent)
     end
   end
 
   describe '#pretty_intent' do
     it 'is the intent not in snake case' do
-      user = build_stubbed(:user, intent: 'on_campus')
+      user = build_stubbed(:user)
+      allow(user).to \
+        receive(:draw_membership)
+        .and_return(build_stubbed(:draw_membership, intent: 'on_campus'))
       expect(user.pretty_intent).to eq('on campus')
     end
   end
@@ -207,14 +215,14 @@ RSpec.describe User, type: :model do
   describe '#group' do
     it 'returns nil if no accepted membership' do
       group = create(:open_group)
-      user = create(:student, draw: group.draw)
-      Membership.create(user: user, group: group, status: 'requested')
+      user = create(:student_in_draw, draw: group.draw)
+      create(:membership, user: user, group: group, status: 'requested')
       expect(user.reload.group).to be_nil
     end
     it 'returns the group of the accepted membership' do
       group = create(:open_group)
-      user = create(:student, draw: group.draw)
-      Membership.create(user: user, group: group, status: 'accepted')
+      user = create(:student_in_draw, draw: group.draw)
+      create(:membership, user: user, group: group, status: 'accepted')
       expect(user.reload.group).to eq(group)
     end
   end
@@ -222,68 +230,15 @@ RSpec.describe User, type: :model do
   describe '#membership' do
     it 'returns nil if no accepted membership' do
       group = create(:open_group)
-      user = create(:student, draw: group.draw)
-      Membership.create(user: user, group: group, status: 'requested')
+      user = create(:student_in_draw, draw: group.draw)
+      create(:membership, user: user, group: group, status: 'requested')
       expect(user.reload.membership).to be_nil
     end
     it 'returns the accepted membership' do
       group = create(:open_group)
-      user = create(:student, draw: group.draw)
-      m = Membership.create(user: user, group: group, status: 'accepted')
+      user = create(:student_in_draw, draw: group.draw)
+      m = create(:membership, user: user, group: group, status: 'accepted')
       expect(user.reload.membership).to eq(m)
-    end
-  end
-
-  describe '#remove_draw' do
-    it 'backs up the current draw_id to old_draw_id' do
-      user = build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
-      result = user.remove_draw
-      expect(result.old_draw_id).to eq(123)
-    end
-    it 'removes the draw_id' do
-      user = build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
-      result = user.remove_draw
-      expect(result.draw_id).to be_nil
-    end
-    it 'changes the intent to undeclared' do
-      user = build_stubbed(:user, draw_id: 123, old_draw_id: 1234,
-                                  intent: 'on_campus')
-      result = user.remove_draw
-      expect(result.intent).to eq('undeclared')
-    end
-    it 'does not change old_draw_id if draw_id is nil' do
-      user = build_stubbed(:user, draw_id: nil, old_draw_id: 1234)
-      result = user.remove_draw
-      expect(result).to eq(user)
-    end
-  end
-
-  describe '#restore_draw' do
-    it 'copies old_draw_id to draw_id' do
-      user = build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
-      result = user.restore_draw
-      expect(result.draw_id).to eq(1234)
-    end
-    it 'sets draw_id to nil if old_draw_id and draw_id are equal' do
-      user = build_stubbed(:user, draw_id: 123, old_draw_id: 123)
-      result = user.restore_draw
-      expect(result.draw_id).to be_nil
-    end
-    it 'sets old_draw_id to nil by default' do
-      user = build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
-      result = user.restore_draw
-      expect(result.old_draw_id).to be_nil
-    end
-    it 'optionally saves draw_id to old_draw_id' do
-      user = build_stubbed(:user, draw_id: 123, old_draw_id: 1234)
-      result = user.restore_draw(save_current: true)
-      expect(result.old_draw_id).to eq(123)
-    end
-    it 'sets the intent to undeclared' do
-      user = build_stubbed(:user, draw_id: 123, old_draw_id: 1234,
-                                  intent: 'on_campus')
-      result = user.restore_draw
-      expect(result.intent).to eq('undeclared')
     end
   end
 

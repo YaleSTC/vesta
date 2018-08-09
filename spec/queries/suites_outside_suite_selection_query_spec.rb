@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SuitesOutsideSuiteSelectionQuery do
-  let(:group) { create(:group_from_draw, draw: nil, size: 1) }
+  let(:group) { create(:group) }
 
   it 'does not return suites with draws in suite selection' do
     draw = create(:draw, status: 'suite_selection')

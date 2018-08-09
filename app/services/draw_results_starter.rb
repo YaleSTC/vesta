@@ -56,7 +56,7 @@ class DrawResultsStarter
   def duplicate_draw! # rubocop:disable AbcSize
     d = Draw.create!(name: draw.name + ' (oversub)', status: 'group_formation')
     draw.ungrouped_students.each do |s|
-      s.remove_draw.update!(draw_id: d.id, intent: 'on_campus')
+      s.draw_membership.remove_draw.update!(draw_id: d.id, intent: 'on_campus')
     end
     d.suites << draw.suites.available
     true

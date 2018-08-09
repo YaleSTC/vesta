@@ -45,16 +45,15 @@ RSpec.describe MembershipUpdater do
     let(:g) { create(:open_group) }
 
     it 'emails leader on invitation acceptance' do
-      m = Membership.create(user: create(:student, draw: g.draw),
-                            group: g, status: 'invited')
+      m = create(:membership, group: g, status: 'invited')
       allow(StudentMailer).to receive(:joined_group).and_return(msg)
       described_class.update(membership: m, action: 'accept')
       expect(StudentMailer).to have_received(:joined_group)
     end
 
     it 'does not email leaders on request acceptance' do
-      m = Membership.create(user: create(:student, draw: g.draw),
-                            group: g, status: 'requested')
+      m = create(:membership, group: g, status: 'requested')
+
       allow(StudentMailer).to receive(:joined_group).and_return(msg)
       described_class.update(membership: m, action: 'accept')
       expect(StudentMailer).not_to have_received(:joined_group)

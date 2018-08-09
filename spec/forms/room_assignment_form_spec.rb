@@ -45,7 +45,7 @@ RSpec.describe RoomAssignmentForm do
   describe '#update' do
     it 'updates all relevant room assignments' do
       ra = instance_spy('room_assignment')
-      allow(RoomAssignment).to receive(:find_by).and_return(ra)
+      allow(RoomAssignment).to receive(:includes).and_return(ra)
       params = mock_params(1 => 2, 2 => 1)
       described_class.new(group: group).update(params)
       expect(ra).to have_received(:update!).exactly(2).times

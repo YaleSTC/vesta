@@ -42,7 +42,7 @@ RSpec.describe DrawReport do
     it 'returns a hash of size => # of locked groups' do
       size = 2
       draw = create(:locked_group, size: size).draw
-      create(:group, leader: create(:user, draw: draw), size: size)
+      create(:group, leader: create(:student_in_draw, draw: draw), size: size)
       expect(described_class.new(draw).locked_counts).to eq(size => 1)
     end
   end
@@ -76,11 +76,10 @@ RSpec.describe DrawReport do
 
   describe '#suite_counts' do
     it 'returns the number of available suites grouped by size ' do
-      size = 2
-      draw = create(:group_with_suite, size: size).draw
-      create(:suite_with_rooms, rooms_count: size, draws: [draw])
-      # 1 => 1 created during draw creation
-      expect(described_class.new(draw).suite_counts).to eq(size => 1, 1 => 1)
+      draw = create(:group_with_suite, size: 2).draw
+      create(:suite_with_rooms, rooms_count: 2, draws: [draw])
+      create(:suite_with_rooms, rooms_count: 1, draws: [draw])
+      expect(described_class.new(draw).suite_counts).to eq(1 => 1, 2 => 1)
     end
   end
 
@@ -120,8 +119,8 @@ RSpec.describe DrawReport do
     end
     it 'groups by intent and removes off campus' do
       draw = create(:draw_with_members)
-      draw.students << create(:student, intent: 'off_campus')
-      on_campus = draw.students.where(intent: 'on_campus')
+      create(:student_in_draw, draw: draw, intent: 'off_campus')
+      on_campus = draw.students.where(draw_memberships: { intent: 'on_campus' })
       expect(described_class.new(draw).ungrouped_students_by_intent).to \
         eq('on_campus' => on_campus)
     end
@@ -136,9 +135,9 @@ RSpec.describe DrawReport do
 
     it 'returns a count of each intent' do
       draw = create(:draw)
-      draw.students << create(:student, intent: 'on_campus')
-      draw.students << create(:student, intent: 'off_campus')
-      draw.students << create(:student, intent: 'undeclared')
+      create(:student_in_draw, draw: draw, intent: 'on_campus')
+      create(:student_in_draw, draw: draw, intent: 'off_campus')
+      create(:student_in_draw, draw: draw, intent: 'undeclared')
       expect(described_class.new(draw).intent_metrics.values).to eq([1, 1, 1])
     end
   end

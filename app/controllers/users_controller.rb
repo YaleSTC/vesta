@@ -59,7 +59,7 @@ class UsersController < ApplicationController # rubocop:disable ClassLength
     respond_to do |format|
       format.html { update }
       format.js do
-        @user.intent = user_params['intent']
+        @user.draw_membership.intent = user_params['intent']
         @color_class = @user.save ? 'success' : 'failure'
       end
     end

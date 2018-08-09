@@ -34,7 +34,7 @@ RSpec.describe SuitesWithRoomsAssignedQuery do
     group = create(:drawless_group, size: size)
     SuiteAssignment.create!(group: group, suite: suite)
     group.members.each_with_index do |student, i|
-      RoomAssignment.create!(user: student.reload,
+      RoomAssignment.create!(draw_membership: student.draw_membership,
                              room_id: suite.rooms[i].id)
     end
     suite

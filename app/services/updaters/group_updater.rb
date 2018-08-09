@@ -41,28 +41,25 @@ class GroupUpdater
   def process_params(params)
     @params = params.to_h.transform_keys(&:to_sym)
     @pending_users = { add: users(:member_ids), remove: users(:remove_ids) }
-    delete_user_id_keys_from_params
-    delete_leader_id_if_empty
-    delete_size_if_empty
+    find_leader_draw_membership if params[:leader].present?
+    cleanup_params
   end
 
-  def users(key)
+  def users(key) # rubocop:disable AbcSize
     return nil unless params.key? key
-    return nil if key == :remove_ids && params[key] == group.leader_id.to_s
-    User.active.find(params[key].reject(&:empty?))
+    return nil if key == :remove_ids && params[key] == group.leader.id.to_s
+    User.active.includes(:draw_membership).find(params[key].reject(&:empty?))
   end
 
-  def delete_user_id_keys_from_params
-    params.delete(:member_ids) if params[:member_ids]
-    params.delete(:remove_ids) if params[:remove_ids]
+  def find_leader_draw_membership
+    dm = DrawMembership.find_by(user_id: params[:leader], active: true)
+    @params[:leader_draw_membership] = dm
   end
 
-  def delete_leader_id_if_empty
-    params[:leader_id] = '' unless params[:leader_id]
-    params.delete(:leader_id) if params[:leader_id].empty?
-  end
-
-  def delete_size_if_empty
+  def cleanup_params
+    params.delete(:member_ids)
+    params.delete(:remove_ids)
+    params.delete(:leader)
     params.delete(:size) if params[:size].blank?
   end
 
@@ -83,13 +80,13 @@ class GroupUpdater
   def add_users
     pending_users[:add].each do |user|
       update_added_user(user)
-      group.members << user
+      group.draw_memberships << user.draw_membership
     end
   end
 
   def update_added_user(user)
-    user.update!(intent: 'on_campus')
-    m = group.memberships.find { |i| i.user_id == user.id }
+    user.draw_membership.update!(intent: 'on_campus')
+    m = group.memberships.find { |i| i.draw_membership.user_id == user.id }
     m.update!(status: 'accepted') if m.present?
   end
 

@@ -35,8 +35,10 @@ class DrawStudentsController < ApplicationController
     @student_assignment_form ||= DrawStudentAssignmentForm.new(draw: @draw)
     @class_years = AvailableStudentClassYearsQuery.call
     @students = @draw.students.order(:last_name)
-    @available_students_count = UngroupedStudentsQuery.call.where(draw_id: nil)
-                                                      .count
+    @available_students_count = \
+      UngroupedStudentsQuery.call
+                            .includes(:draw_membership)
+                            .where(draw_memberships: { draw_id: nil }).count
   end
 
   def set_draw

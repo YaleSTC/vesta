@@ -36,7 +36,7 @@ RSpec.describe MembershipBatchCreator do
 
   context 'redirect object' do
     it 'is added when there are no failures' do
-      users.last.update!(intent: 'on_campus')
+      users.last.draw_membership.update!(intent: 'on_campus')
       result = described_class.run(user_ids: users.map { |u| u.id.to_s },
                                    **params_hash)
       expect(result[:redirect_object].map(&:class)).to eq([Draw, Group])
@@ -57,8 +57,9 @@ RSpec.describe MembershipBatchCreator do
   def users
     # generate params hash
     params_hash
-    @users ||= [create(:student, intent: 'on_campus', draw: @group.draw),
-                create(:student, intent: 'undeclared', draw: @group.draw)]
+    @users ||=
+      [create(:student_in_draw, intent: 'on_campus', draw: @group.draw),
+       create(:student_in_draw, intent: 'undeclared', draw: @group.draw)]
   end
   # rubocop:enable RSpec/InstanceVariable
 end

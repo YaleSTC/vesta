@@ -32,7 +32,7 @@ RSpec.describe Room, type: :model do
   it 'destroy the room assignment on destruction' do
     g = create(:group_with_suite).reload
     r = g.suite.rooms.first
-    RoomAssignment.create!(user: g.leader, room: r)
+    RoomAssignment.create!(draw_membership: g.leader_draw_membership, room: r)
     expect { r.destroy! }.to change { RoomAssignment.count }.by(-1)
   end
 

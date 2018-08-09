@@ -19,14 +19,14 @@ RSpec.feature 'Group editing' do
 
   context 'leader update' do
     let(:new_leader) do
-      create(:student, intent: 'on_campus', draw: group.draw)
+      create(:student_in_draw, intent: 'on_campus', draw: group.draw)
     end
 
     before do
       create(:suite_with_rooms, rooms_count: 2, draws: [group.draw])
       group.update(size: 2)
       group.update_status!
-      group.members << new_leader
+      create(:membership, group: group, user: new_leader)
     end
     it 'can be performed' do
       visit edit_draw_group_path(group.draw, group)
@@ -41,7 +41,7 @@ RSpec.feature 'Group editing' do
   end
 
   def select_new_leader(new_leader)
-    select new_leader.full_name, from: 'group_leader_id'
+    select new_leader.full_name, from: 'group_leader'
     click_on 'Save'
   end
 end

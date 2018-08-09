@@ -79,7 +79,8 @@ class SuiteSelector
 
   def assign_single!
     room = suite.rooms.where(beds: 1).first
-    RoomAssignment.create!(user: group.leader, room: room)
+    RoomAssignment.create!(draw_membership: group.leader.draw_membership,
+                           room: room)
   end
 
   def success

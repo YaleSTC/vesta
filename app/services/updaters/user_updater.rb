@@ -20,9 +20,10 @@ class UserUpdater < Updater
     handle_promotion_or_demotion
   end
 
-  def update
+  def update # rubocop:disable AbcSize
     return error(self) unless valid?
     ActiveRecord::Base.transaction do
+      update_intent if params[:intent].present?
       object.update!(**params)
       nullify_draw_info if object.saved_change_to_college_id?
     end
@@ -65,10 +66,16 @@ class UserUpdater < Updater
   end
 
   def user_is_not_a_leader_of_a_group
-    return unless object.led_group.present? && object.group.size != 1 &&
-                  changing_college?
+    return unless object.draw_membership&.led_group&.present? && \
+                  object.group.size != 1 && changing_college?
     errors.add(:base, 'This user is the leader of a group. Please change ' \
                 'this before continuing.')
+  end
+
+  # This occurs within the transaction
+  def update_intent
+    object.draw_membership.update!(intent: params[:intent])
+    params.delete(:intent)
   end
 
   def nullify_draw_info # rubocop:disable AbcSize
@@ -80,11 +87,11 @@ class UserUpdater < Updater
       m.destroy!
     end
     object.room_assignment&.destroy!
-    object.update!(draw_id: nil, old_draw_id: nil)
+    object.draw_membership&.update!(draw_id: nil, old_draw_id: nil)
   end
 
   def success
-    return super.merge(intent_message) if object.saved_change_to_intent?
+    return super.merge(intent_message) if intent_changed?
     return super unless @needs_warning
     super.merge(warning) { |_, old, new| old.merge(new) }
   end
@@ -107,5 +114,9 @@ class UserUpdater < Updater
   def changing_college?
     return false unless params[:college_id].present?
     params[:college_id] != object.college_id.to_s
+  end
+
+  def intent_changed?
+    object.draw_membership&.saved_change_to_intent?
   end
 end

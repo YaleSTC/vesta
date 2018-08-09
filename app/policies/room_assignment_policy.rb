@@ -15,7 +15,7 @@ class RoomAssignmentPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.admin? && rooms_assigned?(record.group)
+    user.admin? && rooms_assigned?(record.draw_membership&.group)
   end
 
   def update?
@@ -26,14 +26,16 @@ class RoomAssignmentPolicy < ApplicationPolicy
 
   def user_can_assign_rooms?(user, record)
     user_has_uber_permission? ||
-      (user.group == record.group && record.group.leader == user)
+      (user.group.present? && user.group == record&.draw_membership&.group && \
+        record&.draw_membership&.group&.leader == user)
   end
 
   def room_assignment_eligible?(record)
-    record.group.suite.present? && !rooms_assigned?(record.group)
+    record.draw_membership&.group&.suite&.present? && \
+      !rooms_assigned?(record.group)
   end
 
   def rooms_assigned?(group)
-    group.members.all? { |m| m.room.present? }
+    group&.members&.all? { |m| m.room.present? }
   end
 end

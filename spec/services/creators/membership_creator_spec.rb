@@ -41,16 +41,16 @@ RSpec.describe MembershipCreator do
     let(:g) { create(:open_group) }
 
     it 'is sent to leader on request creation' do
-      m = described_class.new(user: create(:student, draw: g.draw), group: g,
-                              action: 'request')
+      m = described_class.new(user: create(:student_in_draw, draw: g.draw),
+                              group: g, action: 'request')
       allow(StudentMailer).to receive(:requested_to_join_group).and_return(msg)
       m.create!
       expect(StudentMailer).to have_received(:requested_to_join_group)
     end
 
     it 'is sent to student on invitation creation' do
-      m = described_class.new(user: create(:student, draw: g.draw), group: g,
-                              action: 'invite')
+      m = described_class.new(user: create(:student_in_draw, draw: g.draw),
+                              group: g, action: 'invite')
       allow(StudentMailer).to receive(:invited_to_join_group).and_return(msg)
       m.create!
       expect(StudentMailer).to have_received(:invited_to_join_group)
@@ -60,7 +60,7 @@ RSpec.describe MembershipCreator do
   # rubocop:disable RSpec/InstanceVariable
   def params_hash(action = 'invite')
     @group ||= create(:open_group)
-    @user ||= build(:student, intent: 'on_campus', draw: @group.draw)
+    @user ||= create(:student_in_draw, intent: 'on_campus', draw: @group.draw)
     { group: @group, user: @user, action: action }
   end
   # rubocop:enable RSpec/InstanceVariable

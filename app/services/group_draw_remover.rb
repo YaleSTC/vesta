@@ -21,12 +21,14 @@ class GroupDrawRemover
   # Removes the draw_id from the group and makes other necessary changes
   #
   # @return [Hash{Symbol=>Group,Hash,Array}] the results hash
-  def remove
+  def remove # rubocop:disable MethodLength
     ActiveRecord::Base.transaction do
       handle_clip_membership
       handle_lottery_assignment
       group.update!(draw_id: nil)
-      members.each { |s| s.remove_draw.update!(intent: 'on_campus') }
+      members.each do |s|
+        s.draw_membership.remove_draw.update!(intent: 'on_campus')
+      end
       pending.each(&:destroy!)
     end
     success

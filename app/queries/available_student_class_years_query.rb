@@ -21,7 +21,8 @@ class AvailableStudentClassYearsQuery
   #
   # @return [Array<Integer>] the valid class years
   def call
-    UngroupedStudentsQuery.new(@relation).call.where(draw_id: nil)
+    UngroupedStudentsQuery.new(@relation).call.includes(:draw_membership)
+                          .where(draw_memberships: { user_id: nil })
                           .map(&:class_year).uniq.sort
   end
 end

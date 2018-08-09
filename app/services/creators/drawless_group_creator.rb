@@ -6,8 +6,8 @@ class DrawlessGroupCreator
   include ActiveModel::Model
   include Callable
 
-  validate :validate_suite_size_inclusion,
-           if: ->() { params[:size] }
+  validate :validate_suite_size_inclusion
+  validate :validate_draw_membership_presence
 
   # Initialize a new SpecialGroupCreator
   #
@@ -15,6 +15,7 @@ class DrawlessGroupCreator
   def initialize(params:)
     @params = params.to_h.transform_keys(&:to_sym)
     process_params
+    clean_params
   end
 
   # Attempt to create a new drawless group. Also includes the removal of all
@@ -23,11 +24,11 @@ class DrawlessGroupCreator
   # @return [Hash{Symbol=>Group,Hash}] a results hash with a message to set in
   #   flash an either `nil` or the created group.
   def create
+    @group = Group.new(**params)
     return error(self) unless valid?
     ActiveRecord::Base.transaction do
       ensure_valid_members
-      @group = Group.new(**params)
-      @group.save!
+      group.save!
     end
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -38,34 +39,41 @@ class DrawlessGroupCreator
 
   private
 
-  attr_reader :klass, :params, :name_method, :group
+  attr_reader :params, :group, :members_to_add
 
   def process_params
-    @params = params.to_h.transform_keys(&:to_sym)
-    remove_blank_members
-    remove_remove_ids_from_params
+    @params[:draw_memberships] = find_or_create_draw_memberships
+    @params[:leader_draw_membership] = DrawMembership
+                                       .where(user_id: params[:leader],
+                                              active: true).first
   end
 
-  def remove_blank_members
-    return unless params[:member_ids]
-    @params[:member_ids] = params[:member_ids].reject(&:empty?)
-  end
-
-  def remove_remove_ids_from_params
-    return unless params[:remove_ids]
+  def clean_params
+    @params.delete(:member_ids)
     @params.delete(:remove_ids)
+    @params.delete(:leader)
   end
 
-  # Note that this occurs within the transaction
-  def ensure_valid_members
-    User.active.where(id: all_member_ids).each do |user|
-      user.remove_draw.update!(intent: 'on_campus')
+  def find_or_create_draw_memberships
+    return unless all_member_ids.present?
+    all_member_ids.each_with_object([]) do |user_id, array|
+      found_dm = DrawMembership.where(user_id: user_id, active: true).first
+      dm = found_dm || DrawMembership.create!(user_id: user_id)
+      array << dm
     end
   end
 
   def all_member_ids
-    return params[:leader_id] unless params[:member_ids].present?
-    params[:member_ids] + [params[:leader_id]]
+    return nil unless params[:leader].present?
+    return [params[:leader]] unless params[:member_ids].present?
+    (params[:member_ids] + [params[:leader]]).reject(&:empty?)
+  end
+
+  # Note that this occurs within the transaction
+  def ensure_valid_members
+    params[:draw_memberships].each do |dm|
+      dm.remove_draw.update!(intent: 'on_campus')
+    end
   end
 
   def success
@@ -87,7 +95,13 @@ class DrawlessGroupCreator
   end
 
   def validate_suite_size_inclusion
+    errors.add :size, 'must be present' unless params[:size].present?
     return if SuiteSizesQuery.call.include? params[:size].to_i
     errors.add :size, 'must be a valid suite size'
+  end
+
+  def validate_draw_membership_presence
+    return if params[:draw_memberships]&.all?(&:present?)
+    errors.add(:base, 'Users must have a valid draw membership.')
   end
 end

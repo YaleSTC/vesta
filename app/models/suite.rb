@@ -18,9 +18,13 @@ class Suite < ApplicationRecord
   has_many :rooms, dependent: :nullify
   has_many :draw_suites, dependent: :delete_all
   has_many :draws, through: :draw_suites
-  # Note there will be multiple suite_assignments when draw_memberships
-  # are added - :suite_assignment will only be where it is active
-  has_one :suite_assignment, dependent: :destroy
+  has_many :suite_assignments, dependent: :destroy
+  has_many :groups, through: :suite_assignments
+
+  has_one :suite_assignment, lambda {
+    includes(group: [leader_draw_membership: :draw_membership])
+  }
+
   has_one :group, through: :suite_assignment
 
   delegate :name, to: :building, prefix: :building, allow_nil: true

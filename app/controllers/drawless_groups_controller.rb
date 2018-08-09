@@ -60,7 +60,7 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def drawless_group_params
-    p = params.require(:group).permit(:size, :leader_id, :transfers,
+    p = params.require(:group).permit(:size, :leader, :transfers,
                                       member_ids: [], remove_ids: [])
     return p if @group
     p.reject! { |k, _v| k == 'transfers' }

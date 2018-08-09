@@ -3,53 +3,92 @@
 require 'rails_helper'
 
 RSpec.describe DrawlessGroupCreator do
-  context 'size validations' do
-    # note: params_hash is a hash containing a size and leader_id
-    it 'fails if it is not an existing suite size' do
+  let(:leader_draw_membership) do
+    instance_spy('DrawMembership', user_id: 1, draw_id: 1, present?: true)
+  end
+  let(:other_member) do
+    instance_spy('DrawMembership', user_id: 2, draw_id: 1, present?: true)
+  end
+  let(:params_hash) do
+    { size: '2', leader: leader_draw_membership.user_id.to_s,
+      member_ids: [other_member.user_id.to_s] }
+  end
+  let(:group) { instance_spy('Group') }
+
+  before do
+    allow(SuiteSizesQuery).to \
+      receive(:call).and_return([params_hash[:size].to_i])
+
+    allow(Group).to receive(:new).and_return(group)
+
+    allow(DrawMembership).to receive(:where)
+      .with(user_id: other_member.user_id.to_s, active: true)
+      .and_return([other_member])
+
+    allow(DrawMembership).to receive(:where)
+      .with(user_id: leader_draw_membership.user_id.to_s, active: true)
+      .and_return([leader_draw_membership])
+  end
+
+  context 'validation' do
+    # note: params_hash is a hash containing a size,
+    #   a leader_id, and an array containing a member_id
+    it 'is not valid if no size is given' do
+      params = instance_spy('ActionController::Parameters',
+                            to_h: params_hash.merge(size: nil))
+      expect(described_class.new(params: params)).not_to be_valid
+    end
+
+    it 'is not valid if the size given is not an existing suite size' do
       params = instance_spy('ActionController::Parameters',
                             to_h: params_hash.merge(size: 1))
       allow(SuiteSizesQuery).to receive(:call).and_return([50])
-      expect(described_class.create(params: params)[:msg]).to have_key(:error)
+      expect(described_class.new(params: params)).not_to be_valid
     end
-    it 'succeeds when it is an existing suite size' do
+
+    it 'is valid if a size given is an existing suite size' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
-      allow(SuiteSizesQuery).to receive(:call).and_return([params_hash[:size]])
-      expect(described_class.create(params: params)[:msg]).to have_key(:success)
+      allow(SuiteSizesQuery).to receive(:call)
+        .and_return([params_hash[:size].to_i])
+      expect(described_class.new(params: params)).to be_valid
     end
   end
 
   context 'success' do
     it 'successfully creates a group' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
-      expect(described_class.create(params: params)[:redirect_object]).to \
-        be_instance_of(Group)
+      described_class.create(params: params)
+      # group is the stubbed return from `Group.new`
+      expect(group).to have_received(:save!)
     end
-    it 'removes leaders and members from existing draws if necessary' do
-      params = instance_spy('ActionController::Parameters',
-                            to_h: params_hash_with_draw_students)
-      expect(described_class.create(params: params)[:redirect_object]).to \
-        be_instance_of(Group)
+    it 'gives group the correct params' do
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      described_class.create(params: params)
+      hash = { size: '2', leader_draw_membership: leader_draw_membership,
+               draw_memberships: [other_member, leader_draw_membership] }
+      expect(Group).to have_received(:new).with(hash)
     end
-    it 'assigns the :old_draw_id of the students to their original draws' do
-      params = instance_spy('ActionController::Parameters',
-                            to_h: params_hash_with_draw_students)
-      leader = described_class.create(params: params)[:redirect_object].leader
-      # rubocop:disable RSpec/InstanceVariable
-      # Note the use of @leader to access the original object
-      expect(leader.old_draw_id).to eq(@leader.draw_id)
-      # rubocop:enable RSpec/InstanceVariable
+    it 'calls #remove_draw on the leader' do
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      described_class.create(params: params)
+      # leader_draw_membership is a stubbed draw_membership defined up top
+      expect(leader_draw_membership).to have_received(:remove_draw)
+    end
+    it 'calls #remove_draw on all members' do
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      described_class.create(params: params)
+      # other_member is a stubbed draw_membership defined up top
+      expect(other_member).to have_received(:remove_draw)
     end
     it 'automatically sets the intents of members if necessary' do
-      params = instance_spy('ActionController::Parameters',
-                            to_h: params_hash_with_undeclared_intent_student)
-      expect(described_class.create(params: params)[:redirect_object]).to \
-        be_instance_of(Group)
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      described_class.create(params: params)
+      expect(leader_draw_membership).to \
+        have_received(:update!).with(intent: 'on_campus')
     end
     it 'returns the group object' do
-      params = instance_spy('ActionController::Parameters',
-                            to_h: params_hash_with_undeclared_intent_student)
-      expect(described_class.create(params: params)[:record]).to \
-        be_instance_of(Group)
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      expect(described_class.create(params: params)[:record]).to eq(group)
     end
     it 'returns a success flash message' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)
@@ -63,44 +102,20 @@ RSpec.describe DrawlessGroupCreator do
     end
   end
 
-  it 'does not create when given invalid params' do
-    params = instance_spy('ActionController::Parameters', to_h: {})
-    expect(described_class.create(params: params)[:redirect_object]).to be_nil
-  end
-  it 'returns the group object even if invalid' do
-    params = instance_spy('ActionController::Parameters', to_h: {})
-    expect(described_class.create(params: params)[:record]).to \
-      be_instance_of(Group)
-  end
-  it 'does not persist changes to members if save fails' do
-    student = create(:student, intent: 'undeclared')
-    params = instance_spy('ActionController::Parameters',
-                          to_h: invalid_params_hash_with_draw_student(student))
-    expect { described_class.create(params: params) }.not_to \
-      change { User.find(student.id).intent }
-  end
-
-  # rubocop:disable RSpec/InstanceVariable
-  def params_hash(leader = nil)
-    @suite ||= create(:suite_with_rooms, rooms_count: 2)
-    @leader ||= leader || create(:student)
-    { size: @suite.size, leader_id: @leader.id }
-  end
-  # rubocop:enable RSpec/InstanceVariable
-
-  def params_hash_with_draw_students
-    params_hash(create(:student_in_draw)).merge(
-      member_ids: [create(:student_in_draw).id.to_s]
-    )
-  end
-
-  def params_hash_with_undeclared_intent_student
-    params_hash.merge(
-      member_ids: [create(:student, intent: 'undeclared').id.to_s]
-    )
-  end
-
-  def invalid_params_hash_with_draw_student(student)
-    params_hash(student).merge(size: 0)
+  context 'failure' do
+    it 'does not create when given invalid params' do
+      # since we have already stubbed out DrawMembership.where we
+      #   need to stub out where queries with other parameters as well
+      allow(DrawMembership).to receive(:where)
+        .with(user_id: nil, active: true).and_return([])
+      params = instance_spy('ActionController::Parameters', to_h: {})
+      expect(described_class.create(params: params)[:redirect_object]).to be_nil
+    end
+    it 'returns the group object even if invalid' do
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      err = ActiveRecord::RecordInvalid.new(described_class.new(params: params))
+      allow(group).to receive(:save!).and_raise(err)
+      expect(described_class.create(params: params)[:record]).to eq(group)
+    end
   end
 end

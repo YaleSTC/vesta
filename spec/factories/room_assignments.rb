@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :room_assignment do
     room
-    user
+    user { build(:group).leader }
+    draw_membership { user.draw_membership }
   end
 end

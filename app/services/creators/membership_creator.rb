@@ -11,13 +11,14 @@ class MembershipCreator < Creator
   def initialize(user:, group:, action:)
     @klass = Membership
     @user = user
+    @draw_membership = user&.draw_membership
     @group = group
     process_params(action)
   end
 
   private
 
-  attr_reader :user, :group, :status
+  attr_reader :user, :draw_membership, :group, :status
 
   def success
     send_create_email unless status == 'accepted'
@@ -42,7 +43,7 @@ class MembershipCreator < Creator
               elsif action == 'invite'
                 'invited'
               end
-    @params = { user: user, group: group, status: status }
+    @params = { draw_membership: draw_membership, group: group, status: status }
   end
 
   def send_create_email

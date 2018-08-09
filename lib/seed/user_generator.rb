@@ -32,7 +32,6 @@ class UserGenerator
                   email: FFaker::Internet.email,
                   username: FFaker::Internet.user_name,
                   role: 'student',
-                  intent: User.intents.keys.sample,
                   password: 'passw0rd',
                   class_year: random_class_year }.merge(overrides)
   end

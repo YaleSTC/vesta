@@ -122,7 +122,9 @@ class DrawReport < SimpleDelegator
   #   with the ungrouped on campus and undeclared students in the draw
   def ungrouped_students_by_intent
     @ungrouped_students ||= UngroupedStudentsQuery.new(students).call
-                                                  .group_by(&:intent)
+                                                  .group_by do |s|
+                                                    s.draw_membership.intent
+                                                  end
     @ungrouped_students.delete('off_campus')
     @ungrouped_students
   end

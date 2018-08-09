@@ -58,9 +58,11 @@ class EmailExport
   end
 
   def execute_query # rubocop:disable AbcSize
-    query = User.active.includes(:led_group).where.not(groups: { id: nil })
-                .order(:last_name, :first_name)
-    query = query.where(groups: { draw_id: draw_id }) if draw_scope
+    query = User.active.includes(draw_membership: :led_group)
+                .where.not(groups: { id: nil }).order(:last_name, :first_name)
+    if draw_scope
+      query = query.where(groups: { draw_memberships: { draw_id: draw_id } })
+    end
     query = query.where(groups: { size: size }) if size.present?
     query = query.where(groups: { status: Group.statuses['locked'] }) if locked
     @leaders = query.to_a

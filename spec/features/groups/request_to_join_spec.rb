@@ -6,7 +6,7 @@ RSpec.feature 'Students Joining Groups' do
   context 'requesting to join open group' do
     it 'succeeds' do
       group = create(:open_group)
-      log_in create(:student, intent: 'on_campus', draw: group.draw)
+      log_in create(:student_in_draw, intent: 'on_campus', draw: group.draw)
       visit draw_group_path(group.draw, group)
       click_on 'Request To Join'
       expect(page).to have_content(/Membership.+created/)
@@ -16,7 +16,7 @@ RSpec.feature 'Students Joining Groups' do
   context 'requesting to join a full group' do
     it 'fails' do
       group = create(:full_group).tap { |g| g.draw.group_formation! }
-      log_in create(:student, intent: 'on_campus', draw: group.draw)
+      log_in create(:student_in_draw, intent: 'on_campus', draw: group.draw)
       visit draw_group_path(group.draw, group)
       click_on 'Request To Join'
       expect(page).to have_content('Please review the errors below:')
@@ -26,8 +26,8 @@ RSpec.feature 'Students Joining Groups' do
   context 'approving requests' do
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength
       group = create(:open_group)
-      user = create(:student, intent: 'on_campus', draw: group.draw)
-      Membership.create(group: group, user: user, status: 'requested')
+      user = create(:student_in_draw, intent: 'on_campus', draw: group.draw)
+      create(:membership, group: group, user: user, status: 'requested')
       log_in group.leader
       visit draw_group_path(group.draw, group)
       click_on 'accept'
@@ -38,8 +38,8 @@ RSpec.feature 'Students Joining Groups' do
   context 'rejecting requests' do
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength
       group = create(:open_group)
-      user = create(:student, intent: 'on_campus', draw: group.draw)
-      Membership.create(group: group, user: user, status: 'requested')
+      user = create(:student_in_draw, intent: 'on_campus', draw: group.draw)
+      create(:membership, group: group, user: user, status: 'requested')
       log_in group.leader
       visit draw_group_path(group.draw, group)
       click_on 'reject'

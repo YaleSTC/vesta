@@ -104,13 +104,14 @@ RSpec.describe UserPolicy do
         it { is_expected.not_to permit(user, other_user) }
       end
       context 'other user is not in draw' do
-        before { allow(other_user).to receive(:draw_id).and_return(nil) }
+        before { allow(other_user).to receive(:draw).and_return(nil) }
         it { is_expected.not_to permit(user, other_user) }
       end
       context 'non-admin in draw' do
         before do
           allow(other_user).to receive(:admin?).and_return(false)
-          allow(other_user).to receive(:draw_id).and_return(1)
+          allow(other_user).to \
+            receive(:draw).and_return(instance_spy('draw', present?: true))
         end
         it { is_expected.to permit(user, other_user) }
       end
@@ -235,13 +236,14 @@ RSpec.describe UserPolicy do
         it { is_expected.not_to permit(user, other_user) }
       end
       context 'other user is not in draw' do
-        before { allow(other_user).to receive(:draw_id).and_return(nil) }
+        before { allow(other_user).to receive(:draw).and_return(nil) }
         it { is_expected.not_to permit(user, other_user) }
       end
       context 'non-admin in draw' do
         before do
           allow(other_user).to receive(:admin?).and_return(false)
-          allow(other_user).to receive(:draw_id).and_return(1)
+          allow(other_user).to \
+            receive(:draw).and_return(instance_spy('draw', present?: true))
         end
         it { is_expected.to permit(user, other_user) }
       end
@@ -300,13 +302,14 @@ RSpec.describe UserPolicy do
         it { is_expected.not_to permit(user, other_user) }
       end
       context 'other user is not in draw' do
-        before { allow(other_user).to receive(:draw_id).and_return(nil) }
+        before { allow(other_user).to receive(:draw).and_return(nil) }
         it { is_expected.not_to permit(user, other_user) }
       end
       context 'non-admin in draw' do
         before do
           allow(other_user).to receive(:admin?).and_return(false)
-          allow(other_user).to receive(:draw_id).and_return(1)
+          allow(other_user).to \
+            receive(:draw).and_return(instance_spy('draw', present?: true))
         end
         it { is_expected.to permit(user, other_user) }
       end

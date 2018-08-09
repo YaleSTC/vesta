@@ -16,8 +16,8 @@ RSpec.feature 'Special group editing' do
   # rubocop:disable RSpec/ExampleLength
   it 'succeeds when switching in a user from a draw' do
     group = create(:drawless_group, size: 2)
-    remove = create(:student, intent: 'on_campus')
-    group.members << remove
+    remove = create(:student_in_draw, intent: 'on_campus', draw: nil)
+    create(:membership, group: group, user: remove)
     add = create(:student_in_draw, intent: 'off_campus')
     visit edit_group_path(group)
     check remove.full_name
@@ -37,8 +37,8 @@ RSpec.feature 'Special group editing' do
 
   it 'removes a user from a locked group' do
     group = create(:drawless_group, size: 2)
-    remove = create(:student, intent: 'on_campus')
-    group.members << remove
+    remove = create(:student_in_draw, intent: 'on_campus', draw: nil)
+    create(:membership, group: group, user: remove)
     GroupLocker.lock(group: group)
     visit edit_group_path(group)
     check remove.full_name

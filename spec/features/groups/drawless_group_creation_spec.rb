@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'Special housing group creation' do
   context 'as admin' do
-    let!(:leader) { create(:student, intent: 'on_campus') }
+    let!(:leader) { create(:student) }
 
     before { log_in(create(:admin)) }
 
@@ -24,7 +24,7 @@ RSpec.feature 'Special housing group creation' do
 
   def create_group(size:, leader:, members: [])
     select(size, from: 'group_size')
-    select(leader.full_name, from: 'group_leader_id')
+    select(leader.full_name, from: 'group_leader')
     members.each { |m| check(m.full_name) }
     click_on 'Create'
   end

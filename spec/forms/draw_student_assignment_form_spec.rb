@@ -30,7 +30,7 @@ RSpec.describe DrawStudentAssignmentForm, type: :model do
 
       context 'adding a user success' do
         it 'takes a username and adds the user' do
-          create(:student, student_params)
+          create(:student_in_draw, student_params)
           params = mock_params(login: login, adding: 'true')
           expect { described_class.submit(draw: draw, params: params) }.to \
             change { draw.students.count }.by(1)
@@ -42,19 +42,19 @@ RSpec.describe DrawStudentAssignmentForm, type: :model do
             change { draw.students.count }.by(0)
         end
         it 'sets :redirect_object as nil' do
-          create(:student, student_params)
+          create(:student_in_draw, student_params)
           params = mock_params(login: login, adding: 'true')
           result = described_class.submit(draw: draw, params: params)
           expect(result[:redirect_object]).to be_nil
         end
         it 'sets :update_object as nil' do
-          create(:student, student_params)
+          create(:student_in_draw, student_params)
           params = mock_params(login: login, adding: 'true')
           result = described_class.submit(draw: draw, params: params)
           expect(result[:update_object]).to be_nil
         end
         it 'sets a success message' do
-          create(:student, student_params)
+          create(:student_in_draw, student_params)
           params = mock_params(login: login, adding: 'true')
           result = described_class.submit(draw: draw, params: params)
           expect(result[:msg]).to have_key(:success)
@@ -63,19 +63,19 @@ RSpec.describe DrawStudentAssignmentForm, type: :model do
 
       context 'failure' do
         it 'sets :redirect_object as nil' do
-          create(:student, student_params)
+          create(:student_in_draw, student_params)
           params = mock_params(login: '', adding: 'true')
           result = described_class.submit(draw: draw, params: params)
           expect(result[:redirect_object]).to be_nil
         end
         it 'sets :update_object to the form object' do
-          create(:student, student_params)
+          create(:student_in_draw, student_params)
           params = mock_params(login: '', adding: 'true')
           object = described_class.new(draw: draw, params: params)
           expect(object.submit[:update_object]).to eq(object)
         end
         it 'sets an error message' do
-          create(:student, student_params)
+          create(:student_in_draw, student_params)
           params = mock_params(login: '', adding: 'true')
           result = described_class.submit(draw: draw, params: params)
           expect(result[:msg]).to have_key(:error)

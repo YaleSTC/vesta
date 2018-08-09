@@ -77,7 +77,7 @@ describe UserUpdater do
   end
 
   context 'nullifying draw info' do
-    let(:user) { create(:user, draw_id: 2, old_draw_id: 1) }
+    let(:user) { create(:student_in_draw) }
     let(:membership) { instance_spy('Membership') }
 
     it 'destroys the group if the size is 1' do
@@ -113,19 +113,19 @@ describe UserUpdater do
     it 'updates the draw id to nil' do
       params = { college_id: create(:college).id }
       described_class.update(user: user, params: params, editing_self: false)
-      expect(user.draw_id).to eq(nil)
+      expect(user.draw_membership.draw_id).to eq(nil)
     end
 
     it 'updates the old draw id to nil' do
       params = { college_id: create(:college).id }
       described_class.update(user: user, params: params, editing_self: false)
-      expect(user.old_draw_id).to eq(nil)
+      expect(user.draw_membership.old_draw_id).to eq(nil)
     end
   end
 
   context 'handling promotions and demotions' do
     it 'keeps the college_id if the role is not being changed' do
-      user = create(:student)
+      user = create(:student_in_draw)
       params = { role: 'student' }
       described_class.update(user: user, params: params, editing_self: false)
       expect(user.college).to eq(College.current)

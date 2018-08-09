@@ -57,7 +57,7 @@ RSpec.feature 'Draw group report' do
   def create_groups(draw:, statuses:)
     statuses.map do |status|
       factory = "#{status}_group".to_sym
-      leader = create(:student, draw: draw, intent: 'on_campus')
+      leader = create(:student_in_draw, draw: draw)
       create(factory, leader: leader)
     end
   end

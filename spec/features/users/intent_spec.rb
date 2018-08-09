@@ -31,7 +31,7 @@ RSpec.feature 'Housing Intent' do
     let!(:draw) { create(:draw, status: 'group_formation') }
 
     it 'can lock intent changes on a per draw basis' do
-      student = create(:student, draw: draw)
+      student = create(:student_in_draw, draw: draw)
       lock_intent(draw)
       log_in student
       expect(page).not_to have_content('Update Housing Intent')

@@ -48,9 +48,9 @@ class DrawStudentAssignmentForm
 
   def update_students
     if adding?
-      student.remove_draw.update!(draw_id: draw.id)
+      student.draw_membership&.remove_draw&.update!(draw: draw)
     else
-      student.restore_draw(save_current: true).save!
+      student.draw_membership&.restore_draw(save_current: true)&.save!
     end
   end
 
@@ -88,13 +88,13 @@ class DrawStudentAssignmentForm
   end
 
   def validate_addition
-    return unless student.draw_id == draw.id
+    return unless student.draw == draw
     errors.add(:username,
                'must belong to a student outside the draw when adding')
   end
 
   def validate_removal
-    return unless student.draw_id != draw.id
+    return unless student.draw != draw
     errors.add(:username,
                'must belong to a student in the draw when removing')
   end

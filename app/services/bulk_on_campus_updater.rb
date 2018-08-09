@@ -27,8 +27,8 @@ class BulkOnCampusUpdater
   attr_reader :draw
 
   def put_all_undeclared_students_on_campus
-    draw.students.where(intent: 'undeclared')
-        .map { |u| u.update(intent: 'on_campus') }
+    draw.draw_memberships.where(intent: 'undeclared')
+        .map { |dm| dm.update(intent: 'on_campus') }
   end
 
   def success

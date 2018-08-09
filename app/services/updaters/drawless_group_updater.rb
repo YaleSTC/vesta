@@ -8,17 +8,20 @@ class DrawlessGroupUpdater < GroupUpdater
   # Note that this occurs within the transaction
   def remove_users # rubocop:disable Metrics/AbcSize
     ids = pending_users[:remove].map(&:id)
-    group.memberships.where(user_id: ids).delete_all
+    group.memberships.joins(:draw_membership)
+         .where(draw_memberships: { user_id: ids }).delete_all
     # rubocop:disable Rails/SkipsModelValidations
     group.decrement!(:memberships_count, ids.size)
     # rubocop:enable Rails/SkipsModelValidations
     group.update_status!
-    pending_users[:remove].each { |user| user.restore_draw.save! }
+    pending_users[:remove].each do |user|
+      user.draw_membership.restore_draw.save!
+    end
   end
 
   # Note that this occurs within the transaction
   def update_added_user(user)
-    user.remove_draw.update!(intent: 'on_campus')
+    user.draw_membership.remove_draw.update!(intent: 'on_campus')
   end
 
   def success

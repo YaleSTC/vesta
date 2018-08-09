@@ -75,7 +75,9 @@ RSpec.feature 'Draw intent report' do
 
   def create_student_data(draw:, intents: %w(on_campus))
     students = intents.map do |intent|
-      create(:student, draw: draw, intent: intent)
+      s = create(:student_in_draw, draw: draw)
+      s.draw_membership.update!(intent: intent)
+      s
     end
     return students.first if students.length == 1
     students

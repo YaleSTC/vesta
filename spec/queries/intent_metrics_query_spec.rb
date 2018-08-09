@@ -20,14 +20,14 @@ RSpec.describe IntentMetricsQuery do
   end
 
   it 'ignores students from other draws' do
-    create(:user, intent: 'off_campus')
+    create(:student_in_draw, intent: 'off_campus')
     result = described_class.call(draw)
     expect(result).to eq({})
   end
 
   def create_intent_data(draw, metrics)
     metrics.each do |status, count|
-      create_list(:user, count, draw: draw, intent: status)
+      create_list(:student_in_draw, count, draw: draw, intent: status)
     end
   end
 end

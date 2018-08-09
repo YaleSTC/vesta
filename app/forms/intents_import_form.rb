@@ -45,7 +45,7 @@ class IntentsImportForm
 
   def update_intent_from_row(row:)
     student = find_student(row)
-    student.update!(intent: row[:intent])
+    student.draw_membership.update!(intent: row[:intent])
     successes << row[login_attr]
   rescue
     failures << row[login_attr]

@@ -167,7 +167,8 @@ class RoomAssignmentForm
   def create_room_assignment
     ActiveRecord::Base.transaction do
       params.each do |student_id, room_id|
-        RoomAssignment.create!(user_id: student_id, room_id: room_id)
+        dm = DrawMembership.find_by(user_id: student_id, active: true)
+        RoomAssignment.create!(draw_membership: dm, room_id: room_id)
       end
     end
   end
@@ -175,7 +176,8 @@ class RoomAssignmentForm
   def update_room_assignment
     ActiveRecord::Base.transaction do
       params.each do |student_id, room_id|
-        r_a = RoomAssignment.find_by(user_id: student_id)
+        r_a = RoomAssignment.includes(:draw_membership)
+                            .find_by(draw_memberships: { user_id: student_id })
         r_a.update!(room_id: room_id)
       end
     end

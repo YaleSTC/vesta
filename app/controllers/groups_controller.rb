@@ -8,14 +8,15 @@ class GroupsController < ApplicationController
   before_action :authorize_draw!, except: %i(show index)
   before_action :set_form_data, only: %i(new edit)
 
-  def show
+  def show # rubocop:disable Metrics/AbcSize
     @same_size_groups_count = @draw.groups.where(size: @group.size).count
     @compatible_suites = CompatibleSuitesQuery.new(@draw.available_suites)
                                               .call(@group)
     @compatible_suites_count = @compatible_suites.count
     @clip_invites = @group.clip_memberships.includes(:clip)
                           .where(confirmed: false)
-    @membership = @group.memberships.find_by(user: current_user)
+    @membership = @group.memberships
+                        .find_by(draw_membership: current_user.draw_membership)
   end
 
   def index
@@ -27,7 +28,7 @@ class GroupsController < ApplicationController
 
   def create
     p = group_params.to_h
-    p[:leader_id] = current_user.id if current_user.student?
+    p[:leader] = current_user.id if current_user.student?
     result = GroupCreator.create(params: p)
     @group = result[:record]
     set_form_data unless result[:redirect_object]
@@ -90,7 +91,7 @@ class GroupsController < ApplicationController
   end
 
   def group_params
-    p = params.require(:group).permit(:size, :leader_id, :transfers,
+    p = params.require(:group).permit(:size, :leader, :transfers,
                                       :lottery_number, :suite,
                                       member_ids: [], remove_ids: [],
                                       invitations: [])
@@ -108,8 +109,11 @@ class GroupsController < ApplicationController
 
   def set_form_data
     @group ||= Group.new(draw: @draw)
-    @group.members.delete_all unless @group.persisted?
-    @students = UngroupedStudentsQuery.new(@draw.students.on_campus).call
+    @group.memberships.delete_all unless @group.persisted?
+    @students = UngroupedStudentsQuery.new(
+      @draw.students.joins(:draw_membership)
+      .where(draw_memberships: { intent: %w(on_campus) })
+    ).call
     @leader_students = @group.members.empty? ? @students : @group.members
     @suite_sizes = @draw.open_suite_sizes
   end

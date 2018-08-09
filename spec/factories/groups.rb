@@ -7,7 +7,7 @@ FactoryBot.define do
     # The group's draw can be changed by passing in a leader. The draw is
     # inherited from the leader. This trait is used by default.
     trait :defined_by_leader do
-      association :leader, factory: :student_in_draw, intent: 'on_campus'
+      leader { create(:student_in_draw) }
       draw { leader.draw }
     end
 
@@ -18,10 +18,11 @@ FactoryBot.define do
     # a draw if none is provided.
     trait :defined_by_draw do
       draw
-      leader { build(:user, role: 'student', intent: 'on_campus', draw: draw) }
+      leader { create(:student_in_draw, draw: draw) }
     end
 
-    members { [leader] }
+    leader_draw_membership { leader.draw_membership }
+    draw_memberships { [leader_draw_membership] }
 
     factory :group_from_draw, traits: [:defined_by_draw]
 
@@ -30,8 +31,8 @@ FactoryBot.define do
       after(:build) do |g|
         suite = create(:suite_with_rooms, rooms_count: g.size)
         g.draw.suites << suite if g.draw.present?
-        (g.size - g.members.size).times do
-          g.members << create(:student, draw: g.draw)
+        (g.size - g.draw_memberships.size).times do
+          g.draw_memberships << create(:draw_membership, draw: g.draw)
         end
       end
 
@@ -80,7 +81,9 @@ FactoryBot.define do
     end
 
     factory :drawless_group do
-      association :leader, factory: :student, intent: 'on_campus'
+      leader do
+        create(:draw_membership, draw: nil).user
+      end
       after(:build) { |g| create(:suite_with_rooms, rooms_count: g.size) }
     end
   end

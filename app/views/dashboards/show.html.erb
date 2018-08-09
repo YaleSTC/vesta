@@ -26,7 +26,7 @@
         <h1 class="h4">Your draw: <%= link_to @draw.name, draw_path(@draw) %></h1>
       </div>
       <div class="card-section">
-        <% if current_user.undeclared? %>
+        <% if current_user&.draw_membership&.undeclared? %>
           <p>You have not declared your housing intent.</p>
         <% else %>
           <p>You are living <%= current_user.intent.humanize.downcase %>.</p>

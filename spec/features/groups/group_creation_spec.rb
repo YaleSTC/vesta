@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'Housing Group Creation' do
   context 'as student' do
-    let!(:leader) { create(:student_in_draw) }
+    let!(:leader) { create(:student_in_draw, draw: create(:draw_with_members)) }
 
     it 'succeeds' do
       leader.draw.update(status: 'group_formation')
@@ -68,7 +68,7 @@ RSpec.feature 'Housing Group Creation' do
 
   def create_group(size:, leader:, members:)
     select(size, from: 'group_size')
-    select(leader.full_name, from: 'group_leader_id')
+    select(leader.full_name, from: 'group_leader')
     members.each { |m| check(m.full_name) }
     click_on 'Create'
   end

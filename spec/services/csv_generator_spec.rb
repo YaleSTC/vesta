@@ -53,8 +53,8 @@ RSpec.describe CSVGenerator do
 
   def create_data
     draw = create(:draw_with_members, students_count: 4)
-    draw.students.last.update(intent: 'off_campus')
-    draw.students.first.update(intent: 'undeclared')
+    draw.draw_memberships.last.update(intent: 'off_campus')
+    draw.draw_memberships.first.update(intent: 'undeclared')
     draw.students
   end
 end

@@ -5,6 +5,7 @@ FactoryBot.define do
     name 'MyString'
     allow_clipping true
     restrict_clipping_group_size false
+    active true
 
     factory :draw_with_members do
       transient do
@@ -15,13 +16,13 @@ FactoryBot.define do
 
       after(:create) do |draw, e|
         create_list(:suite_with_rooms, e.suites_count, draws: [draw])
-        create_list(:student, e.students_count, draw: draw)
+        create_list(:student_in_draw, e.students_count, draw: draw)
       end
 
       factory :oversubscribed_draw do
         after(:create) do |draw, e|
           e.groups_count.times do
-            l = create(:student, draw: draw, intent: 'on_campus')
+            l = create(:student_in_draw, draw: draw)
             create(:locked_group, size: 1, leader: l)
           end
           draw.suites.delete_all
@@ -42,11 +43,11 @@ FactoryBot.define do
         after(:create) do |draw, e|
           suites = create_list(:suite_with_rooms, e.groups_count, draws: [draw])
           suites.each do |suite|
-            l = create(:student, draw: draw, intent: 'on_campus')
+            l = create(:student_in_draw, draw: draw)
             create(:locked_group, size: suite.size, leader: l)
           end
           # clean-up to ensure we only have valid students
-          draw.students.each do |s|
+          draw.draw_memberships.each do |s|
             unless s.off_campus? || (s.on_campus? && s.group.present?)
               s.destroy!
             end
@@ -59,14 +60,14 @@ FactoryBot.define do
         after(:create) do |draw, e|
           suites = create_list(:suite_with_rooms, e.groups_count, draws: [draw])
           # clean-up to ensure we only have valid students
-          draw.students.each do |s|
+          draw.draw_memberships.each do |s|
             unless s.off_campus? || (s.on_campus? && s.group.present?)
               s.destroy!
             end
           end
           draw.update(status: 'lottery')
           suites.each do |suite|
-            l = create(:student, draw: draw, intent: 'on_campus')
+            l = create(:student_in_draw, draw: draw)
             g = create(:locked_group, size: suite.size, leader: l)
             create(:lottery_assignment, :defined_by_group, group: g)
           end

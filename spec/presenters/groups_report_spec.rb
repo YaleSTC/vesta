@@ -47,8 +47,8 @@ RSpec.describe GroupsReport do
       it 'returns the number of groups with suites assigned' do
         # initialize the data: one group with a suite, one without
         groups(with_count: 2, total_count: 3)
-        RoomAssignment.create!(user: groups.first.leader,
-                               room: groups.first.suite.rooms.first)
+        create(:room_assignment, user: groups.first.leader,
+                                 room: groups.first.suite.rooms.first)
         expect(described_class.new(groups).without_rooms_count).to eq(1)
       end
     end

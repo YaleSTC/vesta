@@ -14,17 +14,22 @@
 #   (requested, invited, accepted)
 class Membership < ApplicationRecord
   belongs_to :group
-  belongs_to :user
+  belongs_to :draw_membership
+
+  has_one :user, through: :draw_membership, source: :user
+  has_one :draw, through: :draw_membership, source: :draw
 
   enum status: %w(accepted invited requested)
 
   validates :group, presence: true
-  validates :user, presence: true, uniqueness: { scope: :group }
+  validates :draw_membership, presence: true, uniqueness: { scope: :group }
+
   validates :status, presence: true
-  validate :matching_draw, if: ->(m) { m.user.present? && m.group.present? }
-  validate :user_on_campus, if: ->(m) { m.user.present? }
+  validate :matching_draw, if: ->(m) { m.draw.present? && m.group.present? }
+  validate :user_on_campus, if: ->(m) { m.draw_membership.present? }
   validate :group_is_open, if: ->(m) { m.group.present? }, on: :create
-  validate :user_not_in_group, if: ->(m) { m.user.present? }, on: :create
+  validate :user_not_in_group, if: ->(m) { m.draw_membership.present? },
+                               on: :create
   validate :lockable?, if: ->(m) { m.group.present? }
 
   before_destroy do |m|
@@ -56,7 +61,8 @@ class Membership < ApplicationRecord
   private
 
   def user_not_in_group
-    return unless user.group && user.group != group
+    return unless draw_membership.group.present? && \
+                  draw_membership.group != group
     errors.add :base, "#{user.full_name} already belongs to another group"
   end
 
@@ -65,7 +71,8 @@ class Membership < ApplicationRecord
   end
 
   def freeze_group_and_user
-    return unless will_save_change_to_group_id? || will_save_change_to_user_id?
+    return unless will_save_change_to_group_id? || \
+                  will_save_change_to_draw_membership_id?
     handle_abort('Cannot change group or user associated with this membership')
   end
 
@@ -76,7 +83,7 @@ class Membership < ApplicationRecord
   end
 
   def matching_draw
-    return if user.draw == group.draw
+    return if draw_membership.draw == group.draw
     errors.add :base, "#{user.full_name} is not in the same draw as the group"
   end
 
@@ -86,8 +93,9 @@ class Membership < ApplicationRecord
   end
 
   def user_on_campus
-    return if user.on_campus?
-    errors.add :base, "#{user.full_name} is not living on campus"
+    return if draw_membership.on_campus?
+    msg = "#{draw_membership.user.full_name} is not living on campus"
+    errors.add :base, msg
   end
 
   def lockable?
@@ -98,7 +106,7 @@ class Membership < ApplicationRecord
 
   def destroy_pending
     return unless saved_change_to_status || saved_change_to_id
-    user.memberships.where.not(id: id).destroy_all
+    draw_membership.memberships.where.not(id: id).destroy_all
   end
 
   def update_counter_cache

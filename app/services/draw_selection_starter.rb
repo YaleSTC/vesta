@@ -69,7 +69,7 @@ class DrawSelectionStarter
   end
 
   def notify_all_students
-    students = draw.students.on_campus
+    students = draw.draw_memberships.on_campus.map(&:user)
     students.each do |s|
       mailer.lottery_notification(user: s, college: college).deliver_later
     end

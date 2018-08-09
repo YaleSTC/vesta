@@ -7,7 +7,7 @@ RSpec.feature 'Bulk intent assignment' do
 
   before do
     log_in create(:admin)
-    create(:student, intent: 'undeclared', draw_id: draw.id)
+    create(:student_in_draw, intent: 'undeclared', draw: draw)
   end
 
   it 'can be performed' do

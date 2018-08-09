@@ -11,7 +11,8 @@ class MembershipBatchCreator
   # @param group [Group] The group to create memberships in
   # @param action [String] The action creating the membership ('invite', etc.)
   def initialize(user_ids:, group:, action:)
-    @users = User.active.find(user_ids.reject(&:empty?))
+    @users = User.active.includes(:draw_membership)
+                 .find(user_ids.reject(&:empty?))
     @group = group
     @action = action
   end
@@ -68,7 +69,7 @@ class MembershipBatchCreator
   def failure_msg
     return if failures.empty?
     @failure_errors ||= failures.map do |f|
-      "#{f[:params][:user].full_name} (#{f[:errors]})"
+      "#{f[:params][:draw_membership].user.full_name} (#{f[:errors]})"
     end
     @failure_msg ||= 'Failed to create memberships for '\
       "\n#{@failure_errors.join('\n')}"

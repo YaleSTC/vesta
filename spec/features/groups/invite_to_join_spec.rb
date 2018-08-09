@@ -6,7 +6,7 @@ RSpec.feature 'Students Joining Groups' do
   context 'inviting to join open group' do
     it 'succeeds' do
       group = create(:open_group, size: 2)
-      user = create(:student, intent: 'on_campus', draw: group.draw)
+      user = create(:student_in_draw, intent: 'on_campus', draw: group.draw)
       log_in group.leader
       invite_member(user: user, group: group)
       expect(page).to have_content('Successfully created memberships')
@@ -23,8 +23,8 @@ RSpec.feature 'Students Joining Groups' do
   context 'rescinding invitation' do
     it 'succeeds' do # rubocop:disable RSpec/ExampleLength
       group = create(:open_group, size: 2)
-      user = create(:student, intent: 'on_campus', draw: group.draw)
-      Membership.create(user: user, group: group, status: 'invited')
+      user = create(:student_in_draw, intent: 'on_campus', draw: group.draw)
+      create(:membership, user: user, group: group, status: 'invited')
       log_in group.leader
       visit draw_group_path(group.draw, group)
       click_on 'rescind'

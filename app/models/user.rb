@@ -12,8 +12,6 @@
 #   [housing] rep, or student (required)
 # @attr first_name [String] the user's first name (required)
 # @attr last_name [String] the user's last name (required)
-# @attr intent [Integer] an enum for the user's housing intent, on_campus,
-#   off_campus, or undeclared (required)
 # @attr class_year [Integer] the graduating class year of the student (required)
 # @attr tos_accepted [DateTime] the time of agreement to the terms of service
 class User < ApplicationRecord
@@ -36,15 +34,15 @@ class User < ApplicationRecord
   end
 
   belongs_to :college
-  belongs_to :draw
-  has_one :led_group, inverse_of: :leader, dependent: :destroy,
-                      class_name: 'Group', foreign_key: :leader_id
-  has_one :membership, -> { where(status: 'accepted') }, dependent: :destroy
-  accepts_nested_attributes_for :membership
+  has_many :draw_memberships, dependent: :destroy
+  has_many :draws, through: :draw_memberships
+  has_one :draw_membership, -> { where(active: true) }, dependent: :destroy
+  has_one :draw, through: :draw_membership
+  has_many :memberships, through: :draw_memberships, source: :memberships
+  has_one :membership, through: :draw_membership, source: :membership
   has_one :group, through: :membership
-  has_many :memberships, dependent: :destroy
-  has_one :room_assignment
-  has_one :room, through: :room_assignment
+  has_one :room_assignment, through: :draw_membership
+  has_one :room, through: :draw_membership
 
   delegate :building_name, to: :room, allow_nil: true
   delegate :name, to: :draw, prefix: :draw, allow_nil: true
@@ -52,6 +50,7 @@ class User < ApplicationRecord
   delegate :number, to: :room, prefix: :room, allow_nil: true
   delegate :suite_number, to: :group, allow_nil: true
   delegate :lottery_number, to: :group, allow_nil: true
+  delegate :intent, to: :draw_membership, allow_nil: true
 
   validates :email, uniqueness: true
   validates :username, presence: true, if: :cas_auth?
@@ -59,13 +58,11 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :intent, presence: true
   validates :class_year, presence: true,
                          if: ->() { role == 'student' || role == 'rep' }
   validates :college_id, presence: true, unless: :superadmin?
 
   enum role: %w(student admin rep superuser superadmin graduated)
-  enum intent: %w(undeclared on_campus off_campus)
 
   before_update :freeze_tos_acceptance,
                 if: ->() { will_save_change_to_tos_accepted? }
@@ -127,33 +124,6 @@ class User < ApplicationRecord
   # @return [Boolean]
   def leader_of?(group)
     self == group.leader
-  end
-
-  # Back up a user's current draw into old_draw_id and removes them from current
-  # draw, also setting intent to undeclared. Does nothing if draw_id is nil.
-  #
-  # @return [User] the modified but unpersisted user object
-  def remove_draw
-    return self if draw_id.nil?
-    old_draw_id = draw_id
-    assign_attributes(draw_id: nil, old_draw_id: old_draw_id,
-                      intent: 'undeclared')
-    self
-  end
-
-  # Restores a user's draw from old_draw_id and optionally saves the current
-  # draw_id to old_draw_id, also setting intent to undeclared. If the draw_id is
-  # equal to the old_draw_id, will set draw_id to nil.
-  #
-  # @param save_current [Boolean] whether or not to assign the current draw_id
-  #   value to old_draw_id, defaults to false
-  # @return [User] the modified but unpersisted user object
-  def restore_draw(save_current: false)
-    to_save = save_current ? draw_id : nil
-    new_draw_id = old_draw_id != draw_id ? old_draw_id : nil
-    assign_attributes(draw_id: new_draw_id, old_draw_id: to_save,
-                      intent: 'undeclared')
-    self
   end
 
   # Override #admin? to also return true for superusers

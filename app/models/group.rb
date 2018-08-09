@@ -19,7 +19,10 @@
 # @attr clip_membership [ClipMembership] The confirmed clip membership for the
 #   group, if any.
 class Group < ApplicationRecord # rubocop:disable ClassLength
-  belongs_to :leader, inverse_of: :led_group, class_name: 'User'
+  belongs_to :leader_draw_membership, class_name: 'DrawMembership',
+                                      inverse_of: :led_group
+  has_one :leader, through: :leader_draw_membership, class_name: 'User',
+                   source: :user
   belongs_to :draw
   has_one :clip_membership, -> { where(confirmed: true) }, dependent: :destroy
   has_one :clip, through: :clip_membership
@@ -32,18 +35,21 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   has_many :memberships, dependent: :delete_all
   has_many :full_memberships, -> { where(status: 'accepted') },
            class_name: 'Membership', inverse_of: :group
-  has_many :members, through: :full_memberships, source: :user
+  has_many :draw_memberships, through: :full_memberships,
+                              source: :draw_membership
+  has_many :members, through: :draw_memberships, source: :user
 
   delegate :number, to: :lottery_assignment, prefix: :lottery, allow_nil: true
   delegate :number, to: :suite, prefix: :suite, allow_nil: true
 
   enum status: %w(open closed finalizing locked)
 
-  # validates :draw, presence: true
   validates :status, presence: true
   validates :size, presence: true,
                    numericality: { greater_than: 0 }
-  validates :leader, presence: true, inclusion: { in: ->(g) { g.members } }
+  validates :leader_draw_membership, presence: true,
+                                     inclusion:
+                                     { in: ->(g) { g.draw_memberships } }
   validates :memberships_count, numericality: { greater_than_or_equal_to: 0 }
   validates :transfers, presence: true,
                         numericality: { greater_than_or_equal_to: 0,
@@ -53,7 +59,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   validate :validate_lottery_assignment,
            if: -> { will_save_change_to_lottery_assignment_id? }
 
-  before_validation :add_leader_to_members, if: ->(g) { g.leader.present? }
+  before_validation :add_leader_to_members,
+                    if: ->(g) { g.leader_draw_membership.present? }
   after_save :update_status!,
              if: ->() { saved_change_to_transfers || saved_change_to_size }
   before_update :freeze_lottery,
@@ -114,7 +121,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   # @return [Array<User>] the members of the group with the exception of the
   #   group leader
   def removable_members
-    members.reject { |u| u.id == leader_id }
+    members.joins(:draw_membership).where
+           .not(draw_memberships: { id: leader_draw_membership_id })
   end
 
   # Remove specified members
@@ -122,8 +130,9 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   # @param ids [Array<User>] members of the group
   # @return [Array<User>] the remaining members of the group after deletion
   def remove_members!(ids:)
-    ids.delete_if { |u| u == leader_id }
-    memberships.where(user_id: ids).delete_all
+    ids.delete_if { |u| u == leader.id }
+    memberships.joins(:draw_membership)
+               .where(draw_memberships: { user_id: ids }).delete_all
     # rubocop:disable Rails/SkipsModelValidations
     decrement!(:memberships_count, ids.size)
     # rubocop:enable Rails/SkipsModelValidations
@@ -214,7 +223,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   end
 
   def add_leader_to_members
-    members << leader unless members.include? leader
+    return if draw_memberships.include?(leader_draw_membership)
+    draw_memberships << leader_draw_membership
   end
 
   def validate_members_count

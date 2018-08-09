@@ -6,6 +6,8 @@ RSpec.describe Suite, type: :model do
   describe 'basic validations' do
     it { is_expected.to validate_presence_of(:number) }
     it { is_expected.to belong_to(:building) }
+    it { is_expected.to have_many(:suite_assignments) }
+    it { is_expected.to have_many(:groups).through(:suite_assignments) }
     it { is_expected.to have_one(:suite_assignment) }
     it { is_expected.to have_one(:group).through(:suite_assignment) }
     it { is_expected.to have_many(:rooms) }
@@ -32,7 +34,7 @@ RSpec.describe Suite, type: :model do
     describe '.available' do
       it 'returns all suites not assigned to groups' do
         available = create(:suite)
-        create(:group_with_suite, :defined_by_draw, draw: nil)
+        create(:group_with_suite)
         expect(described_class.available).to eq([available])
       end
     end

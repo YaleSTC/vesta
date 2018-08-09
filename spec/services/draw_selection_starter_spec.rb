@@ -56,7 +56,7 @@ RSpec.describe DrawSelectionStarter do
       mailer = instance_spy('student_mailer')
       described_class.start(draw: draw, mailer: mailer)
       expect(mailer).to have_received(:lottery_notification)
-        .exactly(draw.students.on_campus.count).times
+        .exactly(draw.draw_memberships.on_campus.count).times
     end
 
     it 'sets the object key to nil in the hash on failure' do

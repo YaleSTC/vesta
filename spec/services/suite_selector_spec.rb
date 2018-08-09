@@ -89,8 +89,9 @@ RSpec.describe SuiteSelector do
         allow(RoomAssignment).to receive(:create!)
         described_class.select(group: group, suite_id: suite.id.to_s)
         expect(RoomAssignment).to \
-          have_received(:create!).with(user: group.leader,
-                                       room: single_rooms.first)
+          have_received(:create!)
+          .with(draw_membership: group.leader_draw_membership,
+                room: single_rooms.first)
       end
       # rubocop:enable RSpec/ExampleLength
       it 'does not set the room if the suite is of size >1' do

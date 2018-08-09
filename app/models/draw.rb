@@ -25,7 +25,8 @@
 #  false otherwise.
 class Draw < ApplicationRecord # rubocop:disable ClassLength
   has_many :groups, dependent: :destroy
-  has_many :students, class_name: 'User', dependent: :nullify
+  has_many :draw_memberships, dependent: :destroy
+  has_many :students, through: :draw_memberships, source: :user
   has_many :draw_suites, dependent: :delete_all
   has_many :suites, through: :draw_suites
   has_many :lottery_assignments, dependent: :destroy
@@ -39,8 +40,10 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   validate :cannot_lock_intent_if_undeclared,
            if: ->() { intent_locked_changed? }
 
+  before_update :update_draw_membership_statuses,
+                if: ->() { will_save_change_to_active? }
   after_update :destroy_all_clips, if: ->() { saved_change_to_allow_clipping }
-  after_destroy :remove_old_draw_ids
+  before_destroy :remove_old_draw_ids
 
   enum status: %w(draft group_formation lottery
                   suite_selection results intent_selection)
@@ -111,7 +114,8 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   #   students in the draw
   def ungrouped_students
     @ungrouped_students ||= UngroupedStudentsQuery.new(
-      students.where(intent: %w(undeclared on_campus))
+      students.joins(:draw_memberships)
+              .where(draw_memberships: { intent: %w(undeclared on_campus) })
     ).call
   end
 
@@ -237,11 +241,11 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   private
 
   def undeclared_count
-    @undeclared_count ||= students.undeclared.count
+    @undeclared_count ||= draw_memberships.undeclared.count
   end
 
   def on_campus_student_count
-    @on_campus_count ||= students.on_campus.count
+    @on_campus_count ||= draw_memberships.on_campus.count
   end
 
   def ungrouped_count
@@ -250,7 +254,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
 
   # rubocop:disable Rails/SkipsModelValidations
   def remove_old_draw_ids
-    User.where(old_draw_id: id).update_all(old_draw_id: nil)
+    DrawMembership.where(old_draw_id: id).update_all(old_draw_id: nil)
   end
   # rubocop:enable Rails/SkipsModelValidations
 
@@ -273,5 +277,13 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
 
   def destroy_all_clips
     clips.destroy_all
+  end
+
+  def update_draw_membership_statuses
+    ActiveRecord::Base.transaction do
+      draw_memberships.map { |dm| dm.update!(active: active) }
+    end
+  rescue ActiveRecord::RecordInvalid
+    errors.add(:draw, 'was unable to change active status.')
   end
 end

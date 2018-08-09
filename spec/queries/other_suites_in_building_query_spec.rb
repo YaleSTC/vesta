@@ -18,7 +18,7 @@ RSpec.describe OtherSuitesInBuildingQuery do
   it 'ignores unavailable suites' do
     suite = create(:suite)
     other = create(:suite, building: suite.building)
-    create(:group_with_suite, :defined_by_draw, suite: other, draw: nil)
+    create(:group_with_suite, suite: other)
     expect(described_class.call(suite: suite)).to eq([])
   end
 end

@@ -8,7 +8,7 @@ RSpec.describe GroupPolicy do
   subject { described_class }
 
   context 'student' do
-    let(:user) { build_stubbed(:user, role: 'student') }
+    let(:user) { build_stubbed(:student_in_draw, role: 'student') }
     let(:group) { build_stubbed(:group, leader: user) }
     let(:other_group) { build_stubbed(:group) }
 
@@ -18,16 +18,17 @@ RSpec.describe GroupPolicy do
           draw = instance_spy('draw', group_formation?: true)
           allow(user).to receive(:draw).and_return(draw)
           allow(user).to receive(:group).and_return(nil)
-          allow(user).to receive(:on_campus?).and_return(true)
+          allow(user.draw_membership).to receive(:on_campus?).and_return(true)
         end
         it { is_expected.to permit(user, Group) }
       end
       context 'in group-formation draw, in group, on_campus' do
         before do
           draw = instance_spy('draw', group_formation?: true)
+          group = instance_spy('group', blank?: false)
           allow(user).to receive(:draw).and_return(draw)
-          allow(user).to receive(:group).and_return(instance_spy('group'))
-          allow(user).to receive(:on_campus?).and_return(true)
+          allow(user).to receive(:group).and_return(group)
+          allow(user.draw_membership).to receive(:on_campus?).and_return(true)
         end
         it { is_expected.not_to permit(user, Group) }
       end
@@ -36,7 +37,7 @@ RSpec.describe GroupPolicy do
           draw = instance_spy('draw', group_formation?: true)
           allow(user).to receive(:draw).and_return(draw)
           allow(user).to receive(:group).and_return(nil)
-          allow(user).to receive(:on_campus?).and_return(false)
+          allow(user.draw_membership).to receive(:on_campus?).and_return(false)
         end
         it { is_expected.not_to permit(user, Group) }
       end
@@ -157,7 +158,7 @@ RSpec.describe GroupPolicy do
   end
 
   context 'housing rep' do
-    let(:user) { build_stubbed(:user, role: 'rep') }
+    let(:user) { build_stubbed(:student_in_draw, role: 'rep') }
     let(:group) do
       build_stubbed(:group, draw: build_stubbed(:draw))
     end

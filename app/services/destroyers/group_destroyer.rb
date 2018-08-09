@@ -32,7 +32,7 @@ class GroupDestroyer < Destroyer
   private
 
   def remove_member_rooms
-    object.members.each do |member|
+    object.draw_memberships.each do |member|
       member.room_assignment.destroy! if member.room_assignment.present?
     end
   end
@@ -45,6 +45,6 @@ class GroupDestroyer < Destroyer
 
   def restore_member_draws
     return unless object.draw.nil?
-    object.members.each { |u| u.restore_draw.save! }
+    object.draw_memberships.each { |u| u.restore_draw.save! }
   end
 end

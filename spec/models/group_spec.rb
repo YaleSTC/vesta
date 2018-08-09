@@ -11,8 +11,9 @@ RSpec.describe Group, type: :model do
     it { is_expected.not_to allow_value(0).for(:size) }
     it { is_expected.not_to allow_value(-1).for(:size) }
     it { is_expected.to validate_presence_of(:status) }
-    it { is_expected.to belong_to(:leader) }
-    it { is_expected.to validate_presence_of(:leader) }
+    it { is_expected.to belong_to(:leader_draw_membership) }
+    it { is_expected.to have_one(:leader).through(:leader_draw_membership) }
+    it { is_expected.to validate_presence_of(:leader_draw_membership) }
     it { is_expected.to belong_to(:draw) }
     it { is_expected.to have_one(:clip_membership) }
     it { is_expected.to have_one(:clip).through(:clip_membership) }
@@ -22,7 +23,10 @@ RSpec.describe Group, type: :model do
     it { is_expected.to have_many(:memberships) }
     it { is_expected.to have_many(:clip_memberships) }
     it { is_expected.to have_many(:full_memberships) }
-    it { is_expected.to have_many(:members).through(:full_memberships) }
+    it do
+      is_expected.to have_many(:draw_memberships).through(:full_memberships)
+    end
+    it { is_expected.to have_many(:members).through(:draw_memberships) }
     it { is_expected.not_to allow_value(-1).for(:memberships_count) }
     it { is_expected.to validate_presence_of(:transfers) }
     it { is_expected.not_to allow_value(-1).for(:transfers) }
@@ -50,9 +54,9 @@ RSpec.describe Group, type: :model do
       expect(group.valid?).to be_falsey
     end
     it 'also validates during creation' do
-      leader, student = create_pair(:student)
-      group = described_class.new(size: 1, leader_id: leader.id,
-                                  member_ids: [student.id])
+      leader, student = create_pair(:student_in_draw)
+      group = described_class.new(size: 1, leader: leader,
+                                  draw_memberships: [student.draw_membership])
       group.save
       expect(group.persisted?).to be_falsey
     end
@@ -225,8 +229,8 @@ RSpec.describe Group, type: :model do
   describe '#requests' do
     it 'returns an array of users who have requested to join' do
       group = create(:open_group)
-      user = create(:student, intent: 'on_campus', draw: group.draw)
-      m = Membership.create(group: group, user: user, status: 'requested')
+      user = create(:student_in_draw, draw: group.draw)
+      m = create(:membership, group: group, user: user, status: 'requested')
       expect(group.requests).to eq([m])
     end
   end
@@ -234,8 +238,8 @@ RSpec.describe Group, type: :model do
   describe '#invitations' do
     it 'returns an array of users who have been invited to join' do
       group = create(:open_group)
-      user = create(:student, intent: 'on_campus', draw: group.draw)
-      m = Membership.create(group: group, user: user, status: 'invited')
+      user = create(:student_in_draw, draw: group.draw)
+      m = create(:membership, group: group, user: user, status: 'invited')
       expect(group.invitations).to eq([m])
     end
   end
@@ -244,13 +248,13 @@ RSpec.describe Group, type: :model do
     let(:group) { create(:open_group) }
 
     it 'returns invitations but not accepted memberships' do
-      user = create(:student, draw: group.draw, intent: 'on_campus')
-      m = Membership.create(group: group, user: user, status: 'invited')
+      user = create(:student_in_draw, draw: group.draw)
+      m = create(:membership, group: group, user: user, status: 'invited')
       expect(group.pending_memberships).to match([m])
     end
     it 'returns requests but not accepted memberships' do
-      user = create(:student, draw: group.draw, intent: 'on_campus')
-      m = Membership.create(group: group, user: user, status: 'requested')
+      user = create(:student_in_draw, draw: group.draw)
+      m = create(:membership, group: group, user: user, status: 'requested')
       expect(group.pending_memberships).to match([m])
     end
   end
@@ -264,8 +268,8 @@ RSpec.describe Group, type: :model do
     end
 
     def create_potential_member(status:, group:)
-      u = create(:student, draw: group.draw, intent: 'on_campus')
-      Membership.create(user: u, group: group, status: status)
+      u = create(:student_in_draw, draw: group.draw)
+      create(:membership, user: u, group: group, status: status)
       u
     end
   end
@@ -273,7 +277,7 @@ RSpec.describe Group, type: :model do
   describe '#removable_members' do
     it 'returns all accepted members except for the leader' do
       group = create(:full_group, size: 2)
-      expect(group.removable_members.map(&:id)).not_to include(group.leader_id)
+      expect(group.removable_members.map(&:id)).not_to include(group.leader.id)
     end
   end
 

@@ -60,8 +60,8 @@ RSpec.feature 'Dashboards' do
         let(:student) do
           g = create(:group_with_suite)
           s = g.leader
-          RoomAssignment.create!(room: g.suite_assignment.suite.rooms.first,
-                                 user: s.reload)
+          create(:room_assignment, room: g.suite_assignment.suite.rooms.first,
+                                   user: s.reload)
           s
         end
       end

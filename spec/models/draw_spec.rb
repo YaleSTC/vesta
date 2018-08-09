@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe Draw, type: :model do
   describe 'basic validations' do
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to have_many(:students) }
+    it { is_expected.to have_many(:draw_memberships) }
+    it { is_expected.to have_many(:students).through(:draw_memberships) }
     it { is_expected.to have_many(:groups) }
     it { is_expected.to have_many(:draw_suites) }
     it { is_expected.to have_many(:lottery_assignments) }
@@ -39,9 +40,9 @@ RSpec.describe Draw, type: :model do
     end
     it 'clears old_draw_id when necessary' do
       draw = create(:draw)
-      student = create(:student, old_draw_id: draw.id)
+      dm = create(:draw_membership, draw: nil, old_draw_id: draw.id)
       draw.destroy
-      expect(student.reload.old_draw_id).to be_nil
+      expect(dm.reload.old_draw_id).to be_nil
     end
     it 'clears groups on destruction' do
       group = create(:group)
@@ -166,13 +167,13 @@ RSpec.describe Draw, type: :model do
     it 'checks undeclared students' do
       draw = create(:draw_with_members, students_count: 2)
       create(:group, leader: draw.students.first)
-      draw.students.last.update(intent: 'undeclared')
+      draw.draw_memberships.last.update(intent: 'undeclared')
       expect(draw.all_students_grouped?).to be_falsey
     end
     it 'ignores off_campus students' do
       draw = create(:draw_with_members, students_count: 2)
       create(:group, leader: draw.students.first)
-      draw.students.last.update(intent: 'off_campus')
+      draw.draw_memberships.last.update(intent: 'off_campus')
       expect(draw.all_students_grouped?).to be_truthy
     end
     it 'returns true if there are no students in the draw not in a group' do
@@ -187,15 +188,16 @@ RSpec.describe Draw, type: :model do
 
     before do
       create(:group, leader: draw.students.first)
-      draw.students[1].update!(intent: 'off_campus')
-      draw.students[2].update!(intent: 'undeclared')
+      draw.draw_memberships[1].update!(intent: 'off_campus')
+      draw.draw_memberships[2].update!(intent: 'undeclared')
     end
     it 'returns all students that do not belong to groups' do
       # Tried to use draw.students but it looks like changing those users
       # changes the order of the returned results (maybe orders by updated_at by
       # default?)
       expected = UngroupedStudentsQuery.new(
-        draw.students.where(intent: %w(undeclared on_campus))
+        draw.students.joins(:draw_memberships)
+            .where(draw_memberships: { intent: %w(undeclared on_campus) })
       ).call
       expect(draw.ungrouped_students).to match_array(expected)
     end
@@ -205,11 +207,11 @@ RSpec.describe Draw, type: :model do
     let(:draw) { create(:draw_with_members) }
 
     it 'returns false if there are any undeclared students in the draw' do
-      draw.students.first.update(intent: 'undeclared')
+      draw.draw_memberships.first.update(intent: 'undeclared')
       expect(draw.all_intents_declared?).to be_falsey
     end
     it 'returns true if there are no undeclared students in the draw' do
-      draw.students.first.update(intent: 'on_campus')
+      draw.draw_memberships.first.update(intent: 'on_campus')
       expect(draw.all_intents_declared?).to be_truthy
     end
   end

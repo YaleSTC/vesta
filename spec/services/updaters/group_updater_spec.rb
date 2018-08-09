@@ -24,12 +24,12 @@ RSpec.describe GroupUpdater do
     context 'group is full' do
       let(:group) { create(:open_group, size: 2) }
       let(:to_remove) do
-        create(:student, intent: 'on_campus', draw: group.draw)
+        create(:student_in_draw, intent: 'on_campus', draw: group.draw)
       end
 
       it 'deletes memberships for users being removed before updating' do
         p = mock_remove_parameters(to_remove)
-        group.members << to_remove
+        create(:membership, user: to_remove, group: group)
         expect { described_class.update(group: group, params: p) }.to \
           change(Membership, :count).by(-1)
       end
@@ -41,16 +41,16 @@ RSpec.describe GroupUpdater do
 
     context 'users being added' do
       let(:group) { create(:open_group, size: 2) }
-      let(:to_add) { create(:student, draw: group.draw) }
+      let(:to_add) { create(:student_in_draw, draw: group.draw) }
 
       it 'updates their intent to on_campus if necessary' do
-        to_add.update!(intent: 'undeclared')
+        to_add.draw_membership.update!(intent: 'undeclared')
         p = mock_add_parameters(to_add)
         described_class.update(group: group, params: p)
-        expect(to_add.reload.intent).to eq('on_campus')
+        expect(to_add.draw_membership.reload.intent).to eq('on_campus')
       end
       it 'updates even if user has pending invitations' do
-        create(:membership, user_id: to_add.id, status: 'invited', group: group)
+        create(:membership, user: to_add, status: 'invited', group: group)
         p = mock_add_parameters(to_add)
         described_class.update(group: group, params: p)
         expect(group.members).to include(to_add)
@@ -66,7 +66,7 @@ RSpec.describe GroupUpdater do
 
       it 'deletes the empty size key from the params' do
         p = instance_spy('ActionController::Parameters',
-                         to_h: { 'leader_id' => group.members.last.id.to_s,
+                         to_h: { 'leader' => group.members.last.id.to_s,
                                  'size' => '' })
         result = described_class.update(group: group, params: p)
         expect(result[:msg]).to have_key(:success)
@@ -77,7 +77,7 @@ RSpec.describe GroupUpdater do
       it 'does not remove the leader if passed' do
         group = create(:open_group, size: 2)
         p = instance_spy('ActionController::Parameters',
-                         to_h: { 'remove_ids' => [group.leader_id.to_s] })
+                         to_h: { 'remove_ids' => [group.leader.id.to_s] })
         expect { described_class.update(group: group, params: p) }.not_to \
           change(Membership, :count)
       end
@@ -104,7 +104,7 @@ RSpec.describe GroupUpdater do
       end
       it 'can add members and increase the size' do
         group = expandable_group(size: 1)
-        user = create(:user, draw: group.draw, intent: 'on_campus')
+        user = create(:student_in_draw, draw: group.draw)
         params = { size: 2, member_ids: [user.id.to_s] }
         described_class.update(group: group, params: params)
         expect(group.members).to include(user)

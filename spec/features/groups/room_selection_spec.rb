@@ -21,8 +21,8 @@ RSpec.feature 'Room Selection' do
     context 'assignment editing' do
       before do
         group.members.each_with_index do |m, i|
-          RoomAssignment.create!(user: m.reload,
-                                 room: group.suite_assignment.suite.rooms[i])
+          create(:room_assignment, user: m.reload,
+                                   room: group.suite_assignment.suite.rooms[i])
         end
       end
 

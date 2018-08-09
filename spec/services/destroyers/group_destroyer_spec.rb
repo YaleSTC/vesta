@@ -9,7 +9,7 @@ RSpec.describe GroupDestroyer do
     expect(destroyer.destroy[:redirect_object]).to be_nil
   end
   it 'fails if destroy fails' do
-    g = instance_spy('Group', members: [])
+    g = instance_spy('Group', draw_memberships: [])
     allow(g).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed)
     destroyer = described_class.new(group: g)
     expect(destroyer.destroy[:redirect_object]).to eq(g)
@@ -48,22 +48,22 @@ RSpec.describe GroupDestroyer do
 
     it 'restores members to their original draws if drawless' do
       group = create(:drawless_group)
-      allow(group.leader).to receive(:restore_draw)
-        .and_return(instance_spy('user', save: true))
+      allow(group.leader_draw_membership).to receive(:restore_draw)
+        .and_return(instance_spy('DrawMembership', save: true))
       described_class.new(group: group).destroy
-      expect(group.leader).to have_received(:restore_draw)
+      expect(group.leader_draw_membership).to have_received(:restore_draw)
     end
 
     it 'does nothing if group belongs to a draw' do
       group = create(:group)
-      allow(group.leader).to receive(:restore_draw)
+      allow(group.leader_draw_membership).to receive(:restore_draw)
       described_class.new(group: group).destroy
-      expect(group.leader).not_to have_received(:restore_draw)
+      expect(group.leader_draw_membership).not_to have_received(:restore_draw)
     end
 
     it 'raises an error if cannot restore the draw' do
       group = create(:drawless_group)
-      allow(group.leader).to receive(:restore_draw)
+      allow(group.leader_draw_membership).to receive(:restore_draw)
         .and_raise(ActiveRecord::RecordInvalid)
       result = described_class.new(group: group).destroy
       expect(result[:redirect_object]).to eq(group)
@@ -71,7 +71,7 @@ RSpec.describe GroupDestroyer do
   end
 
   def make_stub_room_assignment(valid = false)
-    stub_room_assignment = instance_spy('Room Assignment')
+    stub_room_assignment = instance_spy('RoomAssignment')
     if valid
       allow(stub_room_assignment).to receive(:destroy!).and_return(true)
     else
@@ -84,8 +84,8 @@ RSpec.describe GroupDestroyer do
   end
 
   def make_stub_group(stub_room_assignment)
-    user_ingroup = instance_spy('User', room_assignment: stub_room_assignment)
-    group = instance_spy('Group', members: [user_ingroup])
+    dm = instance_spy('DrawMembership', room_assignment: stub_room_assignment)
+    group = instance_spy('Group', draw_memberships: [dm])
     group
   end
 end

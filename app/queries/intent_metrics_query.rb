@@ -27,7 +27,10 @@ class IntentMetricsQuery
   # @return [Hash{String => Integer}] a hash with intent Enum strings as keys
   #   and associated record counts as values
   def call(draw)
-    @query_results = @relation.where(draw: draw).group(:intent).count.tap do |q|
+    @query_results = @relation.joins(:draw_membership)
+                              .where(draw_memberships: { draw_id: draw.id })
+                              .group_by { |s| s.draw_membership.intent }
+                              .transform_values(&:count).tap do |q|
       q.default = 0
     end
   end

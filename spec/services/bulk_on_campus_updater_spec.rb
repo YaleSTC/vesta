@@ -11,7 +11,7 @@ RSpec.describe BulkOnCampusUpdater do
       expect(draw.students.map(&:intent).uniq).to eq(['on_campus'])
     end
     it 'ignores off-campus students' do
-      off_campus = draw.students.first
+      off_campus = draw.draw_memberships.first
       off_campus.update(intent: 'off_campus')
       expect { described_class.update(draw: draw) }.not_to \
         change { off_campus.reload.intent }

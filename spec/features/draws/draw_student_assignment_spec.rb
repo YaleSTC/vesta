@@ -36,7 +36,7 @@ RSpec.feature 'Draw student assignment' do
       let!(:fake_student) { { username: 'bar', email: 'bar@m.com' } }
       let!(:student) { create(:student, username: 'foo', email: 'foo@m.com') }
       let!(:student_in_group) do
-        create(:student, username: 'stu', email: 'stu@m.com')
+        create(:student_in_draw, username: 'stu', email: 'stu@m.com')
       end
 
       before do

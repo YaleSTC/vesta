@@ -60,7 +60,9 @@ class DrawStudentsUpdate
 
   def students_to_add_by_class_year
     return [] unless class_year
-    UngroupedStudentsQuery.call.where(draw_id: nil, class_year: class_year)
+    UngroupedStudentsQuery.call.includes(:draw_membership)
+                          .where(class_year: class_year,
+                                 draw_memberships: { draw_id: nil })
   end
 
   def students_to_add_by_username
