@@ -41,7 +41,8 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   after_update :destroy_all_clips, if: ->() { saved_change_to_allow_clipping }
   after_destroy :remove_old_draw_ids
 
-  enum status: %w(draft pre_lottery lottery suite_selection results)
+  enum status: %w(draft pre_lottery lottery
+                  suite_selection results intent_selection)
   enum email_type: %w(intent locking)
   enum suite_selection_mode: %w(admin_selection student_selection)
 
@@ -164,7 +165,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   #
   # @return [Boolean] whether or not the draw is not yet in the lottery phase
   def before_lottery?
-    %w(draft pre_lottery).include? status
+    %w(draft pre_lottery intent_selection).include? status
   end
 
   # Query method to check whether or not a draw is in the lottery phase or after
