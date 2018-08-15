@@ -54,7 +54,7 @@ class DrawResultsStarter
 
   # Note: this occurs in a transaction
   def duplicate_draw! # rubocop:disable AbcSize
-    d = Draw.create!(name: draw.name + ' (oversub)', status: 'pre_lottery')
+    d = Draw.create!(name: draw.name + ' (oversub)', status: 'group_formation')
     draw.ungrouped_students.each do |s|
       s.remove_draw.update!(draw_id: d.id, intent: 'on_campus')
     end

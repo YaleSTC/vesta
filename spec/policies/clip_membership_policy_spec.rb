@@ -7,7 +7,7 @@ RSpec.describe ClipMembershipPolicy do
   subject { described_class }
 
   let(:record) { build_stubbed(:clip_membership) }
-  let(:draw) { instance_spy('Draw', pre_lottery?: true) }
+  let(:draw) { instance_spy('Draw', group_formation?: true) }
   let(:group) { instance_spy('Group', present?: true, draw: draw) }
 
   context 'student' do
@@ -41,16 +41,16 @@ RSpec.describe ClipMembershipPolicy do
           context 'with the correct invite' do
             before { allow(record).to receive(:group).and_return(group) }
 
-            context 'but the draw is not pre_lottery' do
+            context 'but the draw is not group-formation' do
               before do
-                allow(draw).to receive(:pre_lottery?).and_return(false)
+                allow(draw).to receive(:group_formation?).and_return(false)
               end
               it { is_expected.not_to permit(user, record) }
             end
 
-            context 'and the draw is pre_lottery' do
+            context 'and the draw is group-formation' do
               before do
-                allow(draw).to receive(:pre_lottery?).and_return(true)
+                allow(draw).to receive(:group_formation?).and_return(true)
               end
               it { is_expected.to permit(user, record) }
             end
@@ -95,16 +95,16 @@ RSpec.describe ClipMembershipPolicy do
             context 'and the membership is not confirmed' do
               before { allow(record).to receive(:confirmed).and_return(false) }
 
-              context 'but the draw is not pre_lottery' do
+              context 'but the draw is not group-formation' do
                 before do
-                  allow(draw).to receive(:pre_lottery?).and_return(false)
+                  allow(draw).to receive(:group_formation?).and_return(false)
                 end
                 it { is_expected.not_to permit(user, record) }
               end
 
-              context 'and the draw is pre_lottery' do
+              context 'and the draw is group-formation' do
                 before do
-                  allow(draw).to receive(:pre_lottery?).and_return(true)
+                  allow(draw).to receive(:group_formation?).and_return(true)
                 end
                 it { is_expected.to permit(user, record) }
               end
@@ -150,16 +150,16 @@ RSpec.describe ClipMembershipPolicy do
             context 'and the membership is confirmed' do
               before { allow(record).to receive(:confirmed).and_return(true) }
 
-              context 'but the draw is not pre_lottery' do
+              context 'but the draw is not group-formation' do
                 before do
-                  allow(draw).to receive(:pre_lottery?).and_return(false)
+                  allow(draw).to receive(:group_formation?).and_return(false)
                 end
                 it { is_expected.not_to permit(user, record) }
               end
 
-              context 'and the draw is pre_lottery' do
+              context 'and the draw is group-formation' do
                 before do
-                  allow(draw).to receive(:pre_lottery?).and_return(true)
+                  allow(draw).to receive(:group_formation?).and_return(true)
                 end
                 it { is_expected.to permit(user, record) }
               end
@@ -201,16 +201,16 @@ RSpec.describe ClipMembershipPolicy do
           context 'with the correct invite' do
             before { allow(record).to receive(:group).and_return(group) }
 
-            context 'but the draw is not pre_lottery' do
+            context 'but the draw is not group-formation' do
               before do
-                allow(draw).to receive(:pre_lottery?).and_return(false)
+                allow(draw).to receive(:group_formation?).and_return(false)
               end
               it { is_expected.not_to permit(user, record) }
             end
 
-            context 'and the draw is pre_lottery' do
+            context 'and the draw is group-formation' do
               before do
-                allow(draw).to receive(:pre_lottery?).and_return(true)
+                allow(draw).to receive(:group_formation?).and_return(true)
               end
               it { is_expected.to permit(user, record) }
             end
@@ -255,16 +255,16 @@ RSpec.describe ClipMembershipPolicy do
             context 'and the membership is not confirmed' do
               before { allow(record).to receive(:confirmed).and_return(false) }
 
-              context 'but the draw is not pre_lottery' do
+              context 'but the draw is not group-formation' do
                 before do
-                  allow(draw).to receive(:pre_lottery?).and_return(false)
+                  allow(draw).to receive(:group_formation?).and_return(false)
                 end
                 it { is_expected.not_to permit(user, record) }
               end
 
-              context 'and the draw is pre_lottery' do
+              context 'and the draw is group-formation' do
                 before do
-                  allow(draw).to receive(:pre_lottery?).and_return(true)
+                  allow(draw).to receive(:group_formation?).and_return(true)
                 end
                 it { is_expected.to permit(user, record) }
               end
@@ -309,16 +309,16 @@ RSpec.describe ClipMembershipPolicy do
             context 'and the membership is confirmed' do
               before { allow(record).to receive(:confirmed).and_return(true) }
 
-              context 'but the draw is not pre_lottery' do
+              context 'but the draw is not group-formation' do
                 before do
-                  allow(draw).to receive(:pre_lottery?).and_return(false)
+                  allow(draw).to receive(:group_formation?).and_return(false)
                 end
                 it { is_expected.not_to permit(user, record) }
               end
 
-              context 'and the draw is pre_lottery' do
+              context 'and the draw is group-formation' do
                 before do
-                  allow(draw).to receive(:pre_lottery?).and_return(true)
+                  allow(draw).to receive(:group_formation?).and_return(true)
                 end
                 it { is_expected.to permit(user, record) }
               end

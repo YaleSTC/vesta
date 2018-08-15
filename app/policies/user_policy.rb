@@ -47,7 +47,7 @@ class UserPolicy < ApplicationPolicy
   private
 
   def valid_student_rep_update
-    (user.rep? || record == user) && record&.draw&.pre_lottery? &&
+    (user.rep? || record == user) && record&.draw&.group_formation? &&
       !record.draw.intent_locked
   end
 

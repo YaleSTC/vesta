@@ -78,6 +78,6 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def student_can_create_group(user)
-    (user.draw && user.draw.pre_lottery? && user.on_campus? && !user.group)
+    (user.draw && user.draw.group_formation? && user.on_campus? && !user.group)
   end
 end

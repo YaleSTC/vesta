@@ -15,7 +15,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def group_actions?
-    (user.admin? && !record.draft?) || record.pre_lottery?
+    (user.admin? && !record.draft?) || record.group_formation?
   end
 
   def intent_actions?
@@ -23,7 +23,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def reminder?
-    record.pre_lottery? && user_has_uber_permission?
+    record.group_formation? && user_has_uber_permission?
   end
 
   def intent_reminder?
@@ -45,7 +45,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def oversub_report?
-    record.pre_lottery? && !record.suites.empty?
+    record.group_formation? && !record.suites.empty?
   end
 
   def group_report?
@@ -53,7 +53,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def start_lottery?
-    edit? && record.pre_lottery?
+    edit? && record.group_formation?
   end
 
   def lottery_confirmation?
@@ -61,7 +61,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def oversubscription?
-    (user.admin? || user.rep?) && record.pre_lottery?
+    (user.admin? || user.rep?) && record.group_formation?
   end
 
   def toggle_size_lock?
@@ -79,7 +79,7 @@ class DrawPolicy < ApplicationPolicy
   def prune?
     # the #oversubscribed? comes from the DrawReport -- this will fail
     # if a plain draw object is passed
-    user.admin? && record.pre_lottery? && record.oversubscribed?
+    user.admin? && record.group_formation? && record.oversubscribed?
   end
 
   def start_selection?

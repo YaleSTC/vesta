@@ -6,7 +6,7 @@ RSpec.feature 'Group editing' do
   let(:group) { create(:group) }
 
   before do
-    group.draw.update(status: 'pre_lottery')
+    group.draw.update(status: 'group_formation')
     log_in group.leader
   end
   it 'succeeds' do

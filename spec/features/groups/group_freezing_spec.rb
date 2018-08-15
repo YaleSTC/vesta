@@ -43,6 +43,6 @@ RSpec.feature 'Group locking' do
   end
 
   def full_group(size: 2)
-    create(:full_group, size: size).tap { |g| g.draw.pre_lottery! }
+    create(:full_group, size: size).tap { |g| g.draw.group_formation! }
   end
 end

@@ -23,7 +23,7 @@ RSpec.describe Draw, type: :model do
       expect(draw).not_to be_valid
     end
     it 'cannot lock intent if undeclared students' do
-      draw = create(:draw, status: 'pre_lottery')
+      draw = create(:draw, status: 'group_formation')
       draw.students << create(:student, intent: 'undeclared')
       draw.intent_locked = true
       expect(draw).not_to be_valid
@@ -260,8 +260,8 @@ RSpec.describe Draw, type: :model do
       draw.status = 'draft'
       expect(draw).to be_before_lottery
     end
-    it 'returns true if draw is in the pre_lottery phase' do
-      draw.status = 'pre_lottery'
+    it 'returns true if draw is in the group-formation phase' do
+      draw.status = 'group_formation'
       expect(draw).to be_before_lottery
     end
     it 'returns true if draw is in the intent_selection phase' do
@@ -293,8 +293,8 @@ RSpec.describe Draw, type: :model do
       draw.status = 'intent_selection'
       expect(draw).not_to be_lottery_or_later
     end
-    it 'returns false if draw is in the pre_lottery phase' do
-      draw.status = 'pre_lottery'
+    it 'returns false if draw is in the group-formation phase' do
+      draw.status = 'group_formation'
       expect(draw).not_to be_lottery_or_later
     end
     it 'returns true if the draw is in the lottery phase' do
@@ -318,13 +318,13 @@ RSpec.describe Draw, type: :model do
     end
 
     it 'returns false if the draw is not oversubscribed' do
-      draw = create(:draw_with_members, status: 'pre_lottery')
+      draw = create(:draw_with_members, status: 'group_formation')
       create(:locked_group, leader: draw.students.first)
       expect(draw).not_to be_oversubscribed
     end
 
     it 'only counts avaiable suites' do
-      draw = create(:draw_with_members, status: 'pre_lottery')
+      draw = create(:draw_with_members, status: 'group_formation')
       create(:locked_group, leader: draw.students.first)
       # this assigns a suite in this draw to a group in another draw
       create(:group_with_suite, suite: draw.suites.last)

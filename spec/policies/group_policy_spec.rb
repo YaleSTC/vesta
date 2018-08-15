@@ -13,36 +13,36 @@ RSpec.describe GroupPolicy do
     let(:other_group) { build_stubbed(:group) }
 
     permissions :create? do
-      context 'in pre_lottery draw, not in group, on_campus' do
+      context 'in group-formation draw, not in group, on_campus' do
         before do
-          draw = instance_spy('draw', pre_lottery?: true)
+          draw = instance_spy('draw', group_formation?: true)
           allow(user).to receive(:draw).and_return(draw)
           allow(user).to receive(:group).and_return(nil)
           allow(user).to receive(:on_campus?).and_return(true)
         end
         it { is_expected.to permit(user, Group) }
       end
-      context 'in pre_lottery draw, in group, on_campus' do
+      context 'in group-formation draw, in group, on_campus' do
         before do
-          draw = instance_spy('draw', pre_lottery?: true)
+          draw = instance_spy('draw', group_formation?: true)
           allow(user).to receive(:draw).and_return(draw)
           allow(user).to receive(:group).and_return(instance_spy('group'))
           allow(user).to receive(:on_campus?).and_return(true)
         end
         it { is_expected.not_to permit(user, Group) }
       end
-      context 'in pre_lottery draw, not in group, not on_campus' do
+      context 'in group-formation draw, not in group, not on_campus' do
         before do
-          draw = instance_spy('draw', pre_lottery?: true)
+          draw = instance_spy('draw', group_formation?: true)
           allow(user).to receive(:draw).and_return(draw)
           allow(user).to receive(:group).and_return(nil)
           allow(user).to receive(:on_campus?).and_return(false)
         end
         it { is_expected.not_to permit(user, Group) }
       end
-      context 'in non-pre_lottery' do
+      context 'in non-group-formation' do
         before do
-          draw = instance_spy('draw', pre_lottery?: false)
+          draw = instance_spy('draw', group_formation?: false)
           allow(user).to receive(:draw).and_return(draw)
         end
         it { is_expected.not_to permit(user, Group) }

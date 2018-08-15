@@ -17,10 +17,10 @@ RSpec.describe DrawActivator do
         include('Draw must have at least one student.')
     end
 
-    it 'updates the status of the draw to pre_lottery' do
+    it 'updates the status of the draw to group-formation' do
       draw = instance_spy('draw', validity_stubs(valid: true))
       described_class.activate(draw: draw)
-      expect(draw).to have_received(:update!).with(status: 'pre_lottery')
+      expect(draw).to have_received(:update!).with(status: 'group_formation')
     end
 
     it 'checks to see if the update works' do

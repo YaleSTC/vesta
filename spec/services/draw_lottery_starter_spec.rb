@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe DrawLotteryStarter do
   describe '#start' do
     context 'validations' do
-      it 'draw is in pre-lottery' do
-        draw = instance_spy('draw', pre_lottery?: false, present?: true)
+      it 'draw is in group-formation' do
+        draw = instance_spy('draw', group_formation?: false, present?: true)
         result = described_class.start(draw: draw)
-        expect(result[:msg][:error]).to include('in the pre-lottery phase')
+        expect(result[:msg][:error]).to include('in the group-formation phase')
       end
 
       it 'the draw has at least one group' do
@@ -124,8 +124,8 @@ RSpec.describe DrawLotteryStarter do
   # id is necessary to run the UnconfirmedClipMembershipsForDrawQuery
   def validity_stubs(valid:, **attrs)
     {
-      pre_lottery?: valid, groups?: valid, enough_beds?: valid, nil?: !valid,
-      all_students_grouped?: valid, no_contested_suites?: valid,
+      group_formation?: valid, groups?: valid, enough_beds?: valid,
+      nil?: !valid, all_students_grouped?: valid, no_contested_suites?: valid,
       all_groups_locked?: valid, all_intents_declared?: valid, id: 1
     }.merge(attrs)
   end

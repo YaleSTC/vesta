@@ -5,7 +5,7 @@
 # @attr name [String] The name of the housing draw -- e.g. "Junior Draw 2016"
 # @attr students [Array<User>] The students in the draw.
 # @attr suites [Array<Suite>] The suites in the draw.
-# @attr status [String] The status / phase of the draw (draft, pre_lottery,
+# @attr status [String] The status / phase of the draw (draft, group_formation,
 #   lottery, suite_selection). Note the use of underscores in the status
 #   strings; this prevents some unpleasantness with the helper methods.
 # @attr locked_sizes [Array<Integer>] the group sizes that are restricted.
@@ -41,7 +41,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   after_update :destroy_all_clips, if: ->() { saved_change_to_allow_clipping }
   after_destroy :remove_old_draw_ids
 
-  enum status: %w(draft pre_lottery lottery
+  enum status: %w(draft group_formation lottery
                   suite_selection results intent_selection)
   enum email_type: %w(intent locking)
   enum suite_selection_mode: %w(admin_selection student_selection)
@@ -165,7 +165,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   #
   # @return [Boolean] whether or not the draw is not yet in the lottery phase
   def before_lottery?
-    %w(draft pre_lottery intent_selection).include? status
+    %w(draft group_formation intent_selection).include? status
   end
 
   # Query method to check whether or not a draw is in the lottery phase or after

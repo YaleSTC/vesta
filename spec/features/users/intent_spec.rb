@@ -6,7 +6,7 @@ RSpec.feature 'Housing Intent' do
   context 'student' do
     it 'can be indicated' do
       student = create(:student_in_draw)
-      student.draw.update(status: 'pre_lottery')
+      student.draw.update(status: 'group_formation')
       log_in student
       declare_off_campus student
       expect(page).to have_css('.user-intent', text: 'Off campus')
@@ -20,7 +20,7 @@ RSpec.feature 'Housing Intent' do
   end
 
   context 'admin' do
-    let!(:draw) { create(:draw, status: 'pre_lottery') }
+    let!(:draw) { create(:draw, status: 'group_formation') }
 
     it 'can lock intent changes on a per draw basis' do
       student = create(:student, draw: draw)

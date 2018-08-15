@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Bulk group locking' do
-  let(:draw) { create(:draw_with_groups, status: 'pre_lottery') }
+  let(:draw) { create(:draw_with_groups, status: 'group_formation') }
   let(:oversubd) { create(:oversubscribed_draw) }
 
   before do

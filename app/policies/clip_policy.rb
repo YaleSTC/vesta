@@ -8,16 +8,16 @@ class ClipPolicy < ApplicationPolicy
 
   def create?
     (student_can_create_clip(user, user.group) || user_has_uber_permission?) &&
-      record.draw.pre_lottery? && record.draw.allow_clipping
+      record.draw.group_formation? && record.draw.allow_clipping
   end
 
   def create_as_rep?
-    user.rep? && user.group.present? && record.draw.pre_lottery? &&
+    user.rep? && user.group.present? && record.draw.group_formation? &&
       record.draw.allow_clipping
   end
 
   def edit?
-    user.admin? && record.draw.pre_lottery?
+    user.admin? && record.draw.group_formation?
   end
 
   def update?

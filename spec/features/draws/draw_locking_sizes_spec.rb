@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.feature 'Draw suite size locking' do
   before { log_in create(:admin) }
   let(:draw) do
-    create(:draw, status: 'pre_lottery').tap do |d|
+    create(:draw, status: 'group_formation').tap do |d|
       d.suites << Array.new(3) do |i|
         create(:suite_with_rooms, rooms_count: i + 1)
       end

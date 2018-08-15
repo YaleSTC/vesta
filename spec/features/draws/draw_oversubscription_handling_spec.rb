@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'Draw oversubscription handling' do
   let(:draw) do
-    create(:draw_with_members, students_count: 2, status: 'pre_lottery')
+    create(:draw_with_members, students_count: 2, status: 'group_formation')
   end
   let!(:group) do
     create(:locked_group, leader: draw.students.first, size: 1)

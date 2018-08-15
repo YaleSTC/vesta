@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Bulk intent assignment' do
-  let(:draw) { create(:draw_with_members, status: 'pre_lottery') }
+  let(:draw) { create(:draw_with_members, status: 'group_formation') }
 
   before do
     log_in create(:admin)

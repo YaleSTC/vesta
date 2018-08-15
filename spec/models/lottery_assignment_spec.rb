@@ -37,7 +37,7 @@ RSpec.describe LotteryAssignment, type: :model do
       expect(lottery).to be_valid
     end
     it 'fails in other states' do
-      draw = create(:draw_with_members, status: 'pre_lottery')
+      draw = create(:draw_with_members, status: 'group_formation')
       group = create(:group, :defined_by_draw, draw: draw)
       lottery = build(:lottery_assignment, draw: draw, groups: [group])
       expect(lottery).not_to be_valid

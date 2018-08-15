@@ -12,7 +12,7 @@ RSpec.feature 'Dashboards' do
 
     def create_draws
       create(:draw_with_members, status: 'draft')
-      create(:oversubscribed_draw, status: 'pre_lottery')
+      create(:oversubscribed_draw, status: 'group_formation')
       create(:draw_in_lottery)
       create(:draw_in_selection)
       # TODO: results draw

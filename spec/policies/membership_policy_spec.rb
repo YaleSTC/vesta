@@ -47,14 +47,18 @@ RSpec.describe MembershipPolicy do
           context 'and draws match' do
             before { allow(user).to receive(:draw).and_return(draw) }
 
-            context 'but draw is not pre-lottery' do
-              before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+            context 'but draw is not group-formation' do
+              before do
+                allow(draw).to receive(:group_formation?).and_return(false)
+              end
 
               it { is_expected.not_to permit(user, membership) }
             end
 
-            context 'and draw is pre-lottery' do
-              before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+            context 'and draw is group-formation' do
+              before do
+                allow(draw).to receive(:group_formation?).and_return(true)
+              end
 
               it { is_expected.to permit(user, membership) }
             end
@@ -293,14 +297,18 @@ RSpec.describe MembershipPolicy do
           context 'and draws match' do
             before { allow(group).to receive(:draw).and_return(draw) }
 
-            context 'but draw is not pre-lottery' do
-              before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+            context 'but draw is not group-formation' do
+              before do
+                allow(draw).to receive(:group_formation?).and_return(false)
+              end
 
               it { is_expected.not_to permit(user, membership) }
             end
 
-            context 'and draw is pre-lottery' do
-              before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+            context 'and draw is group-formation' do
+              before do
+                allow(draw).to receive(:group_formation?).and_return(true)
+              end
 
               it { is_expected.to permit(user, membership) }
             end

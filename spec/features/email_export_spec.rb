@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Email export' do
-  let!(:draw) { create(:draw_with_members, status: 'pre_lottery') }
+  let!(:draw) { create(:draw_with_members, status: 'group_formation') }
   let!(:group) { create(:locked_group, leader: draw.students.last) }
 
   before { log_in create(:admin) }

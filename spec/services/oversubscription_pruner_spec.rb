@@ -82,7 +82,7 @@ RSpec.describe OversubscriptionPruner do
   end
 
   def oversubscribed_draw(sizes: [1])
-    draw = create(:draw, status: 'pre_lottery')
+    draw = create(:draw, status: 'group_formation')
     sizes.each do |s|
       2.times { create(:locked_group, :defined_by_draw, draw: draw, size: s) }
     end

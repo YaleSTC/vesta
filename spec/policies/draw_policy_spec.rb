@@ -38,7 +38,7 @@ RSpec.describe DrawPolicy do
     permissions :intent_reminder? do
       before do
         allow(draw).to receive(:intent_deadline).and_return(Time.zone.today)
-        allow(draw).to receive(:pre_lottery?).and_return(true)
+        allow(draw).to receive(:group_formation?).and_return(true)
       end
       it { is_expected.not_to permit(user, draw) }
     end
@@ -46,18 +46,18 @@ RSpec.describe DrawPolicy do
     permissions :locking_reminder? do
       before do
         allow(draw).to receive(:locking_deadline).and_return(Time.zone.today)
-        allow(draw).to receive(:pre_lottery?).and_return(true)
+        allow(draw).to receive(:group_formation?).and_return(true)
       end
       it { is_expected.not_to permit(user, draw) }
     end
 
     permissions :group_actions? do
-      context 'non-pre-lottery draw' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+      context 'non-group-formation draw' do
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
-      context 'pre-lottery draw' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      context 'group-formation draw' do
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
     end
@@ -68,7 +68,7 @@ RSpec.describe DrawPolicy do
 
     permissions :oversub_report? do
       context 'when draw is pre lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         context 'when draw has suites' do
           before do
             allow(draw).to receive(:suites)
@@ -82,7 +82,7 @@ RSpec.describe DrawPolicy do
         end
       end
       context 'when draw is not pre lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -123,24 +123,24 @@ RSpec.describe DrawPolicy do
       it { is_expected.to permit(user, Draw) }
     end
     permissions :group_actions? do
-      context 'non-pre-lottery draw' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+      context 'non-group-formation draw' do
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
-      context 'pre-lottery draw' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      context 'group-formation draw' do
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
     end
 
     permissions :oversubscription? do
-      context 'when draw is pre_lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      context 'when draw is group-formation' do
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
 
       context 'when draw is not pre lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -157,8 +157,8 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :oversub_report? do
-      context 'when draw is pre lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      context 'when draw is in group-formation' do
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         context 'when draw has suites' do
           before do
             allow(draw).to receive(:suites)
@@ -171,25 +171,25 @@ RSpec.describe DrawPolicy do
           it { is_expected.not_to permit(user, draw) }
         end
       end
-      context 'when draw is not pre lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+      context 'when draw is not in group-formation' do
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
 
     permissions :reminder? do
-      context 'draw is not in pre_lottery phase' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+      context 'draw is not in group-formation phase' do
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
-      context 'draw is in pre_lottery phase' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      context 'draw is in group-formation phase' do
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
     end
 
     permissions :intent_reminder? do
-      before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      before { allow(draw).to receive(:group_formation?).and_return(true) }
       context 'no intent deadline' do
         before { allow(draw).to receive(:intent_deadline).and_return(nil) }
         it { is_expected.not_to permit(user, draw) }
@@ -211,7 +211,7 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :locking_reminder? do
-      before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      before { allow(draw).to receive(:group_formation?).and_return(true) }
       context 'no locking deadline' do
         before do
           allow(draw).to receive(:locking_deadline).and_return(nil)
@@ -294,13 +294,13 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :start_lottery?, :lottery_confirmation?, :oversubscription? do
-      context 'when draw is pre_lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      context 'when draw is group-formation' do
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
 
       context 'when draw is not a draft' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -308,7 +308,7 @@ RSpec.describe DrawPolicy do
     permissions :prune? do
       context 'when prelottery and oversubscribed' do
         let(:draw_report) do
-          allow(draw).to receive_messages(pre_lottery?: true)
+          allow(draw).to receive_messages(group_formation?: true)
           DrawReport.new(draw).tap do |d|
             allow(d).to receive_messages(oversubscribed?: true)
           end
@@ -318,7 +318,7 @@ RSpec.describe DrawPolicy do
       end
       context 'when prelottery and not oversubscribed' do
         let(:draw_report) do
-          allow(draw).to receive_messages(pre_lottery?: true)
+          allow(draw).to receive_messages(group_formation?: true)
           DrawReport.new(draw).tap do |d|
             allow(d).to receive_messages(oversubscribed?: false)
           end
@@ -328,7 +328,7 @@ RSpec.describe DrawPolicy do
       end
       context 'when not prelottery and oversubscribed' do
         let(:draw_report) do
-          allow(draw).to receive_messages(pre_lottery?: false)
+          allow(draw).to receive_messages(group_formation?: false)
           DrawReport.new(draw).tap do |d|
             allow(d).to receive_messages(oversubscribed?: true)
           end
@@ -362,7 +362,7 @@ RSpec.describe DrawPolicy do
 
     permissions :oversub_report? do
       context 'when draw is pre lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         context 'when draw has suites' do
           before do
             allow(draw).to receive(:suites)
@@ -376,7 +376,7 @@ RSpec.describe DrawPolicy do
         end
       end
       context 'when draw is not pre lottery' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -403,18 +403,18 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :reminder? do
-      context 'draw is not in pre_lottery phase' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(false) }
+      context 'draw is not in group-formation phase' do
+        before { allow(draw).to receive(:group_formation?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
-      context 'draw is in pre_lottery phase' do
-        before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      context 'draw is in group-formation phase' do
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
     end
 
     permissions :intent_reminder? do
-      before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      before { allow(draw).to receive(:group_formation?).and_return(true) }
       context 'no intent deadline' do
         before { allow(draw).to receive(:intent_deadline).and_return(nil) }
         it { is_expected.not_to permit(user, draw) }
@@ -436,7 +436,7 @@ RSpec.describe DrawPolicy do
     end
 
     permissions :locking_reminder? do
-      before { allow(draw).to receive(:pre_lottery?).and_return(true) }
+      before { allow(draw).to receive(:group_formation?).and_return(true) }
       context 'no locking deadline' do
         before do
           allow(draw).to receive(:locking_deadline).and_return(nil)

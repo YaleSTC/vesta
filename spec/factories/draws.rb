@@ -24,7 +24,7 @@ FactoryBot.define do
             create(:locked_group, size: 1, leader: l)
           end
           draw.suites.delete_all
-          draw.update(status: 'pre_lottery')
+          draw.update(status: 'group_formation')
         end
       end
 

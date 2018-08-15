@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.feature 'Draw group report' do
   include GroupsHelper # for status-displaying
 
-  let(:draw) { create(:draw, status: 'pre_lottery') }
+  let(:draw) { create(:draw, status: 'group_formation') }
   let!(:groups) { create_groups(draw: draw, statuses: %w(full open locked)) }
 
   context 'as admin' do

@@ -52,16 +52,16 @@ RSpec.describe ClipPolicy do
               allow(clip).to receive(:draw).and_return(draw)
             end
 
-            context 'but the draw is not in a pre-lottery stage' do
+            context 'but the draw is not in a group-formation stage' do
               before do
-                allow(draw).to receive(:pre_lottery?).and_return(false)
+                allow(draw).to receive(:group_formation?).and_return(false)
               end
               it { is_expected.not_to permit(user, clip) }
             end
 
-            context 'and is in a pre-lottery draw' do
+            context 'and is in a group-formation draw' do
               before do
-                allow(draw).to receive(:pre_lottery?).and_return(true)
+                allow(draw).to receive(:group_formation?).and_return(true)
               end
 
               context 'but the draw does not allow for clipping' do
@@ -109,16 +109,16 @@ RSpec.describe ClipPolicy do
           allow(clip).to receive(:draw).and_return(draw)
         end
 
-        context 'but the draw is not in a pre-lottery stage' do
+        context 'but the draw is not in a group-formation stage' do
           before do
-            allow(draw).to receive(:pre_lottery?).and_return(false)
+            allow(draw).to receive(:group_formation?).and_return(false)
           end
           it { is_expected.not_to permit(user, clip) }
         end
 
-        context 'and is in a pre-lottery draw' do
+        context 'and is in a group-formation draw' do
           before do
-            allow(draw).to receive(:pre_lottery?).and_return(true)
+            allow(draw).to receive(:group_formation?).and_return(true)
           end
 
           context 'but the draw does not allow for clipping' do
@@ -152,18 +152,18 @@ RSpec.describe ClipPolicy do
     permissions :create? do
       let(:draw) { instance_spy('Draw') }
 
-      context 'the draw is not pre_lottery' do
+      context 'the draw is not group-formation' do
         before do
           allow(clip).to receive(:draw).and_return(draw)
-          allow(draw).to receive(:pre_lottery?).and_return(false)
+          allow(draw).to receive(:group_formation?).and_return(false)
         end
         it { is_expected.not_to permit(user, clip) }
       end
 
-      context 'the draw is pre_lottery' do
+      context 'the draw is group-formation' do
         before do
           allow(clip).to receive(:draw).and_return(draw)
-          allow(draw).to receive(:pre_lottery?).and_return(true)
+          allow(draw).to receive(:group_formation?).and_return(true)
         end
 
         context 'but the draw does not allow for clipping' do
@@ -184,18 +184,18 @@ RSpec.describe ClipPolicy do
     permissions :edit?, :update?, :destroy? do
       let(:draw) { instance_spy('Draw') }
 
-      context 'the draw is not pre_lottery' do
+      context 'the draw is not group-formation' do
         before do
           allow(clip).to receive(:draw).and_return(draw)
-          allow(draw).to receive(:pre_lottery?).and_return(false)
+          allow(draw).to receive(:group_formation?).and_return(false)
         end
         it { is_expected.not_to permit(user, clip) }
       end
 
-      context 'the draw is pre_lottery' do
+      context 'the draw is group-formation' do
         before do
           allow(clip).to receive(:draw).and_return(draw)
-          allow(draw).to receive(:pre_lottery?).and_return(true)
+          allow(draw).to receive(:group_formation?).and_return(true)
         end
         it { is_expected.to permit(user, clip) }
       end

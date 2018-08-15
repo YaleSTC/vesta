@@ -27,7 +27,7 @@ class DrawActivator
   #   message to set in the flash and either `nil` or the created object.
   def activate
     return error(self) unless valid?
-    draw.update!(status: 'pre_lottery')
+    draw.update!(status: 'group_formation')
     send_emails
     success
   rescue ActiveRecord::RecordInvalid => e

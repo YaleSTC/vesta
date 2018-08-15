@@ -15,7 +15,7 @@ RSpec.feature 'Students Joining Groups' do
 
   context 'requesting to join a full group' do
     it 'fails' do
-      group = create(:full_group).tap { |g| g.draw.pre_lottery! }
+      group = create(:full_group).tap { |g| g.draw.group_formation! }
       log_in create(:student, intent: 'on_campus', draw: group.draw)
       visit draw_group_path(group.draw, group)
       click_on 'Request To Join'

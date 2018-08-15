@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Convert to drawless group' do
-  let(:draw) { create(:draw_with_members, status: 'pre_lottery') }
+  let(:draw) { create(:draw_with_members, status: 'group_formation') }
   let(:group) { create(:full_group, leader: draw.students.first) }
 
   before { log_in create(:admin) }

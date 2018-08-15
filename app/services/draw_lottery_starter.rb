@@ -9,7 +9,7 @@ class DrawLotteryStarter
 
   attr_reader :draw
 
-  validate :draw_in_pre_lottery_phase, if: ->() { draw.present? }
+  validate :draw_in_group_formation_phase, if: ->() { draw.present? }
   validate :at_least_one_group, if: ->() { draw.present? }
   validate :all_students_grouped, if: ->() { draw.present? }
   validate :all_intents_declared, if: ->() { draw.present? }
@@ -44,9 +44,9 @@ class DrawLotteryStarter
 
   attr_writer :draw
 
-  def draw_in_pre_lottery_phase
-    return if draw.pre_lottery?
-    errors.add(:draw, 'must be in the pre-lottery phase')
+  def draw_in_group_formation_phase
+    return if draw.group_formation?
+    errors.add(:draw, 'must be in the group-formation phase')
   end
 
   def at_least_one_group

@@ -4,7 +4,7 @@
 class ClipMembershipPolicy < ApplicationPolicy
   def update?
     user_is_a_group_leader(user) && membership_is_for_this_group(user, record)\
-      && record.group.draw.pre_lottery?
+      && record.group.draw.group_formation?
   end
 
   def destroy?

@@ -6,7 +6,7 @@ FactoryBot.define do
       groups_count 2
     end
 
-    draw { create(:draw, status: 'pre_lottery') }
+    draw { create(:draw, status: 'group_formation') }
     groups { build_list(:group_from_draw, groups_count, draw: draw) }
 
     factory :locked_clip do

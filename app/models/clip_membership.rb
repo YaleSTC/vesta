@@ -48,8 +48,8 @@ class ClipMembership < ApplicationRecord
   end
 
   def freeze_confirmed
-    return if clip.draw.pre_lottery?
-    msg = 'Cannot confirm clip membership outside of pre-lottery phase'
+    return if clip.draw.group_formation?
+    msg = 'Cannot confirm clip membership outside of group-formation phase'
     handle_abort(msg)
   end
 

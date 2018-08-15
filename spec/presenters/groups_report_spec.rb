@@ -19,7 +19,7 @@ RSpec.describe GroupsReport do
     # rubocop:disable RSpec/InstanceVariable
     def groups_of_each_status(size:)
       return @groups if @groups
-      draw = create(:draw_with_members, status: 'pre_lottery')
+      draw = create(:draw_with_members, status: 'group_formation')
       group_in_draw(factory: :open_group, draw: draw, size: size)
       group_in_draw(factory: :full_group, draw: draw, size: size)
       group_in_draw(factory: :locked_group, draw: draw, size: size)

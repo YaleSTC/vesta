@@ -46,7 +46,7 @@ class Generator
   GENERATORS = { user: UserGenerator, building: BuildingGenerator,
                  suite: SuiteGenerator, room: RoomGenerator,
                  draw: DrawGenerator,
-                 pre_lottery_draw: PreLotteryDrawGenerator,
+                 group_formation_draw: GroupFormationGenerator,
                  lottery_draw: LotteryDrawGenerator,
                  suite_selection_draw: SuiteSelectionDrawGenerator,
                  college: CollegeGenerator }.freeze

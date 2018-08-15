@@ -8,7 +8,7 @@ class MembershipPolicy < ApplicationPolicy
 
   def request_to_join?
     user.group.blank? && draws_match?(user, record) &&
-      record.group.draw.pre_lottery?
+      record.group.draw.group_formation?
   end
 
   def create_invite?

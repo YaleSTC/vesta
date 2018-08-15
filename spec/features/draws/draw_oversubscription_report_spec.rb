@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.feature 'Draw oversubscription report' do
   let(:draw) do
     create(:draw_with_members, students_count: 2, suites_count: 1,
-                               status: 'pre_lottery')
+                               status: 'group_formation')
   end
 
   before do

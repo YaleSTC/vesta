@@ -10,7 +10,7 @@ RSpec.feature 'Draw email buttons' do
 
   context 'before intent deadline' do
     let(:draw) do
-      create(:draw_with_members, status: 'pre_lottery',
+      create(:draw_with_members, status: 'group_formation',
                                  intent_deadline: Time.zone.tomorrow)
     end
 
@@ -24,7 +24,7 @@ RSpec.feature 'Draw email buttons' do
 
   context 'after intent deadline and before lottery' do
     let!(:draw) do
-      create(:draw_with_members, status: 'pre_lottery',
+      create(:draw_with_members, status: 'group_formation',
                                  intent_deadline: Time.zone.tomorrow,
                                  locking_deadline: Time.zone.today + 3.days)
     end

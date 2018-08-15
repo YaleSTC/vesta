@@ -7,7 +7,7 @@ RSpec.feature 'Housing Group Creation' do
     let!(:leader) { create(:student_in_draw) }
 
     it 'succeeds' do
-      leader.draw.update(status: 'pre_lottery')
+      leader.draw.update(status: 'group_formation')
       suite = leader.draw.suites.first
       create_group(size: suite.size, leader: leader)
       expect(page).to have_css('.group-name',
@@ -25,7 +25,7 @@ RSpec.feature 'Housing Group Creation' do
   context 'as rep' do
     let(:draw) do
       create(:draw_with_members, students_count: 3,
-                                 status: 'pre_lottery')
+                                 status: 'group_formation')
     end
     let(:leader) { draw.students.first }
     let!(:suite) do
@@ -47,7 +47,7 @@ RSpec.feature 'Housing Group Creation' do
   context 'as admin' do
     let(:draw) do
       create(:draw_with_members, students_count: 3,
-                                 status: 'pre_lottery')
+                                 status: 'group_formation')
     end
     let(:leader) { draw.students.first }
     let!(:suite) do

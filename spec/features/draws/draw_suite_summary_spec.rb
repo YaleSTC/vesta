@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'Draw suite summary' do
   let(:draw) do
-    create(:draw_with_members, suites_count: 1, status: 'pre_lottery')
+    create(:draw_with_members, suites_count: 1, status: 'group_formation')
   end
   let(:draw_suite) { draw.suites.first }
   let(:other_suite) { create(:suite) }

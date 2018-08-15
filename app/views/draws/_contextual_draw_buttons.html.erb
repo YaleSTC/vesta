@@ -33,7 +33,7 @@
           data: { confirm: 'This will send an e-mail to all students in the draw inviting them to log in and start forming groups. Do you want to continue?' },
           class: 'button' %>
       <% end %>
-    <% elsif @draw.status == 'pre_lottery' %>
+    <% elsif @draw.status == 'group_formation' %>
       <% if policy(Group).new? && policy(@draw).group_actions? %>
         <%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %>
       <% end %>

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Clip creation' do
-  let(:draw) { create(:draw, status: 'pre_lottery') }
+  let(:draw) { create(:draw, status: 'group_formation') }
   let(:groups) { create_pair(:group_from_draw, draw: draw) }
 
   context 'as a leader' do

@@ -191,27 +191,27 @@ RSpec.describe Suite, type: :model do
     it "returns true if the suite isn't selectable in another draw" do
       suite = build_stubbed(:suite)
       allow(suite).to receive(:draws)
-        .and_return(mock_draws(%i(pre_lottery? draft?)))
+        .and_return(mock_draws(%i(group_formation? draft?)))
       expect(suite).to be_selectable
     end
 
     it "returns false if one of the suite's draws is in the lottery phase" do
       suite = build_stubbed(:suite)
       allow(suite).to receive(:draws)
-        .and_return(mock_draws(%i(pre_lottery? draft? lottery?)))
+        .and_return(mock_draws(%i(group_formation? draft? lottery?)))
       expect(suite).not_to be_selectable
     end
 
     it 'returns false if a draw is in the suite_selection phase' do
       suite = build_stubbed(:suite)
       allow(suite).to receive(:draws)
-        .and_return(mock_draws(%i(pre_lottery? draft? suite_selection?)))
+        .and_return(mock_draws(%i(group_formation? draft? suite_selection?)))
       expect(suite).not_to be_selectable
     end
 
     def mock_draws(statuses)
-      default_statuses = { draft?: false, pre_lottery?: false, lottery?: false,
-                           suite_selection?: false }
+      default_statuses = { draft?: false, group_formation?: false,
+                           lottery?: false, suite_selection?: false }
       statuses.map do |s|
         status_hash = default_statuses.merge(s => true)
         instance_spy('draw', **status_hash)

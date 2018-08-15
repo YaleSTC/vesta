@@ -63,20 +63,22 @@ RSpec.describe ClipMembership, type: :model do
     end
   end
 
-  describe 'freeze confirm unless pre-lottery' do
-    let(:msg) { 'Cannot confirm clip membership outside of pre-lottery phase' }
+  describe 'freeze confirm unless group-formation' do
+    let(:msg) do
+      'Cannot confirm clip membership outside of group-formation phase'
+    end
 
-    it 'cannot change confirmation if not pre-lottery' do
+    it 'cannot change confirmation if not group-formation' do
       clip.draw.update(status: 'draft')
       membership.confirmed = false
       expect(membership.save).to be_falsey
     end
-    it 'can change confirmation if the draw is pre-lottery' do
-      clip.draw.update(status: 'pre_lottery')
+    it 'can change confirmation if the draw is group-formation' do
+      clip.draw.update(status: 'group_formation')
       membership.confirmed = false
       expect(membership.save).to be_truthy
     end
-    it 'returns error if confirmation changed in not pre-lottery' do
+    it 'returns error if confirmation changed in not group-formation' do
       clip.draw.update(status: 'draft')
       membership.confirmed = false
       membership.save

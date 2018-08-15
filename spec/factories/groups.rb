@@ -37,7 +37,7 @@ FactoryBot.define do
 
       factory :finalizing_group do
         after(:create) do |g|
-          g.draw.update(status: 'pre_lottery') if g.draw&.draft?
+          g.draw.update(status: 'group_formation') if g.draw&.draft?
           g.update(status: 'finalizing')
           g.leader.membership.update(locked: true)
         end
@@ -45,7 +45,7 @@ FactoryBot.define do
 
       factory :locked_group do
         after(:create) do |g|
-          g.draw.update(status: 'pre_lottery') if g.draw&.draft?
+          g.draw.update(status: 'group_formation') if g.draw&.draft?
           g.update(status: 'finalizing')
           g.full_memberships.each { |m| m.update!(locked: true) }
           g.update(status: 'locked')
@@ -74,7 +74,7 @@ FactoryBot.define do
         g.draw.suites << create(:suite_with_rooms, rooms_count: g.size)
       end
       after(:create) do |g|
-        g.draw.update(status: 'pre_lottery') if g.draw.draft?
+        g.draw.update(status: 'group_formation') if g.draw.draft?
       end
     end
 

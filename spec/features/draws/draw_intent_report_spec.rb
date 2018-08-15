@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw intent report' do
-  let(:draw) { create(:draw, status: 'pre_lottery') }
+  let(:draw) { create(:draw, status: 'group_formation') }
   let(:f) { "vesta_intents_export_#{Time.zone.today.to_s(:number)}.csv" }
   let(:h_str) { 'email,last_name,first_name,intent' }
 

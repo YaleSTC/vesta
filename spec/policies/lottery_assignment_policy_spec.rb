@@ -31,7 +31,7 @@ RSpec.describe LotteryAssignmentPolicy do
       end
     end
     context 'draw not in lottery' do
-      let(:draw) { build_stubbed(:draw, status: 'pre_lottery') }
+      let(:draw) { build_stubbed(:draw, status: 'group_formation') }
       let(:lottery) { LotteryAssignment.new(draw: draw) }
 
       permissions :index?, :create?, :update?, :automatic? do
@@ -51,7 +51,7 @@ RSpec.describe LotteryAssignmentPolicy do
         it { is_expected.to permit(user, lottery) }
       end
       context 'draw not in lottery' do
-        let(:draw) { build_stubbed(:draw, status: 'pre_lottery') }
+        let(:draw) { build_stubbed(:draw, status: 'group_formation') }
         let(:lottery) { LotteryAssignment.new(draw: draw) }
 
         it { is_expected.not_to permit(user, lottery) }
