@@ -46,6 +46,7 @@ class Generator
   GENERATORS = { user: UserGenerator, building: BuildingGenerator,
                  suite: SuiteGenerator, room: RoomGenerator,
                  draw: DrawGenerator,
+                 intent_selection_draw: IntentSelectionGenerator,
                  group_formation_draw: GroupFormationGenerator,
                  lottery_draw: LotteryDrawGenerator,
                  suite_selection_draw: SuiteSelectionDrawGenerator,

@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 * Allow users to edit their passwords ([#131](https://gitlab.com/yale-sdmp/vesta/issues/131)).
 * Create separate memberships controller for invitations / requests / other membership actions ([#333](https://yale.githost.io/sdmp/rails/vesta/issues/333)).
 * Add ARIA labels and update forms([#747](https://gitlab.com/yale-sdmp/vesta/issues/747)]).
+* Add intent-selection phase to draws and change pre-lottery phase to group-formation phase ([#818](https://gitlab.com/yale-sdmp/vesta/issues/818)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600)).

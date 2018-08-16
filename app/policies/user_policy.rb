@@ -47,8 +47,13 @@ class UserPolicy < ApplicationPolicy
   private
 
   def valid_student_rep_update
-    (user.rep? || record == user) && record&.draw&.group_formation? &&
+    (user.rep? || record == user) &&
+      intent_selection_or_group_formation &&
       !record.draw.intent_locked
+  end
+
+  def intent_selection_or_group_formation
+    record&.draw&.group_formation? || record&.draw&.intent_selection?
   end
 
   def valid_admin_update

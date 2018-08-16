@@ -14,12 +14,20 @@ class DrawPolicy < ApplicationPolicy
     edit? && record.draft?
   end
 
+  def proceed_to_group_formation?
+    edit? && record.intent_selection?
+  end
+
   def group_actions?
     (user.admin? && !record.draft?) || record.group_formation?
   end
 
   def intent_actions?
     (user.admin? || user.rep?) && record.before_lottery?
+  end
+
+  def intent_editable?
+    record.group_formation? || record.intent_selection?
   end
 
   def reminder?

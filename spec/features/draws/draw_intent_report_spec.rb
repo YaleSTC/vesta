@@ -3,61 +3,74 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw intent report' do
-  let(:draw) { create(:draw, status: 'group_formation') }
-  let(:f) { "vesta_intents_export_#{Time.zone.today.to_s(:number)}.csv" }
-  let(:h_str) { 'email,last_name,first_name,intent' }
+  shared_examples 'draw intent report' do
+    let(:f) { "vesta_intents_export_#{Time.zone.today.to_s(:number)}.csv" }
+    let(:h_str) { 'email,last_name,first_name,intent' }
 
-  context 'as an admin' do
-    before { log_in(create(:admin)) }
+    context 'as an admin' do
+      before { log_in(create(:admin)) }
 
-    it 'displays a table with intent data' do
-      student = create_student_data(draw: draw, intents: %w(on_campus))
-      visit draw_path(draw)
-      click_link('View intent report')
-      expect(page_has_intent_report(page, student)).to be_truthy
+      it 'displays a table with intent data' do
+        student = create_student_data(draw: draw, intents: %w(on_campus))
+        visit draw_path(draw)
+        click_link('View intent report')
+        expect(page_has_intent_report(page, student)).to be_truthy
+      end
+
+      it 'can export data to CSV' do
+        d = create_student_data(draw: draw, intents: %w(on_campus off_campus))
+        visit report_draw_intents_path(draw)
+        click_link('Export to CSV')
+        expect(page_is_valid_export?(page: page, data: d, filename: f,
+                                     header_str: h_str)).to be_truthy
+      end
+
+      it 'csv export raises an error if no data is created' do
+        visit report_draw_intents_path(draw)
+        click_link('Export to CSV')
+        msg = 'Data must exist before it can be exported.'
+        expect(page).to have_css('.flash-error', text: /#{msg}/)
+      end
+
+      # rubocop:disable ExampleLength
+      it 'can import intents for students in the draw' do
+        draw = create(:draw_with_members, students_count: 3)
+        User.first.update!(email: 'email1@email.com')
+        User.second.update!(email: 'email2@email.com')
+        User.third.update!(email: 'email3@email.com')
+        visit report_draw_intents_path(draw)
+        attach_file('intents_import_form[file]',
+                    Rails.root.join('spec', 'fixtures', 'intent_upload.csv'))
+        click_on('Import')
+        # email1@email.com is already taken by the admin logging in so only two
+        # of the three users will be updated from the csv
+        expect(page).to have_css('.flash-success',
+                                 text: 'Successfully updated 2 intents.')
+      end
     end
 
-    it 'can export data to CSV' do
-      data = create_student_data(draw: draw, intents: %w(on_campus off_campus))
-      visit report_draw_intents_path(draw)
-      click_link('Export to CSV')
-      expect(page_is_valid_export?(page: page, data: data,
-                                   filename: f, header_str: h_str)).to be_truthy
-    end
+    context 'as a rep' do
+      before { log_in(create(:student, role: 'rep')) }
 
-    it 'csv export raises an error if no data is created' do
-      visit report_draw_intents_path(draw)
-      click_link('Export to CSV')
-      msg = 'Data must exist before it can be exported.'
-      expect(page).to have_css('.flash-error', text: /#{msg}/)
-    end
-
-    # rubocop:disable ExampleLength
-    it 'can import intents for students in the draw' do
-      draw = create(:draw_with_members, students_count: 3)
-      User.first.update!(email: 'email1@email.com')
-      User.second.update!(email: 'email2@email.com')
-      User.third.update!(email: 'email3@email.com')
-      visit report_draw_intents_path(draw)
-      attach_file('intents_import_form[file]',
-                  Rails.root.join('spec', 'fixtures', 'intent_upload.csv'))
-      click_on('Import')
-      # email1@email.com is already taken by the admin logging in so only two
-      # of the three users will be updated from the csv
-      expect(page).to have_css('.flash-success',
-                               text: 'Successfully updated 2 intents.')
+      it 'does not display form' do
+        create_student_data(draw: draw, intents: %w(on_campus))
+        visit draw_path(draw)
+        click_link('View intent report')
+        expect(page).to have_css('td[data-role="student-intent"]')
+      end
     end
   end
 
-  context 'as a rep' do
-    before { log_in(create(:student, role: 'rep')) }
+  describe 'intent-selection draw' do
+    let(:draw) { create(:draw, status: 'intent_selection') }
 
-    it 'does not display form' do
-      create_student_data(draw: draw, intents: %w(on_campus))
-      visit draw_path(draw)
-      click_link('View intent report')
-      expect(page).to have_css('td[data-role="student-intent"]')
-    end
+    it_behaves_like 'draw intent report'
+  end
+
+  describe 'group-formation draw' do
+    let(:draw) { create(:draw, status: 'group_formation') }
+
+    it_behaves_like 'draw intent report'
   end
 
   def create_student_data(draw:, intents: %w(on_campus))

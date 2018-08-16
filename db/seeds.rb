@@ -18,6 +18,7 @@ def generate_superuser
 end
 
 def generate_draws
+  Generator.generate(model: 'intent_selection_draw')
   Generator.generate(model: 'group_formation_draw')
   Generator.generate(model: 'lottery_draw')
   Generator.generate(model: 'suite_selection_draw')

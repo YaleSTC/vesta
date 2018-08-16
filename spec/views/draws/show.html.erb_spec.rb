@@ -50,7 +50,7 @@ RSpec.describe 'draws/show.html.erb' do
     end
 
     def activate_link_regex
-      /Begin draw process/
+      /Begin intent selection phase/
     end
   end
 

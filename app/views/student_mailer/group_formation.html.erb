@@ -1,0 +1,16 @@
+<p>Hi <%= @user.name %>,</p>
+<p>The housing process for <%= @college.name %> has entered the group formation phase. Please log in to <%= college_site_link(@college) %><%= @login_str %> to create or join a group.</p>
+<% if @intent_locked %>
+  <% if @user.intent != 'on-campus' %>
+    Please note that intent declaration is now locked. If you wish to change you intent to on-campus, please contact <%= admin_mail_link(@college) %>
+  <% end %>
+<% else %>
+  <p>
+  You also can still declare or change your intent to live on- or off-campus for next year
+  <% if @intent_deadline %>
+    until <%= @intent_deadline %>
+  <% end %>
+<% end %>
+.</p>
+<p>Please e-mail <%= admin_mail_link(@college) %> if you have any questions.</p>
+<p>Sincerely,<br /><%= @college.dean %></p>

@@ -22,7 +22,8 @@ RSpec.describe DrawPolicy do
         it { is_expected.not_to permit(user, draw) }
       end
     end
-    permissions :destroy?, :edit?, :update?, :activate?, :oversubscription?,
+    permissions :destroy?, :edit?, :update?, :activate?,
+                :proceed_to_group_formation?, :oversubscription?,
                 :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
                 :start_selection?, :bulk_on_campus?, :reminder?, :results?,
                 :lock_all_sizes?, :prune?, :lock_all_groups? do
@@ -110,8 +111,8 @@ RSpec.describe DrawPolicy do
     permissions :show?, :toggle_size_lock?, :group_report? do
       it { is_expected.to permit(user, draw) }
     end
-    permissions :edit?, :update?, :destroy?, :activate?,
-                :oversubscription?, :start_lottery?,
+    permissions :edit?, :update?, :destroy?, :activate?, :oversubscription?,
+                :proceed_to_group_formation?, :start_lottery?,
                 :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
                 :lock_all_sizes?, :prune?, :lock_all_groups? do
       it { is_expected.not_to permit(user, draw) }
@@ -277,6 +278,18 @@ RSpec.describe DrawPolicy do
 
       context 'when draw is not a draft' do
         before { allow(draw).to receive(:draft?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
+
+    permissions :proceed_to_group_formation? do
+      context 'when draw is in intent-selection' do
+        before { allow(draw).to receive(:intent_selection?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+
+      context 'when draw is not in intent-selection' do
+        before { allow(draw).to receive(:intent_selection?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
       end
     end
@@ -485,6 +498,38 @@ RSpec.describe DrawPolicy do
 
   context 'role-agnostic permissions' do
     let(:user) { build_stubbed(:user) }
+
+    permissions :intent_editable? do
+      context 'in draft' do
+        before { allow(draw).to receive(:draft?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'in intent-selection' do
+        before { allow(draw).to receive(:intent_selection?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+
+      context 'in group-formation' do
+        before { allow(draw).to receive(:group_formation?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+
+      context 'in lottery' do
+        before { allow(draw).to receive(:lottery?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'in suite-selection' do
+        before { allow(draw).to receive(:suite_selection?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+
+      context 'in results' do
+        before { allow(draw).to receive(:results?).and_return(true) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+    end
 
     permissions :selection_metrics? do
       context 'in suite selection' do

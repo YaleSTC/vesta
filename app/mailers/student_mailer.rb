@@ -21,6 +21,25 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
          reply_to: @college.admin_email)
   end
 
+  # Send group formation notification to students in draw
+  #
+  # @param user [User] the user to send the invitation to
+  # @param college [College] the college to pull settings from
+  def group_formation(user:, college: nil) # rubocop:disable MethodLength
+    determine_college(college)
+    @user = user
+    @intent_locked = user.draw.intent_locked
+    @intent_deadline = format_date(user.draw.intent_deadline)
+    @login_str = if User.cas_auth?
+                   ''
+                 else
+                   ' (you will need to use the password reset feature to set '\
+                     'your password if you have not logged in before)'
+                 end
+    mail(to: @user.email, subject: 'You may now form housing groups',
+         reply_to: @college.admin_email)
+  end
+
   # Send invitation to a group leader to select a suite
   #
   # @param user [User] the group leader to send the invitation to

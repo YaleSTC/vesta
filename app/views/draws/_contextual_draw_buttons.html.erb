@@ -7,6 +7,13 @@
       <% if policy(DrawSuite.new(draw: @draw.__getobj__)).edit_collection? %>
         <%= link_to 'Add or edit suites', edit_collection_draw_suites_path(@draw), class: 'button secondary' %>
       <% end %>
+      <% if policy(@draw).activate? %>
+        <%= link_to 'Begin intent selection phase',
+          activate_draw_path(@draw), method: :patch,
+          data: { confirm: 'This will send an e-mail to all students in the draw inviting them to log in and start declaring intent. Do you want to continue?' },
+          class: 'button' %>
+      <% end %>
+    <% elsif @draw.status == 'intent_selection' %>
       <% if policy(:intent).report? %>
         <%= link_to 'Upload intents', report_draw_intents_path(@draw), class: 'button secondary' %>
       <% end %>
@@ -27,12 +34,7 @@
           <% end %>
         </div>
       <% end %>
-      <% if policy(@draw).activate? %>
-        <%= link_to 'Begin draw process',
-          activate_draw_path(@draw), method: :patch,
-          data: { confirm: 'This will send an e-mail to all students in the draw inviting them to log in and start forming groups. Do you want to continue?' },
-          class: 'button' %>
-      <% end %>
+      <%= link_to 'Proceed to group formation phase', proceed_to_group_formation_draw_path(@draw), method: :patch, class: 'button', data: { confirm: 'This will send an e-mail to all students in the draw inviting them to log in and start forming groups. Do you want to continue?' } %>
     <% elsif @draw.status == 'group_formation' %>
       <% if policy(Group).new? && policy(@draw).group_actions? %>
         <%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %>

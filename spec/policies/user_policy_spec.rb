@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable RSpec/NestedGroups
+# rubocop:disable RSpec/NestedGroups, RSpec/ScatteredSetup
 require 'rails_helper'
 
 RSpec.describe UserPolicy do
@@ -42,6 +42,20 @@ RSpec.describe UserPolicy do
         context 'draw is not group-formation' do
           before { allow(draw).to receive(:group_formation?).and_return(false) }
           it { is_expected.not_to permit(user, user) }
+        end
+
+        context 'draw is not intent-selection' do
+          before do
+            allow(draw).to receive(:intent_selection?).and_return(false)
+          end
+
+          it { is_expected.not_to permit(user, user) }
+        end
+
+        context 'draw is in intent-selection' do
+          before { allow(draw).to receive(:intent_selection?).and_return(true) }
+          before { allow(draw).to receive(:intent_locked).and_return(false) }
+          it { is_expected.to permit(user, user) }
         end
 
         context 'draw is group-formation' do

@@ -5,9 +5,10 @@
 # @attr name [String] The name of the housing draw -- e.g. "Junior Draw 2016"
 # @attr students [Array<User>] The students in the draw.
 # @attr suites [Array<Suite>] The suites in the draw.
-# @attr status [String] The status / phase of the draw (draft, group_formation,
-#   lottery, suite_selection). Note the use of underscores in the status
-#   strings; this prevents some unpleasantness with the helper methods.
+# @attr status [String] The status / phase of the draw (draft,
+#   intent_selection, group_formation, lottery,
+#   suite_selection). Note the use of underscores in the status strings; this
+#   prevents some unpleasantness with the helper methods.
 # @attr locked_sizes [Array<Integer>] the group sizes that are restricted.
 # @attr intent_locked [Boolean] True when students in the draw can no longer
 #   update their housing intent.
@@ -173,6 +174,15 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   # @return [Boolean] whether or not the draw is in or past the lottery phase
   def lottery_or_later?
     %w(lottery suite_selection results).include? status
+  end
+
+  # Query method to check whether or not a draw is in the group-formation
+  #   phase or after
+  #
+  # @return [Boolean] whether or not the draw is in or past the
+  #   group-formation phase
+  def group_formation_or_later?
+    %(group_formation lottery suite_selection results).include? status
   end
 
   # Query method to return whether or not all groups have lottery numbers

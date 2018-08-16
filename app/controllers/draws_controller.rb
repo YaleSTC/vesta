@@ -4,6 +4,7 @@
 class DrawsController < ApplicationController # rubocop:disable ClassLength
   prepend_before_action :set_draw, except: %i(index new create)
   before_action :calculate_metrics, only: %i(show activate start_lottery
+                                             proceed_to_group_formation
                                              start_selection
                                              lottery_confirmation
                                              oversubscription prune)
@@ -41,6 +42,11 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def activate
     result = DrawActivator.activate(draw: @draw)
+    handle_action(action: 'show', **result)
+  end
+
+  def proceed_to_group_formation
+    result = DrawGroupFormationStarter.start(draw: @draw)
     handle_action(action: 'show', **result)
   end
 

@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   resources :draws do
     member do
       patch 'activate'
+      patch 'proceed_to_group_formation'
       post 'reminder'
       patch 'bulk_on_campus'
       get 'lottery_confirmation'

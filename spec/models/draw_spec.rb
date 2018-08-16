@@ -260,12 +260,12 @@ RSpec.describe Draw, type: :model do
       draw.status = 'draft'
       expect(draw).to be_before_lottery
     end
-    it 'returns true if draw is in the group-formation phase' do
-      draw.status = 'group_formation'
-      expect(draw).to be_before_lottery
-    end
     it 'returns true if draw is in the intent_selection phase' do
       draw.status = 'intent_selection'
+      expect(draw).to be_before_lottery
+    end
+    it 'returns true if draw is in the group-formation phase' do
+      draw.status = 'group_formation'
       expect(draw).to be_before_lottery
     end
     it 'returns false if the draw is in the lottery phase' do
@@ -279,6 +279,35 @@ RSpec.describe Draw, type: :model do
     it 'returns false if the draw is in the results phase' do
       draw.status = 'results'
       expect(draw).not_to be_before_lottery
+    end
+  end
+
+  describe '#group_formation_or_later?' do
+    let(:draw) { build_stubbed(:draw) }
+
+    it 'returns false if draw is a draft' do
+      draw.status = 'draft'
+      expect(draw).not_to be_group_formation_or_later
+    end
+    it 'returns false if draw is in the intent_selection phase' do
+      draw.status = 'intent_selection'
+      expect(draw).not_to be_group_formation_or_later
+    end
+    it 'returns true if draw is in the group-formation phase' do
+      draw.status = 'group_formation'
+      expect(draw).to be_group_formation_or_later
+    end
+    it 'returns true if the draw is in the lottery phase' do
+      draw.status = 'lottery'
+      expect(draw).to be_group_formation_or_later
+    end
+    it 'returns true if the draw is in the suite_selection phase' do
+      draw.status = 'suite_selection'
+      expect(draw).to be_group_formation_or_later
+    end
+    it 'returns true if the draw is in the results phase' do
+      draw.status = 'results'
+      expect(draw).to be_group_formation_or_later
     end
   end
 
