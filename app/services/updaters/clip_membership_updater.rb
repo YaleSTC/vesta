@@ -17,6 +17,17 @@ class ClipMembershipUpdater < Updater
     super(object: clip_membership, name_method: nil, params: params)
   end
 
+  def update
+    return error(self) unless valid?
+    ActiveRecord::Base.transaction do
+      object.update!(**params)
+      destroy_pending
+    end
+    success
+  rescue ActiveRecord::RecordInvalid => e
+    error(e)
+  end
+
   private
 
   def freeze_status
@@ -42,6 +53,10 @@ class ClipMembershipUpdater < Updater
   def freeze_group_id
     return if params[:group_id] == object.group_id
     errors.add(:group, 'cannot be changed in clip membership.')
+  end
+
+  def destroy_pending
+    object.group.clip_memberships.where.not(id: object.id).destroy_all
   end
 
   # This success message assumes that the only update to a clip membership

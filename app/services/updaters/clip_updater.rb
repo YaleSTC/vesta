@@ -46,7 +46,9 @@ class ClipUpdater < Updater
 
   def confirm_unconfirmed
     groups_to_be_confirmed.each do |g|
-      clip_memberships.where(group_id: g).first.update!(confirmed: true)
+      cm = clip_memberships.where(group_id: g).first
+      ClipMembershipUpdater.update(clip_membership: cm,
+                                   params: { confirmed: true })
     end
   end
 

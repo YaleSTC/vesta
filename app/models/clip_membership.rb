@@ -11,18 +11,11 @@ class ClipMembership < ApplicationRecord
   validates :group, presence: true, uniqueness: { scope: :clip }
   validates :clip, presence: true
 
-  after_save :destroy_pending,
-             if: ->() { saved_change_to_confirmed && confirmed }
-
   after_destroy :run_clip_cleanup
 
   private
 
   def run_clip_cleanup
     clip.cleanup!
-  end
-
-  def destroy_pending
-    group.clip_memberships.where.not(id: id).destroy_all
   end
 end

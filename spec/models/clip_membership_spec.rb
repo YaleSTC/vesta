@@ -22,20 +22,4 @@ RSpec.describe ClipMembership, type: :model do
       expect(clip).to have_received(:cleanup!)
     end
   end
-
-  # rubocop:disable RSpec/ExampleLength
-  describe 'pending clip membership destruction' do
-    it 'on the group accepting another clip' do
-      group = create(:locked_group)
-      clip1, clip2 = create_pair(:clip, draw: group.draw)
-      inv = create_membership(clip: clip1, group: group)
-      req = create_membership(clip: clip2, group: group)
-      inv.update(confirmed: true)
-      expect { req.reload }.to raise_error(ActiveRecord::RecordNotFound)
-    end # rubocop:enable RSpec/ExampleLength
-
-    def create_membership(clip:, group:, confirmed: false)
-      create(:clip_membership, clip: clip, group: group, confirmed: confirmed)
-    end
-  end
 end
