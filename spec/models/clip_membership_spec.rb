@@ -29,64 +29,6 @@ RSpec.describe ClipMembership, type: :model do
     end
   end
 
-  describe 'freeze clip before update' do
-    it 'cannot change clip' do
-      membership.clip = create(:clip, draw: clip.draw)
-      expect(membership.save).to be_falsey
-    end
-    it 'cannot remove clip' do
-      membership.clip_id = nil
-      expect(membership.save).to be_falsey
-    end
-    it 'returns error if clip is updated' do
-      membership.clip = create(:clip, draw: clip.draw)
-      membership.save
-      expect(membership.errors[:base])
-        .to include('Cannot change clip inside clip membership')
-    end
-  end
-
-  describe 'freeze group before update' do
-    it 'cannot change group' do
-      membership.group = create(:group_from_draw, draw: clip.draw)
-      expect(membership.save).to be_falsey
-    end
-    it 'cannot remove group' do
-      membership.group_id = nil
-      expect(membership.save).to be_falsey
-    end
-    it 'returns error if group is updated' do
-      membership.group = create(:group_from_draw, draw: clip.draw)
-      membership.save
-      expect(membership.errors[:base])
-        .to include('Cannot change group inside clip membership')
-    end
-  end
-
-  describe 'freeze confirm unless group-formation' do
-    let(:msg) do
-      'Cannot confirm clip membership outside of group-formation phase'
-    end
-
-    it 'cannot change confirmation if not group-formation' do
-      clip.draw.update(status: 'draft')
-      membership.confirmed = false
-      expect(membership.save).to be_falsey
-    end
-    it 'can change confirmation if the draw is group-formation' do
-      clip.draw.update(status: 'group_formation')
-      membership.confirmed = false
-      expect(membership.save).to be_truthy
-    end
-    it 'returns error if confirmation changed in not group-formation' do
-      clip.draw.update(status: 'draft')
-      membership.confirmed = false
-      membership.save
-      expect(membership.errors[:base])
-        .to include(msg)
-    end
-  end
-
   # rubocop:disable RSpec/ExampleLength
   describe 'pending clip membership destruction' do
     it 'on the group accepting another clip' do

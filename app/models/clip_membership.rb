@@ -13,9 +13,6 @@ class ClipMembership < ApplicationRecord
   validate :matching_draw, if: ->(m) { m.clip.present? && m.group.present? }
   validate :group_not_in_clip, if: ->(m) { m.group.present? }, on: :create
 
-  before_update :freeze_clip, :freeze_group
-  before_update :freeze_confirmed, if: ->() { will_save_change_to_confirmed? }
-
   after_save :destroy_pending,
              if: ->() { saved_change_to_confirmed && confirmed }
 
@@ -35,22 +32,6 @@ class ClipMembership < ApplicationRecord
   def group_not_in_clip
     return unless group.clip
     errors.add :base, "#{group.name} already belongs to another clip"
-  end
-
-  def freeze_clip
-    return unless will_save_change_to_clip_id?
-    handle_abort('Cannot change clip inside clip membership')
-  end
-
-  def freeze_group
-    return unless will_save_change_to_group_id?
-    handle_abort('Cannot change group inside clip membership')
-  end
-
-  def freeze_confirmed
-    return if clip.draw.group_formation?
-    msg = 'Cannot confirm clip membership outside of group-formation phase'
-    handle_abort(msg)
   end
 
   def destroy_pending
