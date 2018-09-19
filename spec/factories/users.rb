@@ -15,7 +15,7 @@ FactoryBot.define do
     username { first_name.downcase if env? 'CAS_BASE_URL' }
     tos_accepted { Time.zone.now }
     college_id { College.current.id }
-
+    sequence(:student_sid) { |n| 900_000_000 + n }
     factory :student_in_draw do
       draw { create(:draw) }
       after(:build) do |s, e|
