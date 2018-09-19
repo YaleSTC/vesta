@@ -23,10 +23,15 @@ RSpec.feature 'Results' do
       click_on 'Results by student'
       expect(student_page_has_building_results(page)).to be_truthy
     end
+    it 'can view SIDs' do
+      visit root_path
+      click_on 'Results by student'
+      expect(student_page_has_sid_results(page)).to be_truthy
+    end
   end
 
   context 'when listed by suite' do
-    it 'can view suites' do
+    it 'can view students in suites' do
       visit root_path
       click_on 'Results by suite'
       expect(page_has_room_results(page)).to be_truthy
@@ -119,6 +124,13 @@ RSpec.feature 'Results' do
     data[:members].all? do |member|
       page.assert_selector("tr.result-student-#{member.id} td.building",
                            text: member.building_name)
+    end
+  end
+
+  def student_page_has_sid_results(page)
+    data[:members].all? do |member|
+      page.assert_selector("tr.result-student-#{member.id} td.sid",
+                           text: member.student_sid)
     end
   end
 

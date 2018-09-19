@@ -7,6 +7,7 @@
     <thead>
       <tr>
         <th scope="col">Student</th>
+        <th scope="col">SID</th>
         <th scope="col">Building</th>
         <th scope="col">Room</th>
       </tr>
@@ -15,6 +16,7 @@
       <% @students.each do |student| %>
         <tr class="result-student-<%= student.id %>">
           <th scope="row"><%= student.full_name %></td>
+          <td class="sid"><%= student.student_sid %></td>
           <td class="building"><%= student.building_name %></td>
           <td class="room"><%= student.room.number %></td>
         </tr>
