@@ -18,7 +18,7 @@ class IntentsController < ApplicationController
 
   def export
     @students = @draw.students.order('draw_memberships.intent', :last_name)
-    attributes = %I[#{User.login_attr} last_name first_name intent]
+    attributes = %I[#{User.login_attr} last_name first_name intent student_sid]
     result = CSVGenerator.generate(data: @students, attributes: attributes,
                                    name: 'intents')
     handle_file_action(**result)
