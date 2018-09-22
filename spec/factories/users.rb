@@ -11,6 +11,7 @@ FactoryBot.define do
     sequence(:first_name) { |n| "First_#{n}" }
     last_name { 'Last' }
     role { 'student' }
+    sequence(:student_sid) { |n| 900_000_000 + n }
     class_year { Time.zone.today.year }
     username { first_name.downcase if env? 'CAS_BASE_URL' }
     tos_accepted { Time.zone.now }

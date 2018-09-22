@@ -18,7 +18,7 @@ class ResultsController < ApplicationController
     s = User.active.where(role: %w(student rep), college: College.current)
             .includes(:draw, :room, group: %i(lottery_assignment suite leader))
             .order(:last_name)
-    a = %I[username email last_name first_name draw_name intent
+    a = %I[username email student_sid last_name first_name draw_name intent
            group_name lottery_number building_name suite_number room_number]
 
     result = CSVGenerator.generate(data: s, attributes: a, name: 'students')
