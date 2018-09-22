@@ -9,23 +9,17 @@ RSpec.describe ClipMembership, type: :model do
     it { is_expected.to validate_presence_of(:group) }
     it { is_expected.to validate_presence_of(:clip) }
   end
-  let(:clip) { create(:clip) }
-  let(:group) { create(:group) }
-  let(:membership) { clip.clip_memberships.last }
 
-  describe 'group uniqueness' do
-    it 'is scoped to clip' do
-      membership = ClipMembership.new(clip: clip, group: group)
-      expect(membership).not_to be_valid
-    end
-    it 'group can only have one accepted clip membership' do
-      other_clip = create(:clip)
-      m = ClipMembership.new(clip: other_clip, group: clip.groups.first)
-      expect(m).not_to be_valid
-    end
-    it 'group draw and clip draw must match' do
-      membership = build(:clip_membership, clip: clip, group: group)
-      expect(membership).not_to be_valid
+  describe 'clip membership cleanup' do
+    let(:clip) { create(:clip) }
+    let(:group) { create(:group) }
+    let(:membership) { clip.clip_memberships.last }
+
+    it 'runs clip#cleanup! after destruction' do
+      m = clip.clip_memberships.first
+      allow(clip).to receive(:cleanup!)
+      m.destroy!
+      expect(clip).to have_received(:cleanup!)
     end
   end
 
@@ -42,15 +36,6 @@ RSpec.describe ClipMembership, type: :model do
 
     def create_membership(clip:, group:, confirmed: false)
       create(:clip_membership, clip: clip, group: group, confirmed: confirmed)
-    end
-  end
-
-  describe 'clip membership cleanup' do
-    it 'runs clip#cleanup! after destruction' do
-      m = clip.clip_memberships.first
-      allow(clip).to receive(:cleanup!)
-      m.destroy!
-      expect(clip).to have_received(:cleanup!)
     end
   end
 end

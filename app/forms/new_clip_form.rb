@@ -10,6 +10,8 @@ class NewClipForm
             length: { minimum: 2,
                       too_short: 'There must be more than one group per clip.' }
   validate :draw_allows_clipping
+  validate :matching_draw, if: ->() { clip.present? && group_ids.present? }
+  validate :group_not_in_clip, if: ->() { group_ids.present? }
 
   attr_reader :draw_id, :group_ids, :add_self
 
@@ -65,6 +67,7 @@ class NewClipForm
     @draw_id = params[:draw_id]
     @add_self = (params[:add_self] == '1')
     assign_group_ids(params[:group_ids])
+    @groups = Group.includes(:draw).where(id: group_ids)
   end
 
   def create_clip_memberships
@@ -87,5 +90,23 @@ class NewClipForm
     errors.add(:base, 'This draw currently does not allow for clipping.')
   rescue ActiveRecord::RecordNotFound
     errors.add(:base, 'Please provide a valid draw_id.')
+  end
+
+  def matching_draw
+    @groups.each do |group|
+      if group.draw != clip.draw
+        errors.add :base,
+                   "#{group.name} is not in the same draw as the clip"
+      end
+    end
+  end
+
+  def group_not_in_clip
+    @groups.each do |group|
+      if group.clip
+        errors.add :base,
+                   "#{group.name} already belongs to another clip"
+      end
+    end
   end
 end

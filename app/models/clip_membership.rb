@@ -10,8 +10,6 @@ class ClipMembership < ApplicationRecord
 
   validates :group, presence: true, uniqueness: { scope: :clip }
   validates :clip, presence: true
-  validate :matching_draw, if: ->(m) { m.clip.present? && m.group.present? }
-  validate :group_not_in_clip, if: ->(m) { m.group.present? }, on: :create
 
   after_save :destroy_pending,
              if: ->() { saved_change_to_confirmed && confirmed }
@@ -22,16 +20,6 @@ class ClipMembership < ApplicationRecord
 
   def run_clip_cleanup
     clip.cleanup!
-  end
-
-  def matching_draw
-    return if group.draw == clip.draw
-    errors.add :base, "#{group.name} is not in the same draw as the clip"
-  end
-
-  def group_not_in_clip
-    return unless group.clip
-    errors.add :base, "#{group.name} already belongs to another clip"
   end
 
   def destroy_pending

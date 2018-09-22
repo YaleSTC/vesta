@@ -10,6 +10,7 @@ RSpec.describe NewClipForm do
   let(:groups) { create_pair(:group_from_draw, draw: draw) }
   let(:group_ids) { groups.map(&:id).map(&:to_s) }
   let(:group) { create(:group_from_draw, draw: draw) }
+  let(:clip) { create(:clip) }
 
   # Each shared 'success' example must define the following params in let blocks
   # user [User] a user with the role being tested
@@ -96,6 +97,7 @@ RSpec.describe NewClipForm do
         expect(r[:form_object]).to be_instance_of(described_class)
       end
     end
+
     context 'when draw clipping disallowed' do
       it 'sets the redirect object to nil' do
         param_hash = { draw_id: clipless_draw.id.to_s, group_ids: group_ids }
@@ -115,6 +117,36 @@ RSpec.describe NewClipForm do
         r = described_class.new(admin: user.admin?, params: p).submit
         msg = 'This draw currently does not allow for clipping.'
         expect(r[:msg][:error]).to include(msg)
+      end
+    end
+
+    context 'group is already in a clip' do
+      it 'sets the redirect object to nil' do
+        groups.first.clip = clip
+        r = described_class.new(admin: user.admin?, params: p).submit
+        expect(r[:redirect_object]).to be_nil
+      end
+      it 'returns the form object' do
+        groups.first.clip = clip
+        r = described_class.new(admin: user.admin?, params: p).submit
+        expect(r[:form_object]).to be_instance_of(described_class)
+      end
+    end
+
+    context 'group draw and clip draw do not match' do
+      it 'checks matching draw validation' do
+        new_draw = create(:draw)
+        param_hash = { draw_id: new_draw.id.to_s, group_ids: [[group.id]] }
+        p = instance_spy('ActionController::Parameters', to_h: param_hash)
+        r = described_class.new(admin: user.admin?, params: p).submit
+        expect(r[:redirect_object]).to be_nil
+      end
+      it 'returns the form object' do
+        new_draw = create(:draw)
+        param_hash = { draw_id: new_draw.id.to_s, group_ids: [[group.id]] }
+        p = instance_spy('ActionController::Parameters', to_h: param_hash)
+        r = described_class.new(admin: user.admin?, params: p).submit
+        expect(r[:form_object]).to be_instance_of(described_class)
       end
     end
   end
