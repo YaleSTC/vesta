@@ -9,7 +9,7 @@ RSpec.describe GroupDestroyer do
     expect(destroyer.destroy[:redirect_object]).to be_nil
   end
   it 'fails if destroy fails' do
-    group = instance_spy('Group', destroy: false)
+    group = instance_spy('Group', destroy: false, members: [])
     destroyer = described_class.new(group: group)
     expect(destroyer.destroy[:redirect_object]).to eq(group)
   end
@@ -24,5 +24,59 @@ RSpec.describe GroupDestroyer do
       expect(StudentMailer).to \
         have_received(:disband_notification).exactly(group.memberships_count)
     end
+  end
+
+  context 'actions while disbanding' do
+    let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
+
+    it 'removes member room ids when disbanding' do
+      allow(StudentMailer).to receive(:disband_notification).and_return(msg)
+      stub_room_assignment = make_stub_room_assignment
+      group = make_stub_group(stub_room_assignment)
+      described_class.new(group: group).destroy
+      expect(stub_room_assignment).to have_received(:destroy!)
+    end
+
+    it 'raises an error if cannot remove room id' do
+      allow(StudentMailer).to receive(:disband_notification).and_return(msg)
+      stub_room_assignment = make_stub_room_assignment(false)
+      group = make_stub_group(stub_room_assignment)
+      result = described_class.new(group: group).destroy
+      expect(result[:redirect_object]).to eq(group)
+    end
+
+    it 'restores members to their original draws if drawless' do
+      group = create(:drawless_group)
+      allow(group.leader).to receive(:restore_draw)
+        .and_return(instance_spy('user', save: true))
+      described_class.new(group: group).destroy
+      expect(group.leader).to have_received(:restore_draw)
+    end
+
+    it 'does nothing if group belongs to a draw' do
+      group = create(:group)
+      allow(group.leader).to receive(:restore_draw)
+      described_class.new(group: group).destroy
+      expect(group.leader).not_to have_received(:restore_draw)
+    end
+  end
+
+  def make_stub_room_assignment(valid = false)
+    stub_room_assignment = instance_spy('Room Assignment')
+    if valid
+      allow(stub_room_assignment).to receive(:destroy!).and_return(true)
+    else
+      allow(stub_room_assignment).to receive(:destroy!)
+        .and_raise(ActiveRecord::RecordNotDestroyed)
+    end
+    allow(stub_room_assignment).to receive(:present?).and_return(true)
+
+    stub_room_assignment
+  end
+
+  def make_stub_group(stub_room_assignment)
+    user_ingroup = instance_spy('User', room_assignment: stub_room_assignment)
+    group = instance_spy('Group', members: [user_ingroup])
+    group
   end
 end

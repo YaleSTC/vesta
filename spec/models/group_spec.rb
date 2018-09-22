@@ -182,29 +182,6 @@ RSpec.describe Group, type: :model do
     expect(group.reload).to be_full
   end
 
-  describe 'disbanding group' do
-    let(:group) { create(:locked_group, size: 1).reload }
-    let(:suite) { create(:suite_with_rooms, group_id: group.id) }
-
-    it 'removes member room ids when disbanding' do
-      RoomAssignment.create!(user: group.leader, room: suite.rooms.reload.first)
-      expect { group.destroy! }.to change { RoomAssignment.count }.by(-1)
-    end
-    it 'raises an error if cannot remove room id' do
-      RoomAssignment.create!(user: group.leader, room: suite.rooms.reload.first)
-      stub_room_assignment
-      group.destroy
-      expect(group.errors[:base])
-        .to include('Unable to remove all member\'s rooms')
-    end
-    def stub_room_assignment
-      group.members.each do |member|
-        allow(member.room_assignment).to receive(:destroy!)
-          .and_raise(ActiveRecord::RecordNotDestroyed)
-      end
-    end
-  end
-
   describe 'leader is included as a member' do
     it do
       group = create(:group)
@@ -334,19 +311,6 @@ RSpec.describe Group, type: :model do
   end
 
   describe '#destroy' do
-    it 'restores members to their original draws if drawless' do
-      group = create(:drawless_group)
-      allow(group.leader).to receive(:restore_draw)
-        .and_return(instance_spy('user', save: true))
-      group.destroy
-      expect(group.leader).to have_received(:restore_draw)
-    end
-    it 'does nothing if group belongs to a draw' do
-      group = create(:group)
-      allow(group.leader).to receive(:restore_draw)
-      group.destroy
-      expect(group.leader).not_to have_received(:restore_draw)
-    end
     it 'removes clip_memberships if they exist' do
       group = create(:clip, groups_count: 3).groups.first
       m = group.clip_membership

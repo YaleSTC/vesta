@@ -28,11 +28,6 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   belongs_to :lottery_assignment
   accepts_nested_attributes_for :suite
 
-  # This before_destroy clears room assignments and needs to be added before
-  # the dependent: :delete_all in the memberships association or there won't be
-  # any members to update
-  before_destroy :remove_member_rooms
-
   has_many :memberships, dependent: :delete_all
   has_many :full_memberships, -> { where(status: 'accepted') },
            class_name: 'Membership', inverse_of: :group
@@ -66,7 +61,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
                 if: -> { will_save_change_to_lottery_assignment_id? }
   after_update :remove_clip_memberships,
                if: ->() { changed_draw_with_clip_memberships? }
-  after_destroy :restore_member_draws, if: ->(g) { g.draw.nil? }
+
   after_destroy :destroy_lottery_assignment,
                 if: ->(g) { g.lottery_assignment.present? }
 
@@ -254,20 +249,6 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   def validate_not_open
     return if full?
     errors.add :status, "can only be #{status} when members equal size"
-  end
-
-  def restore_member_draws
-    members.each { |u| u.restore_draw.save }
-  end
-
-  def remove_member_rooms
-    ActiveRecord::Base.transaction do
-      members.each do |member|
-        member.room_assignment.destroy! if member.room_assignment.present?
-      end
-    end
-  rescue
-    handle_abort("Unable to remove all member's rooms")
   end
 
   def validate_locked

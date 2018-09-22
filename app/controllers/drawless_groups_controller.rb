@@ -39,7 +39,7 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def destroy
-    result = Destroyer.destroy(object: @group, name_method: :name)
+    result = GroupDestroyer.destroy(group: @group)
     handle_action(path: groups_path, **result)
   end
 
