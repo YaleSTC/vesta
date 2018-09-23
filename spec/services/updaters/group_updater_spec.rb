@@ -3,6 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe GroupUpdater do
+  context 'size validations' do
+    it 'must be available in the draw' do
+      group = create(:open_group, size: 2)
+      allow(group.draw).to receive(:open_suite_sizes).and_return([2])
+      p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
+      expect(described_class.update(group: group, params: p)[:msg]).to \
+        have_key(:error)
+    end
+    it 'only runs on changing size' do
+      group = create(:open_group, size: 2)
+      allow(group.draw).to receive(:open_suite_sizes).and_return([4])
+      p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
+      expect(described_class.update(group: group, params: p)[:msg]).to \
+        have_key(:success)
+    end
+  end
+
   describe '#update' do
     context 'group is full' do
       let(:group) { create(:open_group, size: 2) }

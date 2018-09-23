@@ -3,6 +3,19 @@
 require 'rails_helper'
 
 RSpec.describe DrawlessGroupCreator do
+  context 'size validations' do
+    it 'fails if it is not an existing suite size' do
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      allow(SuiteSizesQuery).to receive(:call).and_return([50])
+      expect(described_class.create(params: params)[:msg]).to have_key(:error)
+    end
+    it 'succeeds when it is an existing suite size' do
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      allow(SuiteSizesQuery).to receive(:call).and_return([params_hash[:size]])
+      expect(described_class.create(params: params)[:msg]).to have_key(:success)
+    end
+  end
+
   context 'success' do
     it 'successfully creates a group' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)

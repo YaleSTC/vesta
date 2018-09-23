@@ -3,6 +3,10 @@
 #
 # Service object to update special (drawless) groups
 class DrawlessGroupUpdater < GroupUpdater
+  validate :validate_suite_size_inclusion,
+           if: ->() \
+            { params[:size].present? && group.size != params[:size].to_i }
+
   private
 
   # Note that this occurs within the transaction
@@ -26,5 +30,10 @@ class DrawlessGroupUpdater < GroupUpdater
       redirect_object: group, record: group,
       msg: { success: 'Group successfully updated!' }
     }
+  end
+
+  def validate_suite_size_inclusion
+    return if SuiteSizesQuery.call.include? params[:size].to_i
+    errors.add :size, 'must be a valid suite size'
   end
 end

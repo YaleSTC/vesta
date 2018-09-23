@@ -2,7 +2,14 @@
 
 # Service object to update groups
 class GroupUpdater
+  include ActiveModel::Model
   include Callable
+
+  validate :validate_suite_size_inclusion,
+           if: lambda {
+                 params[:size].present? && group.draw.present? \
+                 && group.size != params[:size].to_i
+               }
 
   # Instantiates a new DrawlessGroupUpdater
   #
@@ -17,6 +24,7 @@ class GroupUpdater
   #
   # @return [Hash{Symbol=>Group,Hash,Nil}] the return hash
   def update
+    return error(self) unless valid?
     ActiveRecord::Base.transaction do
       update_size
       update_members
@@ -108,5 +116,10 @@ class GroupUpdater
       redirect_object: nil, record: group,
       msg: { error: "Group update failed: #{msg}" }
     }
+  end
+
+  def validate_suite_size_inclusion
+    return if group.draw.open_suite_sizes.include? params[:size].to_i
+    errors.add :size, 'must be a suite size included in the draw'
   end
 end

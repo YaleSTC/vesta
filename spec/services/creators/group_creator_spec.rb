@@ -3,6 +3,24 @@
 require 'rails_helper'
 
 RSpec.describe GroupCreator do
+  context 'size validations' do
+    let(:draw) { instance_double(Draw) }
+
+    it 'fails when it size is not available in the draw' do
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      allow(Draw).to receive(:find).and_return(draw)
+      allow(draw).to receive(:open_suite_sizes).and_return([50])
+      expect(described_class.create(params: params)[:msg]).to have_key(:error)
+    end
+    it 'succeeds when size is available in the draw' do
+      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      allow(Draw).to receive(:find).and_return(draw)
+      allow(draw).to receive(:open_suite_sizes)\
+        .and_return([params_hash[:size]])
+      expect(described_class.create(params: params)[:msg]).to have_key(:success)
+    end
+  end
+
   context 'success' do
     it 'sucessfully creates a group' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)

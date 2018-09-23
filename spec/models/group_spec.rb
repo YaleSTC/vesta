@@ -33,27 +33,6 @@ RSpec.describe Group, type: :model do
   end
 
   describe 'size validations' do
-    context 'for regular groups' do
-      it 'must be available in the draw' do
-        group = build(:group)
-        allow(group.draw).to receive(:open_suite_sizes).and_return([1])
-        group.size = 2
-        expect(group.valid?).to be_falsey
-      end
-      it 'only runs on changing size' do
-        group = create(:full_group, size: 2)
-        allow(group.draw).to receive(:open_suite_sizes).and_return([1])
-        expect(group.valid?).to be_truthy
-      end
-    end
-    context 'for drawless groups' do
-      it 'must be an existing suite size' do
-        group = build(:drawless_group)
-        allow(SuiteSizesQuery).to receive(:call).and_return([1])
-        group.size = 2
-        expect(group).not_to be_valid
-      end
-    end
     it 'must not have more members than the size' do
       group = create(:full_group, size: 2)
       allow(group.draw).to receive(:suite_sizes).and_return([1, 2])

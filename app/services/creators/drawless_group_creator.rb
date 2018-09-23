@@ -3,7 +3,11 @@
 #
 # Service object for 'special' (non-draw) housing groups
 class DrawlessGroupCreator
+  include ActiveModel::Model
   include Callable
+
+  validate :validate_suite_size_inclusion,
+           if: ->() { params[:size] }
 
   # Initialize a new SpecialGroupCreator
   #
@@ -19,6 +23,7 @@ class DrawlessGroupCreator
   # @return [Hash{Symbol=>Group,Hash}] a results hash with a message to set in
   #   flash an either `nil` or the created group.
   def create
+    return error(self) unless valid?
     ActiveRecord::Base.transaction do
       ensure_valid_members
       @group = Group.new(**params)
@@ -79,5 +84,10 @@ class DrawlessGroupCreator
         'Please make sure you are not adding too many students.'
       }
     }
+  end
+
+  def validate_suite_size_inclusion
+    return if SuiteSizesQuery.call.include? params[:size].to_i
+    errors.add :size, 'must be a valid suite size'
   end
 end

@@ -8,6 +8,23 @@ RSpec.describe DrawlessGroupUpdater do
     end
   end
 
+  context 'size validations' do
+    it 'fails if it is not an existing suite size' do
+      group = create(:drawless_group, size: 2)
+      p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
+      allow(SuiteSizesQuery).to receive(:call).and_return([2])
+      expect(described_class.update(group: group, params: p)[:msg]).to \
+        have_key(:error)
+    end
+    it 'succeeds when it is an existing suite size' do
+      group = create(:drawless_group, size: 2)
+      p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
+      allow(SuiteSizesQuery).to receive(:call).and_return([4])
+      expect(described_class.update(group: group, params: p)[:msg]).to \
+        have_key(:success)
+    end
+  end
+
   describe '#update' do
     # rubocop:disable RSpec/ExampleLength
     context 'group is full' do
@@ -64,18 +81,21 @@ RSpec.describe DrawlessGroupUpdater do
       it 'sets to the :redirect_object to the group' do
         group = instance_spy('group', update!: true)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
+        allow(SuiteSizesQuery).to receive(:call).and_return([group.size, 4])
         result = described_class.update(group: group, params: p)
         expect(result[:redirect_object]).to eq(group)
       end
       it 'sets the :group to the group' do
         group = instance_spy('group', update!: true)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
+        allow(SuiteSizesQuery).to receive(:call).and_return([group.size, 4])
         result = described_class.update(group: group, params: p)
         expect(result[:record]).to eq(group)
       end
       it 'sets a success message' do
         group = instance_spy('group', update!: true)
         p = instance_spy('ActionController::Parameters', to_h: { size: 4 })
+        allow(SuiteSizesQuery).to receive(:call).and_return([group.size, 4])
         result = described_class.update(group: group, params: p)
         expect(result[:msg]).to have_key(:success)
       end
