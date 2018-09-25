@@ -16,8 +16,6 @@ class Clip < ApplicationRecord
 
   validate :draw_allows_clipping
 
-  before_update ->() { freeze_draw if will_save_change_to_draw_id? }
-
   # Generate the clip's name
   #
   # @return [String] the clip's name
@@ -56,9 +54,5 @@ class Clip < ApplicationRecord
   def draw_allows_clipping
     return if draw.allow_clipping
     errors.add(:base, 'This draw currently does not allow for clipping.')
-  end
-
-  def freeze_draw
-    handle_abort('Cannot change draw inside clip')
   end
 end

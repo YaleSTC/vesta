@@ -7,6 +7,9 @@ class ClipUpdater < Updater
             length: { minimum: 2,
                       too_short: 'There must be more than one group per clip.' }
 
+  validate :freeze_draw_id, if: -> { params.key?(:draw_id) }
+  validate :freeze_draw, if: -> { params.key?(:draw) }
+
   # Initialize a new ClipUpdater.
   #
   # @param clip [Clip] the clip to be updated
@@ -72,5 +75,15 @@ class ClipUpdater < Updater
 
   def groups_to_be_removed
     object.group_ids.map(&:to_s) - group_ids
+  end
+
+  def freeze_draw_id
+    return if params[:draw_id] == object.draw.id
+    errors.add(:draw, 'cannot be changed inside clip')
+  end
+
+  def freeze_draw
+    return if params[:draw] == object.draw
+    errors.add(:draw, 'cannot be changed inside clip')
   end
 end

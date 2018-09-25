@@ -14,12 +14,6 @@ RSpec.describe Clip, type: :model do
       clip = build(:clip, draw: draw)
       expect(clip.valid?).to be_falsey
     end
-    it 'forwards message if draw id changed before clip update' do
-      draw = create(:draw, allow_clipping: true)
-      clip = create(:clip)
-      clip.update(draw_id: draw.id)
-      expect(clip.errors[:base]).to include('Cannot change draw inside clip')
-    end
   end
 
   describe '#name' do

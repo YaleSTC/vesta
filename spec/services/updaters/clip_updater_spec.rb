@@ -6,6 +6,29 @@ RSpec.describe ClipUpdater do
   let(:clip) { create(:clip, groups_count: 3) }
   let(:group_ids) { clip.clip_memberships.map(&:group_id).map(&:to_s) }
 
+  context 'action prevented' do
+    let(:msg) { 'Draw cannot be changed inside clip' }
+
+    it 'if it changes draw_id' do
+      params = { draw_id: clip.draw_id + 1 }
+      result = described_class.update(clip: clip, params: params)
+      expect(result[:msg][:error]).to include(msg)
+    end
+
+    it 'if it changes draw' do
+      new_draw = instance_spy('Draw')
+      params = { draw: new_draw }
+      result = described_class.update(clip: clip, params: params)
+      expect(result[:msg][:error]).to include(msg)
+    end
+
+    it 'allows matching draw_id' do
+      params = { draw_id: clip.draw.id }
+      result = described_class.update(clip: clip, params: params)
+      expect(result[:msg][:error]).not_to include(msg)
+    end
+  end
+
   context 'successfully' do
     context 'when adding a group' do
       let(:new_group) { create(:group_from_draw, draw: clip.draw) }
