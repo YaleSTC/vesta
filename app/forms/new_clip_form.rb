@@ -9,6 +9,7 @@ class NewClipForm
   validates :group_ids,
             length: { minimum: 2,
                       too_short: 'There must be more than one group per clip.' }
+  validate :draw_allows_clipping
 
   attr_reader :draw_id, :group_ids, :add_self
 
@@ -79,5 +80,12 @@ class NewClipForm
 
   def assign_group_ids(group_ids)
     @group_ids = group_ids.present? ? group_ids.reject(&:empty?) : []
+  end
+
+  def draw_allows_clipping
+    return if Draw.find(@draw_id).allow_clipping
+    errors.add(:base, 'This draw currently does not allow for clipping.')
+  rescue ActiveRecord::RecordNotFound
+    errors.add(:base, 'Please provide a valid draw_id.')
   end
 end

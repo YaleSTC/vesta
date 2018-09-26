@@ -8,14 +8,6 @@ RSpec.describe Clip, type: :model do
     it { is_expected.to belong_to(:draw) }
   end
 
-  describe 'validations' do
-    it 'prevent non-clipping draws from making clips' do
-      draw = create(:draw, allow_clipping: false)
-      clip = build(:clip, draw: draw)
-      expect(clip.valid?).to be_falsey
-    end
-  end
-
   describe '#name' do
     it 'displays the name' do
       clip = create(:clip)
