@@ -20,7 +20,8 @@ class RoomGenerator
   attr_reader :params, :overrides
 
   def gen_params
-    @params ||= { suite: Suite.all.sample || SuiteGenerator.generate,
+    @params ||= { suite: Suite.all.sample ||
+                         SuiteGenerator.generate(room_count: 0),
                   beds: rand(1..2),
                   number: FFaker::Address.building_number }.merge(overrides)
   end

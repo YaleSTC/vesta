@@ -25,14 +25,6 @@ RSpec.describe CollegeSeeder do
       it_behaves_like 'creates the right data', 'user'
       it_behaves_like 'creates the right data', 'building'
       it_behaves_like 'creates the right data', 'suite'
-      it_behaves_like 'creates the right data', 'room'
-
-      it 'ensures that there are no empty suites' do
-        relation = instance_spy('Suite::ActiveRecord_Relation')
-        allow(Suite).to receive(:where).with(size: 0).and_return(relation)
-        described_class.seed(subdomain: 'foo', io: io)
-        expect(relation).to have_received(:destroy_all).once
-      end
     end
 
     it 'checks subdomain validity' do # rubocop:disable RSpec/ExampleLength

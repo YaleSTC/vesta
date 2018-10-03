@@ -37,10 +37,5 @@ class CollegeSeeder
   def generate_housing_inventory
     Generator.generate(model: 'building', count: 1)
     Generator.generate(model: 'suite', count: 10)
-    Generator.generate(model: 'room', count: 20)
-    Generator.generate(model: 'room', count: 5, beds: 0)
-
-    # ensure no empty suites
-    Suite.where(size: 0).destroy_all
   end
 end

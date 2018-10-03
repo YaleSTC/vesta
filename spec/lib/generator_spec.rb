@@ -14,6 +14,11 @@ describe Generator do
 
   OBJECTS.each { |o| it_behaves_like 'generates a valid', o }
 
+  it 'can generate rooms with in suite' do
+    expect { described_class.generate(model: 'Suite') }.to \
+      change { Room.count }.by_at_least(1)
+  end
+
   it 'can generate an superuser' do
     expect { described_class.generate_superuser }.to \
       change { User.superuser.count }.by(1)

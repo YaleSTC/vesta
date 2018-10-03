@@ -36,9 +36,7 @@ class DrawGenerator
 
   def add_suites
     @suites ||= Array.new(group_count + 1) do
-      SuiteGenerator.generate.tap do |s|
-        rand(1..3).times { RoomGenerator.generate(overrides: { suite: s }) }
-      end
+      SuiteGenerator.generate
     end
   end
 
