@@ -26,7 +26,6 @@ class LotteryAssignment < ApplicationRecord
   after_create :assign_groups_if_clipped!, if: ->() { clip.present? }
 
   before_update :freeze_draw
-  before_update :freeze_number, unless: ->() { draw.lottery? }
 
   # Updates the selected attribute appropriately, if necessary
   # Raises an exception if the update failed
@@ -94,11 +93,6 @@ class LotteryAssignment < ApplicationRecord
   def freeze_draw
     return unless will_save_change_to_draw_id?
     handle_abort('Draw cannot be changed inside lottery')
-  end
-
-  def freeze_number
-    return unless will_save_change_to_number?
-    handle_abort('Lottery number cannot be changed')
   end
 
   def assign_groups_if_clipped!

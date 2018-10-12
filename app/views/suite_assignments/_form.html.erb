@@ -3,12 +3,21 @@
     <div id="group-fields-<%= group.id %>" class="actions">
       <h2 class="h3"><%= group.name %></h2>
       <% if @draw.present? # admin suite selection mode %>
+
         <div class="reveal" id="disbandModal<%=group.id%>" data-reveal>
           <p><em>WARNING</em>: Clicking the button below will disband <%= group.name %>, removing them from this draw's suite selection process. Proceed with caution.</p>
           <%= link_to 'Disband Group', draw_group_path(@draw, group, redirect_path: new_draw_suite_assignment_path(@draw)),
             method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert small expanded' if policy(group).destroy? %>
           <button class="close-button" data-close aria-label="Close modal" type="button"><span aria-hidden="true">&times;</span>
         </div>
+
+        <div class="reveal" id="skipModal<%=group.id%>" data-reveal>
+          <p><em>WARNING</em>: Clicking the button below will skip <%= group.name %>, moving them to the end of this draw's suite selection process.</p>
+          <%= link_to 'Skip Group', skip_draw_group_path(@draw, group, redirect_path: new_draw_suite_assignment_path(@draw)),
+            method: :patch, data: { confirm: 'Are you sure you want to skip this group?' }, class: 'button small expanded'%>
+          <button class="close-button" data-close aria-label="Close modal" type="button"><span aria-hidden="true">&times;</span>
+        </div>
+
       <% end %>
       <div class="row">
         <div class="columns small-<%= @draw.present? ? 10 : 12 %>" >
@@ -20,10 +29,17 @@
           <% end %>
         </div>
         <% if @draw.present? %>
-          <div class="columns small-2">
-            <a href="#" role="button" class="button secondary small has-tip" data-open="disbandModal<%=group.id%>" style="float: right;"
-            data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Disband this group and continue suite selection">Skip</a>
+
+          <div class="columns small-1">
+            <a href="#" role="button" class="button secondary small has-tip" data-open="disbandModal<%=group.id%>" style="float: center;"
+            data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Disband this group and continue suite selection">Disband</a>
           </div>
+
+          <div class="columns small-1">
+            <a href="#" role="button" class="button secondary small has-tip" data-open="skipModal<%=group.id%>" style="float: center;"
+            data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Move this group to the end and continue suite selection">Skip</a>
+          </div>
+
         <% end %>
       </div>
     </div>

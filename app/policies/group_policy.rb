@@ -51,6 +51,10 @@ class GroupPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def skip?
+    user.admin? && record.draw.suite_selection?
+  end
+
   def select_suite?
     user_has_uber_permission? ||
       student_can_select_suite?

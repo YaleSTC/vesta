@@ -40,6 +40,14 @@ RSpec.feature 'Draw suite selection' do
       expect(page).to have_css('.flash-notice', text: /Group.+deleted/)
     end
 
+    it 'permits skipping of groups' do
+      visit new_draw_suite_assignment_path(draw)
+      within("#group-fields-#{clip.groups.first.id}") do
+        click_on 'Skip Group'
+      end
+      expect(page).to have_css('.flash-notice', text: /Group.+skipped/)
+    end
+
     it 'creates secondary draws if necessary' do
       group.destroy!
       visit draw_path(draw)

@@ -105,6 +105,7 @@ Rails.application.routes.draw do
         put 'lock'
         put 'unlock'
         patch 'make_drawless'
+        patch 'skip'
       end
 
       collection do

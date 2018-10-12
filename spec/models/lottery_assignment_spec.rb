@@ -82,16 +82,6 @@ RSpec.describe LotteryAssignment, type: :model do
       expect(lottery.errors[:base])
         .to include('Draw cannot be changed inside lottery')
     end
-    it "can't change number after lottery phase is over" do
-      lottery.draw.suite_selection!
-      expect(lottery.update(number: lottery.number + 1)).to be_falsey
-    end
-    it 'raises an error if number is changed' do
-      lottery.draw.suite_selection!
-      lottery.update(number: lottery.number + 1)
-      expect(lottery.errors[:base])
-        .to include('Lottery number cannot be changed')
-    end
   end
 
   it 'can be destroyed' do

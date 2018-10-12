@@ -69,6 +69,12 @@ class GroupsController < ApplicationController
     handle_action(action: 'show', **result)
   end
 
+  def skip
+    result = GroupSkipper.skip(group: @group)
+    path = params[:redirect_path] || draw_path(@draw)
+    handle_action(**result, path: path)
+  end
+
   private
 
   def authorize!
