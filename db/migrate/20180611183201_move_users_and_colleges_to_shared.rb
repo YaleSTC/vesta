@@ -33,7 +33,7 @@ class MoveUsersAndCollegesToShared < ActiveRecord::Migration[5.1]
           FROM users
           WHERE email NOT IN
             (SELECT email FROM shared.users)
-          OR username NOT IN
+          AND username NOT IN
             (SELECT username FROM shared.users);
 
           /* update user_id references for room_assignments from users

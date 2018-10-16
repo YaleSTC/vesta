@@ -32,7 +32,7 @@ module ApplicationHelper
   # @param college [College] the current_college, may not be persisted
   # @return [String] the appropriate link
   def settings_path(college)
-    return edit_college_path(college) if college.id
+    return edit_college_path(college) if college&.id
     new_college_path
   end
 

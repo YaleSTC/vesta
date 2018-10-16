@@ -89,7 +89,7 @@ class ApplicationController < ActionController::Base
     if current_user.college.present?
       redirect_to root_url(host: current_user.college.host)
     else
-      redirect_to colleges_path
+      redirect_to colleges_url(host: ENV.fetch('APPLICATION_HOST'))
     end
   end
 
