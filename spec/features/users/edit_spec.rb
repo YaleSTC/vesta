@@ -33,8 +33,8 @@ RSpec.feature 'User Editing' do
   end
   it 'will not let you edit users from other colleges' do
     new_user = create(:user, college_id: create(:college).id)
-    expect { visit_edit_form(new_user) }.to \
-      raise_error(ActiveRecord::RecordNotFound)
+    visit edit_user_path(new_user)
+    expect(page).to have_content('Sorry, that record could not be found')
   end
 
   def visit_edit_form(user)

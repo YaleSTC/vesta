@@ -19,6 +19,12 @@ module Admin
       redirect_to request.referer.present? ? request.referer : root_path
     end
 
+    rescue_from ActiveRecord::RecordNotFound do |exception|
+      Honeybadger.notify(exception)
+      flash[:error] = 'Sorry, that record could not be found.'
+      redirect_to request.referer.present? ? request.referer : root_path
+    end
+
     # Override this value to specify the number of elements to display at a time
     # on index pages. Defaults to 20.
     # def records_per_page

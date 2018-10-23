@@ -17,6 +17,12 @@ class ApplicationController < ActionController::Base
     redirect_to request.referer.present? ? request.referer : root_path
   end
 
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    Honeybadger.notify(exception)
+    flash[:error] = 'Sorry, that record could not be found.'
+    redirect_to request.referer.present? ? request.referer : root_path
+  end
+
   private
 
   def unauthenticated?
