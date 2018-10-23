@@ -13,17 +13,18 @@ class NewClipForm
   validate :matching_draw, if: ->() { clip.present? && group_ids.present? }
   validate :group_not_in_clip, if: ->() { group_ids.present? }
 
-  attr_reader :draw_id, :group_ids, :add_self
+  validate :clip_group_sizes
+
+  attr_reader :draw_id, :group_ids
 
   # Initialize a NewClipForm
   #
-  # @param admin [Boolean] true if the current user is an admin, false otherwise
+  # @param role [String] current user's role
   # @param params [#to_h] the params for the new clip. Needs a draw_id,
-  #   enough groups_ids to create a valid clip (two without a group, one
-  #   with), and add_self (optional Boolean that determines if the creator
-  #   of the clip starts confirmed)
-  def initialize(admin:, params:)
-    @admin = admin
+  #   and enough groups_ids to create a valid clip (two without a group, one
+  #   with).
+  def initialize(role:, params:)
+    @role = role
     process_params(params: params) if params
   end
 
@@ -45,7 +46,7 @@ class NewClipForm
 
   private
 
-  attr_reader :clip, :admin
+  attr_reader :clip, :role
 
   def success
     {
@@ -65,16 +66,19 @@ class NewClipForm
   def process_params(params:)
     params = params.to_h.transform_keys(&:to_sym)
     @draw_id = params[:draw_id]
-    @add_self = (params[:add_self] == '1')
     assign_group_ids(params[:group_ids])
     @groups = Group.includes(:draw).where(id: group_ids)
   end
 
   def create_clip_memberships
-    create_membership(id: group_ids.pop, confirmed: true) if add_self
+    create_membership(id: group_ids.pop, confirmed: true) if role == 'student'
     group_ids.each do |group_id|
-      create_membership(id: group_id, confirmed: admin)
+      create_membership(id: group_id, confirmed: confirmed_clip?)
     end
+  end
+
+  def confirmed_clip?
+    %w(admin superadmin superuser).include?(role)
   end
 
   def create_membership(id:, confirmed:)
@@ -108,5 +112,14 @@ class NewClipForm
                    "#{group.name} already belongs to another clip"
       end
     end
+  end
+
+  def clip_group_sizes
+    return if Draw.find_by(id: draw_id)&.restrict_clipping_group_size.blank?
+    groups = Group.where(id: group_ids)
+    return unless groups.length != groups.where(size: groups.first&.size).length
+    msg = 'Groups may only clip together if they are the same size. '\
+          'To allow clipping for any group sizes, edit your draw settings.'
+    errors.add(:base, msg)
   end
 end

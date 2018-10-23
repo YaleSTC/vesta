@@ -1,8 +1,5 @@
-<%= simple_form_for @new_clip_form, url: draw_clip_path, method: :post do |f| %>
+<%= simple_form_for @new_clip_form, url: group_clip_path, method: :post do |f| %>
   <%= f.input :draw_id, as: :hidden %>
-    <%= f.input :group_ids, as: :check_boxes, input_html: {'aria-label' => 'Please select which groups you wish to clip with'}, label: 'Please select which groups you wish to clip with:', collection: @groups %>
-  <% if policy(Clip.new(draw: @draw)).create_as_rep? %>
-    <%= f.input :add_self, as: :boolean, label: 'Add your group to the clip?' %>
-  <% end %>
+  <%= f.input :group_ids, as: :check_boxes, input_html: {'aria-label' => "Please select which groups you wish to clip with #{@group.name(:with_size)}"}, label: "Please select which groups you wish to clip with #{@group.name(:with_size)}:", collection: @groups%>
   <%= f.submit %>
 <% end %>

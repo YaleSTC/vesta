@@ -31,9 +31,9 @@ class ClipUpdater < Updater
   def update
     return error(self) unless valid?
     ActiveRecord::Base.transaction do
-      confirm_unconfirmed
-      create_clip_memberships
       remove_clip_memberships
+      create_clip_memberships
+      confirm_unconfirmed
     end
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -76,7 +76,7 @@ class ClipUpdater < Updater
   end
 
   def groups_to_be_removed
-    object.group_ids.map(&:to_s) - group_ids
+    clip_memberships.map(&:group_id).map(&:to_s) - group_ids
   end
 
   def freeze_draw_id

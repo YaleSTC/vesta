@@ -37,25 +37,32 @@
   <% end %>
 <% end %>
 <hr style="border-color: #DDDDDD;" />
-<% if @group.clip.present? %>
-  <h2 class="clip-information h4">Your Clip</h2>
-  <%= render 'clips/clip_details', clip: @group.clip %>
-  <hr style="border-color: #DDDDDD;" />
-<% elsif @clip_invites.length.positive? %>
-  <h2 class="clip-invites h4">Clip Invitations</h2>
-  <ul>
-    <% @clip_invites.each do |m| %>
-      <li class="clip-invitation" id="clip-membership-<%= m.id %>">
-        <%= link_to m.clip.name, clip_path(m.clip) if policy(m.clip).show? %>
-        <% if policy(m).accept? %>
-          (<%= link_to 'Accept Invitation', clip_membership_path(m), method: :patch %><%= policy(m).reject? ? ' / ' : ')' %>
+<% if @draw.allow_clipping? %>
+  <h2>Clipping</h2>
+  <% if @group.clip.present? %>
+    <h3 class="clip-information h4">Your Clip</h3>
+    <%= render 'clips/clip_details', clip: @group.clip %>
+    <hr style="border-color: #DDDDDD;" />
+  <% else %>
+    <p>This group is not in a clip.<p>
+    <% if @clip_invites.length.positive? %>
+      <h3 class="clip-invites h4">Clip Invitations</h3>
+      <ul>
+        <% @clip_invites.each do |m| %>
+          <li class="clip-invitation" id="clip-membership-<%= m.id %>">
+            <%= link_to m.clip.name, clip_path(m.clip) if policy(m.clip).show? %>
+            <% if policy(m).accept? %>
+              (<%= link_to 'Accept Invitation', clip_membership_path(m), method: :patch %><%= policy(m).reject? ? ' / ' : ')' %>
+            <% end %>
+            <% if policy(m).reject? %>
+              <%= '(' unless policy(m).accept? %><%= link_to 'Reject Invitation', clip_membership_path(m), method: :delete %>)
+            <% end %>
+          </li>
         <% end %>
-        <% if policy(m).reject? %>
-          <%= '(' unless policy(m).accept? %><%= link_to 'Reject Invitation', clip_membership_path(m), method: :delete %>)
-        <% end %>
-      </li>
+      </ul>
     <% end %>
-  </ul>
+    <%= link_to 'Create a Clip', new_group_clip_path(@group), class: 'button' %>
+  <% end %>
   <hr style="border-color: #DDDDDD;" />
 <% end %>
 <div>

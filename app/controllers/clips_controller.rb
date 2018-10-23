@@ -2,17 +2,18 @@
 
 # Controller for Clips
 class ClipsController < ApplicationController
-  prepend_before_action :set_draw, only: %i(new create)
+  prepend_before_action :set_data, only: %i(new create)
   prepend_before_action :set_clip, except: %i(new create)
-  before_action :set_groups, only: %i(new edit)
+  before_action :set_groups, only: %i(edit)
 
   def new
-    @new_clip_form = NewClipForm.new(admin: current_user.admin?,
+    # Admins and reps have the same view when creating clips
+    @new_clip_form = NewClipForm.new(role: current_user.role,
                                      params: { draw_id: @draw.id })
   end
 
   def create
-    result = NewClipForm.new(admin: current_user.admin?,
+    result = NewClipForm.new(role: current_user.role,
                              params: new_clip_form_params).submit
     unless result[:redirect_object].present?
       @new_clip_form = result[:form_object]
@@ -52,13 +53,22 @@ class ClipsController < ApplicationController
   end
 
   def new_clip_form_params
-    params.require(:new_clip_form).permit(:draw_id, :add_self, group_ids: [])
+    params.require(:new_clip_form).permit(:draw_id, group_ids: [])
           .tap { |p| process_new_form_params(p) }
   end
 
   def process_new_form_params(p)
-    p[:add_self] = '1' if current_user.student?
-    p[:group_ids] += [current_user.group&.id.to_s] if p[:add_self] == '1'
+    p[:group_ids] << @group.id.to_s
+  end
+
+  def set_data
+    set_group
+    set_draw
+    set_groups
+  end
+
+  def set_group
+    @group = Group.find(params[:group_id])
   end
 
   def set_clip
@@ -66,13 +76,12 @@ class ClipsController < ApplicationController
   end
 
   def set_draw
-    @draw = Draw.find(params[:draw_id])
+    @draw = @group.draw
   end
 
   def set_groups
-    group = current_user.group
     @groups = GroupsForClippingQuery.call(draw: @draw || @clip.draw,
-                                          group: group)
+                                          group: @group || @clip&.groups&.first)
     @groups += @clip.groups if @clip
   end
 end

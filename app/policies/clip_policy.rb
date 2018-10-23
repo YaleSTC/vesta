@@ -11,11 +11,6 @@ class ClipPolicy < ApplicationPolicy
       record.draw.group_formation? && record.draw.allow_clipping
   end
 
-  def create_as_rep?
-    user.rep? && user.group.present? && record.draw.group_formation? &&
-      record.draw.allow_clipping
-  end
-
   def edit?
     user.admin? && record.draw.group_formation?
   end

@@ -182,6 +182,13 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
     destroy! if existing_memberships.length <= 0
   end
 
+  # For use with simple_form_for's label_method
+  #
+  # @return [String] the group's name with the size appended
+  def to_label
+    name(:with_size)
+  end
+
   private
 
   def name_str(opt)

@@ -112,8 +112,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resource :clip, only: %i(new create)
-
     resource :intents, only: [] do
       get 'report'
       post 'import'
@@ -134,6 +132,7 @@ Rails.application.routes.draw do
     end
     resources :memberships, only: %i(create update destroy)
     resource :suite_assignment, only: %i(new create destroy)
+    resource :clip, only: %i(new create)
     resource :room_assignment, only: %i(new create edit update) do
       collection do
         get 'confirm'

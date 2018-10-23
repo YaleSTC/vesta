@@ -21,8 +21,11 @@ class GroupsForClippingQuery
   # @param group [Group] a group to exclude from the query, if any.
   # @return [Group::ActiveRecord_Relation] the groups available to clip.
   def call(draw:, group: nil)
-    @relation.includes(:clip_membership, :leader).where.not(id: group&.id)
-             .where(draw: draw, clip_memberships: { id: nil })
-             .order('users.last_name')
+    query = @relation.includes(:clip_membership, :leader)
+                     .where.not(id: group&.id)
+                     .where(draw: draw, clip_memberships: { id: nil })
+    query = query.where(size: group&.size) \
+      if draw.restrict_clipping_group_size && group
+    query.order('users.last_name')
   end
 end
