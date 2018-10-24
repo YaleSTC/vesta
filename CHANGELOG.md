@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ### that will contain all users and colleges post v2.0. After that you can upgrade as normal.
 
 ### Changed
+* Make DrawStudentAssignmentForm use a robust query attribute that dynamically chooses username or NetID ([#772](https://gitlab.com/yale-sdmp/vesta/issues/772)).
 * Add room generation functionality to SuiteGenerator ([#119](https://gitlab.com/yale-sdmp/vesta/issues/119)).
 * Updated multitenancy to allow for all users of all tenants to be held in one canonical table in one shared schema [#802](https://gitlab.com/yale-sdmp/vesta/issues/802), [#803](https://gitlab.com/yale-sdmp/vesta/issues/803), [#804](https://gitlab.com/yale-sdmp/vesta/issues/804), [#805](https://gitlab.com/yale-sdmp/vesta/issues/805), [#806](https://gitlab.com/yale-sdmp/vesta/issues/806).
 * Bulk user add instructions are now auth-dependent and no longer Yale specific ([#157](https://gitlab.com/yale-sdmp/vesta/issues/157)).

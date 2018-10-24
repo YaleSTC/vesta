@@ -15,9 +15,9 @@
       <% end %>
     </div>
     <div class="single">
-      <h3>Add/Remove by NetID</h3>
+      <h3>Add/Remove by <%= User.login_attr.to_s %> </h3>
       <%= simple_form_for @student_assignment_form, url: draw_students_path(@draw), method: :patch do |f| %>
-        <%= f.input :username %>
+        <%= f.input :login %>
         <%= f.input :adding, label: 'Action', as: :select, collection: [['Add', true], ['Remove', false]], required: true %>
         <%= f.submit 'Process' %>
       <% end %>

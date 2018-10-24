@@ -44,7 +44,7 @@ class DrawStudentsController < ApplicationController
   end
 
   def student_assignment_params
-    params.fetch(:draw_student_assignment_form, {}).permit(%i(username adding))
+    params.fetch(:draw_student_assignment_form, {}).permit(%i(login adding))
   end
 
   def students_update_params

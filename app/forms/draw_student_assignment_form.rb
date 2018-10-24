@@ -8,9 +8,9 @@ class DrawStudentAssignmentForm
   include ActiveModel::Model
   include Callable
 
-  attr_accessor :username, :adding
+  attr_accessor :login, :login_attr, :adding
 
-  validates :username, presence: true
+  validates :login, presence: true
   validates :adding, inclusion: { in: [true, false] }
   validate :student_found
   validate :student_valid
@@ -21,6 +21,7 @@ class DrawStudentAssignmentForm
   def initialize(draw:, params: nil)
     @draw = draw
     @adding = true
+    @login_attr = User.login_attr
     process_params(params) if params
   end
 
@@ -55,21 +56,21 @@ class DrawStudentAssignmentForm
 
   def process_params(params)
     @params = params.to_h.transform_keys(&:to_sym)
-    @username = @params[:username]
+    @login = @params[:login]&.downcase
     @adding = @params[:adding] == 'true'
     @student = find_student
   end
 
   def find_student
-    return nil unless username
-    UngroupedStudentsQuery.call.find_by(username: username)
+    return nil unless login
+    UngroupedStudentsQuery.call.find_by(login_attr => login)
   end
 
   def student_found
     return if student
     # This query is needed to find out if a student record exists in our db
     #   but has a group already assigned to it.
-    if User.find_by(username: username).present?
+    if User.find_by(login_attr => login).present?
       errors.add(
         :username,
         'cannot be added to this draw because they are already in a group.'
