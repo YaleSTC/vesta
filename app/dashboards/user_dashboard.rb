@@ -13,7 +13,7 @@ class UserDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     draw: Field::BelongsTo,
-    draw_name: Field::String,
+    draw_name: Field::String.with_options(searchable: false),
     draw_id: Field::Number,
     membership: Field::HasOne,
     group: Field::HasOne,

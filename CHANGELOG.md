@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 * Fix simple_form buttons not being focused ([821](https://gitlab.com/yale-sdmp/vesta/issues/812)).
 * Fix duplicate flash message in application([#603](https://gitlab.com/yale-sdmp/vesta/issues/603)).
 * Clarify error message when trying to add a student that doesn't exist to a draw ([#490](https://gitlab.com/yale-sdmp/vesta/issues/490)).
+* Fix search error for user in admin dashboard([#846](https://gitlab.com/yale-sdmp/vesta/issues/846))
 
 ## v1.0.9 - 2018-08-30
 ### Added
