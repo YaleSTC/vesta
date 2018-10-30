@@ -58,6 +58,18 @@ class MoveUsersAndCollegesToShared < ActiveRecord::Migration[5.1]
                                               END) AS joined_ids
           WHERE joined_ids.old_id = user_id;
 
+          /* update leader_id references for groups from users
+             in the current schema to users in the shared schema */
+          UPDATE groups SET leader_id = joined_ids.new_id
+          FROM (SELECT shared.users.id AS new_id, #{schema}.users.id AS old_id
+                FROM shared.users
+                INNER JOIN #{schema}.users ON CASE WHEN shared.users.username IS NULL
+                                              THEN shared.users.email = #{schema}.users.email
+                                              ELSE shared.users.username = #{schema}.users.username
+                                              END) AS joined_ids
+          WHERE joined_ids.old_id = leader_id;
+
+
           TRUNCATE TABLE users RESTART IDENTITY;
           SQL
         end
@@ -124,6 +136,17 @@ class MoveUsersAndCollegesToShared < ActiveRecord::Migration[5.1]
                                                    ELSE shared.users.username = #{subdomain}.users.username
                                                    END) AS joined_ids
             WHERE joined_ids.new_id = user_id;
+
+            /* update group references to leader_id back to the user */
+            /* in the individual college tenant */
+            UPDATE #{subdomain}.groups SET leader_id = joined_ids.old_id
+            FROM (SELECT shared.users.id AS new_id, #{subdomain}.users.id AS old_id
+                  FROM shared.users
+                  INNER JOIN #{subdomain}.users ON CASE WHEN shared.users.username IS NULL
+                                                   THEN shared.users.email = #{subdomain}.users.email
+                                                   ELSE shared.users.username = #{subdomain}.users.username
+                                                   END) AS joined_ids
+            WHERE joined_ids.new_id = leader_id;
             SQL
           end
 
