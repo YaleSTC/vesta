@@ -74,9 +74,9 @@ Rails.application.routes.draw do
       get 'lottery_confirmation'
       patch 'start_lottery'
       get 'oversubscription', to: 'draws#oversubscription', as: 'oversub'
-      patch 'size_lock/:size', to: 'draws#toggle_size_lock',
-                               as: 'toggle_size_lock'
-      patch 'lock_all_sizes'
+      patch 'size_lock/:size', to: 'draws#toggle_size_restrict',
+                               as: 'toggle_size_restrict'
+      patch 'restrict_all_sizes'
       patch 'lock_all_groups'
       delete 'prune_oversub/:prune_size', to: 'draws#prune', as: 'prune'
       patch 'start_selection'

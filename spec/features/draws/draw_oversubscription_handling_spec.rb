@@ -31,10 +31,10 @@ RSpec.feature 'Draw oversubscription handling' do
     expect(page).to have_css('.flash-notice', text: /Group.+deleted/)
   end
 
-  it 'allows admins to lock suite sizes' do
+  it 'allows admins to restrict suite sizes' do
     visit draw_path(draw)
-    click_on 'Lock Singles'
-    expect(page).to have_css('.flash-success', text: /Singles locked/)
+    click_on 'Restrict Singles'
+    expect(page).to have_css('.flash-success', text: /Singles restricted/)
   end
 
   it 'allows admins to resolve oversubscription in a single size' do

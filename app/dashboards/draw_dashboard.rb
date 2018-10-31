@@ -21,7 +21,7 @@ class DrawDashboard < Administrate::BaseDashboard
     updated_at: Field::DateTime,
     status: Field::String.with_options(searchable: false),
     intent_deadline: Field::DateTime,
-    locked_sizes: ArrayField.with_options(permitted_values: (1..12).to_a),
+    restricted_sizes: ArrayField.with_options(permitted_values: (1..12).to_a),
     intent_locked: Field::Boolean,
     last_email_sent: Field::DateTime,
     email_type: Field::String.with_options(searchable: false),
@@ -49,7 +49,7 @@ class DrawDashboard < Administrate::BaseDashboard
     name
     status
     locking_deadline
-    locked_sizes
+    restricted_sizes
     intent_deadline
     intent_locked
     last_email_sent
@@ -69,7 +69,7 @@ class DrawDashboard < Administrate::BaseDashboard
     name
     status
     intent_deadline
-    locked_sizes
+    restricted_sizes
     intent_locked
     last_email_sent
     email_type

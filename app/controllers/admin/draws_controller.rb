@@ -25,7 +25,7 @@ module Admin
 
     def resource_params
       params.require(resource_name)
-            .permit(*dashboard.permitted_attributes, locked_sizes: [])
+            .permit(*dashboard.permitted_attributes, restricted_sizes: [])
     end
   end
 end

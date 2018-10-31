@@ -132,7 +132,7 @@ RSpec.describe Draw, type: :model do
 
   describe '#open_suite_sizes' do
     it 'returns suite sizes in the draw minus locked sizes' do
-      draw = build_stubbed(:draw, locked_sizes: [1])
+      draw = build_stubbed(:draw, restricted_sizes: [1])
       all_sizes = [1, 2]
       allow(draw).to receive(:suite_sizes).and_return(all_sizes)
       expect(draw.open_suite_sizes).to eq([2])
@@ -363,15 +363,15 @@ RSpec.describe Draw, type: :model do
     end
   end
 
-  describe '#size_locked?' do
+  describe '#size_restricted?' do
     it 'returns true if the suite size is locked' do
-      draw = build_stubbed(:draw, locked_sizes: [1])
-      expect(draw.size_locked?(1)).to be_truthy
+      draw = build_stubbed(:draw, restricted_sizes: [1])
+      expect(draw.size_restricted?(1)).to be_truthy
     end
 
     it 'returns false if the suite size is unlocked' do
-      draw = build_stubbed(:draw, locked_sizes: [])
-      expect(draw.size_locked?(1)).to be_falsey
+      draw = build_stubbed(:draw, restricted_sizes: [])
+      expect(draw.size_restricted?(1)).to be_falsey
     end
   end
 

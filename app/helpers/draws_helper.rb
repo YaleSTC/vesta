@@ -27,10 +27,11 @@ module DrawsHelper
     ''
   end
 
-  # Return the link to lock or unlock a specific group size for a draw
-  def toggle_size_lock_btn(draw:, size:, path:)
-    return lock_size_btn(draw, size, path) unless draw.size_locked?(size)
-    unlock_size_btn(draw, size, path)
+  # Return the link to restrict or permit a specific group size for a draw
+  def toggle_size_restricted_btn(draw:, size:, path:)
+    return restrict_size_btn(draw, size, path) \
+      unless draw.size_restricted?(size)
+    permit_size_btn(draw, size, path)
   end
 
   # Return the appropriate class for starting a lottery based on the draw's
@@ -92,21 +93,21 @@ module DrawsHelper
     "#{n} #{'day'.pluralize(n)}"
   end
 
-  def lock_size_btn(draw, size, path)
-    link_to "Lock #{headerize_size(size)}",
-            toggle_size_lock_draw_path(draw, size, redirect_path: path),
+  def restrict_size_btn(draw, size, path)
+    link_to "Restrict #{headerize_size(size)}",
+            toggle_size_restrict_draw_path(draw, size, redirect_path: path),
             method: :patch, **with_tooltip(
               text: "Prevent students from forming more groups of size #{size}",
-              class_override: 'button expanded', id: "lock-size-#{size}"
+              class_override: 'button expanded', id: "restrict-size-#{size}"
             )
   end
 
-  def unlock_size_btn(draw, size, path)
-    link_to "Unlock #{headerize_size(size)}",
-            toggle_size_lock_draw_path(draw, size, redirect_path: path),
+  def permit_size_btn(draw, size, path)
+    link_to "Permit #{headerize_size(size)}",
+            toggle_size_restrict_draw_path(draw, size, redirect_path: path),
             method: :patch, **with_tooltip(
               text: "Allow students to form groups of size #{size}",
-              class_override: 'button expanded', id: "unlock-size-#{size}"
+              class_override: 'button expanded', id: "permit-size-#{size}"
             )
   end
 end

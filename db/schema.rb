@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 20190219205401) do
     t.datetime "updated_at", null: false
     t.integer "status", default: 0, null: false
     t.date "intent_deadline"
-    t.integer "locked_sizes", default: [], null: false, array: true
+    t.integer "restricted_sizes", default: [], null: false, array: true
     t.boolean "intent_locked", default: false, null: false
     t.datetime "last_email_sent"
     t.integer "email_type"

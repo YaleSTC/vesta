@@ -68,14 +68,14 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def oversubscription; end
 
-  def toggle_size_lock
-    result = DrawSizeLockToggler.toggle(draw: @draw, size: params[:size])
+  def toggle_size_restrict
+    result = DrawSizeRestrictToggler.toggle(draw: @draw, size: params[:size])
     handle_action(path: params[:redirect_path], **result)
   end
 
-  def lock_all_sizes
+  def restrict_all_sizes
     result = Updater.update(object: @draw, name_method: :name,
-                            params: { locked_sizes: @draw.suite_sizes })
+                            params: { restricted_sizes: @draw.suite_sizes })
 
     handle_action(**result.merge!(redirect_object: nil,
                                   path: params[:redirect_path]))
@@ -133,7 +133,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def draw_params
     params.require(:draw).permit(:name, :intent_deadline, :intent_locked,
                                  :email_type, :locking_deadline,
-                                 locked_sizes: [])
+                                 restricted_sizes: [])
   end
 
   def prune_params

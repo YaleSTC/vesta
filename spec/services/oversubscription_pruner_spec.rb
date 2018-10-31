@@ -31,7 +31,7 @@ RSpec.describe OversubscriptionPruner do
         sizes = [1, 2]
         draw = oversubscribed_draw(sizes: sizes)
         described_class.prune(draw_report: draw, sizes: sizes)
-        expect(draw.locked_sizes).to match_array(sizes)
+        expect(draw.restricted_sizes).to match_array(sizes)
       end
 
       it 'returns the draw in redirect_object when no longer oversubscribed' do

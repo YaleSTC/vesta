@@ -75,11 +75,11 @@ class DrawPolicy < ApplicationPolicy
     (user.admin? || user.rep?) && record.group_formation?
   end
 
-  def toggle_size_lock?
+  def toggle_size_restrict?
     (user.admin? || user.rep?)
   end
 
-  def lock_all_sizes?
+  def restrict_all_sizes?
     edit?
   end
 

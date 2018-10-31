@@ -24,9 +24,9 @@ RSpec.describe DrawPolicy do
     end
     permissions :destroy?, :edit?, :update?, :activate?,
                 :proceed_to_group_formation?, :oversubscription?,
-                :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
+                :toggle_size_restrict?, :start_lottery?, :lottery_confirmation?,
                 :start_selection?, :bulk_on_campus?, :reminder?, :results?,
-                :lock_all_sizes?, :prune?, :lock_all_groups?, :archive? do
+                :restrict_all_sizes?, :prune?, :lock_all_groups?, :archive? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -108,13 +108,13 @@ RSpec.describe DrawPolicy do
   context 'housing rep' do
     let(:user) { build_stubbed(:user, role: 'rep') }
 
-    permissions :show?, :toggle_size_lock?, :group_report? do
+    permissions :show?, :toggle_size_restrict?, :group_report? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :edit?, :update?, :destroy?, :activate?, :oversubscription?,
                 :proceed_to_group_formation?, :start_lottery?,
                 :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
-                :lock_all_sizes?, :prune?, :lock_all_groups?, :archive? do
+                :restrict_all_sizes?, :prune?, :lock_all_groups?, :archive? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -270,8 +270,8 @@ RSpec.describe DrawPolicy do
   context 'admin' do
     let(:user) { build_stubbed(:user, role: 'admin') }
 
-    permissions :show?, :edit?, :update?, :destroy?, :toggle_size_lock?,
-                :lock_all_sizes?, :group_report?, :lock_all_groups? do
+    permissions :show?, :edit?, :update?, :destroy?, :toggle_size_restrict?,
+                :restrict_all_sizes?, :group_report?, :lock_all_groups? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :index?, :new?, :create? do

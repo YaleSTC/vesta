@@ -55,18 +55,18 @@ RSpec.describe DrawsHelper, type: :helper do
     end
   end
 
-  describe '#toggle_size_lock_btn' do
+  describe '#toggle_size_restricted_btn' do
     let(:draw) { instance_spy('draw') }
 
-    it 'returns a lock button if the draw size is unlocked' do
-      allow(draw).to receive(:size_locked?).and_return(false)
-      btn = helper.toggle_size_lock_btn(draw: draw, size: 1, path: '')
-      expect(btn).to include('Lock Singles')
+    it 'returns a restrict button if the draw size is permitted' do
+      allow(draw).to receive(:size_restricted?).and_return(false)
+      btn = helper.toggle_size_restricted_btn(draw: draw, size: 1, path: '')
+      expect(btn).to include('Restrict Singles')
     end
-    it 'returns an unlock button if the draw size is locked' do
-      allow(draw).to receive(:size_locked?).and_return(true)
-      btn = helper.toggle_size_lock_btn(draw: draw, size: 1, path: '')
-      expect(btn).to include('Unlock Singles')
+    it 'returns an permit button if the draw size is restricted' do
+      allow(draw).to receive(:size_restricted?).and_return(true)
+      btn = helper.toggle_size_restricted_btn(draw: draw, size: 1, path: '')
+      expect(btn).to include('Permit Singles')
     end
   end
 

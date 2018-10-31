@@ -9,7 +9,7 @@
 #   intent_selection, group_formation, lottery,
 #   suite_selection). Note the use of underscores in the status strings; this
 #   prevents some unpleasantness with the helper methods.
-# @attr locked_sizes [Array<Integer>] the group sizes that are restricted.
+# @attr restricted_sizes [Array<Integer>] the group sizes that are restricted.
 # @attr intent_locked [Boolean] True when students in the draw can no longer
 #   update their housing intent.
 # @attr last_email_sent [Datetime] The time the last reminder email was sent
@@ -62,11 +62,11 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   end
 
   # Finds all suite sizes for which new groups can be created by removing
-  # locked_sizes from available sizes
+  # restricted_sizes from available sizes
   #
   # @return [Array<Integer>] the suite sizes for which new groups can be created
   def open_suite_sizes
-    suite_sizes - locked_sizes
+    suite_sizes - restricted_sizes
   end
 
   # Query method get the suites without groups in the draw
@@ -205,12 +205,12 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
     end
   end
 
-  # Query method to check whether or not a given group size is locked
+  # Query method to check whether or not a given group size is restricted
   #
   # @param [Integer] the group size to check
-  # @return [Boolean] whether or not the group size is locked
-  def size_locked?(size)
-    locked_sizes.include? size
+  # @return [Boolean] whether or not the group size is restricted
+  def size_restricted?(size)
+    restricted_sizes.include? size
   end
 
   # Return the next groups to select suites by lottery number. Returns an empty

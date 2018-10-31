@@ -2,19 +2,19 @@
 
 require 'rails_helper'
 
-RSpec.describe DrawSizeLockToggler do
+RSpec.describe DrawSizeRestrictToggler do
   describe '#toggle' do
     let(:draw) { create(:draw_with_members) }
 
     context 'success' do
       it 'locks the size when unlocked' do
         expect { described_class.toggle(draw: draw, size: '1') }.to \
-          change { draw.size_locked?(1) }
+          change { draw.size_restricted?(1) }
       end
       it 'unlocks the size when locked' do
-        draw.update(locked_sizes: [1])
+        draw.update(restricted_sizes: [1])
         expect { described_class.toggle(draw: draw, size: '1') }.to \
-          change { draw.size_locked?(1) }
+          change { draw.size_restricted?(1) }
       end
       it 'sets :redirect_object to nil' do
         result = described_class.toggle(draw: draw, size: '1')
@@ -29,7 +29,7 @@ RSpec.describe DrawSizeLockToggler do
     context 'failure' do
       it 'ensures that an integer is passed' do
         expect { described_class.toggle(draw: draw, size: 'a') }.not_to \
-          change { draw.locked_sizes }
+          change { draw.restricted_sizes }
       end
       it 'sets :redirect_object to nil' do
         result = described_class.toggle(draw: draw, size: 'a')

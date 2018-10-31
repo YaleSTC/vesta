@@ -73,8 +73,8 @@ class OversubscriptionPruner
 
   def lock_sizes!
     # takes place within a transaction
-    sizes = disbanded.keys.reject { |s| draw_report.size_locked? s }
-    draw_report.locked_sizes.push(*sizes)
+    sizes = disbanded.keys.reject { |s| draw_report.size_restricted? s }
+    draw_report.restricted_sizes.push(*sizes)
     draw_report.save!
   end
 
