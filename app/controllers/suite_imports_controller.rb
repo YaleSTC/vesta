@@ -2,7 +2,7 @@
 
 # Controller for Importing Suites
 class SuiteImportsController < ApplicationController
-  def import
+  def create
     building = Building.find(suite_importer_params[:building_id])
     result = SuiteImportForm.import(building: building,
                                     file: suite_importer_params[:file].path)

@@ -40,7 +40,7 @@ Rails.application.routes.draw do
     end
   end
 
-  post 'suite_import/import', to: 'suite_imports#import', as: 'suite_import'
+  resource :suite_import, only: %i(create)
 
   resource :terms_of_service, only: %i(show) do
     patch 'accept'

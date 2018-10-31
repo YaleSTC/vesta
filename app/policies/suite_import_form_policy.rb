@@ -2,7 +2,7 @@
 
 # Class for SuiteImport permissions.
 class SuiteImportFormPolicy < ApplicationPolicy
-  def import?
+  def create?
     user.admin?
   end
 

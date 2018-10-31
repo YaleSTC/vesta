@@ -8,7 +8,7 @@
 <% end %>
 <hr />
 <p><%= link_to 'New Suite', new_building_suite_path(@building), class: 'button secondary' if policy(Suite).new? %></p>
-<% if policy(SuiteImportForm).import? %>
+<% if policy(SuiteImportForm).create? %>
   <h2>Import Suites</h2>
   <p>Add many suites at once by uploading a CSV file with the building information.
   The CSV must have the columns / structure "Number, Common, Single, Double, Medical"

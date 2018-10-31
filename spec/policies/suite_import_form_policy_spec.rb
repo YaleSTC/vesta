@@ -8,7 +8,7 @@ RSpec.describe SuiteImportFormPolicy do
   context 'student' do
     let(:user) { build_stubbed(:user, role: 'student') }
 
-    permissions :import? do
+    permissions :create? do
       it { is_expected.not_to permit(user, SuiteImportForm) }
     end
   end
@@ -16,7 +16,7 @@ RSpec.describe SuiteImportFormPolicy do
   context 'housing rep' do
     let(:user) { build_stubbed(:user, role: 'rep') }
 
-    permissions :import? do
+    permissions :create? do
       it { is_expected.not_to permit(user, SuiteImportForm) }
     end
   end
@@ -24,7 +24,7 @@ RSpec.describe SuiteImportFormPolicy do
   context 'admin' do
     let(:user) { build_stubbed(:user, role: 'admin') }
 
-    permissions :import? do
+    permissions :create? do
       it { is_expected.to permit(user, SuiteImportForm) }
     end
   end
