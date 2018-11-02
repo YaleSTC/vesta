@@ -25,7 +25,7 @@
   </li>
 </ul>
 <h2 class="h3">Rooms</h2>
-<%= render 'rooms/summary', rooms: @rooms %>
+<%= render partial: 'rooms/summary', locals: { rooms: @rooms } %>
 <p><%= link_to 'Add room', new_suite_room_path(@suite), class: 'button secondary' if policy(Room).new? %></p>
 <hr />
 <% if policy(@suite).merge? %>

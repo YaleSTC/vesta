@@ -1,0 +1,14 @@
+table.room-summary-table {
+
+  .room-edit-form {
+    @include grid-row;
+
+    vertical-align: center;
+
+    &.success { background-color: lighten($success-color, 72%); }
+    &.notice { background-color: lighten($success-color, 72%); }
+    &.failure { background-color: lighten($alert-color, 53%); }
+    &.error { background-color: lighten($alert-color, 53%); }
+
+  }
+}

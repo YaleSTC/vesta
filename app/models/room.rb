@@ -10,6 +10,9 @@
 # @attr [String] original_suite The number of the original suite that the room
 #   was in. Is an empty string unless the room belongs to a merged suite.
 class Room < ApplicationRecord
+  SIZE_STRS = { 'Common' => 0, 'Single' => 1, 'Double' => 2, 'Triple' => 3,
+                'Quad' => 4, 'Quint' => 5 }.freeze
+
   belongs_to :suite
   has_many :room_assignments, dependent: :destroy
   has_many :users, through: :room_assignments

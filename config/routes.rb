@@ -38,7 +38,12 @@ Rails.application.routes.draw do
           post 'split', to: 'suites#perform_split'
           post 'unmerge'
         end
-        resources :rooms, except: :index
+        resources :rooms, except: :index do
+          member do
+            patch 'suite', to: 'rooms#update'
+            post 'suite', to: 'rooms#update'
+          end
+        end
       end
     end
   end

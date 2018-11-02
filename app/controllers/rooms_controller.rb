@@ -21,10 +21,15 @@ class RoomsController < ApplicationController
   def edit; end
 
   def update
-    result = Updater.new(object: @room, params: room_params,
-                         name_method: :number).update
+    result = Updater.update(object: @room, params: room_params,
+                            name_method: :number)
     @room = result[:record]
-    handle_action(action: 'edit', **result)
+    respond_to do |format|
+      format.html { handle_action(action: 'edit', **result) }
+      format.js do
+        @color_class = result[:msg].keys.first.to_s
+      end
+    end
   end
 
   def destroy

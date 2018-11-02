@@ -1,0 +1,8 @@
+$('#room-edit-form').html('<%= escape_javascript(render partial: 'rooms/number_edit_form', locals: { room: @room }) %>');
+$('#room-edit-form').html('<%= escape_javascript(render partial: 'rooms/type_edit_form', locals: { room: @room }) %>');
+
+<% if @color_class %>
+$("#room-<%= @room.id %>").addClass('<%= @color_class %>', 750, 'swing', function() {
+    $("#room-<%= @room.id %>").removeClass('<%= @color_class %>', 750, 'swing');
+  });
+<% end %>

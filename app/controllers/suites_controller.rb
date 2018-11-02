@@ -24,7 +24,9 @@ class SuitesController < ApplicationController
     handle_action(action: 'new', **result)
   end
 
-  def edit; end
+  def edit
+    @rooms = @suite.rooms.order(:number)
+  end
 
   def update
     result = Updater.update(object: @suite, params: suite_params,

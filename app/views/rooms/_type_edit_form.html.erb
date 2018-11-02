@@ -1,0 +1,3 @@
+<%= simple_form_for room, remote: true do |f| %>
+  <%= f.input :beds, as: :select, input_html: { class: 'autosubmitme' }, label: 'Room Type', collection: Room::SIZE_STRS, include_blank: false %>
+<% end %>

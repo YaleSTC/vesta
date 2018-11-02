@@ -14,6 +14,7 @@ class Suite < ApplicationRecord
   SIZE_STRS = { 1 => 'single', 2 => 'double', 3 => 'triple', 4 => 'quad',
                 5 => 'quint', 6 => 'sextet', 7 => 'septet',
                 8 => 'octet', 0 => 'empty' }.freeze
+
   belongs_to :building
   has_many :rooms, dependent: :nullify
   has_many :draw_suites, dependent: :delete_all
