@@ -7,7 +7,7 @@ RSpec.describe ClipUpdater do
   let(:group_ids) { clip.clip_memberships.map(&:group_id).map(&:to_s) }
 
   context 'action prevented' do
-    let(:msg) { 'Draw cannot be changed inside clip' }
+    let(:msg) { 'The draw of a clip cannot be changed' }
 
     it 'if it changes draw_id' do
       params = { draw_id: clip.draw_id + 1 }

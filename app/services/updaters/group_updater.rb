@@ -5,11 +5,7 @@ class GroupUpdater
   include ActiveModel::Model
   include Callable
 
-  validate :validate_suite_size_inclusion,
-           if: lambda {
-                 params[:size].present? && group.draw.present? \
-                 && group.size != params[:size].to_i
-               }
+  validate :suite_size_exists, if: :changing_suite_size
 
   # Instantiates a new DrawlessGroupUpdater
   #
@@ -118,8 +114,13 @@ class GroupUpdater
     }
   end
 
-  def validate_suite_size_inclusion
+  def changing_suite_size
+    params[:size].present? && group.size != params[:size].to_i
+  end
+
+  def suite_size_exists
+    return unless group.draw.present?
     return if group.draw.open_suite_sizes.include? params[:size].to_i
-    errors.add :size, 'must be a suite size included in the draw'
+    errors.add :size, 'must be an available suite size in the draw'
   end
 end

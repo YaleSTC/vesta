@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe GroupCreator do
   context 'size validations' do
+    # note: params_hash is a hash containing a size and leader_id
     let(:draw) { instance_double(Draw) }
 
     it 'fails when it size is not available in the draw' do

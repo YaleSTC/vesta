@@ -7,7 +7,7 @@ class ClipMembershipUpdater < Updater
   validate :freeze_clip_id, if: -> { params.key?(:clip_id) }
   validate :freeze_group, if: -> { params.key?(:group) }
   validate :freeze_group_id, if: -> { params.key?(:group_id) }
-  validate :freeze_status, if: -> { params.key?(:confirmed) }
+  validate :draw_is_in_group_formation, if: -> { params.key?(:confirmed) }
 
   # Initialize a ClipMembershipUpdater
   #
@@ -21,7 +21,6 @@ class ClipMembershipUpdater < Updater
     return error(self) unless valid?
     ActiveRecord::Base.transaction do
       object.update!(**params)
-      destroy_pending
     end
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -30,8 +29,8 @@ class ClipMembershipUpdater < Updater
 
   private
 
-  def freeze_status
-    return if object.clip.draw.status == 'group_formation'
+  def draw_is_in_group_formation
+    return if object.clip.draw.group_formation?
     errors.add(:draw, 'must be in group formation phase.')
   end
 
@@ -53,10 +52,6 @@ class ClipMembershipUpdater < Updater
   def freeze_group_id
     return if params[:group_id] == object.group_id
     errors.add(:group, 'cannot be changed in clip membership.')
-  end
-
-  def destroy_pending
-    object.group.clip_memberships.where.not(id: object.id).destroy_all
   end
 
   # This success message assumes that the only update to a clip membership

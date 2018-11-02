@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ### that will contain all users and colleges post v2.0. After that you can upgrade as normal.
 
 ### Changed
+* Refactor model validations and callbacks ([#202](https://gitlab.com/yale-sdmp/vesta/issues/202)), ([#828](https://gitlab.com/yale-sdmp/vesta/issues/828)), ([#829](https://gitlab.com/yale-sdmp/vesta/issues/829)), ([#830](https://gitlab.com/yale-sdmp/vesta/issues/830)), ([#831](https://gitlab.com/yale-sdmp/vesta/issues/831)), ([#832](https://gitlab.com/yale-sdmp/vesta/issues/832)), ([#833](https://gitlab.com/yale-sdmp/vesta/issues/833)), ([#834](https://gitlab.com/yale-sdmp/vesta/issues/834)), ([#835](https://gitlab.com/yale-sdmp/vesta/issues/835)).
 * Make SuiteImport more restful with create controller action ([#423](https://gitlab.com/yale-sdmp/vesta/issues/423)).
 * Make DrawStudentAssignmentForm use a robust query attribute that dynamically chooses username or NetID ([#772](https://gitlab.com/yale-sdmp/vesta/issues/772)).
 * Add room generation functionality to SuiteGenerator ([#119](https://gitlab.com/yale-sdmp/vesta/issues/119)).

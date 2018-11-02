@@ -6,7 +6,6 @@ RSpec.describe NewClipForm do
   # This will create a clip of length 2 by default or a clip of length 3
   # if the value '1' is passed into the `add_self` variable
   let(:draw) { create(:draw, allow_clipping: true) }
-  let(:clipless_draw) { create(:draw, allow_clipping: false) }
   let(:groups) { create_pair(:group_from_draw, draw: draw) }
   let(:group_ids) { groups.map(&:id).map(&:to_s) }
   let(:group) { create(:group_from_draw, draw: draw) }
@@ -99,6 +98,8 @@ RSpec.describe NewClipForm do
     end
 
     context 'when draw clipping disallowed' do
+      let(:clipless_draw) { create(:draw, allow_clipping: false) }
+
       it 'sets the redirect object to nil' do
         param_hash = { draw_id: clipless_draw.id.to_s, group_ids: group_ids }
         p = instance_spy('ActionController::Parameters', to_h: param_hash)
@@ -122,11 +123,15 @@ RSpec.describe NewClipForm do
 
     context 'group is already in a clip' do
       it 'sets the redirect object to nil' do
+        param_hash = { draw_id: draw.id.to_s, group_ids: group_ids }
+        p = instance_spy('ActionController::Parameters', to_h: param_hash)
         groups.first.clip = clip
         r = described_class.new(admin: user.admin?, params: p).submit
         expect(r[:redirect_object]).to be_nil
       end
       it 'returns the form object' do
+        param_hash = { draw_id: draw.id.to_s, group_ids: group_ids }
+        p = instance_spy('ActionController::Parameters', to_h: param_hash)
         groups.first.clip = clip
         r = described_class.new(admin: user.admin?, params: p).submit
         expect(r[:form_object]).to be_instance_of(described_class)

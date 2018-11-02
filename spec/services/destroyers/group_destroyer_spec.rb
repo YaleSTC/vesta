@@ -9,9 +9,10 @@ RSpec.describe GroupDestroyer do
     expect(destroyer.destroy[:redirect_object]).to be_nil
   end
   it 'fails if destroy fails' do
-    group = instance_spy('Group', destroy: false, members: [])
-    destroyer = described_class.new(group: group)
-    expect(destroyer.destroy[:redirect_object]).to eq(group)
+    g = instance_spy('Group', members: [])
+    allow(g).to receive(:destroy!).and_raise(ActiveRecord::RecordNotDestroyed)
+    destroyer = described_class.new(group: g)
+    expect(destroyer.destroy[:redirect_object]).to eq(g)
   end
   context 'on disbanding' do
     let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
@@ -58,6 +59,14 @@ RSpec.describe GroupDestroyer do
       allow(group.leader).to receive(:restore_draw)
       described_class.new(group: group).destroy
       expect(group.leader).not_to have_received(:restore_draw)
+    end
+
+    it 'raises an error if cannot restore the draw' do
+      group = create(:drawless_group)
+      allow(group.leader).to receive(:restore_draw)
+        .and_raise(ActiveRecord::RecordInvalid)
+      result = described_class.new(group: group).destroy
+      expect(result[:redirect_object]).to eq(group)
     end
   end
 

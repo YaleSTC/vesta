@@ -47,7 +47,6 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   validates :transfers, presence: true,
                         numericality: { greater_than_or_equal_to: 0,
                                         only_integer: true }
-
   validate :validate_members_count, if: ->(g) { g.size.present? }
   validate :validate_status, if: ->(g) { g.size.present? }
   validate :validate_lottery_assignment,

@@ -81,11 +81,11 @@ class ClipUpdater < Updater
 
   def freeze_draw_id
     return if params[:draw_id] == object.draw.id
-    errors.add(:draw, 'cannot be changed inside clip')
+    errors.add(:base, 'The draw of a clip cannot be changed.')
   end
 
   def freeze_draw
     return if params[:draw] == object.draw
-    errors.add(:draw, 'cannot be changed inside clip')
+    errors.add(:base, 'The draw of a clip cannot be changed.')
   end
 end

@@ -35,8 +35,17 @@ RSpec.describe Group, type: :model do
   describe 'size validations' do
     it 'must not have more members than the size' do
       group = create(:full_group, size: 2)
-      allow(group.draw).to receive(:suite_sizes).and_return([1, 2])
       group.size = 1
+      expect(group.valid?).to be_falsey
+    end
+    it 'must be positive' do
+      group = create(:full_group, size: 2)
+      group.size = 0
+      expect(group.valid?).to be_falsey
+    end
+    it 'must be numeric' do
+      group = create(:full_group, size: 2)
+      group.size = 'a'
       expect(group.valid?).to be_falsey
     end
     it 'also validates during creation' do

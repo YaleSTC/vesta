@@ -4,8 +4,10 @@ require 'rails_helper'
 
 RSpec.describe DrawlessGroupCreator do
   context 'size validations' do
+    # note: params_hash is a hash containing a size and leader_id
     it 'fails if it is not an existing suite size' do
-      params = instance_spy('ActionController::Parameters', to_h: params_hash)
+      params = instance_spy('ActionController::Parameters',
+                            to_h: params_hash.merge(size: 1))
       allow(SuiteSizesQuery).to receive(:call).and_return([50])
       expect(described_class.create(params: params)[:msg]).to have_key(:error)
     end

@@ -11,7 +11,7 @@ RSpec.describe GroupUpdater do
       expect(described_class.update(group: group, params: p)[:msg]).to \
         have_key(:error)
     end
-    it 'only runs on changing size' do
+    it 'succeeds when it is an existing suite size' do
       group = create(:open_group, size: 2)
       allow(group.draw).to receive(:open_suite_sizes).and_return([4])
       p = instance_spy('ActionController::Parameters', to_h: { size: 4 })

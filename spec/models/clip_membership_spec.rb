@@ -10,6 +10,16 @@ RSpec.describe ClipMembership, type: :model do
     it { is_expected.to validate_presence_of(:clip) }
   end
 
+  describe 'after acceptance' do
+    it 'destroys all pending clip_memberships for the group' do
+      membership = create(:clip_membership, confirmed: false)
+      unconfirmed = create(:clip_membership, group: membership.group,
+                                             confirmed: false)
+      membership.update!(confirmed: true)
+      expect { unconfirmed.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe 'clip membership cleanup' do
     let(:clip) { create(:clip) }
     let(:group) { create(:group) }

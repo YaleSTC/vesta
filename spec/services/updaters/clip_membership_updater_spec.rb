@@ -3,16 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ClipMembershipUpdater do
-  let(:draw) { instance_spy('Draw', status: 'group_formation') }
+  let(:draw) { instance_spy('Draw', group_formation?: true) }
   let(:clip) { instance_spy('Clip', draw: draw, name: 'Test') }
-  let(:clip_memberships) do
-    instance_spy('ClipMembership::ActiveRecord_relation')
-  end
-  let(:group) do
-    instance_spy('Group', name: 'Name', draw: draw,
-                          clip_memberships: clip_memberships)
-  end
-  let(:params) { instance_spy('ActionController::Parameters', to_h: {}) }
+  let(:group) { instance_spy('Group', name: 'Name', draw: draw) }
   let(:membership) do
     instance_spy('ClipMembership', clip: clip, confirmed: false, group: group)
   end
@@ -75,7 +68,7 @@ RSpec.describe ClipMembershipUpdater do
     let(:msg) { 'Draw must be in group formation phase.' }
 
     it 'cannot change confirmation if not group-formation' do
-      allow(draw).to receive(:status).and_return('draft')
+      allow(draw).to receive(:group_formation?).and_return(false)
       new_params = { confirmed: true }
       result = described_class.update(clip_membership: membership,
                                       params: new_params)
@@ -83,7 +76,7 @@ RSpec.describe ClipMembershipUpdater do
     end
 
     it 'can change confirmation if group-formation' do
-      allow(draw).to receive(:status).and_return('group_formation')
+      allow(draw).to receive(:group_formation?).and_return(true)
       new_params = { confirmed: true }
       result = described_class.update(clip_membership: membership,
                                       params: new_params)
@@ -92,34 +85,22 @@ RSpec.describe ClipMembershipUpdater do
   end
 
   context 'updating clip membership and returning correct values' do
+    let(:params) { { confirmed: true } }
+
     it 'successfully updates a clip membership' do
-      membership = instance_spy('ClipMembership', clip: clip, confirmed: false,
-                                                  group: group)
       described_class.update(clip_membership: membership, params: params)
       expect(membership).to have_received(:update!)
     end
 
     it 'returns an array with the draw and the clip from the membership' do
-      membership = instance_spy('ClipMembership', clip: clip, confirmed: false,
-                                                  group: group, update!: true)
       updater = described_class.new(clip_membership: membership, params: params)
       expect(updater.update[:redirect_object]).to eq([group.draw, group])
     end
 
     it 'returns the correct success message' do
-      membership = instance_spy('ClipMembership', clip: clip, confirmed: false,
-                                                  group: group, update!: true)
       updater = described_class.new(clip_membership: membership, params: params)
       expect(updater.update[:msg][:success]).to \
         eq("#{group.name} joined #{clip.name}.")
-    end
-
-    it 'deletes all other unconfirmed clip_memberships' do
-      membership = instance_spy('ClipMembership', clip: clip, confirmed: false,
-                                                  group: group, update!: true)
-      updater = described_class.new(clip_membership: membership, params: params)
-      updater.update
-      expect(clip_memberships).to have_received(:destroy_all)
     end
   end
 end
