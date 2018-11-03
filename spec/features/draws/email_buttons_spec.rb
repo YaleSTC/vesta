@@ -10,7 +10,7 @@ RSpec.feature 'Draw email buttons' do
 
   context 'before intent deadline' do
     let(:draw) do
-      create(:draw_with_members, status: 'group_formation',
+      create(:draw_with_members, status: 'intent_selection',
                                  intent_deadline: Time.zone.tomorrow)
     end
 

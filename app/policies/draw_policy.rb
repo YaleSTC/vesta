@@ -31,17 +31,20 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def reminder?
-    record.group_formation? && user_has_uber_permission?
+    record.group_formation? || record.intent_selection? \
+      && user_has_uber_permission?
   end
 
   def intent_reminder?
     return false unless record.intent_deadline.present?
-    reminder? && Time.zone.today <= record.intent_deadline
+    record.intent_selection? && user_has_uber_permission? && \
+      Time.zone.today <= record.intent_deadline
   end
 
   def locking_reminder?
     return false unless record.locking_deadline.present?
-    reminder? && Time.zone.today <= record.locking_deadline
+    record.group_formation? && user_has_uber_permission? && \
+      Time.zone.today <= record.locking_deadline
   end
 
   def bulk_on_campus?

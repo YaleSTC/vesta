@@ -187,10 +187,18 @@ RSpec.describe DrawPolicy do
         before { allow(draw).to receive(:group_formation?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
+      context 'draw is not in intent_selection phase' do
+        before { allow(draw).to receive(:intent_selection?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw is in intent_selection phase' do
+        before { allow(draw).to receive(:intent_selection?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
     end
 
     permissions :intent_reminder? do
-      before { allow(draw).to receive(:group_formation?).and_return(true) }
+      before { allow(draw).to receive(:intent_selection?).and_return(true) }
       context 'no intent deadline' do
         before { allow(draw).to receive(:intent_deadline).and_return(nil) }
         it { is_expected.not_to permit(user, draw) }
@@ -424,10 +432,18 @@ RSpec.describe DrawPolicy do
         before { allow(draw).to receive(:group_formation?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
+      context 'draw is not in intent_selection phase' do
+        before { allow(draw).to receive(:intent_selection?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw is in intent_selection phase' do
+        before { allow(draw).to receive(:intent_selection?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
     end
 
     permissions :intent_reminder? do
-      before { allow(draw).to receive(:group_formation?).and_return(true) }
+      before { allow(draw).to receive(:intent_selection?).and_return(true) }
       context 'no intent deadline' do
         before { allow(draw).to receive(:intent_deadline).and_return(nil) }
         it { is_expected.not_to permit(user, draw) }

@@ -7,6 +7,7 @@ class ReminderQueuer
   include Callable
 
   validate :correct_reminder_type
+  validate :draw_not_locked
 
   # Initialize a new ReminderQueuer
   #
@@ -45,6 +46,17 @@ class ReminderQueuer
   def correct_reminder_type
     return if REMINDER_JOBS.include?(type)
     errors.add(:base, "Invalid reminder type: #{type}")
+  end
+
+  def draw_not_locked
+    return unless draw.intent_locked? && draw.intent_selection?
+    intent_locked_msg = 'Intent for this draw has already been locked. ' \
+                       'Students are unable to change their intent status ' \
+                       'even if reminded.' \
+                       "\n" \
+                       'To send reminders, you must first ' \
+                       'unlock the intent for this draw.'
+    errors.add(:base, intent_locked_msg)
   end
 
   def success
