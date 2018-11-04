@@ -17,7 +17,7 @@ RSpec.feature 'User enrollment' do
     end
 
     it 'succeeds' do
-      visit new_enrollment_path
+      visit_new_enrollment_path
       list_of_ids = [User.first.email, User.second.email].join(',')
       fill_out_form(list_of_ids)
       click_on 'Submit'
@@ -32,7 +32,7 @@ RSpec.feature 'User enrollment' do
   end
 
   it 'can be performed using a list of IDs' do
-    visit new_enrollment_path
+    visit_new_enrollment_path
     submit_list_of_ids
     expect(page_has_enrollment_results(page)).to be_truthy
   end
@@ -41,7 +41,7 @@ RSpec.feature 'User enrollment' do
   it 'handles IDR timeout' do
     allow_any_instance_of(FakeProfileQuerier).to receive(:query)
       .and_raise(Rack::Timeout::RequestTimeoutException.new({}))
-    visit new_enrollment_path
+    visit_new_enrollment_path
     expect { submit_list_of_ids }.not_to raise_error
   end
   # rubocop:enable RSpec/AnyInstance
@@ -56,5 +56,11 @@ RSpec.feature 'User enrollment' do
     page.assert_selector(:css, '.flash-error', text: /.+invalidid.+/) &&
       page.assert_selector(:css, '.flash-success', text: /.+id1.+id2.+id3.+/) &&
       page.assert_selector(:css, 'td')
+  end
+
+  def visit_new_enrollment_path
+    visit root_path
+    click_on 'Users'
+    click_on 'Import Users'
   end
 end

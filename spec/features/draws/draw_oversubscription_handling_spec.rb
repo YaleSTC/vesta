@@ -3,12 +3,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw oversubscription handling' do
-  let(:draw) do
+  let!(:draw) do
     create(:draw_with_members, students_count: 2, status: 'group_formation')
   end
-  let!(:group) do
-    create(:locked_group, leader: draw.students.first, size: 1)
-  end
+  let!(:group) { create(:locked_group, leader: draw.students.first, size: 1) }
 
   before do
     create(:locked_group, leader: draw.students.last, size: 1)
@@ -58,5 +56,10 @@ RSpec.feature 'Draw oversubscription handling' do
     within("tr#group-#{group.id}") do
       click_on 'Disband'
     end
+  end
+
+  def navigate_to_view
+    visit root_path
+    first(:link, draw.name).click
   end
 end

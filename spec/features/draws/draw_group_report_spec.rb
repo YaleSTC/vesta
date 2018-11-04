@@ -5,8 +5,18 @@ require 'rails_helper'
 RSpec.feature 'Draw group report' do
   include GroupsHelper # for status-displaying
 
-  let(:draw) { create(:draw, status: 'group_formation') }
+  let!(:draw) { create(:draw, status: 'group_formation') }
   let!(:groups) { create_groups(draw: draw, statuses: %w(full open locked)) }
+
+  context 'navigation' do
+    before { log_in create(:admin) }
+    it 'navigates to view from dashboard' do
+      visit root_path
+      first(:link, draw.name).click
+      click_on 'View printable group report'
+      expect(page).to have_content('All Groups')
+    end
+  end
 
   context 'as admin' do
     before { log_in create(:admin) }

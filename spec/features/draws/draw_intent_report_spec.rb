@@ -6,13 +6,14 @@ RSpec.feature 'Draw intent report' do
   shared_examples 'draw intent report' do
     let(:f) { "vesta_intents_export_#{Time.zone.today.to_s(:number)}.csv" }
     let(:h_str) { 'email,student_id,last_name,first_name,intent' }
+    let!(:draw) { create(:draw, status: 'intent_selection') }
 
     context 'as an admin' do
       before { log_in(create(:admin)) }
 
       it 'displays a table with intent data' do
+        navigate_to_view
         student = create_student_data(draw: draw, intents: %w(on_campus))
-        visit draw_path(draw)
         click_link('View intent report')
         expect(page_has_intent_report(page, student)).to be_truthy
       end
@@ -46,6 +47,11 @@ RSpec.feature 'Draw intent report' do
         # of the three users will be updated from the csv
         expect(page).to have_css('.flash-success',
                                  text: 'Successfully updated 2 intents.')
+      end
+
+      def navigate_to_view
+        visit root_path
+        first(:link, draw.name).click
       end
     end
 

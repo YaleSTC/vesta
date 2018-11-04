@@ -3,6 +3,20 @@
 require 'rails_helper'
 
 RSpec.feature 'Housing Group Creation' do
+  context 'navigating' do
+    let!(:draw) do
+      create(:draw_with_members, students_count: 3,
+                                 status: 'group_formation')
+    end
+
+    it 'navigates to view from dashboard' do
+      log_in create(:admin)
+      first(:link, draw.name).click
+      click_on 'Add group to draw'
+      expect(page).to have_content('Add Group')
+    end
+  end
+
   context 'as student' do
     let!(:leader) { create(:student_in_draw, draw: create(:draw_with_members)) }
 

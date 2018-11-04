@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'College creation' do
   before { log_in create(:user, role: 'superuser') }
+
   it 'succeeds' do
     visit root_path
     click_on 'New College'

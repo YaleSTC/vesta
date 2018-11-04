@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Clip creation', type: :feature do
-  let(:draw) { create(:draw, status: 'group_formation') }
-  let(:groups) { create_pair(:group_from_draw, draw: draw) }
+  let!(:draw) { create(:draw, status: 'group_formation') }
+  let!(:groups) { create_pair(:group_from_draw, draw: draw) }
 
   context 'as a leader' do
     before { log_in groups.first.leader }
@@ -71,5 +71,11 @@ RSpec.describe 'Clip creation', type: :feature do
   def create_clip_with_groups(groups:)
     groups.each { |g| check "new_clip_form_group_ids_#{g.id}" }
     click_on 'Create'
+  end
+
+  def allow_clipping
+    click_on 'Settings'
+    select('true', from: 'Allow clipping?')
+    click_on 'Save'
   end
 end

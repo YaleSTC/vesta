@@ -3,6 +3,23 @@
 require 'rails_helper'
 
 RSpec.feature 'Group locking' do
+  context 'admin' do
+    let(:group) { create(:group) }
+
+    before do
+      group.draw.update(status: 'group_formation')
+      group.draw.update(name: 'new_draw')
+      log_in create(:admin)
+    end
+    it 'navigates to view from dashboard' do
+      first(:link, group.draw.name).click
+      first("a[href='#{draw_path(group.draw.id)}#{group_path(group.id)}']")
+        .click
+      click_on 'Begin Locking Process for Group'
+      expect(page).to have_content("#{group.name} is being finalized.")
+    end
+  end
+
   context 'suite size still available, full group' do
     it 'can be initiated by a leader' do
       group = full_group(size: 2)

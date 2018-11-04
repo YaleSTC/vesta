@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.feature 'Draw editing' do
   before { log_in create(:admin) }
-  let(:draw) { create(:draw) }
+  let!(:draw) { create(:draw) }
 
   it 'succeeds' do
     new_name = 'Froco Draw'
-    visit draw_path(draw)
+    navigate_to_view
     click_on 'Edit draw'
     update_draw_name(new_name)
     expect(page).to have_css('.draw-name', text: new_name)
@@ -23,5 +23,10 @@ RSpec.feature 'Draw editing' do
   def update_draw_name(new_name)
     fill_in 'draw_name', with: new_name
     click_on 'Save'
+  end
+
+  def navigate_to_view
+    visit root_path
+    first(:link, draw.name).click
   end
 end

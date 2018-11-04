@@ -12,7 +12,7 @@ RSpec.feature 'Group editing' do
   it 'succeeds' do
     new_suite = create(:suite_with_rooms, rooms_count: 5,
                                           draws: [group.draw])
-    visit edit_draw_group_path(group.draw, group)
+    navigate_to_view(group.draw)
     update_group_size(new_suite.size)
     expect(page).to have_css('.group-size', text: new_suite.size)
   end
@@ -43,5 +43,12 @@ RSpec.feature 'Group editing' do
   def select_new_leader(new_leader)
     select new_leader.full_name, from: 'group_leader'
     click_on 'Save'
+  end
+
+  def navigate_to_view(draw)
+    visit root_path
+    first(:link, draw.name).click
+    first("a[href='#{draw_path(draw.id)}#{group_path(group.id)}']").click
+    click_on 'Edit'
   end
 end

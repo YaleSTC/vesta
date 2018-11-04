@@ -38,7 +38,8 @@ RSpec.feature 'User Editing' do
   end
 
   def visit_edit_form(user)
-    visit user_path(user)
-    click_on 'Edit'
+    visit root_path
+    click_on 'Users'
+    find("a[href='#{edit_user_path(user.id)}']").click
   end
 end

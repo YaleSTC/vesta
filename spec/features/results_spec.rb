@@ -68,7 +68,8 @@ RSpec.feature 'Results' do
   # rubocop:enable RSpec/ExampleLength
 
   it 'can be viewed for specific draws' do
-    visit draw_path(Draw.first) # this sucks
+    visit root_path
+    first(:link, Draw.first.name).click
     click_on 'View results'
     expect(page_has_room_results(page)).to be_truthy
   end

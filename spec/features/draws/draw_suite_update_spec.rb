@@ -11,6 +11,13 @@ RSpec.feature 'Draw suite update' do
 
   before { log_in create(:admin) }
 
+  it 'navigates to view from dashboard' do
+    visit root_path
+    first(:link, draw.name).click
+    click_on 'Add or edit suites'
+    expect(page).to have_content('Edit Suites')
+  end
+
   it 'can be performed' do
     visit_update_suite_page
     update_suites

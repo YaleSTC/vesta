@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 * Add foreign key contraints to schema and dependency handling for all associations ([#406](https://gitlab.com/yale-sdmp/vesta/issues/406)).
 * Add blank template suite import file ([#706](https://gitlab.com/yale-sdmp/vesta/issues/706)).
 * Add 'About Us' page ([#591](https://gitlab.com/yale-sdmp/vesta/issues/591)).
+* Update feature specs to use navigation ([#399] (https://gitlab.com/yale-sdmp/vesta/issues/399)).
 
 ### Changed
 * Create method for lock_and_email ([#945](https://gitlab.com/yale-sdmp/vesta/issues/945)).

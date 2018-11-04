@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'Bulk intent assignment' do
-  let(:draw) { create(:draw_with_members, status: 'group_formation') }
+  let!(:draw) do
+    create(:draw_with_members, status: 'group_formation')
+  end
 
   before do
     log_in create(:admin)
@@ -12,7 +14,7 @@ RSpec.feature 'Bulk intent assignment' do
 
   it 'can be performed' do
     message = 'All undeclared students set to live on-campus'
-    visit draw_path(draw)
+    navigate_to_view
     click_on 'Make all students on campus'
     expect(page).to have_css('.flash-success', text: message)
   end
@@ -21,5 +23,10 @@ RSpec.feature 'Bulk intent assignment' do
     visit draw_path(draw)
     click_on 'Make all students on campus'
     expect(page).to have_css('h1', text: /Intent Report/)
+  end
+
+  def navigate_to_view
+    visit root_path
+    first(:link, draw.name).click
   end
 end

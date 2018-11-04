@@ -9,6 +9,10 @@ RSpec.feature 'Email export' do
   before { log_in create(:admin) }
 
   context 'with default options' do
+    it 'navigates to view from dashboard' do
+      visit root_path
+      expect(page).to have_content('Export all student data')
+    end
     it 'returns all the group leader e-mails in a given draw' do
       select_draw(draw)
       click_on 'Get e-mails'

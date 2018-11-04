@@ -7,7 +7,7 @@ require 'rack-timeout'
 RSpec.feature 'Admin creation' do
   before { log_in create(:admin) }
   it 'can be performed by other admins' do
-    visit build_users_path
+    navigate_to_view
     submit_username('foo@example.com')
     submit_profile_data(first_name: 'John', last_name: 'Smith', role: 'admin')
     expect(page).to have_content('User John Smith created.')
@@ -46,5 +46,11 @@ RSpec.feature 'Admin creation' do
     fill_in 'user_last_name', with: last_name
     select role, from: 'user_role'
     click_on 'Create'
+  end
+
+  def navigate_to_view
+    visit root_path
+    click_on 'Users'
+    click_on 'Add User Manually'
   end
 end

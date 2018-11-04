@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw activation' do
-  let(:draw) do
+  let!(:draw) do
     create(:draw_with_members, status: 'draft',
                                intent_deadline: Time.zone.tomorrow)
   end
@@ -15,7 +15,7 @@ RSpec.feature 'Draw activation' do
     end
 
     it 'can be initiated' do
-      visit draw_path(draw)
+      navigate_to_view
       click_link('Begin intent selection phase')
       expect(page).to have_css('.flash-notice',
                                text: 'Draw successfully initiated.')
@@ -36,5 +36,10 @@ RSpec.feature 'Draw activation' do
       visit draw_path(draw)
       expect(page).not_to have_link('Begin intent selection phase')
     end
+  end
+
+  def navigate_to_view
+    visit root_path
+    first(:link, draw.name).click
   end
 end

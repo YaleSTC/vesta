@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw suite selection' do
-  let(:clip) { create(:locked_clip) }
-  let(:draw) { clip.draw }
+  let(:draw) { create(:draw) }
+  let(:clip) { create(:locked_clip, draw: draw) }
   let(:group) { create(:locked_group, :defined_by_draw, draw: draw) }
-  let!(:clip_suites) do
+  let(:clip_suites) do
     clip.groups.map { |g| create(:suite_with_rooms, rooms_count: g.size) }
   end
-  let!(:other_suite) { create(:suite_with_rooms, rooms_count: group.size) }
+  let(:other_suite) { create(:suite_with_rooms, rooms_count: group.size) }
   let(:f) { "vesta_groups_export_#{Time.zone.today.to_s(:number)}.csv" }
   let(:h_str) { 'name,lottery_number,suite_number' }
 
@@ -19,6 +19,13 @@ RSpec.feature 'Draw suite selection' do
     create(:lottery_assignment, :defined_by_clip, clip: clip, number: 1)
     create(:lottery_assignment, :defined_by_group, group: group, number: 2)
     draw.suite_selection!
+  end
+
+  it 'navigates to view from dashboard' do
+    log_in create(:admin)
+    first(:link, draw.name).click
+    click_on 'Select suites'
+    expect(page).to have_content('Suite Selection')
   end
 
   context 'as admin' do

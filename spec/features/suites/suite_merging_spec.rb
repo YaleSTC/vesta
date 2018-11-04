@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Suite merging' do
-  let(:suite) { create(:suite_with_rooms) }
+  let!(:building) { create(:building) }
+  let!(:suite) { create(:suite_with_rooms, rooms_count: 2, building: building) }
   let!(:other_suite) do
-    create(:suite_with_rooms, building: suite.building)
+    create(:suite_with_rooms, rooms_count: 2, building: building)
   end
 
   before { log_in create(:admin) }
@@ -25,7 +26,8 @@ RSpec.feature 'Suite merging' do
   end
 
   def initiate_suite_merger
-    visit suite_path(suite)
+    visit building_path(building)
+    click_on suite.number.to_s
     fill_in 'suite_merger_form_other_suite_number', with: other_suite.number
     click_on 'Merge'
   end

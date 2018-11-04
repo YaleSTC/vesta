@@ -16,7 +16,8 @@ RSpec.feature 'Draw Creation' do
   end
 
   def create_draw(name:)
-    visit 'draws/new'
+    visit root_path
+    click_on 'Create New Draw'
     fill_in 'draw_name', with: name
     click_on 'Create'
   end

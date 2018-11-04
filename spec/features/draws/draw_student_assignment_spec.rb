@@ -3,9 +3,17 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw student assignment' do
-  let(:draw) { create(:draw) }
+  let!(:draw) { create(:draw) }
 
   before { log_in create(:admin) }
+
+  it 'navigates to view from dashboard' do
+    visit root_path
+    first(:link, draw.name).click
+    click_on 'Add or edit students'
+    expect(page).to have_content('Student actions')
+  end
+
   describe 'bulk adding' do
     before { create_pair(:student, class_year: 2016) }
     it 'can be performed' do

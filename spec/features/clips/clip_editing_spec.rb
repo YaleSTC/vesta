@@ -3,10 +3,19 @@
 require 'rails_helper'
 
 RSpec.feature 'Clip editing' do
-  let(:clip) { create(:clip, groups_count: 3) }
+  let!(:draw) { create(:draw, status: 'group_formation') }
+  let!(:clip) { create(:clip, groups_count: 3, draw: draw) }
   let(:group_ids) { clip.group_ids }
 
   before { log_in create(:admin) }
+
+  it 'navigates to view from dashboard' do
+    msg = "Edit #{clip.leader.full_name}'s Clip"
+    first(:link, draw.name).click
+    first("a[href='#{clip_path(clip.id)}']").click
+    click_on 'Edit'
+    expect(page).to have_text(msg)
+  end
 
   it 'succeeds in adding a group' do
     new_group = create(:group_from_draw, draw: clip.draw)

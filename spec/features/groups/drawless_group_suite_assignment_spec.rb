@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Drawless group suite assignment' do
-  let(:group) { create(:drawless_group) }
+  let!(:group) { create(:drawless_group) }
   let(:suite) { Suite.where(size: group.size).first }
 
   before do
@@ -12,7 +12,7 @@ RSpec.feature 'Drawless group suite assignment' do
   end
 
   it 'can be performed' do
-    visit group_path(group)
+    navigate_to_view
     click_on 'Assign suite'
     select suite.number, from: "suite_assignment_form_suite_id_for_#{group.id}"
     click_button 'Assign suites'
@@ -24,5 +24,11 @@ RSpec.feature 'Drawless group suite assignment' do
     visit group_path(group)
     click_on 'Remove suite'
     expect(page).to have_content("Suite removed from #{group.name}")
+  end
+
+  def navigate_to_view
+    visit root_path
+    click_on 'All Special Groups'
+    first("a[href='#{group_path(group.id)}']").click
   end
 end

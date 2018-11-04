@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw suite summary' do
-  let(:draw) do
+  let!(:draw) do
     create(:draw_with_members, suites_count: 1, status: 'group_formation')
   end
   let(:draw_suite) { draw.suites.first }
@@ -12,7 +12,7 @@ RSpec.feature 'Draw suite summary' do
   before { log_in create(:admin) }
 
   it 'displays correctly' do
-    visit draw_path(draw)
+    navigate_to_view
     expect(page_has_suite_summary?(page, draw_suite, other_suite)).to be_truthy
   end
 
@@ -29,5 +29,10 @@ RSpec.feature 'Draw suite summary' do
   def page_does_not_have_suite_content?(page, suite)
     page.assert_no_selector(:css, 'th[data-role="suite-name"]',
                             text: suite.number)
+  end
+
+  def navigate_to_view
+    visit root_path
+    first(:link, draw.name).click
   end
 end

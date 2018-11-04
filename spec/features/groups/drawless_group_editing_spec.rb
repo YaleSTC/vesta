@@ -5,6 +5,18 @@ require 'rails_helper'
 RSpec.feature 'Special group editing' do
   before { log_in create(:admin) }
 
+  context 'navigating' do
+    let!(:group) { create(:drawless_group) }
+
+    it 'navigates to view from dashboard' do
+      msg = "Edit #{group.leader.full_name}'s Group"
+      visit root_path
+      click_on 'All Special Groups'
+      find("a[href='#{edit_group_path(group.id)}']").click
+      expect(page).to have_content(msg)
+    end
+  end
+
   it 'succeeds when changing size' do
     group = create(:drawless_group)
     new_suite = create(:suite_with_rooms, rooms_count: 5)

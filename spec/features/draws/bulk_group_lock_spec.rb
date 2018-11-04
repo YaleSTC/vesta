@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.feature 'Bulk group locking' do
-  let(:draw) { create(:draw_with_groups, status: 'group_formation') }
+  let!(:draw) do
+    create(:draw_with_groups, status: 'group_formation')
+  end
   let(:oversubd) { create(:oversubscribed_draw) }
 
   before do
@@ -12,7 +14,7 @@ RSpec.feature 'Bulk group locking' do
 
   it 'can be performed' do
     message = 'All groups have been locked'
-    visit draw_path(draw)
+    navigate_to_view
     click_on 'Lock all full groups'
     expect(page).to have_css('.flash-success', text: message)
   end
@@ -22,5 +24,11 @@ RSpec.feature 'Bulk group locking' do
     visit draw_path(oversubd)
     click_on 'Lock all full groups'
     expect(page).to have_css('.flash-error', text: message)
+  end
+
+  def navigate_to_view
+    visit root_path
+    first(:link, draw.name).click
+    click_on 'Lock all full groups'
   end
 end

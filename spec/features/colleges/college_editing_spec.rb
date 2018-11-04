@@ -3,8 +3,16 @@
 require 'rails_helper'
 
 RSpec.feature 'College editing' do
-  before { log_in create(:admin) }
+  before { log_in create(:user, role: 'superuser') }
   let(:college) { create(:college) }
+
+  it 'navigates to view from dashboard' do
+    visit root_path
+    click_on 'Admin Dashboard'
+    click_on 'Colleges'
+    click_on 'Edit'
+    expect(page).to have_content('Edit College1')
+  end
 
   it 'succeeds' do
     new_name = 'TD'

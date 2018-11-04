@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Suite splitting' do
-  let(:suite) { create(:suite_with_rooms, rooms_count: 2) }
+  let!(:building) { create(:building) }
+  let!(:suite) { create(:suite_with_rooms, rooms_count: 2, building: building) }
 
   before { log_in create(:admin) }
 
@@ -14,7 +15,8 @@ RSpec.feature 'Suite splitting' do
   end
 
   def initiate_suite_split
-    visit suite_path(suite)
+    visit building_path(building)
+    click_on suite.number.to_s
     click_on 'Split suite'
   end
 

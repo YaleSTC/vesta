@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.feature 'Draw lottery assignment', js: true do
   let(:clip) { create(:locked_clip) }
   let(:draw) { clip.draw }
-  let!(:group) { create(:locked_group, :defined_by_draw, draw: draw) }
+  let(:group) { create(:locked_group, :defined_by_draw, draw: draw) }
 
   before { draw.lottery! }
 

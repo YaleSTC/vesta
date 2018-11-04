@@ -3,7 +3,17 @@
 require 'rails_helper'
 
 RSpec.feature 'Suite CSV Import' do
-  let(:building) { create(:building) }
+  let!(:building) { create(:building) }
+
+  context 'navigating' do
+    it 'navigates to view from dashboard' do
+      log_in create(:admin)
+      visit root_path
+      click_on 'Inventory'
+      first("a[href='#{building_path(building.id)}']").click
+      expect(page).to have_content('Upload a CSV')
+    end
+  end
 
   context 'admin' do
     before { log_in create(:admin) }

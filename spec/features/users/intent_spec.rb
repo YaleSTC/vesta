@@ -39,7 +39,7 @@ RSpec.feature 'Housing Intent' do
 
     def lock_intent(draw)
       log_in create(:admin)
-      visit draw_path(draw)
+      first(:link, draw.name).click
       click_on 'Lock Intents'
       click_on 'Log Out'
     end
