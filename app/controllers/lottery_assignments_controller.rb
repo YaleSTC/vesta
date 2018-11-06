@@ -6,7 +6,14 @@ class LotteryAssignmentsController < ApplicationController
   prepend_before_action :set_lottery_assignment, only: %i(update)
 
   def index
-    @lotteries = ObjectsForLotteryQuery.call(draw: @draw)
+    @sort = College.current.size_sort
+    if @sort == 'no_sort'
+      @lotteries = ObjectsForLotteryQuery.call(draw: @draw)
+    else
+      @lotteries = LotteriesBySizeQuery.call(draw: @draw)
+      @keys = @lotteries&.keys&.sort
+      @keys&.reverse! if @sort == 'descending'
+    end
   end
 
   def create

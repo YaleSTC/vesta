@@ -8,7 +8,7 @@ class ClipPolicy < ApplicationPolicy
 
   def create?
     (student_can_create_clip(user, user.group) || user_has_uber_permission?) &&
-      record.draw.group_formation? && record.draw.allow_clipping
+      record.draw.group_formation? && College.current.allow_clipping
   end
 
   def edit?

@@ -26,8 +26,7 @@ class DrawDashboard < Administrate::BaseDashboard
     last_email_sent: Field::DateTime,
     email_type: Field::String.with_options(searchable: false),
     locking_deadline: Field::DateTime,
-    suite_selection_mode: Field::String.with_options(searchable: false),
-    allow_clipping: Field::Boolean
+    suite_selection_mode: Field::String.with_options(searchable: false)
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -53,7 +52,6 @@ class DrawDashboard < Administrate::BaseDashboard
     locked_sizes
     intent_deadline
     intent_locked
-    allow_clipping
     last_email_sent
     email_type
     suite_selection_mode
@@ -80,7 +78,6 @@ class DrawDashboard < Administrate::BaseDashboard
     groups
     students
     suites
-    allow_clipping
   ).freeze
 
   # Overwrite this method to customize how draws are displayed

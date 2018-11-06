@@ -21,9 +21,6 @@
 #   enforced, just used for display purposes and sending emails.
 # @attr suite_selection_mode [String] The draw's mode for selecting suites. Can
 #   be either "admin_selection" or "student_selection"
-# @attr allow_clipping [Boolean] True if the draw allows for clipping,
-#  false otherwise.
-# @attr active [Boolean] True if the draw is active, false if it is archived.
 class Draw < ApplicationRecord # rubocop:disable ClassLength
   has_many :groups, dependent: :destroy
   has_many :draw_memberships, dependent: :destroy
@@ -43,7 +40,6 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
 
   before_update :update_draw_membership_statuses,
                 if: ->() { will_save_change_to_active? }
-  after_update :destroy_all_clips, if: ->() { saved_change_to_allow_clipping }
   before_destroy :remove_old_draw_ids
 
   enum status: %w(draft group_formation lottery
@@ -274,10 +270,6 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   def locking_deadline_is_not_in_the_past
     return unless locking_deadline.present? && locking_deadline.past?
     errors.add(:locking_deadline, 'can not be in the past')
-  end
-
-  def destroy_all_clips
-    clips.destroy_all
   end
 
   def update_draw_membership_statuses

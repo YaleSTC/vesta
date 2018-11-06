@@ -133,8 +133,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def draw_params
     params.require(:draw).permit(:name, :intent_deadline, :intent_locked,
                                  :email_type, :locking_deadline,
-                                 :restrict_clipping_group_size,
-                                 :allow_clipping, locked_sizes: [])
+                                 locked_sizes: [])
   end
 
   def prune_params

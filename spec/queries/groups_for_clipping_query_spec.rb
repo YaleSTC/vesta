@@ -37,6 +37,9 @@ RSpec.describe GroupsForClippingQuery do
   end
 
   context 'when clipping group size is restricted' do
+    before { College.current.update!(restrict_clipping_group_size: true) }
+    after { College.current.update!(restrict_clipping_group_size: true) }
+
     it 'returns groups of the same size' do
       draw, quad1, quad2, quad3 = setup
       result = described_class.call(draw: draw, group: quad3)
@@ -52,8 +55,7 @@ RSpec.describe GroupsForClippingQuery do
     end
 
     def setup
-      draw = create(:draw, restrict_clipping_group_size: true,
-                           status: 'group_formation')
+      draw = create(:draw, status: 'group_formation')
       quad1 = create(:locked_group, :defined_by_draw, draw: draw, size: 4)
       quad2 = create(:locked_group, :defined_by_draw, draw: draw, size: 4)
       quad3 = create(:locked_group, :defined_by_draw, draw: draw, size: 4)

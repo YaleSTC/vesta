@@ -37,7 +37,7 @@
   <% end %>
 <% end %>
 <hr style="border-color: #DDDDDD;" />
-<% if @draw.allow_clipping? %>
+<% if College.current.allow_clipping? %>
   <h2>Clipping</h2>
   <% if @group.clip.present? %>
     <h3 class="clip-information h4">Your Clip</h3>

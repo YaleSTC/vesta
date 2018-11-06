@@ -14,6 +14,7 @@ class RandomLottery
   # @param draw [Draw] the draw to assign lottery numbers in
   def initialize(draw:)
     @draw = draw
+    @sort = College.current.size_sort
   end
 
   # Assign random lottery numbers and start the suite selection phase
@@ -24,7 +25,9 @@ class RandomLottery
   def run # rubocop:disable Metrics/MethodLength
     return error(self) unless valid?
     ActiveRecord::Base.transaction do
-      lottery!
+      clear_and_set_lottery_assignments
+      sort_lottery_assignments
+      assign_lottery_values
       DrawSelectionStarter.start!(draw: draw)
     end
     success
@@ -40,20 +43,38 @@ class RandomLottery
 
   private
 
-  attr_reader :draw
+  attr_reader :draw, :sort, :lottery_assignments
 
   def draw_in_lottery
     return if draw.lottery?
     errors.add(:base, 'draw must be in lottery')
   end
 
-  def lottery!
+  def clear_and_set_lottery_assignments
     draw.lottery_assignments.each(&:destroy!)
-    lottery_assignments = ObjectsForLotteryQuery.call(draw: draw)
-    order = (1..lottery_assignments.count).to_a.shuffle(random: SecureRandom)
+    if sort == 'no_sort'
+      @lottery_assignments = ObjectsForLotteryQuery.call(draw: draw)
+    else
+      @lottery_assignments = LotteriesBySizeQuery.call(draw: draw)
+    end
+  end
+
+  def sort_lottery_assignments
+    if sort == 'no_sort'
+      @lottery_assignments.shuffle!(random: SecureRandom)
+    else
+      @lottery_assignments.transform_values! do |las|
+        las.shuffle(random: SecureRandom)
+      end
+      keys = @lottery_assignments.keys.sort
+      keys.reverse! if sort == 'descending'
+      @lottery_assignments = lottery_assignments.values_at(*keys).flatten!
+    end
+  end
+
+  def assign_lottery_values
     lottery_assignments.each_with_index do |l, i|
-      l.number = order[i]
-      l.save!
+      l.update!(number: i + 1)
     end
   end
 

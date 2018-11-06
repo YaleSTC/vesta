@@ -83,7 +83,7 @@
         </div>
       </li>
     <% end %>
-    <% if @draw.allow_clipping? && @draw.group_formation? %>
+    <% if College.current.allow_clipping? && @draw.group_formation? %>
       <li class="accordion-item" data-accordion-item>
         <a href="#" class="accordion-title"><h2 class="h4">Clips</h2></a>
         <div class="accordion-content clip-report" data-tab-content>

@@ -64,15 +64,15 @@ RSpec.describe ClipPolicy do
                 allow(draw).to receive(:group_formation?).and_return(true)
               end
 
-              context 'but the draw does not allow for clipping' do
+              context 'but the college does not allow for clipping' do
                 before do
-                  allow(draw).to receive(:allow_clipping).and_return(false)
+                  College.current.update!(allow_clipping: false)
                 end
                 it { is_expected.not_to permit(user, clip) }
               end
-              context 'and the draw allows for clipping' do
+              context 'and the college allows for clipping' do
                 before do
-                  allow(draw).to receive(:allow_clipping).and_return(true)
+                  College.current.update!(allow_clipping: true)
                 end
                 it { is_expected.to permit(user, clip) }
               end
@@ -123,15 +123,15 @@ RSpec.describe ClipPolicy do
           allow(draw).to receive(:group_formation?).and_return(true)
         end
 
-        context 'but the draw does not allow for clipping' do
+        context 'but the college does not allow for clipping' do
           before do
-            allow(draw).to receive(:allow_clipping).and_return(false)
+            College.current.update!(allow_clipping: false)
           end
           it { is_expected.not_to permit(user, clip) }
         end
-        context 'and the draw allows for clipping' do
+        context 'and the college allows for clipping' do
           before do
-            allow(draw).to receive(:allow_clipping).and_return(true)
+            College.current.update!(allow_clipping: true)
           end
           it { is_expected.to permit(user, clip) }
         end

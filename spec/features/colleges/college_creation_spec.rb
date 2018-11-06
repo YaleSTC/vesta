@@ -7,13 +7,15 @@ RSpec.feature 'College creation' do
   it 'succeeds' do
     visit root_path
     click_on 'New College'
-    submit_college_info(FactoryBot.attributes_for(:college,
-                                                  subdomain: 'newcollege'))
-    expect(page).to have_css('.flash-success', text: /College.+created/)
+    submit_college_info
+    expect(page).to have_css('.flash-success', text: /college.+created/)
   end
 
-  def submit_college_info(attrs)
-    attrs.each { |k, v| fill_in "college_#{k}", with: v }
+  def submit_college_info
+    fill_in 'college_name', with: 'newcollege'
+    fill_in 'college_admin_email', with: 'bar'
+    fill_in 'college_subdomain', with: 'newcollege'
+    fill_in 'college_dean', with: 'Dean'
     click_on 'Create'
   end
 end

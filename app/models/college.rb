@@ -11,6 +11,15 @@
 # @attr floor_plan_url [String] the url to access floor plans
 # @attr student_info_text [Text] a paragraph of text viewable on the student
 #   dashboard
+# @attr allow_clipping [Boolean] True if the college allows for clipping,
+#  false otherwise.
+# @attr restrict_clipping_group_size [Boolean] True if groups can only clip with
+#   groups of the same size, false otherwise
+# @attr size_sort [Integer] whether to order groups ascending by size,
+#   descending by size, or randomly when assigning lottery numbers
+# @attr advantage_clips [Boolean] true if clips are given the priority of the
+#   highest priority group in the clip or false if clips are given the priority
+#   of the lowest priority group
 class College < ApplicationRecord
   validates :name, presence: true
   validates :admin_email, presence: true
@@ -23,6 +32,8 @@ class College < ApplicationRecord
   after_destroy :drop_schema!
 
   self.table_name = 'shared.colleges'
+
+  enum size_sort: %w(no_sort ascending descending)
 
   # Returns the current Apartment tenant. Raises an ActiveRecord::RecordNotFound
   # exception if the tenant does not exist (shouldn't be possible unless we're

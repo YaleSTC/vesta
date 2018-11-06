@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181209171928) do
+ActiveRecord::Schema.define(version: 20190206152011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,10 @@ ActiveRecord::Schema.define(version: 20181209171928) do
     t.string "floor_plan_url"
     t.text "student_info_text"
     t.string "subdomain", null: false
+    t.integer "size_sort", default: 0, null: false
+    t.boolean "advantage_clips", default: false, null: false
+    t.boolean "restrict_clipping_group_size", default: false, null: false
+    t.boolean "allow_clipping", default: false, null: false
     t.index ["name"], name: "index_colleges_on_name"
     t.index ["subdomain"], name: "index_colleges_on_subdomain", unique: true
   end
@@ -99,8 +103,6 @@ ActiveRecord::Schema.define(version: 20181209171928) do
     t.integer "email_type"
     t.date "locking_deadline"
     t.integer "suite_selection_mode", default: 0, null: false
-    t.boolean "allow_clipping", default: false, null: false
-    t.boolean "restrict_clipping_group_size", default: false, null: false
     t.boolean "active", default: true, null: false
   end
 

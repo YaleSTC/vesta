@@ -1,20 +1,14 @@
 <% provide(:title, "#{@draw.name} - Assign Lottery Numbers") %>
 <h1><%= @draw.name %> - Assign Lottery Numbers</h1>
 <p>Please enter a lottery number for each group below. The number will save after you click out of the field (and the background of the relevant row should turn blue). When you're finished please return to the draw page to proceed to suite selection.</p>
-<table aria-label="Lottery Forms" class="lottery-forms-table">
-  <% @lotteries.each do |lottery| %>
-    <tr class="lottery-form">
-      <th scope="col" class="lottery-owner"><%= link_to lottery.name, lottery_owner_url(lottery) %></th>
-      <td id=<%= lottery_form_id(lottery) %>>
-        <% if lottery.persisted? %>
-          <%= render partial: 'edit_form', locals: { lottery: lottery } %>
-        <% else %>
-          <%= render partial: 'new_form', locals: { lottery: lottery } %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+<% if College.current.size_sort == 'no_sort' %>
+    <%= render partial: 'table', locals: { lotteries: @lotteries, label: "Lottery Forms All" } %>
+<% else %>
+    <% @keys.each do |key| %>
+      <h2><%= headerize_size(key) %></h2>
+      <%= render partial: 'table', locals: { lotteries: @lotteries[key], label: "Lottery Forms #{headerize_size(key)}" } %>
+    <% end %>
+<% end %>
 <% if policy(@draw).start_selection? %>
   <%= link_to 'Start suite selection', start_selection_draw_path(@draw), method: :patch, data: { confirm: 'Are you sure that you have finished assigning lottery numbers? They cannot be changed after you proceed!' }, class: 'button' %>
 <% end %>

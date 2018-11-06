@@ -7,5 +7,13 @@
   <%= f.input :dean, hint: 'Used in e-mail signatures' %>
   <%= f.input :floor_plan_url, label: 'Floor plan URL', hint: 'The web address used to view the floor plans' %>
   <%= f.input :student_info_text, label: 'Student welcome text', hint: 'This text is displayed to all students; you should outline your policies and any other information they may need to participate in the housing draw.' %>
+  <%= f.input :allow_clipping, as: :select, collection: [true, false], include_blank: false, label: 'Allow clipping?' %>
+  <%= f.input :restrict_clipping_group_size, as: :select, collection: [true, false], include_blank: false, label: 'Allow students to only clip groups of the same size together?' %>
+  <%= f.input :size_sort, collection: College.size_sorts.keys, include_blank: false, label: 'Lottery assignment sorting',
+    label_method: ->(s) { s.humanize },
+    hint: 'Should groups be grouped by size for lottery assignment? If so, in what order?' %>
+  <%= f.input :advantage_clips, as: :select, collection: [true, false], include_blank: false,
+    label: 'Give advantage to clips?',
+    hint: 'Should clips be pulled up in the lottery phase to get a number as the earliest assigned group size in the clip? Or should they get a number as if they were the latest? Note: this only applies if lottery assignments are sorted ascending or descending.' %>
   <%= f.submit %>
 <% end %>

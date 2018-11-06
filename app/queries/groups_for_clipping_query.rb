@@ -25,7 +25,7 @@ class GroupsForClippingQuery
                      .where.not(id: group&.id)
                      .where(draw: draw, clip_memberships: { id: nil })
     query = query.where(size: group&.size) \
-      if draw.restrict_clipping_group_size && group
+      if College.current.restrict_clipping_group_size && group
     query.order('users.last_name')
   end
 end

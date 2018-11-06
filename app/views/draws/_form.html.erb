@@ -10,7 +10,5 @@
       label_method: ->(s) { "#{size_str(s)}s".capitalize }, include_hidden: false,
       hint: 'Checking these prevents students from creating new groups of that size' %>
   <% end %>
-  <%= f.input :allow_clipping, as: :boolean, label: 'Allow clipping?' %>
-  <%= f.input :restrict_clipping_group_size, as: :boolean, label: 'Allow students to only clip groups of the same size together?' %>
   <%= f.submit %>
 <% end %>

@@ -4,9 +4,7 @@ require 'rails_helper'
 
 RSpec.describe NewClipForm do
   # This will create a clip of length 2 by default
-  let(:draw) do
-    create(:draw, allow_clipping: true, restrict_clipping_group_size: false)
-  end
+  let(:draw) { create(:draw) }
   let(:groups) { create_pair(:group_from_draw, draw: draw) }
   let(:group_ids) { groups.map(&:id).map(&:to_s) }
   let(:group) { create(:group_from_draw, draw: draw) }
@@ -92,7 +90,10 @@ RSpec.describe NewClipForm do
     end
 
     context 'when draw clipping disallowed' do
-      let(:clipless_draw) { create(:draw, allow_clipping: false) }
+      before { College.current.update!(allow_clipping: false) }
+      after { College.current.update!(allow_clipping: true) }
+
+      let(:clipless_draw) { create(:draw) }
 
       it 'sets the redirect object to nil' do
         param_hash = { draw_id: clipless_draw.id.to_s, group_ids: group_ids }
@@ -151,6 +152,9 @@ RSpec.describe NewClipForm do
   end
 
   shared_examples 'clipping restricted' do
+    before { College.current.update!(restrict_clipping_group_size: true) }
+    after { College.current.update!(restrict_clipping_group_size: true) }
+
     it 'sets the redirect object to nil' do
       params = restricted_draw_setup
       r = described_class.new(role: user.role, params: params).submit
@@ -164,8 +168,7 @@ RSpec.describe NewClipForm do
     end
 
     def restricted_draw_setup
-      restricted_draw = create(:draw, status: 'group_formation',
-                                      restrict_clipping_group_size: true)
+      restricted_draw = create(:draw, status: 'group_formation')
       quad = create(:locked_group, :defined_by_draw,
                     draw: restricted_draw, size: '4')
       trip = create(:locked_group, :defined_by_draw,

@@ -52,7 +52,10 @@ class CollegesController < ApplicationController
 
   def college_params
     params.require(:college).permit(:name, :admin_email, :dean, :floor_plan_url,
-                                    :student_info_text, :subdomain)
+                                    :student_info_text, :subdomain,
+                                    :restrict_clipping_group_size,
+                                    :allow_clipping, :size_sort,
+                                    :advantage_clips)
   end
 
   def set_college

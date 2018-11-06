@@ -90,7 +90,7 @@ class NewClipForm
   end
 
   def draw_allows_clipping
-    return if Draw.find(@draw_id).allow_clipping
+    return if College.current.allow_clipping
     errors.add(:base, 'This draw currently does not allow for clipping.')
   rescue ActiveRecord::RecordNotFound
     errors.add(:base, 'Please provide a valid draw_id.')
@@ -115,7 +115,7 @@ class NewClipForm
   end
 
   def clip_group_sizes
-    return if Draw.find_by(id: draw_id)&.restrict_clipping_group_size.blank?
+    return unless College.current.restrict_clipping_group_size?
     groups = Group.where(id: group_ids)
     return unless groups.length != groups.where(size: groups.first&.size).length
     msg = 'Groups may only clip together if they are the same size. '\

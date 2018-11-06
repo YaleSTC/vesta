@@ -1,0 +1,14 @@
+<table aria-label="<%= label %>" class="lottery-forms-table">
+  <% lotteries.each do |lottery| %>
+    <tr class="lottery-form">
+      <th scope="col" class="lottery-owner"><%= link_to lottery.name, lottery_owner_url(lottery) %></th>
+      <td id=<%= lottery_form_id(lottery) %>>
+        <% if lottery.persisted? %>
+          <%= render partial: 'edit_form', locals: { lottery: lottery } %>
+        <% else %>
+          <%= render partial: 'new_form', locals: { lottery: lottery } %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

@@ -19,7 +19,11 @@ class CollegeDashboard < Administrate::BaseDashboard
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     floor_plan_url: Field::String,
-    student_info_text: Field::Text
+    student_info_text: Field::Text,
+    allow_clipping: Field::Boolean,
+    restrict_clipping_group_size: Field::Boolean,
+    advantage_clips: Field::Boolean,
+    size_sort: Field::String.with_options(searchable: false)
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -46,6 +50,10 @@ class CollegeDashboard < Administrate::BaseDashboard
     updated_at
     floor_plan_url
     student_info_text
+    allow_clipping
+    restrict_clipping_group_size
+    advantage_clips
+    size_sort
   ).freeze
 
   # FORM_ATTRIBUTES
@@ -58,6 +66,10 @@ class CollegeDashboard < Administrate::BaseDashboard
     admin_email
     floor_plan_url
     student_info_text
+    allow_clipping
+    restrict_clipping_group_size
+    advantage_clips
+    size_sort
   ).freeze
 
   # Overwrite this method to customize how colleges are displayed
