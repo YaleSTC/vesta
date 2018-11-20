@@ -64,13 +64,15 @@ class User < ApplicationRecord
                          if: ->() { role == 'student' || role == 'rep' }
   validates :college_id, presence: true, unless: :superadmin?
 
-  enum role: %w(student admin rep superuser superadmin)
+  enum role: %w(student admin rep superuser superadmin graduated)
   enum intent: %w(undeclared on_campus off_campus)
 
   before_update :freeze_tos_acceptance,
                 if: ->() { will_save_change_to_tos_accepted? }
 
   before_save :downcase_username, if: :cas_auth?
+
+  scope :active, -> { where.not(role: 'graduated') }
 
   self.table_name = 'shared.users'
 

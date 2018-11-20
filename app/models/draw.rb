@@ -250,7 +250,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
 
   # rubocop:disable Rails/SkipsModelValidations
   def remove_old_draw_ids
-    User.where(old_draw_id: id).update_all(old_draw_id: nil)
+    User.active.where(old_draw_id: id).update_all(old_draw_id: nil)
   end
   # rubocop:enable Rails/SkipsModelValidations
 

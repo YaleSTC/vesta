@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
   before_action :authenticate_user!, unless: :unauthenticated?
+  before_action :authorize_active, unless: :unauthenticated?
   before_action :authorize!, unless: :unauthenticated?
   before_action :set_current_college
   before_action :authorize_current_college, unless: :unauthenticated?
@@ -97,6 +98,15 @@ class ApplicationController < ActionController::Base
     else
       redirect_to colleges_url(host: ENV.fetch('APPLICATION_HOST'))
     end
+  end
+
+  def authorize_active
+    return unless current_user.role == 'graduated'
+    sign_out
+    msg = 'Your account has been marked as inactive. '\
+          'If you believe this is an error, please contact an Administrator.'
+    flash[:error] = msg
+    redirect_to home_path
   end
 
   def verify_tos_accepted

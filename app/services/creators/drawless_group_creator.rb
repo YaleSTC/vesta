@@ -58,7 +58,7 @@ class DrawlessGroupCreator
 
   # Note that this occurs within the transaction
   def ensure_valid_members
-    User.where(id: all_member_ids).each do |user|
+    User.active.where(id: all_member_ids).each do |user|
       user.remove_draw.update!(intent: 'on_campus')
     end
   end

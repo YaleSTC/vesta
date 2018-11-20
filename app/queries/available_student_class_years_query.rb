@@ -13,7 +13,7 @@ class AvailableStudentClassYearsQuery
   #
   # @param relation [User::ActiveRecord_Relation] the base relation for the
   #   query
-  def initialize(relation = User.all)
+  def initialize(relation = User.active)
     @relation = relation
   end
 

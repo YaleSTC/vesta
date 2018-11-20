@@ -11,7 +11,7 @@ class MembershipBatchCreator
   # @param group [Group] The group to create memberships in
   # @param action [String] The action creating the membership ('invite', etc.)
   def initialize(user_ids:, group:, action:)
-    @users = User.find(user_ids.reject(&:empty?))
+    @users = User.active.find(user_ids.reject(&:empty?))
     @group = group
     @action = action
   end

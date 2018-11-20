@@ -49,7 +49,7 @@ class GroupUpdater
   def users(key)
     return nil unless params.key? key
     return nil if key == :remove_ids && params[key] == group.leader_id.to_s
-    User.find(params[key].reject(&:empty?))
+    User.active.find(params[key].reject(&:empty?))
   end
 
   def delete_user_id_keys_from_params

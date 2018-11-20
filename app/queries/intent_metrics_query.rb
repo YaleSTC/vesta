@@ -17,7 +17,7 @@ class IntentMetricsQuery
   #
   # @param relation [User::ActiveRecord_Relation] the base relation for the
   #   metrics query
-  def initialize(relation = User.all)
+  def initialize(relation = User.active)
     @relation = relation
   end
 
