@@ -11,6 +11,26 @@ RSpec.feature 'User enrollment' do
     allow(ENV).to receive(:[]).with('QUERIER').and_return('FakeProfileQuerier')
   end
 
+  context 'when updating existing users' do
+    before do
+      create_pair(:user)
+    end
+
+    it 'succeeds' do
+      visit new_enrollment_path
+      list_of_ids = [User.first.email, User.second.email].join(',')
+      fill_out_form(list_of_ids)
+      click_on 'Submit'
+      expect(page).to have_content('Successfully created/updated 2 users:')
+    end
+
+    def fill_out_form(list_of_ids)
+      fill_in 'enrollment_ids', with: list_of_ids
+      select 'Graduated', from: 'enrollment_role'
+      check 'enrollment_overwrite'
+    end
+  end
+
   it 'can be performed using a list of IDs' do
     visit new_enrollment_path
     submit_list_of_ids
@@ -35,6 +55,6 @@ RSpec.feature 'User enrollment' do
   def page_has_enrollment_results(page)
     page.assert_selector(:css, '.flash-error', text: /.+invalidid.+/) &&
       page.assert_selector(:css, '.flash-success', text: /.+id1.+id2.+id3.+/) &&
-      page.assert_selector(:css, 'td', text: 'id1')
+      page.assert_selector(:css, 'td')
   end
 end

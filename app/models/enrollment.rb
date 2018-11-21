@@ -7,10 +7,10 @@ class Enrollment
   include Callable
 
   attr_reader :successes
-  attr_accessor :ids, :ids_array, :role
+  attr_accessor :ids, :ids_array, :role, :overwrite
 
   validates :ids, presence: true
-  validates :role, inclusion: { in: %w(student rep) }
+  validates :role, inclusion: { in: %w(student rep graduated) }
 
   # Initialize an Enrollment
   #
@@ -19,7 +19,7 @@ class Enrollment
   #   or 'rep'
   # @param querier [#query] the profile querier service object, see UserBuilder
   #   for more details
-  def initialize(ids: '', role: 'student', querier: nil)
+  def initialize(ids: '', role: 'student', querier: nil, overwrite: false)
     @ids = ids
     @ids_array = process_ids_str(ids)
     @role = role
@@ -28,6 +28,10 @@ class Enrollment
     @failures = []
     @failed_query_ids = []
     @existing_ids = []
+    # Since trues and falses come from our forms as '1's and '0's
+    #   we need this to convert this to a boolean. In this case this more or
+    #   less does overwrite == '1'.
+    @overwrite = ActiveRecord::Type::Boolean.new.deserialize(overwrite)
   end
 
   # Batch-enroll a group of users identified by the `ids` string. Separately
@@ -73,11 +77,16 @@ class Enrollment
   end
 
   def process_id(id)
-    ub = UserBuilder.new(id_attr: id, role: role, querier: querier)
+    ub = initialize_user_builder(id)
     user = ub.build[:user]
-    return existing_ids << id if ub.exists?
+    return existing_ids << id if ub.exists? && !overwrite
     return failed_query_ids << id if user.first_name.nil?
     save_user(user, id)
+  end
+
+  def initialize_user_builder(id)
+    UserBuilder
+      .new(id_attr: id, role: role, querier: querier, overwrite: overwrite)
   end
 
   def save_user(user, id)
@@ -100,7 +109,7 @@ class Enrollment
 
   def success_msg
     return nil if successes.empty?
-    "Successfully created #{success_count} "\
+    "Successfully created#{overwrite ? '/updated' : nil} #{success_count} "\
       "#{'user'.pluralize(success_count)}: "\
       "(#{successes.map { |s| s[:id] }.join(', ')})"
   end

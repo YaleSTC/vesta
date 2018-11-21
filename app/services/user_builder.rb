@@ -15,15 +15,16 @@ class UserBuilder
   #   This must take the id_attr as an initializer parameter (assigned to :id),
   #   and implement a method :query that returns a hash of user attributes and
   #   values.
-  def initialize(id_attr:, role: 'student', querier: nil)
+  def initialize(id_attr:, role: 'student', querier: nil, overwrite: false)
     @id_attr = id_attr
     @role = role
     @querier = querier&.new(id: id_attr)
-    @user = User.new
+    @overwrite = overwrite
     @id_symbol = User.login_attr
+    @user = initialize_user
   end
 
-  # Build a user record based on the given input, ensuring that it is unique
+  # Build a user record based on the given input
   #
   # @return [Hash{symbol=>User,Hash,Nil}] a results hash with a message to set
   #   in the flash, nil as the :redirect_object value, the user record as the
@@ -31,10 +32,9 @@ class UserBuilder
   #   to nil so that handle_action properly renders the template set in :action.
   def build
     return invalid_error if id_attr.empty?
-    return duplicate_error if exists?
+    return duplicate_error unless overwrite || !exists?
     return invalid_role_error unless role.in?(User.roles.keys)
-    assign_login_college_and_role
-    assign_profile_attrs
+    set_attributes
     success
   end
 
@@ -53,7 +53,13 @@ class UserBuilder
   private
 
   attr_accessor :user
-  attr_reader :id_attr, :id_symbol, :querier, :role
+  attr_reader :id_attr, :id_symbol, :querier, :role, :overwrite
+
+  def initialize_user
+    user = User.find_by(id_symbol => id_attr) if @overwrite
+    return user if user.present?
+    empty_user
+  end
 
   def result_hash
     { redirect_object: nil, user: user }
@@ -79,14 +85,27 @@ class UserBuilder
                       msg: { error: 'Invalid role provided' })
   end
 
+  def empty_user
+    return User.new if User.cas_auth?
+    assign_initial_password
+  end
+
+  def set_attributes
+    assign_login_college_and_role
+    assign_profile_attrs
+  end
+
+  def assign_initial_password
+    user = User.new
+    password = User.random_password
+    user.password = password
+    user.password_confirmation = password
+    user
+  end
+
   def assign_login_college_and_role
     assign_method = "#{id_symbol}=".to_sym
     user.send(assign_method, id_attr)
-    unless User.cas_auth?
-      password = User.random_password
-      user.password = password
-      user.password_confirmation = password
-    end
     user.role = role
     user.college = College.current
   end

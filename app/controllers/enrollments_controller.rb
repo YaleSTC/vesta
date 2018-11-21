@@ -4,12 +4,13 @@
 class EnrollmentsController < ApplicationController
   def new
     @enrollment = Enrollment.new
-    @roles = %w(student rep)
+    @roles = %w(student rep graduated)
   end
 
   def create
     result = Enrollment.enroll(enrollment_params)
     @enrollment = result[:enrollment]
+    @roles = %w(student rep graduated)
     handle_action(**result)
   rescue Rack::Timeout::RequestTimeoutException => exception
     Honeybadger.notify(exception)
@@ -23,8 +24,9 @@ class EnrollmentsController < ApplicationController
   end
 
   def enrollment_params
-    params.require(:enrollment).permit(:ids, :role).to_h
-          .transform_keys(&:to_sym).merge(querier: querier)
+    params.require(:enrollment).permit(:ids, :role, :overwrite).to_h
+          .transform_keys(&:to_sym)
+          .merge(querier: querier)
   end
 
   def querier

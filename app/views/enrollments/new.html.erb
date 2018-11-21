@@ -5,6 +5,7 @@
 <%= simple_form_for @enrollment do |f| %>
   <%= f.input :ids, as: :text, label: User.login_attr.to_s.pluralize.capitalize %>
   <%= f.input :role, collection: @roles, selected: 'student', label_method: :humanize %>
+  <%= f.input :overwrite, as: :boolean, checked_value: true, unchecked_value: false, label: 'Update existing user roles', hint: 'Checking this box will overwrite roles for any users who already exist'%>
   <%= f.submit 'Submit' %>
 <% end %>
 <%= link_to 'Cancel', users_path %>

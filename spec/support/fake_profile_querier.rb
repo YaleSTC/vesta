@@ -9,7 +9,7 @@ class FakeProfileQuerier < ProfileQuerier
       id_value = id
     else
       id_attr = :email
-      id_value = "#{id}@example.com"
+      id_value = FFaker::Internet.email
     end
     fg_attrs.merge(id_attr => id_value)
   end
