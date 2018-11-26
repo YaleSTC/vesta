@@ -6,11 +6,11 @@
       <dt>Suite</dt>
       <dd><%= @group.suite.name %></dd>
     </dl>
-    <% if policy(SuiteAssignment.new(groups: [@group])).destroy? %>
+    <% if policy(@group.suite_assignment).destroy? %>
       <%= link_to 'Remove suite', group_suite_assignment_path(@group), method: :delete, class: 'button alert' %>
     <% end %>
   <% else %>
-    <% if policy(SuiteAssignment.new(groups: [@group])).new? %>
+    <% if policy(SuiteAssignment.new(group: @group)).new? %>
       <%= link_to 'Assign suite', new_group_suite_assignment_path(@group), class: 'button' %>
     <% end %>
   <% end %>

@@ -16,7 +16,8 @@ RSpec.describe Group, type: :model do
     it { is_expected.to belong_to(:draw) }
     it { is_expected.to have_one(:clip_membership) }
     it { is_expected.to have_one(:clip).through(:clip_membership) }
-    it { is_expected.to have_one(:suite) }
+    it { is_expected.to have_one(:suite_assignment) }
+    it { is_expected.to have_one(:suite).through(:suite_assignment) }
     it { is_expected.to belong_to(:lottery_assignment) }
     it { is_expected.to have_many(:memberships) }
     it { is_expected.to have_many(:clip_memberships) }
@@ -160,7 +161,7 @@ RSpec.describe Group, type: :model do
 
   it 'clears suite assignments on destruction' do
     group = create(:locked_group)
-    suite = create(:suite, group_id: group.id)
+    suite = create(:suite, group: group)
     expect { group.destroy }.to change { suite.reload.group }.to(nil)
   end
 

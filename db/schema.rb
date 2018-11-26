@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181023150745) do
+ActiveRecord::Schema.define(version: 20181126192801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,16 +147,23 @@ ActiveRecord::Schema.define(version: 20181023150745) do
     t.index ["suite_id"], name: "index_rooms_on_suite_id"
   end
 
+  create_table "suite_assignments", force: :cascade do |t|
+    t.bigint "suite_id", null: false
+    t.bigint "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_suite_assignments_on_group_id", unique: true
+    t.index ["suite_id"], name: "index_suite_assignments_on_suite_id"
+  end
+
   create_table "suites", force: :cascade do |t|
     t.integer "building_id"
     t.string "number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "size", default: 0, null: false
-    t.integer "group_id"
     t.boolean "medical", default: false
     t.index ["building_id"], name: "index_suites_on_building_id"
-    t.index ["group_id"], name: "index_suites_on_group_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -197,6 +204,8 @@ ActiveRecord::Schema.define(version: 20181023150745) do
   add_foreign_key "memberships", "shared.users", column: "user_id"
   add_foreign_key "room_assignments", "rooms"
   add_foreign_key "room_assignments", "shared.users", column: "user_id"
+  add_foreign_key "suite_assignments", "groups"
+  add_foreign_key "suite_assignments", "suites"
   add_foreign_key "users", "colleges"
 
   create_view "lottery_base_views",  sql_definition: <<-SQL

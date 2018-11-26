@@ -11,6 +11,7 @@ class SuiteSelector
   validate :suite_exists
   validate :group_locked
   validate :suite_not_already_assigned
+  validate :suites_in_correct_draw
 
   # Initialize a new SuiteSelector
   #
@@ -31,7 +32,7 @@ class SuiteSelector
   #   and an action to render.
   def select
     return error(self) unless valid?
-    suite.update!(group: group)
+    SuiteAssignment.create!(group: group, suite: suite)
     assign_single! if suite.size == 1
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -64,8 +65,16 @@ class SuiteSelector
 
   def suite_not_already_assigned
     return unless suite
-    return unless suite.group_id.present?
+    return unless suite.group.present?
     errors.add(:suite, 'is assigned to a different group')
+  end
+
+  def suites_in_correct_draw
+    return unless suite
+    return unless group.draw.present?
+    return if group.draw.suites.available.include? suite
+    errors.add(:base, 'All groups in draws must be assigned to suites in '\
+      'the same draw')
   end
 
   def assign_single!

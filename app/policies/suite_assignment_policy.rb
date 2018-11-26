@@ -2,21 +2,24 @@
 
 # Policy for SuiteAssignments
 class SuiteAssignmentPolicy < ApplicationPolicy
-  def new?
-    return can_bulk_assign? unless single_assignment?
+  def create?
     return can_drawless_assign? unless draw.present?
     return false unless draw.suite_selection?
     return student_can_select_suite? if draw.student_selection?
     # implicit admin single selection
-    user_has_uber_permission?
+    user_has_uber_permission? && draw.suite_selection?
   end
 
-  def create?
-    new?
+  def new?
+    create?
   end
 
   def destroy?
     user_has_uber_permission?
+  end
+
+  def bulk_assign?
+    user_has_uber_permission? && draw.admin_selection? && draw.suite_selection?
   end
 
   class Scope < Scope # rubocop:disable Style/Documentation
@@ -28,15 +31,7 @@ class SuiteAssignmentPolicy < ApplicationPolicy
   private
 
   def draw
-    @draw ||= record.draw || record.groups.first.draw
-  end
-
-  def single_assignment?
-    record.groups.size == 1
-  end
-
-  def can_bulk_assign?
-    user_has_uber_permission? && draw.admin_selection? && draw.suite_selection?
+    record&.group&.draw
   end
 
   def can_drawless_assign?
@@ -44,8 +39,6 @@ class SuiteAssignmentPolicy < ApplicationPolicy
   end
 
   def student_can_select_suite?
-    return false unless draw == user.draw
-    group = record.groups.first
-    user.leader_of?(group) && draw.next_group?(group)
+    user.leader_of?(record.group) && draw.next_group?(record.group)
   end
 end

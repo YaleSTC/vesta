@@ -81,7 +81,7 @@
           data: { confirm: 'Are you sure that you have finished assigning lottery numbers? They cannot be changed after you proceed!' }, class: 'button' %>
       <% end %>
     <% elsif @draw.status == 'suite_selection' %>
-      <% if policy(SuiteAssignment.new(draw: @draw.__getobj__, groups: [])).new? %>
+      <% if policy(SuiteAssignment.new(group: Group.new(draw: @draw.__getobj__))).bulk_assign? %>
         <%= link_to 'Select suites', new_draw_suite_assignment_path(@draw), class: 'button' %>
       <% end %>
       <% if policy(@draw).group_export? %>

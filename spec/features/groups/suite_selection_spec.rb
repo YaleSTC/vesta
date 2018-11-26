@@ -18,7 +18,7 @@ RSpec.feature 'Suite Selection' do
 
     def select_suite(number, group_id)
       click_on 'Select Suite'
-      select number, from: "suite_assignment_suite_id_for_#{group_id}"
+      select number, from: "suite_assignment_form_suite_id_for_#{group_id}"
       click_on 'Assign suites'
     end
   end

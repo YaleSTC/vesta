@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 * Adding ability to limit clipping to groups of the same size in a given draw ([#844](https://gitlab.com/yale-sdmp/vesta/issues/844)).
 * Allow admins to send groups to the "back of the line" during suite selection
 ([#771](https://gitlab.com/yale-sdmp/vesta/issues/771))
+* Add SuiteAssignment join model to allow groups to have many-to-many relationship with suites ([#861](https://gitlab.com/yale-sdmp/vesta/issues/861)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600)).

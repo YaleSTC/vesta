@@ -7,7 +7,7 @@ RSpec.describe SuiteAssignmentPolicy do
   subject { described_class }
 
   context 'student' do
-    let(:draw) { instance_spy('draw', present?: true) }
+    let(:draw) { build_stubbed(:draw) }
     let(:user) do
       build_stubbed(:user, role: 'student').tap do |u|
         allow(u).to receive(:draw).and_return(draw)
@@ -15,23 +15,14 @@ RSpec.describe SuiteAssignmentPolicy do
     end
 
     permissions :new?, :create? do
-      context 'bulk assignment' do
-        let(:assignment) do
-          groups = instance_spy('array', size: 2)
-          SuiteAssignment.new(groups: groups, draw: draw)
-        end
-
-        it { is_expected.not_to permit(user, assignment) }
-      end
-
       context 'drawless group' do
         let(:group) do
-          instance_spy('group', draw: nil).tap do |g|
+          build_stubbed(:group).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         it { is_expected.not_to permit(user, assignment) }
@@ -39,12 +30,12 @@ RSpec.describe SuiteAssignmentPolicy do
 
       context 'draw not in suite selection' do
         let(:group) do
-          instance_spy('group', draw: draw).tap do |g|
+          build_stubbed(:group, draw: draw).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -55,12 +46,12 @@ RSpec.describe SuiteAssignmentPolicy do
 
       context 'admin selection' do
         let(:group) do
-          instance_spy('group', draw: draw).tap do |g|
+          build_stubbed(:group, draw: draw).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -72,12 +63,12 @@ RSpec.describe SuiteAssignmentPolicy do
 
       context 'student selection' do
         let(:group) do
-          instance_spy('group', draw: draw).tap do |g|
+          build_stubbed(:group, draw: draw).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -113,20 +104,58 @@ RSpec.describe SuiteAssignmentPolicy do
 
     permissions :destroy? do
       let(:g) do
-        instance_spy('group', draw: draw).tap do |group|
+        build_stubbed(:group, draw: draw).tap do |group|
           allow(group).to receive(:suite)
             .and_return(instance_spy('suite', present?: true))
           allow(user).to receive(:group).and_return(group)
         end
       end
 
-      it { is_expected.not_to permit(user, SuiteAssignment.new(groups: [g])) }
+      it { is_expected.not_to permit(user, SuiteAssignment.new(group: g)) }
+    end
+
+    permissions :bulk_assign? do
+      let(:group) { build_stubbed(:group, draw: draw) }
+
+      let(:assignment) do
+        SuiteAssignment.new(group: group)
+      end
+
+      context 'draw not in suite selection' do
+        before do
+          allow(draw).to receive(:suite_selection?).and_return(false)
+        end
+
+        it { is_expected.not_to permit(user, assignment) }
+      end
+
+      context 'draw in suite selection' do
+        before do
+          allow(draw).to receive(:suite_selection?).and_return(true)
+        end
+
+        context 'student selection' do
+          before do
+            allow(draw).to receive(:admin_selection?).and_return(false)
+          end
+
+          it { is_expected.not_to permit(user, assignment) }
+        end
+
+        context 'admin selection' do
+          before do
+            allow(draw).to receive(:admin_selection?).and_return(true)
+          end
+
+          it { is_expected.not_to permit(user, assignment) }
+        end
+      end
     end
   end
 
   context 'housing rep' do
-    let(:draw) { instance_spy('draw', present?: true) }
-    let(:other_draw) { instance_spy('draw', present?: true) }
+    let(:draw) { build_stubbed(:draw) }
+    let(:other_draw) { build_stubbed(:draw) }
     let(:user) do
       build_stubbed(:user, role: 'rep').tap do |u|
         allow(u).to receive(:draw).and_return(draw)
@@ -137,27 +166,14 @@ RSpec.describe SuiteAssignmentPolicy do
     # in their own
 
     permissions :new?, :create? do
-      context 'bulk assignment' do
-        let(:assignment) do
-          groups = instance_spy('array', size: 2)
-          SuiteAssignment.new(groups: groups, draw: other_draw)
-        end
-
-        before do
-          allow(draw).to receive(:admin_selection?).and_return(true)
-          allow(draw).to receive(:suite_selection?).and_return(true)
-        end
-        it { is_expected.to permit(user, assignment) }
-      end
-
       context 'drawless group' do
         let(:group) do
-          instance_spy('group', draw: nil).tap do |g|
+          build_stubbed(:group, draw: nil).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         it { is_expected.not_to permit(user, assignment) }
@@ -165,12 +181,12 @@ RSpec.describe SuiteAssignmentPolicy do
 
       context 'draw not in suite selection' do
         let(:group) do
-          instance_spy('group', draw: draw).tap do |g|
+          build_stubbed(:group, draw: draw).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -181,12 +197,12 @@ RSpec.describe SuiteAssignmentPolicy do
 
       context 'admin selection' do
         let(:group) do
-          instance_spy('group', draw: draw).tap do |g|
+          build_stubbed(:group, draw: draw).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -198,12 +214,12 @@ RSpec.describe SuiteAssignmentPolicy do
 
       context 'student selection' do
         let(:group) do
-          instance_spy('group', draw: draw).tap do |g|
+          build_stubbed(:group, draw: draw).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -239,38 +255,63 @@ RSpec.describe SuiteAssignmentPolicy do
 
     permissions :destroy? do
       let(:g) do
-        instance_spy('group', draw: draw).tap do |group|
+        build_stubbed(:group, draw: draw).tap do |group|
           allow(group).to receive(:suite)
             .and_return(instance_spy('suite', present?: true))
         end
       end
 
-      it { is_expected.to permit(user, SuiteAssignment.new(groups: [g])) }
+      it { is_expected.to permit(user, SuiteAssignment.new(group: g)) }
+    end
+
+    permissions :bulk_assign? do
+      let(:group) { build_stubbed(:group, draw: draw) }
+
+      let(:assignment) do
+        SuiteAssignment.new(group: group)
+      end
+
+      context 'draw not in suite selection' do
+        before do
+          allow(draw).to receive(:suite_selection?).and_return(false)
+        end
+
+        it { is_expected.not_to permit(user, assignment) }
+      end
+
+      context 'draw in suite selection' do
+        before do
+          allow(draw).to receive(:suite_selection?).and_return(true)
+        end
+
+        context 'student selection' do
+          before do
+            allow(draw).to receive(:admin_selection?).and_return(false)
+          end
+
+          it { is_expected.not_to permit(user, assignment) }
+        end
+
+        context 'admin selection' do
+          before do
+            allow(draw).to receive(:admin_selection?).and_return(true)
+          end
+
+          it { is_expected.to permit(user, assignment) }
+        end
+      end
     end
   end
 
   context 'admin' do
     let(:user) { build_stubbed(:user, role: 'admin') }
-    let(:draw) { instance_spy('draw', present?: true) }
+    let(:draw) { build_stubbed(:draw) }
 
     permissions :new?, :create? do
-      context 'bulk assignment' do
-        let(:assignment) do
-          groups = instance_spy('array', size: 2)
-          SuiteAssignment.new(groups: groups, draw: draw)
-        end
-
-        before do
-          allow(draw).to receive(:admin_selection?).and_return(true)
-          allow(draw).to receive(:suite_selection?).and_return(true)
-        end
-        it { is_expected.to permit(user, assignment) }
-      end
-
       context 'drawless group' do
-        let(:group) { instance_spy('group', draw: nil) }
+        let(:group) { build_stubbed(:group, draw: nil) }
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: nil)
+          SuiteAssignment.new(group: group)
         end
 
         it { is_expected.to permit(user, assignment) }
@@ -278,12 +319,12 @@ RSpec.describe SuiteAssignmentPolicy do
 
       context 'draw not in suite selection' do
         let(:group) do
-          instance_spy('group', draw: draw).tap do |g|
+          build_stubbed(:group, draw: draw).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -294,12 +335,12 @@ RSpec.describe SuiteAssignmentPolicy do
 
       context 'admin selection' do
         let(:group) do
-          instance_spy('group', draw: draw).tap do |g|
+          build_stubbed(:group, draw: draw).tap do |g|
             allow(user).to receive(:group).and_return(g)
           end
         end
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -310,9 +351,9 @@ RSpec.describe SuiteAssignmentPolicy do
       end
 
       context 'student selection' do
-        let(:group) { instance_spy('group', draw: draw) }
+        let(:group) { build_stubbed(:group, draw: draw) }
         let(:assignment) do
-          SuiteAssignment.new(groups: [group], draw: draw)
+          SuiteAssignment.new(group: group)
         end
 
         before do
@@ -326,13 +367,51 @@ RSpec.describe SuiteAssignmentPolicy do
 
     permissions :destroy? do
       let(:g) do
-        instance_spy('group', draw: draw).tap do |group|
+        build_stubbed(:group, draw: draw).tap do |group|
           allow(group).to receive(:suite)
             .and_return(instance_spy('suite', present?: true))
         end
       end
 
-      it { is_expected.to permit(user, SuiteAssignment.new(groups: [g])) }
+      it { is_expected.to permit(user, SuiteAssignment.new(group: g)) }
+    end
+
+    permissions :bulk_assign? do
+      let(:group) { build_stubbed(:group, draw: draw) }
+
+      let(:assignment) do
+        SuiteAssignment.new(group: group)
+      end
+
+      context 'draw not in suite selection' do
+        before do
+          allow(draw).to receive(:suite_selection?).and_return(false)
+        end
+
+        it { is_expected.not_to permit(user, assignment) }
+      end
+
+      context 'draw in suite selection' do
+        before do
+          allow(draw).to receive(:suite_selection?).and_return(true)
+        end
+
+        context 'student selection' do
+          before do
+            allow(draw).to receive(:admin_selection?).and_return(false)
+          end
+
+          it { is_expected.not_to permit(user, assignment) }
+        end
+
+        context 'admin selection' do
+          before do
+            allow(draw).to receive(:admin_selection?).and_return(true)
+          end
+
+          it { is_expected.to permit(user, assignment) }
+        end
+      end
     end
   end
 end

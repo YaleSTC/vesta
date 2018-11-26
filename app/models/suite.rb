@@ -15,10 +15,13 @@ class Suite < ApplicationRecord
                 5 => 'quint', 6 => 'sextet', 7 => 'septet',
                 8 => 'octet', 0 => 'empty' }.freeze
   belongs_to :building
-  belongs_to :group
   has_many :rooms, dependent: :nullify
   has_many :draw_suites, dependent: :delete_all
   has_many :draws, through: :draw_suites
+  # Note there will be multiple suite_assignments when draw_memberships
+  # are added - :suite_assignment will only be where it is active
+  has_one :suite_assignment, dependent: :destroy
+  has_one :group, through: :suite_assignment
 
   delegate :name, to: :building, prefix: :building, allow_nil: true
 
@@ -27,13 +30,12 @@ class Suite < ApplicationRecord
   validates :size, presence: true,
                    numericality: { greater_than_or_equal_to: 0 }
 
-  scope :available, -> { where(group_id: nil) }
+  scope :available, lambda {
+    includes(:suite_assignment).where(suite_assignments: { group_id: nil })
+  }
 
-  before_save :remove_room_assignments,
-              if: ->() { will_save_change_to_group_id? }
   before_save :remove_draw_from_medical_suites,
               if: ->() { will_save_change_to_medical? }
-  after_save :update_lottery_assignment, if: ->() { saved_change_to_group_id? }
 
   # Return the equivalent string for a given suite size
   #
@@ -77,7 +79,7 @@ class Suite < ApplicationRecord
   #
   # @return [Boolean] whether or not the suite is available
   def available?
-    group_id.nil?
+    group.blank?
   end
 
   # Return all single-bed rooms in the suite
@@ -122,23 +124,10 @@ class Suite < ApplicationRecord
 
   private
 
-  def remove_room_assignments
-    rooms.map(&:room_assignments).map(&:destroy_all)
-  rescue
-    handle_abort('Unable to clear room assignments')
-  end
-
   def remove_draw_from_medical_suites
     return unless medical
     ActiveRecord::Base.transaction { draws.delete_all }
   rescue
     handle_abort('Unable to clear draws from medical suites')
-  end
-
-  def update_lottery_assignment
-    g_id = saved_change_to_group_id.compact.first
-    lottery = Group.includes(:lottery_assignment).find(g_id).lottery_assignment
-    return unless lottery
-    lottery.update_selected!
   end
 end

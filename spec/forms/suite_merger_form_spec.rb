@@ -40,7 +40,7 @@ RSpec.describe SuiteMergerForm, type: :model do
     end
     # rubocop:disable RSpec/ExampleLength
     it 'validates that the suite is available' do
-      suite = build(:suite, group_id: 123, id: 123)
+      suite = build(:suite, group: build(:group), id: 123)
       other_suite = build(:suite, building: suite.building, id: 124)
       params = mock_params(other_suite_number: '124', number: 'foo')
       allow(Suite).to receive(:find_by).and_return(other_suite)
@@ -48,7 +48,7 @@ RSpec.describe SuiteMergerForm, type: :model do
       expect(object).not_to be_valid
     end
     it 'validates that the other_suite is available' do
-      suite = build(:suite, group_id: 123, id: 123)
+      suite = build(:suite, group: build(:group), id: 123)
       other_suite = build(:suite, building: suite.building, id: 124)
       params = mock_params(other_suite_number: '124', number: 'foo')
       allow(Suite).to receive(:find_by).and_return(suite)

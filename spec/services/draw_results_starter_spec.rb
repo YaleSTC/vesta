@@ -44,7 +44,8 @@ RSpec.describe DrawResultsStarter do
 
       before do
         draw.groups.first.destroy!
-        draw.suites.first.update!(group_id: draw.groups.first.id)
+        SuiteAssignment.create!(suite: draw.suites.first,
+                                group: draw.groups.first)
       end
 
       it 'occurs if necessary' do

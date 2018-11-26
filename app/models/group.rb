@@ -24,7 +24,8 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   has_one :clip_membership, -> { where(confirmed: true) }, dependent: :destroy
   has_one :clip, through: :clip_membership
   has_many :clip_memberships, dependent: :destroy
-  has_one :suite, dependent: :nullify
+  has_one :suite_assignment, dependent: :destroy
+  has_one :suite, through: :suite_assignment
   belongs_to :lottery_assignment
   accepts_nested_attributes_for :suite
 

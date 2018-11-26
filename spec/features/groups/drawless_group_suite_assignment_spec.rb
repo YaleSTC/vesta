@@ -14,13 +14,13 @@ RSpec.feature 'Drawless group suite assignment' do
   it 'can be performed' do
     visit group_path(group)
     click_on 'Assign suite'
-    select suite.number, from: "suite_assignment_suite_id_for_#{group.id}"
+    select suite.number, from: "suite_assignment_form_suite_id_for_#{group.id}"
     click_button 'Assign suites'
     expect(page).to have_content('Suite assignment successful')
   end
 
   it 'can remove the current suite' do
-    suite.update(group: group)
+    SuiteAssignment.create!(suite: suite, group: group)
     visit group_path(group)
     click_on 'Remove suite'
     expect(page).to have_content("Suite removed from #{group.name}")

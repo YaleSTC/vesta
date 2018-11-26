@@ -1,4 +1,4 @@
-<%= simple_form_for @suite_assignment, url: @url, method: :post do |f| %>
+<%= simple_form_for @suite_assignment_form, url: @url, method: :post do |f| %>
   <% @groups.each do |group| %>
     <div id="group-fields-<%= group.id %>" class="actions">
       <h2 class="h3"><%= group.name %></h2>

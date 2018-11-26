@@ -32,9 +32,9 @@ class LotteryAssignment < ApplicationRecord
   #
   # @return [true, nil] true when the update succeeds, nil if no update occurred
   def update_selected!
-    if groups.any? { |g| g.suite.nil? } && selected
+    if groups.any? { |g| g.suite_assignment.nil? } && selected
       update!(selected: false)
-    elsif groups.all? { |g| g.suite.present? } && !selected
+    elsif groups.all? { |g| g.suite_assignment.present? } && !selected
       update!(selected: true)
     end
   end

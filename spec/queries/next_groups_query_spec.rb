@@ -25,8 +25,8 @@ RSpec.describe NextGroupsQuery do
 
   it 'skips groups with assigned suites' do
     group_to_skip = draw.groups.first
-    draw.suites.find_by(size: group_to_skip.size)
-        .update(group_id: group_to_skip.id)
+    suite_to_assign = draw.suites.find_by(size: group_to_skip.size)
+    SuiteAssignment.create!(suite: suite_to_assign, group: group_to_skip)
     result = described_class.call(draw: draw)
     expect(result).to match_array([draw.groups[1]])
   end
@@ -40,7 +40,7 @@ RSpec.describe NextGroupsQuery do
 
   it 'returns an empty array if none' do
     draw.groups.each_with_index do |group, i|
-      draw.suites[i].update(group_id: group.id)
+      SuiteAssignment.create!(group: group, suite: draw.suites[i])
     end
     expect(described_class.call(draw: draw)).to match_array([])
   end

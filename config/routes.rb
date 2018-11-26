@@ -107,10 +107,6 @@ Rails.application.routes.draw do
         patch 'make_drawless'
         patch 'skip'
       end
-
-      collection do
-        resource :suite_assignment, only: %i(new create destroy)
-      end
     end
 
     resource :intents, only: [] do
@@ -118,6 +114,8 @@ Rails.application.routes.draw do
       post 'import'
       get 'export'
     end
+
+    resource :suite_assignment, only: %i(new create)
   end
 
   resources :clips, only: %i(show edit update destroy)

@@ -6,7 +6,8 @@ RSpec.describe Suite, type: :model do
   describe 'basic validations' do
     it { is_expected.to validate_presence_of(:number) }
     it { is_expected.to belong_to(:building) }
-    it { is_expected.to belong_to(:group) }
+    it { is_expected.to have_one(:suite_assignment) }
+    it { is_expected.to have_one(:group).through(:suite_assignment) }
     it { is_expected.to have_many(:rooms) }
     it { is_expected.to have_many(:draw_suites) }
     it { is_expected.to have_many(:draws).through(:draw_suites) }
@@ -38,33 +39,6 @@ RSpec.describe Suite, type: :model do
   end
 
   describe 'before_save callbacks' do
-    context 'if group assignment changes' do
-      let(:group) { create(:lottery_assignment).group }
-      let!(:suite) do
-        create(:suite_with_rooms, group_id: group.id).reload
-      end
-
-      it 'clears room ids when group assignment changes' do
-        RoomAssignment.create!(user: group.leader, room: suite.rooms.first)
-        expect { group.suite.update!(group_id: nil) }.to \
-          change { group.leader.reload.room }.from(suite.rooms.first).to(nil)
-      end
-      it 'raises an error when unable to clear room ids' do
-        RoomAssignment.create!(user: group.leader, room: suite.rooms.first)
-        stub_room_assignments
-        suite.update(group_id: nil)
-        expect(suite.errors[:base])
-          .to include('Unable to clear room assignments')
-      end
-      def stub_room_assignments
-        suite.rooms.map do |v|
-          v.room_assignments.map do |d|
-            allow(d).to receive(:destroy!)
-              .and_raise(ActiveRecord::RecordInvalid)
-          end
-        end
-      end
-    end
     context 'if medical status changes' do
       let(:suite) { create(:suite) }
 
@@ -149,11 +123,11 @@ RSpec.describe Suite, type: :model do
 
   describe '#available?' do
     it 'returns true if the suite has no group assigned' do
-      suite = build(:suite, group_id: nil)
+      suite = build(:suite, group: nil)
       expect(suite).to be_available
     end
     it 'returns false if the suite has a group assigned' do
-      suite = build(:suite, group_id: 123)
+      suite = build(:suite, group: build(:group))
       expect(suite).not_to be_available
     end
   end

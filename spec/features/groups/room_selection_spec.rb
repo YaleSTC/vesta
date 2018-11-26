@@ -11,7 +11,7 @@ RSpec.feature 'Room Selection' do
     it 'can be done' do
       visit root_path
       click_on 'Assign Rooms'
-      assign_rooms_to_members(group.suite.rooms, group.members)
+      assign_rooms_to_members(group.suite_assignment.suite.rooms, group.members)
       expect(page).to have_content('Successfully assigned rooms')
     end
   end
@@ -21,14 +21,16 @@ RSpec.feature 'Room Selection' do
     context 'assignment editing' do
       before do
         group.members.each_with_index do |m, i|
-          RoomAssignment.create!(user: m.reload, room: group.suite.rooms[i])
+          RoomAssignment.create!(user: m.reload,
+                                 room: group.suite_assignment.suite.rooms[i])
         end
       end
 
       it 'can be edited' do
         visit group_path(group)
         click_on 'Edit room assignments'
-        update_room_assignments(group.suite.rooms, group.members)
+        update_room_assignments(group.suite_assignment.suite.rooms,
+                                group.members)
         expect(page).to have_content('Successfully assigned rooms')
       end
     end
@@ -37,7 +39,8 @@ RSpec.feature 'Room Selection' do
       it 'can be done' do
         visit draw_group_path(group.draw, group)
         click_on 'Assign rooms'
-        assign_rooms_to_members(group.suite.rooms, group.members)
+        assign_rooms_to_members(group.suite_assignment.suite.rooms,
+                                group.members)
         expect(page).to have_content('Successfully assigned rooms')
       end
     end

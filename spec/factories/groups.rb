@@ -61,8 +61,9 @@ FactoryBot.define do
             end
             # ideally this gets the last suite added to the draw which SHOULD
             # be the one created in the above after(:build) callback
-            suite_to_assign = e.suite ? e.suite : Suite.last
-            suite_to_assign.update(group: g)
+            suite_to_assign = e.suite || Suite.last
+            create(:suite_assignment, group: g, suite: suite_to_assign)
+            g.lottery_assignment&.update_selected!
           end
         end
       end

@@ -151,7 +151,7 @@ RSpec.describe Draw, type: :model do
   describe '#available_suites' do
     it 'returns suites without associated groups' do
       available = create(:suite)
-      taken = create(:group_with_suite).suite
+      taken = create(:group_with_suite).suite_assignment.suite
       draw = create(:draw, suites: [available, taken])
       expect(draw.available_suites).to eq([available])
     end
@@ -248,7 +248,7 @@ RSpec.describe Draw, type: :model do
   describe '#available_suite_count' do
     it 'returns number of available suites' do
       draw = create(:draw_with_members, suites_count: 2)
-      draw.suites.first.update!(group_id: create(:group).id)
+      create(:suite_assignment, suite: draw.suites.first, group: create(:group))
       expect(draw.available_suite_count).to eq(1)
     end
   end
@@ -414,9 +414,14 @@ RSpec.describe Draw, type: :model do
   describe '#all_groups_have_suites?' do
     let(:draw) { create(:draw_in_selection, groups_count: 2) }
 
-    before { draw.suites.last.update!(group_id: draw.groups.last.id) }
+    before do
+      create(:suite_assignment, suite: draw.suites.last,
+                                group: draw.groups.last)
+    end
+
     it 'returns true if all groups have suites assigned' do
-      draw.suites.first.update!(group_id: draw.groups.first.id)
+      create(:suite_assignment, suite: draw.suites.first,
+                                group: draw.groups.first)
       expect(draw.reload.all_groups_have_suites?).to be_truthy
     end
     it 'returns false if not all groups have suites assigned' do
