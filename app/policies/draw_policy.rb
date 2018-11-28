@@ -14,6 +14,10 @@ class DrawPolicy < ApplicationPolicy
     edit? && record.draft?
   end
 
+  def duplicate?
+    create?
+  end
+
   def proceed_to_group_formation?
     edit? && record.intent_selection?
   end

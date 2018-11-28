@@ -161,6 +161,10 @@
   <% if policy(@draw).edit? %>
     <%= link_to 'Edit draw', edit_draw_path(@draw), class: 'button secondary' %>
   <% end %>
+  <% if policy(@draw).duplicate? %>
+    <%= link_to 'Copy draw', duplicate_draw_path(@draw), method: :post, class: 'button secondary',
+      data: { confirm: 'Are you sure you want to copy this draw? Another draw will be created with the same suite configuration, but without the current users or draw settings.' } %>
+  <% end %>
   <% if policy(@draw).archive? %>
     <%= link_to 'Archive draw', archive_draw_path(@draw), method: :patch,
       data: { confirm: 'Are you sure you want to archive this draw? This will freeze all student and group data and cannot be reversed.' }, class: 'button alert' %>

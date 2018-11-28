@@ -68,6 +68,7 @@ Rails.application.routes.draw do
   resources :draws, only: %i(new create show edit update destroy) do
     member do
       patch 'activate'
+      post 'duplicate'
       patch 'proceed_to_group_formation'
       post 'reminder'
       patch 'bulk_on_campus'

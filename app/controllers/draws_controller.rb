@@ -46,6 +46,11 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
     handle_action(action: 'show', **result)
   end
 
+  def duplicate
+    result = DrawDuplicator.duplicate(draw: @draw)
+    handle_action(action: 'show', **result)
+  end
+
   def proceed_to_group_formation
     result = DrawGroupFormationStarter.start(draw: @draw.__getobj__)
     handle_action(action: 'show', **result)
