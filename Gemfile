@@ -46,7 +46,7 @@ end
 
 group :development, :test do
   gem "awesome_print"
-  gem "bullet", "~> 5.5.1"
+  gem "bullet", "~> 5.9.0"
   gem "bundler-audit", ">= 0.5.0", require: false
   gem "dotenv-rails", "~> 2.2.1"
   gem "factory_bot_rails", "~> 4.10.0"
