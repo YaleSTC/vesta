@@ -7,8 +7,10 @@
     <dt>Housing Intent</dt>
     <dd class="user-intent"><%= @user.intent.humanize %></dd>
 <% end %>
+<% unless current_user.student? %>
   <dt>Role</dt>
   <dd class="user-role"><%= @user.role.humanize %></dd>
+<% end %>
   <dt>Email</dt>
   <dd class="user-email"><%= @user.email %></dd>
 </dl>

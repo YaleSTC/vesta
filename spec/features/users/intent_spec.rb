@@ -12,6 +12,14 @@ RSpec.feature 'Housing Intent' do
       expect(page).to have_css('.user-intent', text: 'Off campus')
     end
 
+    it 'displays "Intent updated." on success' do
+      student = create(:student_in_draw)
+      student.draw.update(status: 'group_formation')
+      log_in student
+      declare_off_campus student
+      expect(page).to have_content('Intent updated.')
+    end
+
     def declare_off_campus(student)
       visit "users/#{student.id}/intent"
       select('Off campus', from: 'user_intent')

@@ -84,8 +84,13 @@ class UserUpdater < Updater
   end
 
   def success
+    return super.merge(intent_message) if object.saved_change_to_intent?
     return super unless @needs_warning
     super.merge(warning) { |_, old, new| old.merge(new) }
+  end
+
+  def intent_message
+    { msg: { notice: 'Intent updated.' } }
   end
 
   def warning
