@@ -1,4 +1,8 @@
 <% provide(:title, 'Edit Settings') %>
 <h1>Edit Settings</h1>
 <%= render "form", college: @college %>
-<%= link_to 'Cancel', college_path(@college) %>
+<%= link_to 'Cancel', root_path %>
+<% if policy(@college).archive? %>
+  <%= link_to 'Archive all data in this college', college_archive_path(@college), method: :patch,
+    data: { confirm: 'Are you sure you want to archive all data this college? This will freeze all student, group, and draw data and cannot be reversed.' }, class: 'button alert' %>
+<% end %>

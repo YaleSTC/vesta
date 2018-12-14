@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Add DrawMembership join model to allow users to have many-to-many relationship with draws ([#813](https://gitlab.com/yale-sdmp/vesta/issues/813)), ([#814](https://gitlab.com/yale-sdmp/vesta/issues/814)), ([#815](https://gitlab.com/yale-sdmp/vesta/issues/815)), ([#816](https://gitlab.com/yale-sdmp/vesta/issues/816)), ([#817](https://gitlab.com/yale-sdmp/vesta/issues/817)).
 * Add ability to archive draws ([#869](https://gitlab.com/yale-sdmp/vesta/issues/869)).
 * Add ability to archive active special groups ([#871](https://gitlab.com/yale-sdmp/vesta/issues/871)).
+* Add the ability to archive all draws, special groups, and draw memberships all at once ([#865]( https://gitlab.com/yale-sdmp/vesta/issues/865)).
 
 ### Changed
 * Modify front end for user experience updates ([#875](https://gitlab.com/yale-sdmp/vesta/issues/875)).

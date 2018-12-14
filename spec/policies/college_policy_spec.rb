@@ -18,13 +18,13 @@ RSpec.describe CollegePolicy do
   end
   let(:college) { build_stubbed(:college) }
 
-  permissions :new?, :create? do
+  permissions :new?, :create?, :archive? do
     it { is_expected.to permit(superuser, described_class) }
     it { is_expected.not_to permit(admin, described_class) }
     it { is_expected.not_to permit(non_admin, described_class) }
   end
 
-  permissions :show?, :edit?, :update? do
+  permissions :edit?, :update? do
     it { is_expected.to permit(superuser, college) }
     it { is_expected.to permit(admin, college) }
     it { is_expected.not_to permit(non_admin, college) }
