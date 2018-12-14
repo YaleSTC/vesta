@@ -26,7 +26,7 @@ RSpec.describe DrawPolicy do
                 :proceed_to_group_formation?, :oversubscription?,
                 :toggle_size_lock?, :start_lottery?, :lottery_confirmation?,
                 :start_selection?, :bulk_on_campus?, :reminder?, :results?,
-                :lock_all_sizes?, :prune?, :lock_all_groups? do
+                :lock_all_sizes?, :prune?, :lock_all_groups?, :archive? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -114,7 +114,7 @@ RSpec.describe DrawPolicy do
     permissions :edit?, :update?, :destroy?, :activate?, :oversubscription?,
                 :proceed_to_group_formation?, :start_lottery?,
                 :lottery_confirmation?, :start_selection?, :bulk_on_campus?,
-                :lock_all_sizes?, :prune?, :lock_all_groups? do
+                :lock_all_sizes?, :prune?, :lock_all_groups?, :archive? do
       it { is_expected.not_to permit(user, draw) }
     end
     permissions :new?, :create? do
@@ -507,6 +507,17 @@ RSpec.describe DrawPolicy do
 
       context 'when the draw is lottery_or_later' do
         before { allow(draw).to receive(:lottery_or_later?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
+
+    permissions :archive? do
+      context 'draw is already archived' do
+        before { allow(draw).to receive(:active?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'draw is active' do
+        before { allow(draw).to receive(:active?).and_return(true) }
         it { is_expected.to permit(user, draw) }
       end
     end

@@ -12,7 +12,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def show; end
 
   def index
-    @draws = Draw.all.order(:name)
+    @draws = Draw.where(active: true).order(:name)
   end
 
   def new
@@ -37,6 +37,11 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def destroy
     result = Destroyer.destroy(object: @draw, name_method: :name)
+    handle_action(path: draws_path, **result)
+  end
+
+  def archive
+    result = DrawArchiver.archive(draw: @draw)
     handle_action(path: draws_path, **result)
   end
 

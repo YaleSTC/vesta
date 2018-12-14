@@ -109,6 +109,10 @@ class DrawPolicy < ApplicationPolicy
     record.lottery_or_later? && user_has_uber_permission?
   end
 
+  def archive?
+    destroy? && record.active?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

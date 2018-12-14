@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 ([#771](https://gitlab.com/yale-sdmp/vesta/issues/771))
 * Add SuiteAssignment join model to allow groups to have many-to-many relationship with suites ([#861](https://gitlab.com/yale-sdmp/vesta/issues/861)).
 * Add DrawMembership join model to allow users to have many-to-many relationship with draws ([#813](https://gitlab.com/yale-sdmp/vesta/issues/813)), ([#814](https://gitlab.com/yale-sdmp/vesta/issues/814)), ([#815](https://gitlab.com/yale-sdmp/vesta/issues/815)), ([#816](https://gitlab.com/yale-sdmp/vesta/issues/816)), ([#817](https://gitlab.com/yale-sdmp/vesta/issues/817)).
+* Add ability to archive draws ([#869](https://gitlab.com/yale-sdmp/vesta/issues/869)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600)).

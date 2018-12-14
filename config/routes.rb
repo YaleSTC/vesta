@@ -78,6 +78,7 @@ Rails.application.routes.draw do
       patch 'start_selection'
       get 'results'
       get 'group_export'
+      patch 'archive'
     end
 
     resources :draw_suites, only: %i(index), as: :suites do

@@ -12,7 +12,7 @@ class DashboardsController < ApplicationController
   private
 
   def admin_metrics
-    @draws = Draw.all.includes(:groups).sort_by(&:name)
+    @draws = Draw.where(active: true).includes(:groups).sort_by(&:name)
                  .map { |d| DrawReport.new(d) }
   end
 
