@@ -10,7 +10,7 @@ RSpec.feature 'College editing' do
     new_name = 'TD'
     visit edit_college_path(college)
     update_college_name(new_name)
-    expect(page).to have_css('.college-name', text: new_name)
+    expect(page).to have_css("input#college_name[value='#{new_name}']")
   end
 
   it 'redirects to /edit on failure' do

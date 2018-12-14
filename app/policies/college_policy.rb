@@ -17,4 +17,8 @@ class CollegePolicy < ApplicationPolicy
   def access?
     user.superadmin? || user.college_id == record.id
   end
+
+  def archive?
+    create?
+  end
 end

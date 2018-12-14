@@ -3,14 +3,12 @@
 #
 # Controller for College resources
 class CollegesController < ApplicationController
-  prepend_before_action :set_college, except: %i(index new create)
+  prepend_before_action :set_college, except: %i(index new create archive)
   skip_before_action :set_current_college, only: %i(index)
 
   def index
     @colleges = College.all.order(name: :asc)
   end
-
-  def show; end
 
   def new
     @college = College.new
@@ -29,7 +27,13 @@ class CollegesController < ApplicationController
     result = Updater.new(object: @college, name_method: :name,
                          params: college_params).update
     @college = result[:record]
-    handle_action(action: 'edit', **result)
+    # normally this would redirect to 'show' but we want it to go to 'edit'
+    handle_action(action: 'edit', **result.merge(redirect_object: nil))
+  end
+
+  def archive
+    result = CollegeArchiver.archive
+    handle_action(path: edit_college_path(College.current), **result)
   end
 
   private

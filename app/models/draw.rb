@@ -23,6 +23,7 @@
 #   be either "admin_selection" or "student_selection"
 # @attr allow_clipping [Boolean] True if the draw allows for clipping,
 #  false otherwise.
+# @attr active [Boolean] True if the draw is active, false if it is archived.
 class Draw < ApplicationRecord # rubocop:disable ClassLength
   has_many :groups, dependent: :destroy
   has_many :draw_memberships, dependent: :destroy
