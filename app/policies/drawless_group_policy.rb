@@ -12,6 +12,10 @@ class DrawlessGroupPolicy < ApplicationPolicy
     record.members.include?(user) || user.admin?
   end
 
+  def archive?
+    user.admin?
+  end
+
   private
 
   def group_policy

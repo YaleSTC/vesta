@@ -11,7 +11,7 @@ RSpec.describe DrawlessGroupPolicy do
 
     before { allow(Group).to receive(:find).and_return(group) }
 
-    permissions :new?, :create? do
+    permissions :new?, :create?, :archive? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
     end
     permissions :edit?, :update?, :destroy?, :select_suite?, :lock?, :unlock? do
@@ -37,7 +37,7 @@ RSpec.describe DrawlessGroupPolicy do
 
     before { allow(Group).to receive(:find).and_return(group) }
 
-    permissions :new?, :create? do
+    permissions :new?, :create?, :archive? do
       it { is_expected.not_to permit(user, DrawlessGroup) }
     end
     permissions :edit?, :update?, :destroy?, :select_suite?, :lock?, :unlock? do
@@ -63,7 +63,7 @@ RSpec.describe DrawlessGroupPolicy do
 
     before { allow(Group).to receive(:find).and_return(group) }
 
-    permissions :new?, :create? do
+    permissions :new?, :create?, :archive? do
       it { is_expected.to permit(user, DrawlessGroup) }
     end
     permissions :show?, :edit?, :update?, :destroy? do

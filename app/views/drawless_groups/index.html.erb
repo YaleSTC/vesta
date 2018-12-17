@@ -11,3 +11,7 @@
 <% if policy(DrawlessGroup).new? %>
   <%= link_to 'New Special Group', new_group_path, class: 'button secondary' %>
 <% end %>
+<% if policy(DrawlessGroup).archive? %>
+  <%= link_to 'Archive all special groups', archive_groups_path, method: :patch,
+    data: { confirm: 'Are you sure you want to archive all special groups? This will freeze all student and group data and cannot be reversed.' }, class: 'button alert' %>
+<% end %>

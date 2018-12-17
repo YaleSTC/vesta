@@ -2,7 +2,7 @@
 
 # Controller class for 'special' (admin-created outside of draw) housing groups.
 class DrawlessGroupsController < ApplicationController
-  prepend_before_action :set_group, except: %i(new create index)
+  prepend_before_action :set_group, except: %i(new create index archive)
   before_action :set_form_data, only: %i(new edit)
 
   def show
@@ -15,7 +15,8 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def index
-    @groups_by_size = Group.where(draw_id: nil).order(:size).group_by(&:size)
+    @groups_by_size = Group.active.where(draw_id: nil)
+                           .order(:size).group_by(&:size)
     @sizes = @groups_by_size.keys
   end
 
@@ -51,6 +52,11 @@ class DrawlessGroupsController < ApplicationController
   def unlock
     result = GroupUnlocker.unlock(group: @group)
     handle_action(path: group_path(@group), **result)
+  end
+
+  def archive
+    result = DrawlessGroupArchiver.archive
+    handle_action(path: groups_path, **result)
   end
 
   private

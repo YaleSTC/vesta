@@ -437,6 +437,14 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe '.active' do
+    it 'returns groups with active leader_draw_memberships' do
+      group1, group2 = create_pair(:group)
+      group2.leader_draw_membership.update!(active: false)
+      expect(described_class.active).to eq([group1])
+    end
+  end
+
   describe '#lottery_number' do
     it 'is nil when no lottery assignment' do
       group = build_stubbed(:group)

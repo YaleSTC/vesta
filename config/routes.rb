@@ -124,6 +124,10 @@ Rails.application.routes.draw do
   resources :clip_memberships, only: %i(update destroy)
 
   resources :groups, controller: 'drawless_groups' do
+    collection do
+      patch 'archive'
+    end
+
     member do
       put 'lock'
       put 'unlock'

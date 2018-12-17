@@ -76,6 +76,10 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   scope :order_by_lottery,
         -> { joins(:lottery_assignment).order('lottery_assignments.number') }
 
+  scope :active, lambda {
+    includes(:leader_draw_membership).where(draw_memberships: { active: true })
+  }
+
   # Generate the group name
   #
   # @return [String] the group's name
