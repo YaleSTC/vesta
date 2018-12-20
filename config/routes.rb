@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :users
     resources :draws
+    resources :draw_memberships
     resources :groups
     resources :memberships
     resources :clips
