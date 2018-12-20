@@ -13,10 +13,21 @@ class MembershipDestroyer < Destroyer
     @name = "#{membership.user.full_name}'s membership"
   end
 
+  def destroy
+    return error unless valid?
+    ActiveRecord::Base.transaction do
+      unlock_all_other_memberships
+      object.destroy!
+      send_left_email if object.accepted?
+    end
+    success
+  rescue ActiveRecord::ActiveRecordError
+    error
+  end
+
   private
 
   def success
-    send_left_email if object.status == 'accepted'
     { redirect_object: nil, msg: { notice: "#{name} deleted." } }
   end
 
@@ -32,6 +43,12 @@ class MembershipDestroyer < Destroyer
   def membership_is_not_locked
     return unless object.locked?
     errors.add(:base, "#{name} cannot be destroyed if it is locked.")
+  end
+
+  def unlock_all_other_memberships
+    object.group.memberships.map do |m|
+      m.update!(locked: false)
+    end
   end
 
   def send_left_email

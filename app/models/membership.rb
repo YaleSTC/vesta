@@ -10,8 +10,8 @@
 # @attr group [Group] The group of the membership.
 # @attr user [User] The user of the membership.
 # @attr status [Integer] Enum for membership status.
-# @attr locked [Boolean] Confirmation for membership. Defaults to false.
 #   (requested, invited, accepted)
+# @attr locked [Boolean] Confirmation for membership. Defaults to false.
 class Membership < ApplicationRecord
   belongs_to :group
   belongs_to :draw_membership
@@ -35,9 +35,7 @@ class Membership < ApplicationRecord
   before_destroy do |m|
     handle_abort('Cannot destroy locked membership') if m.locked?
   end
-  before_update do |m|
-    handle_abort('Cannot edit locked membership') if m.locked?
-  end
+
   before_update :freeze_group_and_user
   before_update :freeze_accepted_status
 

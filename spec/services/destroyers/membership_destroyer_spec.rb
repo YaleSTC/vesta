@@ -4,13 +4,23 @@ require 'rails_helper'
 
 RSpec.describe MembershipDestroyer do
   describe '#destroy' do
+    let(:m) { create(:full_group).memberships.last }
+
     it 'sucessfully destroys a membership' do
-      m = instance_spy('Membership', destroy: true, locked?: false,
-                                     user: instance_spy('User'))
+      allow(m).to receive(:destroy!)
       described_class.destroy(membership: m)
-      expect(m).to have_received(:destroy)
+      expect(m).to have_received(:destroy!)
+    end
+
+    it 'unlocks all other memberships' do
+      other_membership = instance_spy('membership', update!: true)
+      allow(m.group).to receive(:memberships).and_return([m, other_membership])
+      described_class.destroy(membership: m)
+      expect(other_membership).to \
+        have_received(:update!).with(locked: false)
     end
   end
+
   describe 'email callbacks' do
     let(:msg) { instance_spy(ActionMailer::MessageDelivery, deliver_later: 1) }
 

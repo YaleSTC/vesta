@@ -4,6 +4,7 @@
 # Service object to update memberships
 class MembershipUpdater < Updater
   validate :params_are_correct
+  validate :not_unlocking_a_locked_membership
 
   # Initialize a MembershipUpdater
   #
@@ -34,6 +35,11 @@ class MembershipUpdater < Updater
   def params_are_correct
     return if params.present?
     errors.add(:base, 'Memberships can only be accepted or finalized.')
+  end
+
+  def not_unlocking_a_locked_membership
+    return unless object.locked?
+    errors.add(:base, 'This membership has already been locked.')
   end
 
   def send_joined_email

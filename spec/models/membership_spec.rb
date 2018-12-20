@@ -187,13 +187,6 @@ RSpec.describe Membership, type: :model do
       expect(membership.errors[:base])
         .to include('Cannot destroy locked membership')
     end
-    it 'cannot be changed while locked' do
-      group = create(:finalizing_group)
-      membership = group.memberships.first
-      membership.update(group_id: nil)
-      expect(membership.errors[:base])
-        .to include('Cannot edit locked membership')
-    end
     it 'must be accepted' do # rubocop:disable RSpec/ExampleLength
       group = create(:finalizing_group)
       dm = create(:draw_membership, draw: group.draw)

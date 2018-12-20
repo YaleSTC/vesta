@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 * Restrict intent actions to draft or pre-lottery phases of a draw ([740](https://gitlab.com/yale-sdmp/vesta/issues/740)).
 * Upgrade FactoryGirl to FactoryBot ([676](https://gitlab.com/yale-sdmp/vesta/issues/676)).
 * Move emails from model callbacks to service objects ([777](https://gitlab.com/yale-sdmp/vesta/issues/777)).
+* Memberships unlock when a user leaves a group ([#872](https://gitlab.com/yale-sdmp/vesta/issues/872)).
 
 ### Added
 * Add flash to warn of oversubscription in suite update ([#670](https://gitlab.com/yale-sdmp/vesta/issues/670)).
