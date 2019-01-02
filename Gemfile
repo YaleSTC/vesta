@@ -63,10 +63,11 @@ group :development, :staging do
 end
 
 group :test do
-  gem "capybara-webkit", "~> 1.14.0"
+  gem "chromedriver-helper"
   gem "database_cleaner"
   gem "formulaic", "~> 0.4.0"
   gem "launchy"
+  gem "selenium-webdriver"
   gem "shoulda-matchers"
   gem "simplecov", "~> 0.13", require: false
   gem "codeclimate-test-reporter", "~> 1.0.8"

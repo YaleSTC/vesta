@@ -17,7 +17,7 @@ RSpec.feature 'Housing Group Creation' do
     def create_group(size:, leader:)
       log_in leader
       visit new_draw_group_path(leader.draw)
-      select(size, from: 'group_size')
+      select(size.to_s, from: 'group_size')
       click_on 'Create'
     end
   end
@@ -67,7 +67,7 @@ RSpec.feature 'Housing Group Creation' do
   end
 
   def create_group(size:, leader:, members:)
-    select(size, from: 'group_size')
+    select(size.to_s, from: 'group_size')
     select(leader.full_name, from: 'group_leader')
     members.each { |m| check(m.full_name) }
     click_on 'Create'

@@ -15,7 +15,7 @@ RSpec.feature 'Draw email buttons' do
     end
 
     it 'sends intent reminders' do
-      time = Time.zone.now.strftime('%B %e, %l:%M %P')
+      time = Time.zone.now.strftime('%B %e, %-l:%M %P')
       visit draw_path(draw)
       click_on 'Send intent reminder'
       expect(page).to have_content(time)
@@ -33,7 +33,7 @@ RSpec.feature 'Draw email buttons' do
     after { Timecop.return }
 
     it 'sends locking reminders' do
-      time = Time.zone.now.strftime('%B %e, %l:%M %P')
+      time = Time.zone.now.strftime('%B %e, %-l:%M %P')
       visit draw_path(draw)
       click_on 'Send locking reminder'
       expect(page).to have_content(time)

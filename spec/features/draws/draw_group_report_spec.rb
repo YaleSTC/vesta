@@ -43,7 +43,7 @@ RSpec.feature 'Draw group report' do
   end
 
   def page_has_group_report(page:, group:, edit: false)
-    edit_assert_method = edit ? :assert_selector : :refute_selector
+    edit_assert_method = edit ? :assert_selector : :assert_no_selector
     status_text = display_group_status(group)
     within(".group-report tr#group-#{group.id}") do
       page.assert_selector(:css, 'th[data-role="group-leader"]',

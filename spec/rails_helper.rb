@@ -9,6 +9,7 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'pundit/rspec'
+require 'selenium/webdriver'
 
 SUPPORT_PATH = %w(spec support ** *.rb).freeze
 
@@ -24,7 +25,6 @@ module Features
   Capybara.app_host = 'http://college.lvh.me'
   Capybara.always_include_port = true
   Capybara.asset_host = 'http://college.lvh.me:3000'
-  Capybara.javascript_driver = :webkit
   ENV['APPLICATION_HOST'] = 'lvh.me:3000'
 end
 

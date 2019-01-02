@@ -1,5 +1,5 @@
 .test_template: &test_definition
-  image: registry.gitlab.com/yale-sdmp/docker-rails-react:latest
+  image: ruby:2.4.3
 
   tags:
     - yale
@@ -15,9 +15,10 @@
   stage: test
 
   before_script:
+    - apt-get update -q
+    - apt-get install nodejs -yqq
     - ruby -v
     - which ruby
-    - gem install bundler --no-ri --no-rdoc
 
   cache:
     paths:
@@ -28,7 +29,7 @@ spec:
   script:
     - bundle check --path vendor/bundle || bundle install --path vendor/bundle
     - cp config/database.yml.gitlab config/database.yml
-    - xvfb-run -a bundle exec rake
+    - bundle exec rake
   after_script:
     - bundle exec codeclimate-test-reporter
 

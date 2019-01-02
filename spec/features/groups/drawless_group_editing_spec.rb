@@ -57,7 +57,7 @@ RSpec.feature 'Special group editing' do
   end
 
   def update_group_size(new_size)
-    select new_size, from: 'group_size'
+    select new_size.to_s, from: 'group_size'
     click_on 'Save'
   end
 end

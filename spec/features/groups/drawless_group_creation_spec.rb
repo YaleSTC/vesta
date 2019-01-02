@@ -23,7 +23,7 @@ RSpec.feature 'Special housing group creation' do
   end
 
   def create_group(size:, leader:, members: [])
-    select(size, from: 'group_size')
+    select(size.to_s, from: 'group_size')
     select(leader.full_name, from: 'group_leader')
     members.each { |m| check(m.full_name) }
     click_on 'Create'

@@ -46,8 +46,8 @@ RSpec.feature 'Results' do
       create(:group, :defined_by_leader, leader: s)
       create(:room_assignment, user: s.reload)
       click_on 'Results by student'
-      page.refute_selector("tr.result-student-#{s.id} td.room",
-                           text: s.room.number)
+      page.assert_no_selector("tr.result-student-#{s.id} td.room",
+                              text: s.room.number)
     end
 
     it 'only lists students in the current college' do
@@ -56,8 +56,8 @@ RSpec.feature 'Results' do
       create(:group, :defined_by_leader, leader: s)
       create(:room_assignment, user: s.reload)
       click_on 'Results by student'
-      page.refute_selector("tr.result-student-#{s.id} td.room",
-                           text: s.room.number)
+      page.assert_no_selector("tr.result-student-#{s.id} td.room",
+                              text: s.room.number)
     end
   end
   # rubocop:enable RSpec/ExampleLength

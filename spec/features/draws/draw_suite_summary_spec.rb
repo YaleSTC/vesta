@@ -27,7 +27,7 @@ RSpec.feature 'Draw suite summary' do
   end
 
   def page_does_not_have_suite_content?(page, suite)
-    page.refute_selector(:css, 'th[data-role="suite-name"]',
-                         text: suite.number)
+    page.assert_no_selector(:css, 'th[data-role="suite-name"]',
+                            text: suite.number)
   end
 end
