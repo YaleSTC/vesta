@@ -2,31 +2,37 @@ class AddDrawMemberships < ActiveRecord::Migration[5.1]
   def change
     create_table :draw_memberships do |t|
       t.references :user, null: false, foreign_key: { to_table: 'shared.users' }
-      t.references :draw, foreign_key: true
-      t.references :old_draw, foreign_key: { to_table: :draws }
+      t.references :draw
+      t.references :old_draw
       t.integer :intent, default: 0, null: false
       t.boolean :active, default: true, null: false
       t.timestamps
     end
 
-    reversible do |dir|
-      schema = ActiveRecord::Base.connection.schema_search_path.delete('\\"')
+    schema = ActiveRecord::Base.connection.schema_search_path.delete('\\"')
 
+    # This ensures that the foreign keys are removed if the migration is rolled back.
+    #   It is added now instead of during the table creation for readability purposes.
+    add_foreign_key :draw_memberships, :draws
+    add_foreign_key :draw_memberships, :draws, column: :old_draw_id
+
+    reversible do |dir|
       dir.up do
         if schema == 'public'
         elsif schema == 'shared'
           # Create draw memberships for all students and reps and store them temporarily in shared.draw_memberships
           # This runs before every other tenant because of how Apartment is configured
-          # Triggers are disabled because this temporarily ignores the foreign key constraints for draw_id and old_draw_id
-          execute <<-SQL
-            ALTER TABLE shared.draw_memberships DISABLE TRIGGER ALL;
 
+          # Foreign key constraints are removed for the time being because the references will be incorrect
+
+          remove_foreign_key :draw_memberships, column: :draw_id
+          remove_foreign_key :draw_memberships, column: :old_draw_id
+
+          execute <<-SQL
             INSERT INTO draw_memberships (user_id, draw_id, old_draw_id, intent, created_at, updated_at)
             SELECT users.id, users.draw_id, users.old_draw_id, users.intent, users.created_at, users.updated_at
             FROM users
             WHERE role IN (0, 2);
-
-            ALTER TABLE shared.draw_memberships ENABLE TRIGGER ALL;
           SQL
         else
           college_id = College.find_by(subdomain: schema)&.id
@@ -53,13 +59,20 @@ class AddDrawMemberships < ActiveRecord::Migration[5.1]
           SQL
         end
 
-        if schema == College.last.subdomain
-
+        if schema == College.last&.subdomain
           # Once all data is migrated into each tenant (i.e. after the last college receives its draw_memberships)
           #   delete the temporary shared.draw_memberships data
+          # Since the data will now have referential integrity we can add back the foreign key constraints
+          ActiveRecord::Base.connection.schema_search_path = "\"shared\""
+
           execute <<~SQL
             TRUNCATE TABLE shared.draw_memberships RESTART IDENTITY CASCADE;
           SQL
+
+          add_foreign_key :draw_memberships, :draws
+          add_foreign_key :draw_memberships, :draws, column: :old_draw_id
+
+          ActiveRecord::Base.connection.schema_search_path = "\"#{schema}\""
         end
       end
 

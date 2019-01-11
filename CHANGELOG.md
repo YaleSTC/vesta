@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Notes for upgrade:
+### When upgrading to 2.1.0 or later you _must_ initially upgrade to 2.0.0 and run `rake db:migrate`
+### to ensure that data is migrated correctly.
+
+### Added
+* Add DrawMembership join model to allow users to have many-to-many relationship with draws ([#813](https://gitlab.com/yale-sdmp/vesta/issues/813)), ([#814](https://gitlab.com/yale-sdmp/vesta/issues/814)), ([#815](https://gitlab.com/yale-sdmp/vesta/issues/815)), ([#816](https://gitlab.com/yale-sdmp/vesta/issues/816)), ([#817](https://gitlab.com/yale-sdmp/vesta/issues/817)).
+* Add ability to archive draws ([#869](https://gitlab.com/yale-sdmp/vesta/issues/869)).
+* Add ability to archive active special groups ([#871](https://gitlab.com/yale-sdmp/vesta/issues/871)).
+
+## v2.0.0 - 2019-01-16
+### Notes for upgrade:
 ### When upgrading from v1.0.8 or earlier to 2.0.0 or later you _must_ initially upgrade to v1.0.9.
 ### Once upgraded to v1.0.9 you must run `rails db:create_shared_schema` to create the new schema
 ### that will contain all users and colleges post v2.0. After that you can upgrade as normal.
@@ -46,10 +56,6 @@ All notable changes to this project will be documented in this file.
 * Allow admins to send groups to the "back of the line" during suite selection
 ([#771](https://gitlab.com/yale-sdmp/vesta/issues/771))
 * Add SuiteAssignment join model to allow groups to have many-to-many relationship with suites ([#861](https://gitlab.com/yale-sdmp/vesta/issues/861)).
-* Add DrawMembership join model to allow users to have many-to-many relationship with draws ([#813](https://gitlab.com/yale-sdmp/vesta/issues/813)), ([#814](https://gitlab.com/yale-sdmp/vesta/issues/814)), ([#815](https://gitlab.com/yale-sdmp/vesta/issues/815)), ([#816](https://gitlab.com/yale-sdmp/vesta/issues/816)), ([#817](https://gitlab.com/yale-sdmp/vesta/issues/817)).
-* Add ability to archive draws ([#869](https://gitlab.com/yale-sdmp/vesta/issues/869)).
-* Add ability to archive active special groups ([#871](https://gitlab.com/yale-sdmp/vesta/issues/871)).
-* Add DrawMemberships to admin dashboard ([#864](https://gitlab.com/yale-sdmp/vesta/issues/864)).
 
 ### Fixed
 * Intent and locking deadline cannot be in the past ([#600](https://gitlab.com/yale-sdmp/vesta/issues/600)).
