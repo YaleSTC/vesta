@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v2.0.0 - 2019-01-16
 ### Notes for upgrade:
 ### When upgrading from v1.0.8 or earlier to 2.0.0 or later you _must_ initially upgrade to v1.0.9.
 ### Once upgraded to v1.0.9 you must run `rails db:create_shared_schema` to create the new schema
