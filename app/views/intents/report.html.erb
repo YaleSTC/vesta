@@ -56,5 +56,14 @@
     </ul>
   <% end %>
 </div>
-<div style="padding-top: 1em;"><%= link_to 'Export to CSV', export_draw_intents_path(@draw), class: 'button secondary' if policy(:intent).export? %></div>
+<div style="padding-top: 1em;">
+  <% if policy(@draw).bulk_on_campus? %>
+        <%= link_to 'Make all undeclared students on campus', bulk_on_campus_draw_path(@draw),
+          method: :patch,
+          **with_tooltip(text: 'Sets all students who have not declared'\
+                        ' their housing intent to living on campus',
+                        class_override: 'button secondary') %>
+  <% end %>
+  <%= link_to 'Export to CSV', export_draw_intents_path(@draw), class: 'button secondary' if policy(:intent).export? %>
+</div>
 <%= link_to 'Return to draw', draw_path(@draw) %>

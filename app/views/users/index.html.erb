@@ -1,5 +1,7 @@
 <% provide(:title, 'All Users') %>
 <h1 id="top">All Users</h1>
+<%= link_to 'Import Users', new_enrollment_path, class: 'button' %>
+<%= link_to 'Add User Manually', build_users_path, class: 'button' %>
 <p><a href="#admins">Admins</a> / <a href="#reps">Housing Committee</a> / <a href="#students">Students</a></p>
 <h2 id="admins">Admins</h2>
 <% if @users.has_key? 'admin' %>

@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_college
   before_action :authorize_current_college, unless: :unauthenticated?
   before_action :verify_tos_accepted, unless: :unauthenticated?
+  before_action :set_active_draws, if: :user_signed_in?
   after_action :verify_authorized, unless: :unauthenticated?
 
   rescue_from Pundit::NotAuthorizedError do |exception|
@@ -113,5 +114,9 @@ class ApplicationController < ActionController::Base
     return if current_user.admin? || current_user.tos_accepted
     flash[:error] = 'You must accept the Terms of Service to proceed.'
     redirect_to terms_of_service_path
+  end
+
+  def set_active_draws
+    @active_draws ||= Draw.where(active: true)
   end
 end

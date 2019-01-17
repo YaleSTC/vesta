@@ -1,5 +1,18 @@
 <% provide(:title, "#{@draw.name} - Entering Lottery Phase") %>
 <h1 class="draw-name"><%= @draw.name %> - Entering Lottery Phase</h1>
+<div>
+  <%= link_to 'Cancel', draw_path(@draw), class: 'button secondary' %>
+  <% if policy(@draw).start_lottery? %>
+    <%= link_to 'Proceed to lottery', start_lottery_draw_path(@draw),
+      method: :patch, data: { confirm: 'Are you sure you want to proceed to the lottery? This cannot be undone!' }, class: start_lottery_btn_class(@draw) %>
+  <% end %>
+</div>
+<% if @draw.oversubscribed? %>
+  <h2>Warning!</h2>
+  <p> There are still oversubscribed suite sizes. If you choose to proceed to
+  lottery, the groups that do not get their suite size will be disbanded
+  and those students must be housed through a subsequent draw.</p>
+<% end %>
 <h2>Draw Summary</h2>
 <% if policy(@draw).oversub_report? %>
   <div class="oversub-report">
@@ -8,19 +21,4 @@
 <% end %>
 <div class="ungrouped-report">
   <%= render 'ungrouped_report' %>
-</div>
-<hr />
-<% if @draw.oversubscribed? %>
-  <h2>Warning!</h2>
-  <p> There are still oversubscribed suite sizes. If you choose to proceed to
-  lottery, the groups that do not get their suite size will be disbanded
-  and those students must be housed through a subsequent draw. </p>
-  <hr />
-<% end %>
-<div>
-  <%= link_to 'Cancel', draw_path(@draw), class: 'button secondary' %>
-  <% if policy(@draw).start_lottery? %>
-    <%= link_to 'Proceed to lottery', start_lottery_draw_path(@draw),
-      method: :patch, data: { confirm: 'Are you sure you want to proceed to the lottery? This cannot be undone!' }, class: start_lottery_btn_class(@draw) %>
-  <% end %>
 </div>

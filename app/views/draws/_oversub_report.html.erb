@@ -5,7 +5,7 @@
       <th scope="col">Suites</th>
       <th scope="col">Groups</th>
       <th scope="col">Locked Groups</th>
-      <th scope="col">Leftover Suites</th>
+      <th scope="col">Available Suites</th>
       <% if policy(draw).lock_all_sizes? %>
         <th scope="col"></th>
       <% end %>
@@ -13,7 +13,7 @@
   <tbody>
     <% @draw.sizes.each do |size| %>
       <tr class="<%= diff_class(@draw.oversubscription[size])%>">
-        <th scope="row"><%= size_str(size).capitalize.pluralize %></td>
+        <th scope="row"><%= size_str(size).capitalize.pluralize %></th>
         <td data-role="suite-count"><%= @draw.suite_counts[size] %></td>
         <td data-role="group-count"><%= @draw.group_counts[size] %></td>
         <td data-role="locked-count"><%= @draw.locked_counts[size] %></td>
@@ -25,3 +25,8 @@
     <% end %>
   </tbody>
 </table>
+<% if policy(@draw).lock_all_sizes? %>
+  <div>
+    <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
+  </div>
+<% end %>

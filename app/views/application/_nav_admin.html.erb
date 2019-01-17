@@ -2,8 +2,10 @@
   <li>
     <a href="#">Draws</a>
     <ul class="menu vertical">
-      <li><%= link_to 'All Draws', draws_path %></li>
-      <li><%= link_to 'New Draw', new_draw_path %></li>
+      <% @active_draws.each do |draw| %>
+        <li><%= link_to "#{draw.name}", draw_path(draw) %></li>
+      <% end %>
+      <li><%= link_to 'Create New Draw', new_draw_path %></li>
     </ul>
   </li>
   <li>
@@ -13,27 +15,19 @@
       <li><%= link_to 'Create Special Group', new_group_path %></li>
     </ul>
   </li>
-  <li><a href="#">Users</a>
-    <ul class="menu vertical">
-      <li><%= link_to 'All Users', users_path %></li>
-      <li><%= link_to 'Add User', build_users_path %></li>
-      <li><%= link_to 'Import Users', new_enrollment_path %></li>
-      <li><%= link_to 'Export Group Leader Emails', new_email_export_path %></li>
-    </ul>
-  </li>
-  <li>
-    <a href="#">Inventory</a>
-    <ul class="menu vertical">
-      <li><%= link_to 'All Buildings', buildings_path %></li>
-      <li><%= link_to 'New Building', new_building_path %></li>
-    </ul>
-  </li>
   <li>
     <a href="#">Results</a>
     <ul class="menu vertical">
       <li><%= link_to 'Results by students', students_results_path %></li>
       <li><%= link_to 'Results by suites', suites_results_path %></li>
       <li><%= link_to 'Export all student data', export_results_path %></li>
+    </ul>
+  </li>
+  <li>
+    <a href="#">Setup</a>
+    <ul class="menu vertical">
+      <li><%= link_to 'Users', users_path %></li>
+      <li><%= link_to 'Inventory', buildings_path %></li>
     </ul>
   </li>
   <li><%= link_to 'Settings', settings_path(@current_college) %></li>

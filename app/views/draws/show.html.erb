@@ -17,9 +17,6 @@
     <div class="oversub-report">
     <h2>Draw Summary</h2>
       <%= render 'oversub_report', draw: @draw, path: draw_path(@draw) %>
-      <% if policy(@draw).lock_all_sizes? %>
-        <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
-      <% end %>
     </div>
   <% end %>
   <ul class="accordion" data-accordion data-multi-expand="true" data-accordion data-allow-all-closed="true">
@@ -173,4 +170,4 @@
       data: { confirm: 'Are you sure you want to delete this draw? You will lose all group, lottery, and suite assignment information!' }, class: 'button alert' %>
   <% end %>
 </div>
-<%= link_to 'View all draws', draws_path %>
+<%= link_to 'View all draws', root_path %>

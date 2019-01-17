@@ -62,7 +62,7 @@ Rails.application.routes.draw do
 
   resources :enrollments, only: %i(new create)
 
-  resources :draws do
+  resources :draws, only: %i(new create show edit update destroy) do
     member do
       patch 'activate'
       patch 'proceed_to_group_formation'

@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 * Add ability to archive draws ([#869](https://gitlab.com/yale-sdmp/vesta/issues/869)).
 * Add ability to archive active special groups ([#871](https://gitlab.com/yale-sdmp/vesta/issues/871)).
 
+### Changed
+* Modify front end for user experience updates ([#875](https://gitlab.com/yale-sdmp/vesta/issues/875)).
+
 ## v2.0.0 - 2019-01-16
 ### Notes for upgrade:
 ### When upgrading from v1.0.8 or earlier to 2.0.0 or later you _must_ initially upgrade to v1.0.9.

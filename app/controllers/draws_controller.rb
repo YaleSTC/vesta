@@ -2,7 +2,7 @@
 
 # Controller for Draws
 class DrawsController < ApplicationController # rubocop:disable ClassLength
-  prepend_before_action :set_draw, except: %i(index new create)
+  prepend_before_action :set_draw, except: %i(new create)
   before_action :calculate_metrics, only: %i(show activate start_lottery
                                              proceed_to_group_formation
                                              start_selection
@@ -10,10 +10,6 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                                              oversubscription prune)
 
   def show; end
-
-  def index
-    @draws = Draw.where(active: true).order(:name)
-  end
 
   def new
     @draw = Draw.new
@@ -37,12 +33,12 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def destroy
     result = Destroyer.destroy(object: @draw, name_method: :name)
-    handle_action(path: draws_path, **result)
+    handle_action(path: root_path, **result)
   end
 
   def archive
     result = DrawArchiver.archive(draw: @draw)
-    handle_action(path: draws_path, **result)
+    handle_action(path: root_path, **result)
   end
 
   def activate

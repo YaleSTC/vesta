@@ -15,14 +15,7 @@
       <% end %>
     <% elsif @draw.status == 'intent_selection' %>
       <% if policy(:intent).report? %>
-        <%= link_to 'Upload intents', report_draw_intents_path(@draw), class: 'button secondary' %>
-      <% end %>
-      <% if policy(@draw).bulk_on_campus? %>
-        <%= link_to 'Make all students on campus', bulk_on_campus_draw_path(@draw),
-          method: :patch,
-          **with_tooltip(text: 'Sets all students who have not declared'\
-                        ' their housing intent to living on campus',
-                        class_override: 'button secondary') %>
+        <%= link_to 'Manage intents', report_draw_intents_path(@draw), class: 'button secondary' %>
       <% end %>
       <% if policy(@draw).lock_intent? %>
         <div class="lock-intent-form">
@@ -63,7 +56,7 @@
           <%= link_to 'Lock all full groups', lock_all_groups_draw_path(@draw), method: :patch, class: 'button secondary' %>
       <% end %>
       <% if policy(@draw).start_lottery? %>
-        <%= link_to 'Proceed to lottery', lottery_confirmation_draw_path(@draw), class: start_lottery_btn_class(@draw) %>
+        <%= link_to 'Proceed to lottery confirmation', lottery_confirmation_draw_path(@draw), class: start_lottery_btn_class(@draw) %>
       <% end %>
     <% elsif @draw.status == 'lottery' %>
       <% if policy(LotteryAssignment.new(draw: @draw.__getobj__)).index? %>

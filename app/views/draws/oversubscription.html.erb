@@ -18,9 +18,6 @@
 </div>
 <div class="oversub-report">
   <%= render 'oversub_report', draw: @draw, path: oversub_draw_path(@draw) %>
-  <% if policy(@draw).lock_all_sizes? %>
-    <%= link_to 'Lock all sizes', lock_all_sizes_draw_path(@draw, redirect_path: oversub_draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will lock ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
-  <% end %>
 </div>
 <div class="group-report">
   <%= render 'group_report', sizes: @draw.oversubscribed_sizes, groups: @draw.groups_by_size,
