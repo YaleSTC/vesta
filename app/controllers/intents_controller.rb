@@ -31,7 +31,7 @@ class IntentsController < ApplicationController
   end
 
   def set_draw
-    @draw = Draw.includes(:students).find(params[:draw_id])
+    @draw = Draw.includes(students: %i(group draw)).find(params[:draw_id])
   end
 
   def intents_import_params

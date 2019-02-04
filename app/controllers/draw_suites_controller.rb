@@ -86,6 +86,6 @@ class DrawSuitesController < ApplicationController
   end
 
   def set_draw
-    @draw = Draw.includes(:suites).find(params[:draw_id])
+    @draw = Draw.includes(suites: :draws).find(params[:draw_id])
   end
 end

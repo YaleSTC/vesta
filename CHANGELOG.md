@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 * Add DrawDuplicator service object to copy suite associations in draws without user data ([#668](https://gitlab.com/yale-sdmp/vesta/issues/668)).
 * Allow editing of room numbers and room type on Suites#show page ([#547](https://gitlab.com/yale-sdmp/vesta/issues/547)).
 
+### Fixed
+* Update eager loading ([#876](https://gitlab.com/yale-sdmp/vesta/issues/876)).
+
 ### Changed
 * Rename group size locking to restrict size locking ([811](https://gitlab.com/yale-sdmp/vesta/issues/811)).
 * Association of draw to draw_membership has been changed to have matching "active" states. ([#928](https://gitlab.com/yale-sdmp/vesta/issues/928)).

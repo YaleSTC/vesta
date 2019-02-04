@@ -147,7 +147,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   #
   # @return [Array<User>] the users who have locked their membership
   def locked_members
-    full_memberships.where(locked: true).map(&:user)
+    full_memberships.where(locked: true).includes(:user).map(&:user)
   end
 
   # Check if all members have locked their memberships
