@@ -16,8 +16,11 @@ module EmailExportsHelper
   end
 
   # Return locked scoping string
-  def locked_scope_str(email_export)
-    return '' unless email_export.locked
-    ' (locked only)'
+  def flag_scope_str(email_export)
+    return ' (leaders of locked groups)' if email_export.locked &&
+                                            email_export.leaders_only
+    return ' (group leaders only)' if email_export.leaders_only
+    return ' (locked only)' if email_export.locked
+    ''
   end
 end

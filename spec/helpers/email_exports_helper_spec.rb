@@ -34,14 +34,22 @@ RSpec.describe EmailExportsHelper, type: :helper do
       end
     end
 
-    describe '#locked_scope_str' do
-      it 'handles scoped cases' do
+    describe '#flag_scope_str' do
+      it 'handles doubly scoped cases' do
         allow(email_export).to receive(:locked).and_return(true)
-        expect(helper.locked_scope_str(email_export)).to eq(' (locked only)')
+        allow(email_export).to receive(:leaders_only).and_return(:true)
+        expect(helper.flag_scope_str(email_export))
+          .to eq(' (leaders of locked groups)')
+      end
+      it 'handles singly scoped cases' do
+        allow(email_export).to receive(:locked).and_return(true)
+        allow(email_export).to receive(:leaders_only).and_return(false)
+        expect(helper.flag_scope_str(email_export)).to eq(' (locked only)')
       end
       it 'handles unscoped cases' do
         allow(email_export).to receive(:locked).and_return(false)
-        expect(helper.locked_scope_str(email_export)).to eq('')
+        allow(email_export).to receive(:leaders_only).and_return(false)
+        expect(helper.flag_scope_str(email_export)).to eq('')
       end
     end
   end

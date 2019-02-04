@@ -6,13 +6,13 @@ RSpec.describe EmailExport do
   describe 'basic validations' do
     subject { described_class.new }
 
-    it do
+    it 'validates :draw_id' do
       is_expected.to \
         validate_numericality_of(:draw_id).only_integer
                                           .is_greater_than_or_equal_to(0)
                                           .allow_nil
     end
-    it do
+    it 'validates :size' do
       is_expected.to validate_numericality_of(:size).only_integer
                                                     .is_greater_than(0)
                                                     .allow_nil
@@ -25,36 +25,42 @@ RSpec.describe EmailExport do
       let(:group2) { create(:locked_group, size: 2) }
       let(:drawless) { create(:drawless_group, size: 1) }
       let!(:leaders) { [group.leader, group2.leader, drawless.leader] }
+      let!(:members) { group.members + group2.members + drawless.members }
 
       it 'returns all leaders without any scoping' do
         expected = leaders.sort_by { |u| [u.last_name, u.first_name] }
         ee = described_class.new.generate
-        expect(ee.leaders).to match_array(expected)
+        expect(ee.users).to match_array(expected)
       end
       it 'scopes to draws' do
         ee = described_class.new(draw_id: group.draw_id.to_s).generate
-        expect(ee.leaders).to eq([group.leader])
+        expect(ee.users).to eq([group.leader])
       end
       it 'scopes to drawless groups' do
         ee = described_class.new(draw_id: '0').generate
-        expect(ee.leaders).to eq([drawless.leader])
+        expect(ee.users).to eq([drawless.leader])
       end
       it 'scopes to size' do
         expected_array = [group.leader, drawless.leader]
         expected = expected_array.sort_by { |u| [u.last_name, u.first_name] }
         ee = described_class.new(size: '1').generate
-        expect(ee.leaders).to match_array(expected)
+        expect(ee.users).to match_array(expected)
       end
       it 'scopes to locked status' do
         expected_array = [group.leader, group2.leader]
         expected = expected_array.sort_by { |u| [u.last_name, u.first_name] }
         ee = described_class.new(locked: '1').generate
-        expect(ee.leaders).to match_array(expected)
+        expect(ee.users).to match_array(expected)
+      end
+      it 'optionally scopes to all members' do
+        expected = members.sort_by { |u| [u.last_name, u.first_name] }
+        ee = described_class.new(leaders_only: '0').generate
+        expect(ee.users).to match_array(expected)
       end
     end
   end
 
-  describe '#draw_scoped?' do
+  describe '#draw_scoped?'  do
     it 'returns true if the draw_id is zero' do
       ee = described_class.new(draw_id: '0')
       expect(ee).to be_draw_scoped

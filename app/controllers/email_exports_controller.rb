@@ -25,7 +25,8 @@ class EmailExportsController < ApplicationController
   end
 
   def email_export_params
-    p = params.require(:email_export).permit(%i(draw_id size locked))
+    p = params.require(:email_export)
+              .permit(%i(draw_id size locked leaders_only))
     p.reject { |_k, v| v.empty? }
   end
 

@@ -142,7 +142,7 @@
     <% end %>
     <% if @draw.group_formation_or_later? && policy(EmailExport).new? %>
       <li class="accordion-item" data-accordion-item>
-        <a href="#" class="accordion-title"><h2 class="h4">Export Leader E-mails</h2></a>
+        <a href="#" class="accordion-title"><h2 class="h4">Export Group E-mails</h2></a>
         <div class="accordion-content export-leader-btns" data-tab-content>
           <p>Click the buttons below to export the e-mail addresses of either all group leaders or leaders of groups of a specific size.</p>
           <ul>
@@ -151,6 +151,7 @@
               <li><%= render 'email_exports/hidden_form', draw: @draw, size: size, id: "email_export_#{size}", btn_str: headerize_size(size) %></li>
             <% end %>
           </ul>
+          <%= link_to "More options...", new_email_export_path, options: {draw: @draw}, method: :get, class: 'button' %>
         </div>
       </li>
     <% end %>

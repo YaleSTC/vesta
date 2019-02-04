@@ -5,24 +5,32 @@
 # @attr draw_id [Integer] the draw_id to scope to, if any; set to zero for
 #   drawless groups only
 # @attr size [Integer,Nil] the size to scope to, if any
+# @attr leaders_only [Boolean] whether to scope to all members
+#   or only leaders; default is true
 # @attr locked [Boolean] whether or not to scope to locked groups only
 class EmailExport
   include ActiveModel::Model
 
-  attr_accessor :draw_id, :size, :locked
-  attr_reader :leaders
+  attr_accessor :draw_id, :size, :locked, :leaders_only
+  attr_reader :users
 
   validates :draw_id, numericality: { only_integer: true, allow_nil: true,
                                       greater_than_or_equal_to: 0 }
   validates :size, numericality: { only_integer: true, allow_nil: true,
                                    greater_than: 0 }
   validates :locked, inclusion: { in: [true, false] }
+  validates :leaders_only, inclusion: { in: [true, false] }
 
   # Initialize a new EmailExport, nillifies empty strings for draw_id and
-  # converts locked to actual booleans
+  # converts locked and leaders_only to actual booleans
+  # (the default input from a checkbox is a string '1' or '0')
   def initialize(*args)
     super(*args)
-    process_locked
+
+    # Locked defaults to false, leaders_only to true
+    # (that's why the ternaries here are in the order they're in)
+    @locked = locked == '1' ? true : false
+    @leaders_only = leaders_only == '0' ? false : true
     process_draw_id
   end
 
@@ -47,10 +55,6 @@ class EmailExport
 
   attr_reader :draw_scope
 
-  def process_locked
-    self.locked = locked.to_i == 1 ? true : false
-  end
-
   def process_draw_id
     return unless draw_id.present?
     @draw_scope = true
@@ -58,13 +62,14 @@ class EmailExport
   end
 
   def execute_query # rubocop:disable AbcSize
-    query = User.active.includes(draw_membership: :led_group)
+    query = User.active
+                .includes(draw_membership: leaders_only ? :led_group : :group)
                 .where.not(groups: { id: nil }).order(:last_name, :first_name)
     if draw_scope
       query = query.where(groups: { draw_memberships: { draw_id: draw_id } })
     end
     query = query.where(groups: { size: size }) if size.present?
     query = query.where(groups: { status: Group.statuses['locked'] }) if locked
-    @leaders = query.to_a
+    @users = query.to_a
   end
 end
