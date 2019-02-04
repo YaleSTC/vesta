@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v2.1.0 - 2019-02-04
 ### Notes for upgrade:
 ### When upgrading to 2.1.0 or later you _must_ initially upgrade to 2.0.0 and run `rake db:migrate`
 ### to ensure that data is migrated correctly.
