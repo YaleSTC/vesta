@@ -4,28 +4,21 @@
       <% if policy(:draw_student).edit? %>
         <%= link_to 'Add or edit students', edit_draw_students_path(@draw), class: 'button secondary' %>
       <% end %>
+      <% if policy(:intent).report? %>
+        <%= link_to 'Manage intents', report_draw_intents_path(@draw), class: 'button secondary' %>
+      <% end %>
       <% if policy(DrawSuite.new(draw: @draw.__getobj__)).edit_collection? %>
         <%= link_to 'Add or edit suites', edit_collection_draw_suites_path(@draw), class: 'button secondary' %>
       <% end %>
       <% if policy(@draw).activate? %>
-        <%= link_to 'Begin intent selection phase',
+        <%= link_to draw_activation_btn_str(@draw),
           activate_draw_path(@draw), method: :patch,
-          data: { confirm: 'This will send an e-mail to all students in the draw inviting them to log in and start declaring intent. Do you want to continue?' },
+          data: { confirm: "This will send an e-mail to all students in the draw inviting them to log in and start #{draw_activation_confirm_action(@draw)}. Do you want to continue?" },
           class: 'button' %>
       <% end %>
     <% elsif @draw.status == 'intent_selection' %>
       <% if policy(:intent).report? %>
         <%= link_to 'Manage intents', report_draw_intents_path(@draw), class: 'button secondary' %>
-      <% end %>
-      <% if policy(@draw).lock_intent? %>
-        <div class="lock-intent-form">
-          <%= simple_form_for @draw, inner_html: { style: 'display: inline-block;' } do |f| %>
-            <%= f.input :intent_locked, as: 'hidden',
-              input_html: { value: !@draw.intent_locked } %>
-            <%= f.submit lock_intent_btn_label(@draw),
-              **with_tooltip(text: lock_intent_btn_tooltip(@draw), class_override: 'button secondary') %>
-          <% end %>
-        </div>
       <% end %>
       <%= link_to 'Proceed to group formation phase', proceed_to_group_formation_draw_path(@draw), method: :patch, class: 'button', data: { confirm: 'This will send an e-mail to all students in the draw inviting them to log in and start forming groups. Do you want to continue?' } %>
     <% elsif @draw.status == 'group_formation' %>

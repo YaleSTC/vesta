@@ -27,7 +27,7 @@ class DrawActivator
   #   message to set in the flash and either `nil` or the created object.
   def activate
     return error(self) unless valid?
-    draw.update!(status: 'intent_selection')
+    update_draw_status
     send_emails
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -49,6 +49,11 @@ class DrawActivator
   def draw_has_students
     return if draw.students?
     errors.add(:draw, 'must have at least one student.')
+  end
+
+  def update_draw_status
+    status = draw.intent_locked ? 'group_formation' : 'intent_selection'
+    draw.update!(status: status)
   end
 
   def send_emails

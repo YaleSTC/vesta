@@ -66,6 +66,26 @@ module DrawsHelper
     date.strftime('%B %e, %l:%M %P')
   end
 
+  # Return the button string for draw activation, indicates intent selection if
+  # intent is unlocked and group formaton otherwise
+  #
+  # @param draw [Draw] the draw in question
+  # @return [String] the appropriate button string
+  def draw_activation_btn_str(draw)
+    return 'Begin group formation phase' if draw.intent_locked
+    'Begin intent selection phase'
+  end
+
+  # Return the confirmation string text for draw activation, indicates intent
+  # selection if intent is unlocked and group formaton otherwise
+  #
+  # @param draw [Draw] the draw in question
+  # @return [String] the appropriate confirmation string
+  def draw_activation_confirm_action(draw)
+    return 'forming groups' if draw.intent_locked
+    'declaring intent'
+  end
+
   private
 
   def day_str(n)

@@ -112,4 +112,37 @@ RSpec.describe DrawsHelper, type: :helper do
       expect(helper.format_email_date(date)).to eq(expected)
     end
   end
+
+  describe '#draw_activation_btn_str' do
+    context 'when draw has intent unlocked' do
+      it 'returns "Begin intent selection phase"' do
+        d = instance_spy('Draw', intent_locked: false)
+        expected = 'Begin intent selection phase'
+        expect(helper.draw_activation_btn_str(d)).to eq(expected)
+      end
+    end
+    context 'when draw has intent locked' do
+      it 'returns "Begin group formation phase"' do
+        d = instance_spy('Draw', intent_locked: true)
+        expected = 'Begin group formation phase'
+        expect(helper.draw_activation_btn_str(d)).to eq(expected)
+      end
+    end
+  end
+
+  describe '#draw_activation_confirm_action' do
+    context 'when draw has intent unlocked' do
+      it 'returns "declaring intent"' do
+        d = instance_spy('Draw', intent_locked: false)
+        expect(helper.draw_activation_confirm_action(d)).to \
+          eq('declaring intent')
+      end
+    end
+    context 'when draw has intent locked' do
+      it 'returns "forming groups"' do
+        d = instance_spy('Draw', intent_locked: true)
+        expect(helper.draw_activation_confirm_action(d)).to eq('forming groups')
+      end
+    end
+  end
 end

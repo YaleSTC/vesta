@@ -54,9 +54,8 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   def bulk_on_campus
     result = BulkOnCampusUpdater.update(draw: @draw)
     # note that BulkOnCampusUpdater.update always returns a success hash with
-    # :redirect_object set to @draw, so we don't need to handle a fallback case
-    # via handle_action
-    handle_action(**result)
+    # :redirect_object set to nil, so we need to provide a redirect path
+    handle_action(**result.merge(path: report_draw_intents_path(@draw)))
   end
 
   def lottery_confirmation; end

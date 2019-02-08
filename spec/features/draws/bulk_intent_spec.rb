@@ -16,4 +16,10 @@ RSpec.feature 'Bulk intent assignment' do
     click_on 'Make all students on campus'
     expect(page).to have_css('.flash-success', text: message)
   end
+
+  it 'redirects to the intent report' do
+    visit draw_path(draw)
+    click_on 'Make all students on campus'
+    expect(page).to have_css('h1', text: /Intent Report/)
+  end
 end

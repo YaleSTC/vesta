@@ -32,7 +32,7 @@ class BulkOnCampusUpdater
   end
 
   def success
-    { redirect_object: draw,
+    { redirect_object: nil,
       msg: { success: 'All undeclared students set to live on-campus' } }
   end
 end

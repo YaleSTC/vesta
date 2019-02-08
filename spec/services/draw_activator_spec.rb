@@ -17,10 +17,22 @@ RSpec.describe DrawActivator do
         include('Draw must have at least one student.')
     end
 
-    it 'updates the status of the draw to intent-selection' do
-      draw = instance_spy('draw', validity_stubs(valid: true))
-      described_class.activate(draw: draw)
-      expect(draw).to have_received(:update!).with(status: 'intent_selection')
+    context 'with intent unlocked' do
+      it 'updates the status of the draw to intent selection' do
+        draw = instance_spy('draw',
+                            validity_stubs(valid: true, intent_locked: false))
+        described_class.activate(draw: draw)
+        expect(draw).to have_received(:update!).with(status: 'intent_selection')
+      end
+    end
+
+    context 'with intent locked' do
+      it 'updates the status of the draw to group formation' do
+        draw = instance_spy('draw',
+                            validity_stubs(valid: true, intent_locked: true))
+        described_class.activate(draw: draw)
+        expect(draw).to have_received(:update!).with(status: 'group_formation')
+      end
     end
 
     it 'checks to see if the update works' do
