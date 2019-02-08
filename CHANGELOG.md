@@ -16,6 +16,9 @@ All notable changes to this project will be documented in this file.
 * Modify front end for user experience updates ([#875](https://gitlab.com/yale-sdmp/vesta/issues/875)).
 * Make draws bypass the intent phase if intent is locked ([#881](https://gitlab.com/yale-sdmp/vesta/issues/881)).
 
+### Fixed
+* Update version number appropriately for the footer ([#878](https://gitlab.com/yale-sdmp/vesta/issues/878))
+
 ## v2.0.0 - 2019-01-16
 ### Notes for upgrade:
 ### When upgrading from v1.0.8 or earlier to 2.0.0 or later you _must_ initially upgrade to v1.0.9.
