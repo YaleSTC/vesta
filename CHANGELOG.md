@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v2.0.1 - 2019-02-08
+### Fixed
+* Update version number appropriately for the footer ([#878](https://gitlab.com/yale-sdmp/vesta/issues/878))
+
 ## v2.0.0 - 2019-01-16
 ### Notes for upgrade:
 ### When upgrading from v1.0.8 or earlier to 2.0.0 or later you _must_ initially upgrade to v1.0.9.
