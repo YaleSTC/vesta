@@ -9,13 +9,13 @@ class ResultsController < ApplicationController
   def students
     @students = User.active
                     .includes(room: :suite)
-                    .where(role: %w(student rep))
+                    .where(role: %w(student rep), college: College.current)
                     .where.not(room_assignments: { room_id: nil })
                     .order(:last_name)
   end
 
   def export
-    s = User.where(role: %w(student rep))
+    s = User.active.where(role: %w(student rep), college: College.current)
             .includes(:draw, :room, group: %i(lottery_assignment suite))
             .order(:last_name)
     a = %I[#{User.login_attr} last_name first_name draw_name intent group_name

@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 * Add the ability to assign lottery numbers by size ([#848](https://gitlab.com/yale-sdmp/vesta/issues/848)).
 
+### Fixed
+* Scope the results view and export to only return active students in the current college ([#885](https://gitlab.com/yale-sdmp/vesta/issues/885)).
+
 ## v2.1.0 - 2019-02-04
 ### Notes for upgrade:
 ### When upgrading to 2.1.0 or later you _must_ initially upgrade to 2.0.0 and run `rake db:migrate`

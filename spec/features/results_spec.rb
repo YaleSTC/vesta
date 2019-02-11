@@ -38,6 +38,30 @@ RSpec.feature 'Results' do
     end
   end
 
+  # rubocop:disable RSpec/ExampleLength
+  context 'view scoping' do
+    it 'only lists active students' do
+      visit root_path
+      s = create(:student_in_draw, role: 'graduated')
+      create(:group, :defined_by_leader, leader: s)
+      create(:room_assignment, user: s.reload)
+      click_on 'Results by student'
+      page.refute_selector("tr.result-student-#{s.id} td.room",
+                           text: s.room.number)
+    end
+
+    it 'only lists students in the current college' do
+      visit root_path
+      s = create(:student_in_draw, college: create(:college))
+      create(:group, :defined_by_leader, leader: s)
+      create(:room_assignment, user: s.reload)
+      click_on 'Results by student'
+      page.refute_selector("tr.result-student-#{s.id} td.room",
+                           text: s.room.number)
+    end
+  end
+  # rubocop:enable RSpec/ExampleLength
+
   it 'can be viewed for specific draws' do
     visit draw_path(Draw.first) # this sucks
     click_on 'View results'
@@ -49,6 +73,20 @@ RSpec.feature 'Results' do
     click_on 'Export CSV'
     expect(page_is_valid_export?(page: page, data: data[:members],
                                  filename: f, header_str: h_str)).to be_truthy
+  end
+
+  it 'export does not contain inactive students' do
+    visit students_results_path
+    s = create(:student, role: 'graduated')
+    click_on 'Export CSV'
+    expect(page.body.include?(export_row_for(s))).to be_falsey
+  end
+
+  it 'export scopes to college' do
+    visit students_results_path
+    s = create(:student, college: create(:college))
+    click_on 'Export CSV'
+    expect(page.body.include?(export_row_for(s))).to be_falsey
   end
 
   def page_has_student_results(page)
