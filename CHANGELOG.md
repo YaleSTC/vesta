@@ -1,8 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
-
+## v2.2.0 - 2019-02-12
 ### Added
 * Add the ability to assign lottery numbers by size ([#848](https://gitlab.com/yale-sdmp/vesta/issues/848)).
 
