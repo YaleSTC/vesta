@@ -10,6 +10,13 @@ RSpec.describe DrawlessSuitesQuery do
     expect(result.map(&:id)).to eq([undrawn.id])
   end
 
+  it 'returns suites that have an archived draw' do
+    drawn = create_suite_with_draw
+    drawn.draws.first.update!(active: false)
+    result = described_class.call
+    expect(result.map(&:id)).to eq([drawn.id])
+  end
+
   it 'restricts the results to the passed query' do
     suite1, suite2 = create_pair(:suite)
     result = described_class.new(Suite.where.not(id: suite1.id)).call

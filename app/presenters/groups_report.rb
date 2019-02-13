@@ -41,8 +41,8 @@ class GroupsReport < SimpleDelegator
   #   suites, sorted by lottery number
   def without_suites
     @without_suites ||= order_by_lottery
-                        .includes(suite: :suite_assignment)
-                        .where(suites: { suite_assignments: { group_id: nil } })
+                        .includes(:suite_assignment)
+                        .where(suite_assignments: { group_id: nil })
   end
 
   # Gets the groups in the collection without suites, sorted by lottery number,

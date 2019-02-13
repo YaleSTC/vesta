@@ -10,6 +10,13 @@ RSpec.describe SuitesInOtherDrawsQuery do
     expect(result.map(&:id)).to eq([drawn.id])
   end
 
+  it 'does not return suites with archived draws' do
+    drawn = create_suite_with_draw
+    drawn.draws.first.update!(active: false)
+    result = described_class.call
+    expect(result).to eq([])
+  end
+
   it 'restricts the results to the passed query' do
     suite1 = create_suite_with_draw
     suite2 = create_suite_with_draw

@@ -22,6 +22,7 @@ class DrawlessSuitesQuery
   #
   # @return [Array<Suite>] the drawless suites in the relation
   def call
-    @relation.includes(:draw_suites).where(draw_suites: { suite_id: nil })
+    @relation.left_joins(draw_suites: :draw)
+             .where('draw_suites.suite_id IS NULL OR draws.active = false')
   end
 end

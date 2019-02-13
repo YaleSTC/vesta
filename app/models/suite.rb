@@ -22,10 +22,12 @@ class Suite < ApplicationRecord
   has_many :groups, through: :suite_assignments
 
   has_one :suite_assignment, lambda {
-    includes(group: [leader_draw_membership: :draw_membership])
+    left_joins(group: :leader_draw_membership)
+      .where(draw_memberships: { active: true })
   }
 
-  has_one :group, through: :suite_assignment
+  has_one :group, -> { left_joins(:leader_draw_membership) },
+          through: :suite_assignment
 
   delegate :name, to: :building, prefix: :building, allow_nil: true
 
@@ -35,7 +37,8 @@ class Suite < ApplicationRecord
                    numericality: { greater_than_or_equal_to: 0 }
 
   scope :available, lambda {
-    includes(:suite_assignment).where(suite_assignments: { group_id: nil })
+    left_joins(suite_assignments: { group: :leader_draw_membership })
+      .where('draw_memberships.active = false OR suite_assignments.id IS NULL')
   }
 
   before_save :remove_draw_from_medical_suites,
@@ -73,7 +76,7 @@ class Suite < ApplicationRecord
   # @return [String] the suite name with draw names
   def name_with_draws(draw = nil)
     return name if draws.empty?
-    draws_to_display = draws.where.not(id: draw&.id)
+    draws_to_display = draws.where.not(id: draw&.id, active: false)
     return name if draws_to_display.empty?
     draws_str = draws_to_display.map(&:name).join(', ')
     "#{name} (#{draws_str})"

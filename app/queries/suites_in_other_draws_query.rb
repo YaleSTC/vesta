@@ -23,8 +23,9 @@ class SuitesInOtherDrawsQuery
   # @param draw [Draw] the draw to exclude
   # @return [Array<Suite>] the undrawn suites in the relation
   def call(draw: nil)
-    base = @relation.includes(:draws).includes(:draw_suites)
+    base = @relation.left_joins(draw_suites: :draw)
                     .where.not(draw_suites: { suite_id: nil })
+                    .where(draws: { active: true })
     return base unless draw
     base.where.not(id: draw.suite_ids)
   end

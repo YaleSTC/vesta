@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Suite, type: :model do
-  describe 'basic validations' do
+  describe 'basic associations and validations' do
     it { is_expected.to validate_presence_of(:number) }
     it { is_expected.to belong_to(:building) }
     it { is_expected.to have_many(:suite_assignments) }
@@ -30,12 +30,47 @@ RSpec.describe Suite, type: :model do
     end
   end
 
+  describe 'group association' do
+    let(:group) { create(:drawless_group) }
+    let(:suite) { create(:suite, size: group.size) }
+
+    before { group.update!(suite: suite) }
+
+    context 'when group is active' do
+      before do
+        group.draw_memberships.map { |dm| dm.update!(active: true) }
+        group.leader_draw_membership.update!(active: true)
+      end
+
+      it 'returns the group' do
+        expect(suite.reload.group.id).to eq(group.id)
+      end
+    end
+    context 'when group is archived' do
+      before do
+        group.draw_memberships.map { |dm| dm.update!(active: false) }
+        group.leader_draw_membership.update!(active: false)
+      end
+
+      it 'does not return a record' do
+        expect(suite.reload.group).to be_nil
+      end
+    end
+  end
+
   context 'scopes' do
     describe '.available' do
       it 'returns all suites not assigned to groups' do
         available = create(:suite)
         create(:group_with_suite)
-        expect(described_class.available).to eq([available])
+        expect(described_class.available).to match_array([available])
+      end
+
+      it 'returns previously assigned suites with archived draws' do
+        g = create(:group_with_suite)
+        available = g.reload.suite
+        g.draw.update!(active: false)
+        expect(described_class.available).to match_array([available])
       end
     end
   end
@@ -106,6 +141,13 @@ RSpec.describe Suite, type: :model do
       draw = create(:draw)
       suite.draws << draw
       expect(suite.name_with_draws(draw)).to eq(suite.name)
+    end
+    it 'ignores archived draws' do
+      suite = create(:suite)
+      draw = create(:draw)
+      suite.draws << draw
+      draw.update!(active: false)
+      expect(suite.name_with_draws).to eq(suite.name)
     end
     it 'returns the name with other draw names' do
       suite = create(:suite)
