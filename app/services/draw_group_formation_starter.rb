@@ -52,8 +52,9 @@ class DrawGroupFormationStarter
   end
 
   def send_emails
-    draw.students.each do |student|
-      mailer.group_formation(user: student, college: college).deliver_later
+    (draw.students + college.users.admin).each do |student|
+      mailer.group_formation(user: student, draw: draw, college: college)
+            .deliver_later
     end
   end
 

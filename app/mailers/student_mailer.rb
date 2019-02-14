@@ -5,39 +5,41 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   # Send initial invitation to students in a draw
   #
   # @param user [User] the user to send the invitation to
+  # @param draw [Draw] the draw to pull settings from
   # @param college [College] the college to pull settings from
-  def draw_invitation(user:, college: nil) # rubocop:disable MethodLength
+  def draw_invitation(user:, draw:, college: nil) # rubocop:disable MethodLength
     determine_college(college)
     @user = user
-    @intent_locked = user.draw.intent_locked
-    @intent_deadline = format_date(user.draw.intent_deadline)
+    @intent_locked = draw.intent_locked?
+    @intent_deadline = format_date(draw.intent_deadline)
     @login_str = if User.cas_auth?
                    ''
                  else
                    ' (you will need to use the password reset feature to set '\
                      'your password if you have not logged in before)'
                  end
-    mail(to: @user.email, subject: 'The housing process has begun',
-         reply_to: @college.admin_email)
+    subject = determine_subject('The housing process has begun')
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send group formation notification to students in draw
   #
   # @param user [User] the user to send the invitation to
+  # @param draw [Draw] the draw to pull settings from
   # @param college [College] the college to pull settings from
-  def group_formation(user:, college: nil) # rubocop:disable MethodLength
+  def group_formation(user:, draw:, college: nil) # rubocop:disable MethodLength
     determine_college(college)
     @user = user
-    @intent_locked = user.draw.intent_locked
-    @intent_deadline = format_date(user.draw.intent_deadline)
+    @intent_locked = draw.intent_locked?
+    @intent_deadline = format_date(draw.intent_deadline)
     @login_str = if User.cas_auth?
                    ''
                  else
                    ' (you will need to use the password reset feature to set '\
                      'your password if you have not logged in before)'
                  end
-    mail(to: @user.email, subject: 'You may now form housing groups',
-         reply_to: @college.admin_email)
+    subject = determine_subject('You may now form housing groups')
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send invitation to a group leader to select a suite
@@ -47,8 +49,8 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   def selection_invite(user:, college: nil)
     determine_college(college)
     @user = user
-    mail(to: @user.email, subject: 'Time to select a suite!',
-         reply_to: @college.admin_email)
+    subject = determine_subject('Time to select a suite!')
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send notification to a user that their group was deleted
@@ -58,8 +60,8 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   def disband_notification(user:, college: nil)
     determine_college(college)
     @user = user
-    mail(to: @user.email, subject: 'Your housing group has been disbanded',
-         reply_to: @college.admin_email)
+    subject = determine_subject('Your housing group has been disbanded')
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send notification to a user that their group is finalizing
@@ -71,7 +73,8 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
     determine_college(college)
     @user = user
     @finalizing_url = finalizing_url_for(@user)
-    mail(to: @user.email, subject: 'Confirm your housing group',
+    subject = determine_subject('Confirm your housing group')
+    mail(to: @user.email, subject: subject,
          reply_to: @college.admin_email)
   end
 
@@ -84,9 +87,8 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
     @user = group.leader
     @requested = requested
     @group = group
-    mail(to: @user.email,
-         subject: "#{requested.full_name} wants to join your group",
-         reply_to: @college.admin_email)
+    subj = determine_subject("#{requested.full_name} wants to join your group")
+    mail(to: @user.email, subject: subj, reply_to: @college.admin_email)
   end
 
   # Send notification to a user that they have been invited to join a group
@@ -97,9 +99,9 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
     determine_college
     @user = invited
     @group = group
-    mail(to: @user.email,
-         subject: "#{@group.leader.full_name} invited you to join their group",
-         reply_to: @college.admin_email)
+    str = "#{@group.leader.full_name} invited you to join their group"
+    subject = determine_subject(str)
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send notification to a leader that a user joined their group
@@ -110,8 +112,8 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
     determine_college(college)
     @user = group.leader
     @joined = joined
-    mail(to: @user.email, subject: "#{joined.full_name} has joined your group",
-         reply_to: @college.admin_email)
+    subject = determine_subject("#{joined.full_name} has joined your group")
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send notification to a leader that a user left their group
@@ -122,8 +124,8 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
     determine_college(college)
     @user = group.leader
     @left = left
-    mail(to: @user.email, subject: "#{left.full_name} has left your group",
-         reply_to: @college.admin_email)
+    subject = determine_subject("#{left.full_name} has left your group")
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send notification to a user that their group is locked
@@ -133,32 +135,34 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   def group_locked(user:, college: nil)
     determine_college(college)
     @user = user
-    mail(to: @user.email, subject: 'Your housing group is now locked',
-         reply_to: @college.admin_email)
+    subject = determine_subject('Your housing group is now locked')
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send reminder to submit housing intent to a user
   #
   # @param user [User] the student to send the reminder to
+  # @param draw [Draw] the draw to pull settings from
   # @param college [College] the college to pull settings from
-  def intent_reminder(user:, college: nil)
+  def intent_reminder(user:, draw:, college: nil)
     determine_college(college)
     @user = user
-    @intent_date = format_date(user.draw.intent_deadline)
-    mail(to: @user.email, subject: 'Reminder to submit housing intent',
-         reply_to: @college.admin_email)
+    @intent_date = format_date(draw.intent_deadline)
+    subject = determine_subject('Reminder to submit housing intent')
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send reminder to lock housing group to a user
   #
   # @param user [User] the student to send the reminder to
+  # @param draw [Draw] the draw to pull settings from
   # @param college [College] the college to pull settings from
-  def locking_reminder(user:, college: nil)
+  def locking_reminder(user:, draw:, college: nil)
     determine_college(college)
     @user = user
-    @locking_date = format_date(user.draw.locking_deadline)
-    mail(to: @user.email, subject: 'Reminder to lock housing group',
-         reply_to: @college.admin_email)
+    @locking_date = format_date(draw.locking_deadline)
+    subject = determine_subject('Reminder to lock housing group')
+    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
 
   # Send an e-mail notifying the student that their lottery number has been
@@ -169,10 +173,10 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   def lottery_notification(user:, college:)
     @user = user
     determine_college(college)
-    @number = @user.group.lottery_number
+    @number = @user.group&.lottery_number
     @rank_str = determine_rank_str
-    subject = 'Your group has been assigned a lottery number'
-    mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
+    subj = determine_subject('Your group has been assigned a lottery number')
+    mail(to: @user.email, subject: subj, reply_to: @college.admin_email)
   end
 
   private
@@ -195,15 +199,21 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   end
 
   def determine_rank_str
+    return 'rank - out of - of size -' unless lottery_numbers.present?
     count = lottery_numbers.length
     rank = lottery_numbers.index(@number) + 1
     "\##{rank} out of #{count} #{'group'.pluralize(count)} of size "\
-      "#{@user.group.size}"
+      "#{@user.group&.size}"
   end
 
   def lottery_numbers
     @lottery_numbers ||=
-      @user.draw.groups.includes(:lottery_assignment)
-           .where(size: @user.group.size).map(&:lottery_number).sort
+      @user.draw&.groups&.includes(:lottery_assignment)
+           &.where(size: @user.group&.size)&.map(&:lottery_number)&.sort
+  end
+
+  def determine_subject(subject)
+    return subject unless @user.admin?
+    '[Example] ' + subject
   end
 end

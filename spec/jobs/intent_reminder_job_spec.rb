@@ -15,8 +15,16 @@ RSpec.describe IntentReminderJob, type: :job do
 
   it 'sends intent reminders to undeclared users in the draw' do
     allow(StudentMailer).to receive(:intent_reminder)
-      .with(user: user).and_return(msg)
+      .with(user: user, draw: draw).and_return(msg)
     described_class.perform_now(draw: draw)
     expect(StudentMailer).to have_received(:intent_reminder).once
+  end
+
+  it 'sends an intent reminder copy to admins' do
+    admin = create(:admin)
+    allow(StudentMailer).to receive(:intent_reminder).and_return(msg)
+    described_class.perform_now(draw: draw)
+    expect(StudentMailer).to have_received(:intent_reminder)
+      .with(user: admin, draw: draw)
   end
 end

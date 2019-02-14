@@ -26,6 +26,8 @@ class College < ApplicationRecord
   validates :dean, presence: true
   validates :subdomain, uniqueness: { case_sensitive: false }
 
+  has_many :users
+
   before_validation :set_subdomain
   before_update :freeze_subdomain
   after_create :create_schema!

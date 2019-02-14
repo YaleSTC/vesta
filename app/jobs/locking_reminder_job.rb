@@ -11,12 +11,13 @@ class LockingReminderJob < ApplicationJob
     students = draw.students.joins(:draw_membership)
                    .where(draw_memberships:
                           { intent: %w(on_campus undeclared) })
-    students.each { |s| send_email(s) }
+    admins = College.current.users.admin
+    (students + admins).each { |s| send_email(user: s, draw: draw) }
   end
 
   private
 
-  def send_email(user)
-    StudentMailer.locking_reminder(user: user).deliver_now
+  def send_email(user:, draw:)
+    StudentMailer.locking_reminder(user: user, draw: draw).deliver_now
   end
 end

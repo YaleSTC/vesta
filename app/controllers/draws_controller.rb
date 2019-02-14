@@ -42,12 +42,12 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def activate
-    result = DrawActivator.activate(draw: @draw)
+    result = DrawActivator.activate(draw: @draw.__getobj__)
     handle_action(action: 'show', **result)
   end
 
   def proceed_to_group_formation
-    result = DrawGroupFormationStarter.start(draw: @draw)
+    result = DrawGroupFormationStarter.start(draw: @draw.__getobj__)
     handle_action(action: 'show', **result)
   end
 
