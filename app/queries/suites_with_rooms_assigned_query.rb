@@ -21,7 +21,8 @@ class SuitesWithRoomsAssignedQuery
   #   assigned, eager loads rooms and users
   def call
     @relation.includes(rooms: :users)
-             .where.not(room_assignments: { room_id: nil })
+             .where.not(room_assignments: { room_id: nil },
+                        draw_memberships: { active: false })
              .order(%w(suites.number rooms.number))
   end
 end

@@ -22,6 +22,14 @@ RSpec.describe SuitesWithRoomsAssignedQuery do
     expect(described_class.call).to match_array([first, second])
   end
 
+  it 'ignores archived suites' do
+    archived = create_suite_with_rooms_assigned(size: 1)
+    archived.suite_assignment.group.draw_memberships.each do |dm|
+      dm.update!(active: false)
+    end
+    expect(described_class.call).to eq([])
+  end
+
   # rubocop:disable MethodLength
   def create_suite_with_rooms_assigned(size: 1, number: nil)
     base_suite_hash = { rooms_count: size }
