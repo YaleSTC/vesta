@@ -115,10 +115,9 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   # @return [User::ActiveRecord_Collection] the ungrouped non-off-campus
   #   students in the draw
   def ungrouped_students
-    @ungrouped_students ||= UngroupedStudentsQuery.new(
-      students.joins(:draw_memberships)
-              .where(draw_memberships: { intent: %w(undeclared on_campus) })
-    ).call
+    @ungrouped_students ||= students_with_intent(intents:
+                            %w(undeclared on_campus))
+                            .select { |student| student.group.nil? }
   end
 
   # Query method to see if there are no undeclared students in the draw
@@ -238,6 +237,15 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   # @return [Boolean] whether or not all groups have selected suites
   def all_groups_have_suites?
     groups.includes(:suite).where(suites: { id: nil }).count.zero?
+  end
+
+  # Return list of students with specified intents
+  #
+  # @param intents [Array<String>] specified intents to query for
+  # @return [Array<User>] the users in the draw gathered by
+  #   specified intent or intents
+  def students_with_intent(intents)
+    StudentsWithIntentQuery.call(intents)
   end
 
   private

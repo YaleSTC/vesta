@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 * Change login and logout to log in and log out when they are used as verbs ([#955](https://gitlab.com/yale-sdmp/vesta/issues/955)).
 * Add timeoutable to users and expiration date to cookies ([#963](https://gitlab.com/yale-sdmp/vesta/issues/963)).
 * Make oversubscription handling notify unlucky groups ([#964](https://gitlab.com/yale-sdmp/vesta/issues/964)).
+* Create query object for users by intent and add a model method to Draw ([#870](https://gitlab.com/yale-sdmp/vesta/issues/870)).
 
 ## v2.3.3 - 2019-04-01
 ### Fixed

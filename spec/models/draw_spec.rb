@@ -455,4 +455,14 @@ RSpec.describe Draw, type: :model do
       expect(draw.all_groups_have_suites?).to be_falsey
     end
   end
+
+  describe '#students_with_intent' do
+    it 'calls StudentsWithIntentQuery' do
+      draw = build_stubbed(:draw)
+      allow(StudentsWithIntentQuery).to receive(:call).with(%w(on_campus))
+      draw.students_with_intent(%w(on_campus))
+      expect(StudentsWithIntentQuery).to have_received(:call)
+        .with(%w(on_campus))
+    end
+  end
 end

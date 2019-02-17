@@ -8,8 +8,7 @@ class IntentReminderJob < ApplicationJob
   #
   # @param [Draw] the draw to send reminders in
   def perform(draw:)
-    students = draw.students.joins(:draw_membership)
-                   .where(draw_memberships: { intent: %w(undeclared) })
+    students = draw.students_with_intent(intents: %w(undeclared))
     admins = College.current.users.admin
     (students + admins).each { |s| send_email(user: s, draw: draw) }
   end

@@ -7,8 +7,8 @@ RSpec.describe LockingReminderJob, type: :job do
   let(:user) { instance_spy('user') }
   let(:draw) do
     instance_spy('draw', locking_deadline: 'date').tap do |d|
-      allow(d.students).to receive(:where)
-        .with(draw_memberships: { intent: %w(on_campus undeclared) })
+      allow(d).to receive(:students_with_intent)
+        .with(intents: %w(on_campus undeclared))
         .and_return([user])
     end
   end

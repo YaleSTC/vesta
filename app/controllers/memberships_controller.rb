@@ -30,9 +30,8 @@ class MembershipsController < ApplicationController
 
   # TODO: Make #new_invite and create_invite more RESTful
   def new_invite
-    @students = UngroupedStudentsQuery
-                .new(@draw.students.joins(:draw_membership)
-            .where(draw_memberships: { intent: %w(on_campus) })).call
+    @students = @draw.students_with_intent(intents: %w(on_campus))
+                     .select { |student| student.group.nil? }
   end
 
   def create_invite

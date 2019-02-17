@@ -110,10 +110,9 @@ class GroupsController < ApplicationController
   def set_form_data
     @group ||= Group.new(draw: @draw)
     @group.memberships.delete_all unless @group.persisted?
-    @students = UngroupedStudentsQuery.new(
-      @draw.students.joins(:draw_membership)
-      .where(draw_memberships: { intent: %w(on_campus) })
-    ).call
+    @students = @draw.students_with_intent(intents: %w(on_campus))
+                     .select { |student| student.group.nil? }
+
     @leader_students = @group.members.empty? ? @students : @group.members
     @suite_sizes = @draw.open_suite_sizes
   end
