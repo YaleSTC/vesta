@@ -20,7 +20,7 @@ class DrawMembershipDashboard < Administrate::BaseDashboard
     room: Field::HasOne,
     id: Field::Number,
     old_draw: Field::BelongsTo.with_options(class_name: 'Draw'),
-    intent: Field::String.with_options(searchable: false),
+    intent: EnumField,
     active: Field::Boolean,
     created_at: Field::DateTime,
     updated_at: Field::DateTime

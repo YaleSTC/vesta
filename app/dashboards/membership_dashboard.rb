@@ -16,7 +16,7 @@ class MembershipDashboard < Administrate::BaseDashboard
     id: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    status: Field::String.with_options(searchable: false),
+    status: EnumField,
     locked: Field::Boolean
   }.freeze
 

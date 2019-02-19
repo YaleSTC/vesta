@@ -19,14 +19,14 @@ class DrawDashboard < Administrate::BaseDashboard
     name: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    status: Field::String.with_options(searchable: false),
+    status: EnumField,
     intent_deadline: Field::DateTime,
     restricted_sizes: ArrayField.with_options(permitted_values: (1..12).to_a),
     intent_locked: Field::Boolean,
     last_email_sent: Field::DateTime,
-    email_type: Field::String.with_options(searchable: false),
+    email_type: EnumField,
     locking_deadline: Field::DateTime,
-    suite_selection_mode: Field::String.with_options(searchable: false)
+    suite_selection_mode: EnumField
   }.freeze
 
   # COLLECTION_ATTRIBUTES

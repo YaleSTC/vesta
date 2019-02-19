@@ -23,7 +23,7 @@ class CollegeDashboard < Administrate::BaseDashboard
     allow_clipping: Field::Boolean,
     restrict_clipping_group_size: Field::Boolean,
     advantage_clips: Field::Boolean,
-    size_sort: Field::String.with_options(searchable: false)
+    size_sort: EnumField
   }.freeze
 
   # COLLECTION_ATTRIBUTES

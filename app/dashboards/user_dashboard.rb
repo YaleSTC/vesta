@@ -22,7 +22,7 @@ class UserDashboard < Administrate::BaseDashboard
     id: Field::Number,
     email: Field::String,
     password: Field::String.with_options(searchable: false),
-    role: Field::String.with_options(searchable: false),
+    role: EnumField,
     first_name: Field::String,
     last_name: Field::String,
     intent: Field::String.with_options(searchable: false),

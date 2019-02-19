@@ -21,7 +21,7 @@ class GroupDashboard < Administrate::BaseDashboard
     members: Field::HasMany.with_options(class_name: 'User'),
     id: Field::Number,
     size: Field::Number,
-    status: Field::String.with_options(searchable: false),
+    status: EnumField,
     leader_id: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,

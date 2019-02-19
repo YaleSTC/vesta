@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 * Rename group size locking to restrict size locking ([811](https://gitlab.com/yale-sdmp/vesta/issues/811)).
 
 ## v2.2.1 - 2019-02-20
+### Added
+* Add custom Administrate field EnumField ([#891](https://gitlab.com/yale-sdmp/vesta/issues/891)).
+
 ### Fixed
 * Fix the display of archived group links on the student dashboard ([#907](https://gitlab.com/yale-sdmp/vesta/issues/907)).
 * Fix the drawless suites query ([#901](https://gitlab.com/yale-sdmp/vesta/issues/901)).
