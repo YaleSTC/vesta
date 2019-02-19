@@ -44,12 +44,20 @@ RSpec.feature 'Draw student assignment' do
         create(:group, leader: student_in_group)
       end
 
-      it 'can be performed' do
+      it 'shows a success flash' do
         visit edit_draw_students_path(draw, student)
         fill_in form_entry, with: student.send(qtype)
         click_on 'Process'
         msg = "#{student.full_name} successfully added"
         expect(page).to have_css('.flash-success', text: msg)
+      end
+
+      it 'actually assigns the student' do
+        visit edit_draw_students_path(draw, student)
+        fill_in form_entry, with: student.send(qtype)
+        click_on 'Process'
+        expect(page).to \
+          have_css('td[data-role="user-first_name"]', text: student.first_name)
       end
 
       it 'displays user not found error if user is not imported' do

@@ -29,7 +29,13 @@ RSpec.describe DrawStudentAssignmentForm, type: :model do
       before { allow(User).to receive(:login_attr).and_return(qtype) }
 
       context 'adding a user success' do
-        it 'takes a username and adds the user' do
+        it 'works for a user not in a draw' do
+          create(:student, student_params)
+          params = mock_params(login: login, adding: 'true')
+          expect { described_class.submit(draw: draw, params: params) }.to \
+            change { draw.students.count }.by(1)
+        end
+        it 'works for a user in a draw' do
           create(:student_in_draw, student_params)
           params = mock_params(login: login, adding: 'true')
           expect { described_class.submit(draw: draw, params: params) }.to \

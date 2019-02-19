@@ -48,7 +48,7 @@ class DrawStudentAssignmentForm
 
   def update_students
     if adding?
-      student.draw_membership&.remove_draw&.update!(draw: draw)
+      add_student(student)
     else
       student.draw_membership&.restore_draw(save_current: true)&.save!
     end
@@ -97,6 +97,14 @@ class DrawStudentAssignmentForm
     return unless student.draw != draw
     errors.add(:username,
                'must belong to a student in the draw when removing')
+  end
+
+  def add_student(student)
+    if student.draw_membership.present?
+      student.draw_membership&.remove_draw&.update!(draw: draw)
+    else
+      student.update!(draw: draw)
+    end
   end
 
   def success

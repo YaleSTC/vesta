@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Scope the results view and export to only return active students in the current college ([#885](https://gitlab.com/yale-sdmp/vesta/issues/885)).
 * Ensure that suites are properly treated as available after archiving old groups ([#895](https://gitlab.com/yale-sdmp/vesta/issues/895)).
 * Fix the results by student view to only show active draw information ([#897](https://gitlab.com/yale-sdmp/vesta/issues/897)).
+* Ensure that students not already in draws can be individually added to other draws ([#898](https://gitlab.com/yale-sdmp/vesta/issues/898)).
 
 ## v2.1.0 - 2019-02-04
 ### Notes for upgrade:
