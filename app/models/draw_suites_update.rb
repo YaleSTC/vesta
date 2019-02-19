@@ -56,7 +56,7 @@ class DrawSuitesUpdate # rubocop:disable ClassLength
     @params = consolidate_params(params.to_h.transform_keys(&:to_sym))
     CONSOLIDATED_ATTRS.each { |attr| update_ids_param(attr) }
     @suites_to_remove = find_suites_to_remove
-    @suites_to_add = find_suites_to_add
+    @suites_to_add = find_suites_to_add - draw.suites
   end
 
   def consolidate_params(p)

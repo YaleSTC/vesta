@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190206152011) do
+ActiveRecord::Schema.define(version: 20190219205401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20190206152011) do
     t.bigint "suite_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["draw_id", "suite_id"], name: "index_draw_suites_on_draw_id_and_suite_id", unique: true
     t.index ["draw_id"], name: "index_draw_suites_on_draw_id"
     t.index ["suite_id"], name: "index_draw_suites_on_suite_id"
   end

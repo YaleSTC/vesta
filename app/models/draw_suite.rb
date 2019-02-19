@@ -5,4 +5,7 @@
 class DrawSuite < ApplicationRecord
   belongs_to :draw
   belongs_to :suite
+
+  validates :draw, presence: true, uniqueness: { scope: :suite }
+  validates :suite, presence: true
 end
