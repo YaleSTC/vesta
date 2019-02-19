@@ -3,7 +3,6 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Added
-* Add masquerading to allow admins to impersonate other users ([#147](https://gitlab.com/yale-sdmp/vesta/issues/147)).
 * Add SID to users ([#669](https://gitlab.com/yale-sdmp/vesta/issues/669)).
 * Add new scope associations to room so that only non-archived data can be retrieved ([#960](https://gitlab.com/yale-sdmp/vesta/issues/960)).
 * Add foreign key contraints to schema and dependency handling for all associations ([#406](https://gitlab.com/yale-sdmp/vesta/issues/406)).
@@ -12,6 +11,8 @@ All notable changes to this project will be documented in this file.
 * Update feature specs to use navigation ([#399] (https://gitlab.com/yale-sdmp/vesta/issues/399)).
 * Add a suite decorator ([#581] (https://gitlab.com/yale-sdmp/vesta/issues/581)).
 * Add ability to reassign suite in the suite selection or results phase ([#969] (https://gitlab.com/yale-sdmp/vesta/issues/969)).
+* Add masquerading to allow admins to impersonate other users ([#147](https://gitlab.com/yale-sdmp/vesta/issues/147)).
+* Add information about pending group requests to user dashboard ([#696](https://gitlab.com/yale-sdmp/vesta/issues/696)).
 
 ### Changed
 * Sort groups in results and suite selection tables by lottery number ([#968](https://gitlab.com/yale-sdmp/vesta/issues/968)).

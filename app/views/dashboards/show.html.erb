@@ -43,6 +43,12 @@
         <% if @group.present? && policy(@group).show? %>
           <p><%= link_to 'Your group', draw_group_path(@draw, @group) %>
         (<%= size_str(@group.size).capitalize %>, <%= display_group_status(@group) %>)</p>
+          <% if @group.requests.present? && @group.requests.any? { |r| policy(r).accept? } %>
+            <p>There are pending requests to join your group. Go to <%= link_to 'your group', draw_group_path(@draw, @group) %> to respond to them</p>
+          <% end %>
+          <% if College.current.allow_clipping? && @group.clip.present? %>
+            <p><%= link_to 'Your clip', clip_path(@group.clip) %></p>
+          <% end %>
         <% elsif @pending.present? && !@pending.empty? %>
           <hr />
           <p>Your membership invitations and requests:</p>
@@ -70,7 +76,6 @@
     </div>
   <% end %>
 <% end %>
-
 <% unless current_user.student? %>
   <% if @draws.present? %>
     <% @draws.each do |draw| %>
