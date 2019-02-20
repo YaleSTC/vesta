@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Modify front end for user experience updates ([#875](https://gitlab.com/yale-sdmp/vesta/issues/875)).
 * Make draws bypass the intent phase if intent is locked ([#881](https://gitlab.com/yale-sdmp/vesta/issues/881)).
+* Update Terms of Service text ([#903](https://gitlab.com/yale-sdmp/vesta/issues/903)).
 
 ### Fixed
 * Update version number appropriately for the footer ([#878](https://gitlab.com/yale-sdmp/vesta/issues/878))
