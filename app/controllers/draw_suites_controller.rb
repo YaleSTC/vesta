@@ -77,7 +77,8 @@ class DrawSuitesController < ApplicationController
   def suite_hash_merge(queried_suites)
     @suite_sizes ||= SuiteSizesQuery.new(ValidSuitesQuery.call).call
     empty_suite_hash = @suite_sizes.map { |s| [s, []] }.to_h
-    empty_suite_hash.merge(queried_suites.order(:number).group_by(&:size))
+    empty_suite_hash
+      .merge(queried_suites.sort_by { |q| q[:number] }.group_by(&:size))
   end
 
   def suites_update_params

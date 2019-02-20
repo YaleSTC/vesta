@@ -22,7 +22,7 @@ class DrawlessSuitesQuery
   #
   # @return [Array<Suite>] the drawless suites in the relation
   def call
-    @relation.left_joins(draw_suites: :draw)
-             .where('draw_suites.suite_id IS NULL OR draws.active = false')
+    @relation - @relation.joins(draw_suites: :draw)
+                         .where(draws: { active: true })
   end
 end
