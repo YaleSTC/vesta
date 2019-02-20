@@ -83,25 +83,12 @@ RSpec.describe User, type: :model do
   end
 
   describe 'other validations' do
-    xit 'checks to make sure an assigned room belongs to the right group'
-
     context 'tos_accepted' do
       it 'can be accepted' do
         user = create(:user, tos_accepted: nil)
         user.tos_accepted = Time.current
         user.save!
         expect(user).to be_valid
-      end
-      it 'is frozen once accepted' do
-        user = create(:user, tos_accepted: Time.current)
-        user.tos_accepted = Time.current
-        expect { user.save! }.to raise_error(ActiveRecord::RecordNotSaved)
-      end
-      it 'raises an error if changed once accepted' do
-        user = create(:user, tos_accepted: Time.current)
-        user.update(tos_accepted: Time.current)
-        expect(user.errors[:base])
-          .to include('Terms of Service acceptance cannot be changed')
       end
     end
   end

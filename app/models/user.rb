@@ -64,9 +64,6 @@ class User < ApplicationRecord
 
   enum role: %w(student admin rep superuser superadmin graduated)
 
-  before_update :freeze_tos_acceptance,
-                if: ->() { will_save_change_to_tos_accepted? }
-
   before_save :downcase_username, if: :cas_auth?
 
   scope :active, -> { where.not(role: 'graduated') }

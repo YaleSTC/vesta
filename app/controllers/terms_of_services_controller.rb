@@ -11,6 +11,11 @@ class TermsOfServicesController < ApplicationController
     handle_action(**result)
   end
 
+  def reset
+    result = BulkTosResetter.reset
+    handle_action(path: edit_college_path(College.current), **result)
+  end
+
   private
 
   def authorize!

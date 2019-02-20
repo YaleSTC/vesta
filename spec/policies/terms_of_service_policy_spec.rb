@@ -25,6 +25,10 @@ RSpec.describe TermsOfServicePolicy do
         it { is_expected.to permit(user) }
       end
     end
+
+    permissions :reset? do
+      it { is_expected.not_to permit(user) }
+    end
   end
 
   context 'housing rep' do
@@ -47,12 +51,26 @@ RSpec.describe TermsOfServicePolicy do
         it { is_expected.to permit(user) }
       end
     end
+    permissions :reset? do
+      it { is_expected.not_to permit(user) }
+    end
   end
 
   context 'admin' do
     let(:user) { build_stubbed(:user, role: 'admin') }
 
     permissions :show? do
+      it { is_expected.to permit(user) }
+    end
+    permissions :accept?, :reset? do
+      it { is_expected.not_to permit(user) }
+    end
+  end
+
+  context 'superuser' do
+    let(:user) { build_stubbed(:user, role: 'superuser') }
+
+    permissions :show?, :reset? do
       it { is_expected.to permit(user) }
     end
     permissions :accept? do

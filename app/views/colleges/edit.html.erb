@@ -2,8 +2,14 @@
 <h1>Edit Settings</h1>
 <%= render "form", college: @college %>
 <%= link_to 'Cancel', root_path %>
+<% if policy(@college).archive? ||  policy(:terms_of_service).reset? %>
+<hr>
+<% end %>
 <% if policy(@college).archive? %>
-  <hr>
   <%= link_to 'Archive all data in this college', college_archive_path(@college), method: :patch,
     data: { confirm: 'Are you sure you want to archive all data this college? This will freeze all student, group, and draw data and cannot be reversed.' }, class: 'button alert' %>
+<% end %>
+<% if policy(:terms_of_service).reset? %>
+<%= link_to 'Reset terms of service acceptance for all non-admins', reset_terms_of_service_path, method: :patch,
+  data: { confirm: 'Are you sure you want to reset the terms of service? This will reset data for all colleges and is irreversible.' }, class: 'button alert' %>
 <% end %>

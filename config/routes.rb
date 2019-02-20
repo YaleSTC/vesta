@@ -47,6 +47,7 @@ Rails.application.routes.draw do
 
   resource :terms_of_service, only: %i(show) do
     patch 'accept'
+    patch 'reset'
   end
 
   resources :users do

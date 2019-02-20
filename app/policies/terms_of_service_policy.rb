@@ -10,6 +10,10 @@ class TermsOfServicePolicy < ApplicationPolicy
     user.tos_accepted.nil? && !user.admin?
   end
 
+  def reset?
+    user.superuser?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope
