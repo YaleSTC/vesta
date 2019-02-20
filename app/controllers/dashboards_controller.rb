@@ -25,7 +25,7 @@ class DashboardsController < ApplicationController
 
   def set_group_info
     @group = current_user.group
-    @pending = current_user.memberships if @group.blank?
+    @pending = current_user.active_memberships if @group.blank?
     @suite = @group.suite if @group.present?
     @room = current_user.room if @suite.present?
   end

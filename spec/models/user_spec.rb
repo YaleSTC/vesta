@@ -11,6 +11,9 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_one(:draw_membership).conditions(active: true) }
     it { is_expected.to have_one(:draw).through(:draw_membership) }
     it { is_expected.to have_many(:memberships).through(:draw_memberships) }
+    it do
+      is_expected.to have_many(:active_memberships).through(:draw_membership)
+    end
     it { is_expected.to have_one(:membership).through(:draw_membership) }
     it { is_expected.to have_one(:room_assignment).through(:draw_membership) }
     it { is_expected.to have_one(:room).through(:draw_membership) }

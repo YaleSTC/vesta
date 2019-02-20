@@ -38,6 +38,31 @@ RSpec.feature 'Dashboards' do
           end
         end
       end
+
+      context 'when archived' do
+        let(:archived_draw) { create(:draw_with_groups) }
+        let(:group) { archived_draw.groups.first }
+        let(:student) { group.leader }
+        let(:active_draw) { create(:draw, status: 'intent_selection') }
+
+        before do
+          archived_draw.update!(active: false)
+          active_draw.students << student
+          log_in student
+        end
+
+        it 'shows current draw' do
+          visit root_path
+          expect(page).to have_link(active_draw.name,
+                                    href: draw_path(active_draw))
+        end
+
+        it 'does not show old data' do
+          visit root_path
+          expect(page).not_to \
+            have_link(group.name, href: draw_group_path(active_draw, group))
+        end
+      end
     end
 
     context 'without group' do

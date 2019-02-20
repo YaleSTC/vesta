@@ -110,16 +110,10 @@ describe UserUpdater do
       expect(room_assignment).to have_received(:destroy!)
     end
 
-    it 'updates the draw id to nil' do
+    it 'makes the active draw membership inactive' do
       params = { college_id: create(:college).id }
       described_class.update(user: user, params: params, editing_self: false)
-      expect(user.draw_membership.draw_id).to eq(nil)
-    end
-
-    it 'updates the old draw id to nil' do
-      params = { college_id: create(:college).id }
-      described_class.update(user: user, params: params, editing_self: false)
-      expect(user.draw_membership.old_draw_id).to eq(nil)
+      expect(user.draw_membership.reload.active).to be_falsey
     end
   end
 

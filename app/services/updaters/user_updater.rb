@@ -87,7 +87,7 @@ class UserUpdater < Updater
       m.destroy!
     end
     object.room_assignment&.destroy!
-    object.draw_membership&.update!(draw_id: nil, old_draw_id: nil)
+    object.draw_membership&.update!(active: false)
   end
 
   def success

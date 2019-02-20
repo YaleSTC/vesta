@@ -39,6 +39,7 @@ class User < ApplicationRecord
   has_one :draw_membership, -> { where(active: true) }, dependent: :destroy
   has_one :draw, through: :draw_membership
   has_many :memberships, through: :draw_memberships, source: :memberships
+  has_many :active_memberships, through: :draw_membership, source: :memberships
   has_one :membership, through: :draw_membership, source: :membership
   has_one :group, through: :membership
   has_one :room_assignment, through: :draw_membership

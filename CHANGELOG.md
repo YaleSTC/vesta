@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v2.2.1 - 2019-02-20
+### Fixed
+* Fix the display of archived group links on the student dashboard ([#907](https://gitlab.com/yale-sdmp/vesta/issues/907)).
+
 ## v2.2.0 - 2019-02-12
 ### Added
 * Add the ability to assign lottery numbers by size ([#848](https://gitlab.com/yale-sdmp/vesta/issues/848)).
