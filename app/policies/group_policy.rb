@@ -51,6 +51,10 @@ class GroupPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def browsable?
+    record.draw&.active?
+  end
+
   def skip?
     user.admin? && record.draw.suite_selection?
   end

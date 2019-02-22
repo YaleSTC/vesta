@@ -15,6 +15,22 @@ RSpec.describe ClipPolicy do
       it { is_expected.to permit(user, clip) }
     end
 
+    permissions :browsable? do
+      context 'when draw is inactive' do
+        let(:draw) { instance_spy('Draw', active?: false) }
+
+        before { allow(clip).to receive(:draw).and_return(draw) }
+        it { is_expected.not_to permit(user, clip) }
+      end
+
+      context 'when draw is active' do
+        let(:draw) { instance_spy('Draw', active?: true) }
+
+        before { allow(clip).to receive(:draw).and_return(draw) }
+        it { is_expected.to permit(user, clip) }
+      end
+    end
+
     permissions :create? do
       let(:group) { instance_spy('Group', present?: true) }
 
@@ -97,6 +113,22 @@ RSpec.describe ClipPolicy do
     permissions :edit?, :update?, :destroy? do
       it { is_expected.not_to permit(user, clip) }
     end
+
+    permissions :browsable? do
+      context 'when draw is inactive' do
+        let(:draw) { instance_spy('Draw', active?: false) }
+
+        before { allow(clip).to receive(:draw).and_return(draw) }
+        it { is_expected.not_to permit(user, clip) }
+      end
+
+      context 'when draw is active' do
+        let(:draw) { instance_spy('Draw', active?: true) }
+
+        before { allow(clip).to receive(:draw).and_return(draw) }
+        it { is_expected.to permit(user, clip) }
+      end
+    end
   end
 
   context 'admin' do
@@ -104,6 +136,22 @@ RSpec.describe ClipPolicy do
 
     permissions :show? do
       it { is_expected.to permit(user, clip) }
+    end
+
+    permissions :browsable? do
+      context 'draw is archived' do
+        let(:draw) { instance_spy('Draw', active?: false) }
+
+        before { allow(clip).to receive(:draw).and_return(draw) }
+        it { is_expected.not_to permit(user, clip) }
+      end
+
+      context 'draw is active' do
+        let(:draw) { instance_spy('Draw', active?: true) }
+
+        before { allow(clip).to receive(:draw).and_return(draw) }
+        it { is_expected.to permit(user, clip) }
+      end
     end
 
     permissions :create? do

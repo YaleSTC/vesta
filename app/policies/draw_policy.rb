@@ -113,6 +113,10 @@ class DrawPolicy < ApplicationPolicy
     destroy? && record.active?
   end
 
+  def browsable?
+    record.active?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

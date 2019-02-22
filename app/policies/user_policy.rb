@@ -38,6 +38,10 @@ class UserPolicy < ApplicationPolicy
     !record.admin? && record.draw.present?
   end
 
+  def browsable?
+    !record.graduated?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope.where(college: College.current).active

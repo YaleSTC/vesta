@@ -81,6 +81,7 @@ class GroupsController < ApplicationController
 
   def authorize!
     if @group
+      authorize @group, :browsable?
       authorize @group
     else
       authorize Group

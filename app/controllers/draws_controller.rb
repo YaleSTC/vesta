@@ -135,6 +135,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
 
   def authorize!
     if @draw
+      authorize @draw, :browsable?
       authorize @draw
     else
       authorize Draw

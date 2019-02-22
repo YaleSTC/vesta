@@ -82,6 +82,7 @@ class UsersController < ApplicationController # rubocop:disable ClassLength
 
   def authorize!
     if @user
+      authorize @user, :browsable?
       authorize @user
     else
       authorize User

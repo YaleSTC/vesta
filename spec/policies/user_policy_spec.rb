@@ -28,6 +28,17 @@ RSpec.describe UserPolicy do
       end
     end
 
+    permissions :browsable? do
+      context 'when user has not graduated' do
+        before { allow(user).to receive(:graduated?).and_return(false) }
+        it { is_expected.to permit(user, user) }
+      end
+      context 'when user has graduated' do
+        before { allow(user).to receive(:graduated?).and_return(true) }
+        it { is_expected.not_to permit(user, user) }
+      end
+    end
+
     permissions :edit_intent?, :update_intent? do
       context 'user is not in a draw' do
         before { allow(user).to receive(:draw).and_return(nil) }
@@ -123,6 +134,16 @@ RSpec.describe UserPolicy do
 
     permissions :show? do
       it { is_expected.to permit(user, other_user) }
+    end
+    permissions :browsable? do
+      context 'when user has not graduated' do
+        before { allow(user).to receive(:graduated?).and_return(false) }
+        it { is_expected.to permit(user, user) }
+      end
+      context 'when user has graduated' do
+        before { allow(user).to receive(:graduated?).and_return(true) }
+        it { is_expected.not_to permit(user, user) }
+      end
     end
     permissions :edit?, :update? do
       it { is_expected.not_to permit(user, user) }
@@ -262,6 +283,17 @@ RSpec.describe UserPolicy do
     permissions :edit_password?, :update_password? do
       it { is_expected.not_to permit(user, other_user) }
       it { is_expected.to permit(user, user) }
+    end
+
+    permissions :browsable? do
+      context 'when user has not graduated' do
+        before { allow(user).to receive(:graduated?).and_return(false) }
+        it { is_expected.to permit(user, user) }
+      end
+      context 'when user has graduated' do
+        before { allow(user).to receive(:graduated?).and_return(true) }
+        it { is_expected.not_to permit(user, user) }
+      end
     end
 
     permissions :edit_intent?, :update_intent? do

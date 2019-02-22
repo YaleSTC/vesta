@@ -42,6 +42,7 @@ class ClipsController < ApplicationController
 
   def authorize!
     if @clip
+      authorize @clip, :browsable?
       authorize @clip
     else
       authorize Clip.new(draw: @draw)

@@ -23,6 +23,10 @@ class ClipPolicy < ApplicationPolicy
     edit?
   end
 
+  def browsable?
+    record.draw&.active?
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

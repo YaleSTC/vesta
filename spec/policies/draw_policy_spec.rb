@@ -29,6 +29,16 @@ RSpec.describe DrawPolicy do
                 :restrict_all_sizes?, :prune?, :lock_all_groups?, :archive? do
       it { is_expected.not_to permit(user, draw) }
     end
+    permissions :browsable? do
+      context 'when draw is inactive' do
+        before { allow(draw).to receive(:active?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
+      context 'when draw is active' do
+        before { allow(draw).to receive(:active?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+    end
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, Draw) }
     end
@@ -117,6 +127,17 @@ RSpec.describe DrawPolicy do
                 :restrict_all_sizes?, :prune?, :lock_all_groups?, :archive?,
                 :duplicate? do
       it { is_expected.not_to permit(user, draw) }
+    end
+    permissions :browsable? do
+      context 'when draw is active' do
+        before { allow(draw).to receive(:active?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+
+      context 'when draw is inactive' do
+        before { allow(draw).to receive(:active?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
     end
     permissions :new?, :create? do
       it { is_expected.not_to permit(user, Draw) }
@@ -278,6 +299,18 @@ RSpec.describe DrawPolicy do
     end
     permissions :index?, :new?, :create? do
       it { is_expected.to permit(user, Draw) }
+    end
+
+    permissions :browsable? do
+      context 'when draw is active' do
+        before { allow(draw).to receive(:active?).and_return(true) }
+        it { is_expected.to permit(user, draw) }
+      end
+
+      context 'when draw is inactive' do
+        before { allow(draw).to receive(:active?).and_return(false) }
+        it { is_expected.not_to permit(user, draw) }
+      end
     end
 
     permissions :activate? do

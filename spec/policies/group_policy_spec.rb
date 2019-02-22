@@ -12,6 +12,21 @@ RSpec.describe GroupPolicy do
     let(:group) { build_stubbed(:group, leader: user) }
     let(:other_group) { build_stubbed(:group) }
 
+    permissions :browsable? do
+      context 'when draw is inactive' do
+        let(:draw) { instance_spy('Draw', active?: false) }
+
+        before { allow(group).to receive(:draw).and_return(draw) }
+        it { is_expected.not_to permit(user, group) }
+      end
+      context 'when draw is active' do
+        let(:draw) { instance_spy('Draw', active?: true) }
+
+        before { allow(group).to receive(:draw).and_return(draw) }
+        it { is_expected.to permit(user, group) }
+      end
+    end
+
     permissions :create? do
       context 'in group-formation draw, not in group, on_campus' do
         before do
@@ -53,6 +68,7 @@ RSpec.describe GroupPolicy do
         it { is_expected.not_to permit(user, Group) }
       end
     end
+
     permissions :index? do
       it { is_expected.not_to permit(user, Group) }
     end
@@ -163,6 +179,21 @@ RSpec.describe GroupPolicy do
       build_stubbed(:group, draw: build_stubbed(:draw))
     end
 
+    permissions :browsable? do
+      context 'when draw is inactive' do
+        let(:draw) { instance_spy('Draw', active?: false) }
+
+        before { allow(group).to receive(:draw).and_return(draw) }
+        it { is_expected.not_to permit(user, group) }
+      end
+      context 'when draw is active' do
+        let(:draw) { instance_spy('Draw', active?: true) }
+
+        before { allow(group).to receive(:draw).and_return(draw) }
+        it { is_expected.to permit(user, group) }
+      end
+    end
+
     permissions :create? do
       it { is_expected.to permit(user, Group) }
     end
@@ -238,6 +269,21 @@ RSpec.describe GroupPolicy do
     let(:user) { build_stubbed(:user, role: 'admin') }
     let(:group) do
       build_stubbed(:group, draw: build_stubbed(:draw))
+    end
+
+    permissions :browsable? do
+      context 'when draw is inactive' do
+        let(:draw) { instance_spy('Draw', active?: false) }
+
+        before { allow(group).to receive(:draw).and_return(draw) }
+        it { is_expected.not_to permit(user, group) }
+      end
+      context 'when draw is active' do
+        let(:draw) { instance_spy('Draw', active?: true) }
+
+        before { allow(group).to receive(:draw).and_return(draw) }
+        it { is_expected.to permit(user, group) }
+      end
     end
 
     permissions :create? do
