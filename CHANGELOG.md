@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 ### Fixed
 * Prevent users from being able to enter room assignments twice ([#950](https://gitlab.com/yale-sdmp/vesta/issues/950)).
+* Fix DrawlessGroupsController not correctly redirecting if the group has a draw ([#920](https://gitlab.com/yale-sdmp/vesta/issues/920)).
 
 ## v2.3.1 - 2019-03-25
 ### Fixed

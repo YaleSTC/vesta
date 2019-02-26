@@ -6,9 +6,6 @@ class DrawlessGroupsController < ApplicationController
   before_action :set_form_data, only: %i(new edit)
 
   def show
-    if @group.draw.present?
-      redirect_to(draw_group_path(@group.draw, @group)) && return
-    end
     generate_suites_data
 
     render layout: 'application_with_sidebar'
@@ -74,6 +71,7 @@ class DrawlessGroupsController < ApplicationController
 
   def set_group
     @group = Group.includes(:members).find(params[:id])
+    redirect_to(draw_group_path(@group.draw, @group)) if @group&.draw.present?
   end
 
   def set_form_data
