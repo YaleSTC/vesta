@@ -8,14 +8,14 @@ RSpec.describe DrawStudentsUpdate do
       it 'bulk-adds users of a passed class year' do
         draw = create(:draw)
         create(:student, class_year: 2016)
-        params = mock_params(class_year: '2016', to_add: nil)
+        params = mock_params(class_year: '2016')
         expect { described_class.update(draw: draw, params: params) }.to \
           change { draw.students.count }.by(1)
       end
       it 'ignores students that are in other draws or groups' do
         draw = create(:draw)
         create_students_in_year(2016)
-        params = mock_params(class_year: '2016', to_add: nil)
+        params = mock_params(class_year: '2016')
         expect { described_class.update(draw: draw, params: params) }.to \
           change { draw.students.count }.by(1)
       end
@@ -100,8 +100,8 @@ RSpec.describe DrawStudentsUpdate do
       end
     end
 
-    def mock_params(class_year: '', to_add: '')
-      hash = { class_year: class_year, to_add: to_add }
+    def mock_params(class_year: '')
+      hash = { class_year: class_year }
       instance_spy('ActionController::Parameters', to_h: hash)
     end
   end
