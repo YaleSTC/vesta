@@ -55,7 +55,7 @@ describe UserUpdater do
       user = create(:full_group).members.last.reload
       params = { college_id: create(:college).id }
       u = described_class.new(user: user, params: params, editing_self: false)
-      expect(u.update[:msg]).to have_key(:alert)
+      expect(u.update[:msg]).to have_key(:error)
     end
     it 'do not appear if the user has not confirmed a membership' do
       # this creates a group of size 2
@@ -78,42 +78,21 @@ describe UserUpdater do
 
   context 'nullifying draw info' do
     let(:user) { create(:student_in_draw) }
-    let(:membership) { instance_spy('Membership') }
-
-    it 'destroys the group if the size is 1' do
-      leader = create(:group).leader.reload
-      allow(leader.group).to receive(:destroy!)
-      params = { college_id: create(:college).id }
-      described_class.update(user: leader, params: params, editing_self: false)
-      expect(leader.group).to have_received(:destroy!)
-    end
+    let(:membership) { instance_spy('Membership', present?: true) }
 
     it 'unlocks all memberships' do
-      allow(user).to receive(:memberships).and_return([membership])
+      allow(user).to receive(:membership).and_return(membership)
       params = { college_id: create(:college).id }
       described_class.update(user: user, params: params, editing_self: false)
       expect(membership).to have_received(:update_column).with(:locked, false)
     end
 
-    it 'destroys all memberships' do
-      allow(user).to receive(:memberships).and_return([membership])
+    it 'destroys the draw membership' do
+      draw_membership = instance_spy('draw_membership', destroy!: true)
+      allow(user).to receive(:draw_membership).and_return(draw_membership)
       params = { college_id: create(:college).id }
       described_class.update(user: user, params: params, editing_self: false)
-      expect(membership).to have_received(:destroy!)
-    end
-
-    it 'destroys all room assignments' do
-      room_assignment = instance_spy('room_assignment', destroy!: true)
-      allow(user).to receive(:room_assignment).and_return(room_assignment)
-      params = { college_id: create(:college).id }
-      described_class.update(user: user, params: params, editing_self: false)
-      expect(room_assignment).to have_received(:destroy!)
-    end
-
-    it 'makes the active draw membership inactive' do
-      params = { college_id: create(:college).id }
-      described_class.update(user: user, params: params, editing_self: false)
-      expect(user.draw_membership.reload.active).to be_falsey
+      expect(draw_membership).to have_received(:destroy!)
     end
   end
 

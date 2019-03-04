@@ -15,7 +15,7 @@ RSpec.describe Draw, type: :model do
     it { is_expected.to validate_presence_of(:status) }
     it { is_expected.to validate_presence_of(:suite_selection_mode) }
 
-    it 'cannot set intent dealine in the past' do
+    it 'cannot set intent deadline in the past' do
       draw = build(:draw, intent_deadline: Time.zone.today - 1)
       expect(draw).not_to be_valid
     end
@@ -49,6 +49,28 @@ RSpec.describe Draw, type: :model do
       draw = create(:draw, group_ids: group.id)
       draw.destroy
       expect { group.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe 'scoping students based on active status of the draw_memberships' do
+    context 'with an inactive draw' do
+      it 'will only be associated with draw_memberships that are inactive' do
+        draw = create(:draw, active: false)
+        create(:student_in_draw, draw: draw)
+        s2 = create(:student_in_draw, draw: draw)
+        s2.draw_memberships.first.update!(active: false)
+        expect(draw.reload.students).to eq([s2])
+      end
+    end
+
+    context 'with an active draw' do
+      it 'will only be associated with draw_memberships that are active' do
+        draw = create(:draw, active: true)
+        s1 = create(:student_in_draw, draw: draw)
+        s2 = create(:student_in_draw, draw: draw)
+        s2.draw_membership.update!(active: false)
+        expect(draw.students).to eq([s1])
+      end
     end
   end
 

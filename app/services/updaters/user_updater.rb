@@ -3,8 +3,8 @@
 # Service object to update Users
 class UserUpdater < Updater
   validate :admin_demote_self
-  validate :user_is_not_a_leader_of_a_group
   validate :superusers_and_superadmins_cannot_have_a_college
+  validate :user_is_not_in_a_group
 
   # Initialize a UserUpdater
   #
@@ -15,8 +15,6 @@ class UserUpdater < Updater
   def initialize(user:, params:, editing_self:)
     super(object: user, params: params, name_method: :name)
     @editing_self = editing_self
-    @needs_warning = user_has_confirmed_a_membership_and_is_changing_college?
-    @old_group = object.group
     handle_promotion_or_demotion
   end
 
@@ -65,11 +63,10 @@ class UserUpdater < Updater
     errors.add(:base, 'Superusers and Superadmins cannot belong to a college')
   end
 
-  def user_is_not_a_leader_of_a_group
-    return unless object.draw_membership&.led_group&.present? && \
-                  object.group.size != 1 && changing_college?
-    errors.add(:base, 'This user is the leader of a group. Please change ' \
-                'this before continuing.')
+  def user_is_not_in_a_group
+    return unless object.group.present? && changing_college?
+    errors.add(:base, "This user is in the group #{object.group.name}." \
+                'Please change this before continuing.')
   end
 
   # This occurs within the transaction
@@ -78,37 +75,23 @@ class UserUpdater < Updater
     params.delete(:intent)
   end
 
-  def nullify_draw_info # rubocop:disable AbcSize
-    object.group.destroy! if object.group&.size == 1
-    object.memberships.map do |m|
+  def nullify_draw_info
+    # We need to unlock accepted memberships before they can be destroyed.
+    if object.membership.present?
       # rubocop:disable Rails/SkipsModelValidations
-      m.update_column(:locked, false)
+      object.membership.update_column(:locked, false)
       # rubocop:enable Rails/SkipsModelValidations
-      m.destroy!
     end
-    object.room_assignment&.destroy!
-    object.draw_membership&.update!(active: false)
+    object.draw_membership&.destroy!
   end
 
   def success
     return super.merge(intent_message) if intent_changed?
-    return super unless @needs_warning
-    super.merge(warning) { |_, old, new| old.merge(new) }
+    super
   end
 
   def intent_message
     { msg: { notice: 'Intent updated.' } }
-  end
-
-  def warning
-    alert = "#{object.full_name} was a member of "\
-            "#{@old_group.name} in #{College.current.name}; "\
-            'please check that this has no repercussions.'
-    { msg: { alert: alert } }
-  end
-
-  def user_has_confirmed_a_membership_and_is_changing_college?
-    object.membership.present? && changing_college?
   end
 
   def changing_college?
