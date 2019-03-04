@@ -1,3 +1,4 @@
 <p>Hi <%= @user.first_name %>,</p>
 <p>This is a reminder to lock your group by <%= @locking_date %>, or it will be locked for you. Please e-mail <%= admin_mail_link(@college) %> if you have any questions.</p>
+<p>You can lock your group at Vesta's website, located at <%= college_site_link(@college) %>.</p>
 <p>Sincerely,<br /><%= @college.dean %></p>

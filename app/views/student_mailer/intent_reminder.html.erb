@@ -1,3 +1,4 @@
 <p>Hi <%= @user.first_name %>,</p>
 <p>This is a reminder that you should submit your housing intent by <%= @intent_date %>. Please e-mail <%= admin_mail_link(@college) %> if you have any questions.</p>
+<p>You can submit housing intents at Vesta's website, located at <%= college_site_link(@college) %>.</p>
 <p>Sincerely,<br /><%= @college.dean %></p>
