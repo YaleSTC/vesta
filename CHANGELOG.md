@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 * Update eager loading ([#876](https://gitlab.com/yale-sdmp/vesta/issues/876)).
 * Fix inactive draw_memberships from interfering with special group formation ([#941](https://gitlab.com/yale-sdmp/vesta/issues/941)).
 * Make widths of lottery forms consistent across multiple sizes ([#890](https://gitlab.com/yale-sdmp/vesta/issues/890)).
+* Fix archived draws appearing to be assigned to suites ([#902](https://gitlab.com/yale-sdmp/vesta/issues/902)).
 
 ### Changed
 * Rename group size locking to restrict size locking ([811](https://gitlab.com/yale-sdmp/vesta/issues/811)).

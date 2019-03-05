@@ -86,8 +86,10 @@ class DrawlessGroupsController < ApplicationController
   def generate_suites_data
     @compatible_suites = CompatibleSuitesQuery.call(@group).order(:number)
     @compatible_suites_no_draw =
-      @compatible_suites.select { |s| s.draws.empty? }.group_by(&:building)
+      @compatible_suites.select { |s| s.draws.active.empty? }
+                        .group_by(&:building)
     @compatible_suites_in_draw =
-      @compatible_suites.select { |s| s.draws.present? }.group_by(&:building)
+      @compatible_suites.select { |s| s.draws.active.present? }
+                        .group_by(&:building)
   end
 end

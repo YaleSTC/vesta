@@ -74,6 +74,15 @@ RSpec.describe Draw, type: :model do
     end
   end
 
+  describe '.active' do
+    it 'scopes to active draws' do
+      active, to_skip = create_pair(:draw, active: true)
+      create(:draw, active: false)
+      expect(described_class.where.not(id: to_skip.id).active).to \
+        match_array([active])
+    end
+  end
+
   describe '#suite_sizes' do
     let(:draw) { build_stubbed(:draw) }
 

@@ -7,7 +7,7 @@ class SuitesController < ApplicationController
 
   def show
     @rooms = @suite.rooms.order(:number)
-    @draws = @suite.draws
+    @draws = @suite.draws.active
     @building = @suite.building
     @group = @suite.group
     @merger_form = SuiteMergerForm.new(suite: @suite)

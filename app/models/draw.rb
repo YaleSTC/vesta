@@ -50,6 +50,8 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   enum email_type: %w(intent locking)
   enum suite_selection_mode: %w(admin_selection student_selection)
 
+  scope :active, -> { where(active: true) }
+
   # Finds all available suite sizes within a draw
   #
   # @return [Array<Integer>] the available suite sizes

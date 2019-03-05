@@ -18,8 +18,8 @@
         <td data-role="suite-count"><%= suites.count %></td>
         <td data-role="assigned-count"><%= suites.select { |s| s.group.present? }.count %></td>
         <% if policy(Suite).view_draw? %>
-          <td data-role="draws-count"><%= suites.select { |s| s.draws.present? }.count %></td>
-          <td data-role="not-draw-count"><%= suites.select { |s| s.draws.empty? }.count %></td>
+          <td data-role="draws-count"><%= suites.select { |s| s.draws.active.present? }.count %></td>
+          <td data-role="not-draw-count"><%= suites.select { |s| s.draws.active.empty? }.count %></td>
         <% end %>
       </tr>
     <% end %>

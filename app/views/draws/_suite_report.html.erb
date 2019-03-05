@@ -38,7 +38,7 @@
                   <td data-role="suite-doubles"><%= suite.doubles.count %></td>
                   <td data-role="suite-commons"><%= suite.common_rooms.count %></td>
                   <td data-role="suite-draws">
-                    <%= render partial: 'suites/draw_link', collection: suite.draws, spacer_template: 'shared/comma' %>
+                    <%= render partial: 'suites/draw_link', collection: suite.draws.active, spacer_template: 'shared/comma' %>
                   </td>
                   <td class="actions" data-role="suite-actions">
                     <%= link_to 'View', suite_path(suite), class: 'button' if policy(suite).show? %>
