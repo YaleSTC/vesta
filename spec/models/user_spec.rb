@@ -31,6 +31,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to delegate_method(:suite_number).to(:group) }
     it { is_expected.to delegate_method(:lottery_number).to(:group) }
     it { is_expected.to delegate_method(:intent).to(:draw_membership) }
+    it { is_expected.to delegate_method(:building_name).to(:group) }
   end
 
   describe 'class_year' do
@@ -278,6 +279,16 @@ RSpec.describe User, type: :model do
     it 'returns the email if CAS is not being used' do
       allow(User).to receive(:cas_auth?).and_return(false)
       expect(user.login_attr).to eq(user.email)
+    end
+  end
+
+  describe '#building_name' do
+    it 'returns the name of the building the group\'s suite is in' do
+      building = create(:building, name: 'test_name')
+      group = create(:open_group, suite: create(:suite, building: building))
+      user = create(:student_in_draw, draw: group.draw)
+      create(:membership, user: user, group: group, status: 'accepted')
+      expect(user.building_name).to eq('test_name')
     end
   end
 end

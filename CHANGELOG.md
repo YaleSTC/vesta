@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 * Add links to Vesta in the intent and group reminder emails. ([#931](https://gitlab.com/yale-sdmp/vesta/issues/931)).
 * Fix NoMethodError caused when importing suites with no csv file chosen ([#975](https://gitlab.com/yale-sdmp/vesta/issues/975)).
 * Fix broken Code Quality CI job ([#908](https://gitlab.com/yale-sdmp/vesta/issues/908)).
+* Fix building names not appearing for students in suites but without rooms ([#882](https://gitlab.com/yale-sdmp/vesta/issues/882))
 
 ## v2.3.3 - 2019-04-01
 ### Fixed

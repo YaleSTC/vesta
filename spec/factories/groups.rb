@@ -14,7 +14,7 @@ FactoryBot.define do
     defined_by_leader
 
     # The group's draw can be changed by passing in a draw. The leader
-    # inherits the draw from whatever draw is passed in.  This will generate
+    # inherits the draw from whatever draw is passed in. This will generate
     # a draw if none is provided.
     trait :defined_by_draw do
       draw

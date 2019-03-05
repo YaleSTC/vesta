@@ -45,7 +45,7 @@ class User < ApplicationRecord
   has_one :room_assignment, through: :draw_membership
   has_one :room, through: :draw_membership
 
-  delegate :building_name, to: :room, allow_nil: true
+  delegate :building_name, to: :group, allow_nil: true
   delegate :name, to: :draw, prefix: :draw, allow_nil: true
   delegate :name, to: :group, prefix: :group, allow_nil: true
   delegate :number, to: :room, prefix: :room, allow_nil: true

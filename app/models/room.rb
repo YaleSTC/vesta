@@ -21,6 +21,7 @@ class Room < ApplicationRecord
       .where(draw_memberships: { active: true })
   }, class_name: 'RoomAssignment'
   has_many :active_users, through: :active_room_assignments, source: :user
+
   delegate :building_name, to: :suite, allow_nil: true
 
   validates :suite, presence: true
