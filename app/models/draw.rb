@@ -236,7 +236,7 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   #
   # @return [Boolean] whether or not all groups have selected suites
   def all_groups_have_suites?
-    groups.includes(:suite).where(suites: { id: nil }).count.zero?
+    GroupWithoutSuitesQuery.new(groups).call.count.zero?
   end
 
   # Return list of students with specified intents
