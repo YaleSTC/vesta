@@ -1,14 +1,5 @@
 .suites-list {
   @include grid-row;
-
-  .suite-item {
-    @include grid-column(12);
-
-    @include breakpoint(medium) {
-      @include grid-column(4);
-      @include grid-column-end;
-    }
-  }
 }
 
 .suites-fields-section {
