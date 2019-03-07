@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 * Rename group size locking to restrict size locking ([811](https://gitlab.com/yale-sdmp/vesta/issues/811)).
 * Association of draw to draw_membership has been changed to have matching "active" states. ([#928](https://gitlab.com/yale-sdmp/vesta/issues/928)).
 * Remove code from drawStudentsUpdate to manually add students by username ([900](https://gitlab.com/yale-sdmp/vesta/issues/900)).
+* Remove stale records of DrawMemberships ([933](https://gitlab.com/yale-sdmp/vesta/issues/933)).
 
 ## v2.2.1 - 2019-02-20
 ### Added
