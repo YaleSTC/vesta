@@ -27,6 +27,8 @@ class UserDashboard < Administrate::BaseDashboard
     last_name: Field::String,
     intent: Field::String.with_options(searchable: false),
     username: Field::String,
+    college: Field::BelongsTo,
+    college_name: Field::String.with_options(searchable: false),
     class_year: Field::Number,
     old_draw_id: Field::Number,
     tos_accepted: Field::DateTime,
@@ -65,6 +67,7 @@ class UserDashboard < Administrate::BaseDashboard
     last_name
     intent
     username
+    college
     class_year
     draw
     old_draw_id
