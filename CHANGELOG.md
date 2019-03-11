@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Added
+* Add SID to users ([#669](https://gitlab.com/yale-sdmp/vesta/issues/669)).
+
 ### Changed
 * Add timeoutable to users and expiration date to cookies ([#963](https://gitlab.com/yale-sdmp/vesta/issues/963)).
 

@@ -5,7 +5,7 @@ require 'rails_helper'
 REQUIRED_CONFIG_PARAMS =
   %w(PROFILE_REQUEST_URL PROFILE_REQUEST_QUERY_PARAM PROFILE_REQUEST_FIRST_NAME
      PROFILE_REQUEST_LAST_NAME PROFILE_REQUEST_EMAIL
-     PROFILE_REQUEST_CLASS_YEAR PROFILE_REQUEST_STUDENT_SID).freeze
+     PROFILE_REQUEST_CLASS_YEAR PROFILE_REQUEST_STUDENT_ID).freeze
 DUMMY_XML_RESPONSE =
   <<~HEREDOC
     <?xml version="1.0" encoding="UTF-8"?>
@@ -23,7 +23,7 @@ DUMMY_XML_RESPONSE =
   HEREDOC
 DUMMY_PROFILE_HASH = { first_name: 'Jane', last_name: 'Smith',
                        email: 'jane.smith@example.com',
-                       class_year: '2018', student_sid: '00' }.freeze
+                       class_year: '2018', student_id: '00' }.freeze
 
 RSpec.describe IDRProfileQuerier do
   describe '#query' do
@@ -87,6 +87,7 @@ RSpec.describe IDRProfileQuerier do
   def mock_val(param)
     return 'https://foo.example.com/' unless param.match(/URL/).nil?
     return 'foo' unless param.match(/QUERY_PARAM/).nil?
+    return 'StudentSid' unless param.match(/STUDENT_ID/).nil?
     param_tag(param)
   end
 
