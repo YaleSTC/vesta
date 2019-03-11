@@ -7,7 +7,7 @@ class ProfileQuerier
   include Callable
 
   PROFILE_FIELDS =
-    %i(first_name last_name email class_year student_sid).freeze
+    %i(first_name last_name email class_year student_id).freeze
 
   # Initialize a ProfileQuerier
   #

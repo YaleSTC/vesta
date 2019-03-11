@@ -33,7 +33,7 @@ class UserGenerator
                   username: FFaker::Internet.user_name,
                   role: 'student',
                   password: 'passw0rd',
-                  student_sid: FFaker::Random.rand(900_000_000),
+                  student_id: FFaker::Random.rand(900_000_000),
                   class_year: random_class_year }.merge(overrides)
   end
 

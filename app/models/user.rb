@@ -59,7 +59,7 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :student_sid, uniqueness: { allow_blank: true }
+  validates :student_id, uniqueness: { allow_blank: true }
   validates :class_year, presence: true,
                          if: ->() { role == 'student' || role == 'rep' }
   validates :college_id, presence: true, unless: :superadmin?

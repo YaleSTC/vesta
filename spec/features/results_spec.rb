@@ -6,8 +6,8 @@ RSpec.feature 'Results' do
   let!(:data) { create_data }
   let(:f) { "vesta_students_export_#{Time.zone.today.to_s(:number)}.csv" }
   let(:h_str) do
-    'email,last_name,first_name,draw_name,intent,group_name,lottery_number,'\
-    'building_name,suite_number,room_number'
+    'username,email,student_id,last_name,first_name,draw_name,intent,'\
+    'group_name,lottery_number,building_name,suite_number,room_number'
   end
 
   before { log_in create(:admin) }
@@ -130,13 +130,13 @@ RSpec.feature 'Results' do
   def student_page_has_sid_results(page)
     data[:members].all? do |member|
       page.assert_selector("tr.result-student-#{member.id} td.sid",
-                           text: member.student_sid)
+                           text: member.student_id)
     end
   end
 
   def export_row_for(student)
     [
-      student.username, student.email, student.last_name,
+      student.username, student.email, student.student_id, student.last_name,
       student.first_name, student.draw_name, student.intent,
       student.group_name, student.lottery_number, student.building_name,
       student.suite_number, student.room_number

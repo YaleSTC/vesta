@@ -16,7 +16,7 @@
       <% @students.each do |student| %>
         <tr class="result-student-<%= student.id %>">
           <th scope="row"><%= student.full_name %></td>
-          <td class="sid"><%= student.student_sid %></td>
+          <td class="sid"><%= student.student_id %></td>
           <td class="building"><%= student.building_name %></td>
           <td class="room"><%= student.room.number %></td>
         </tr>

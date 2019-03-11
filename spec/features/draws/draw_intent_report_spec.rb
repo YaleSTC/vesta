@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.feature 'Draw intent report' do
   shared_examples 'draw intent report' do
     let(:f) { "vesta_intents_export_#{Time.zone.today.to_s(:number)}.csv" }
-    let(:h_str) { 'email,last_name,first_name,intent' }
+    let(:h_str) { 'email,student_id,last_name,first_name,intent' }
 
     context 'as an admin' do
       before { log_in(create(:admin)) }
@@ -114,7 +114,7 @@ RSpec.feature 'Draw intent report' do
 
   def export_row_for(student)
     [
-      student.email, student.last_name, student.first_name,
+      student.email, student.student_id, student.last_name, student.first_name,
       student.intent
     ].join(',')
   end

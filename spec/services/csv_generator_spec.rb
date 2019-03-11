@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe CSVGenerator do
   let(:data) { create_data }
-  let(:a) { %i(username intent student_sid) }
+  let(:a) { %i(username intent student_id) }
 
   context 'successfully' do
     it 'creates a csv' do
       result = described_class.generate(data: data, attributes: a, name: 'test')
-      export = "username,intent,student_sid\n" +
+      export = "username,intent,student_id\n" +
                data.map { |n| export_row_for(n) }.join
       expect(result[:file]).to eq(export)
     end
@@ -49,7 +49,7 @@ RSpec.describe CSVGenerator do
   end
 
   def export_row_for(student)
-    [student.username, student.intent, student.student_sid].join(',') + "\n"
+    [student.username, student.intent, student.student_id].join(',') + "\n"
   end
 
   def create_data
