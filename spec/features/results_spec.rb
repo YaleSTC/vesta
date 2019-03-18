@@ -124,9 +124,10 @@ RSpec.feature 'Results' do
 
   def export_row_for(student)
     [
-      student.email, student.last_name, student.first_name, student.draw_name,
-      student.intent, student.group_name, student.lottery_number,
-      student.building_name, student.suite_number, student.room_number
+      student.username, student.email, student.last_name,
+      student.first_name, student.draw_name, student.intent,
+      student.group_name, student.lottery_number, student.building_name,
+      student.suite_number, student.room_number
     ].join(',')
   end
 

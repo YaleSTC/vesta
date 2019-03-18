@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 * Add DrawDuplicator service object to copy suite associations in draws without user data ([#668](https://gitlab.com/yale-sdmp/vesta/issues/668)).
 * Allow editing of room numbers and room type on Suites#show page ([#547](https://gitlab.com/yale-sdmp/vesta/issues/547)).
+* Add emails to csvs ([#889](https://gitlab.com/yale-sdmp/vesta/issues/889)).
 
 ### Fixed
 * Update eager loading ([#876](https://gitlab.com/yale-sdmp/vesta/issues/876)).
