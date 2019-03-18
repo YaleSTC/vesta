@@ -53,7 +53,10 @@ class DrawGroupFormationStarter
 
   def send_emails
     (draw.students + college.users.admin).each do |student|
-      mailer.group_formation(user: student, draw: draw, college: college)
+      mailer.group_formation(user: student,
+                             intent_deadline: draw.intent_deadline,
+                             intent_locked: draw.intent_locked?,
+                             college: college)
             .deliver_later
     end
   end

@@ -52,7 +52,8 @@ class MembershipDestroyer < Destroyer
   end
 
   def send_left_email
-    StudentMailer.left_group(left: object.user, group: object.group,
+    StudentMailer.left_group(left: object.user,
+                             group_leader: object.group.leader,
                              college: College.current).deliver_later
   end
 end

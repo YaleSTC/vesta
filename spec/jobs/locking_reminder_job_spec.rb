@@ -15,7 +15,7 @@ RSpec.describe LockingReminderJob, type: :job do
 
   it 'sends locking reminders to on_campus/undeclared users in the draw' do
     allow(StudentMailer).to receive(:locking_reminder)
-      .with(user: user, draw: draw).and_return(msg)
+      .with(user: user, locking_deadline: draw.locking_deadline).and_return(msg)
     described_class.perform_now(draw: draw)
     expect(StudentMailer).to have_received(:locking_reminder).once
   end
@@ -25,6 +25,6 @@ RSpec.describe LockingReminderJob, type: :job do
     allow(StudentMailer).to receive(:locking_reminder).and_return(msg)
     described_class.perform_now(draw: draw)
     expect(StudentMailer).to have_received(:locking_reminder)
-      .with(user: admin, draw: draw)
+      .with(user: admin, locking_deadline: draw.locking_deadline)
   end
 end

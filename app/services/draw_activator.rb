@@ -58,7 +58,9 @@ class DrawActivator
 
   def send_emails
     (draw.students + college.users.admin).each do |student|
-      mailer.draw_invitation(user: student, draw: draw, college: college)
+      mailer.draw_invitation(user: student, intent_locked: draw.intent_locked?,
+                             intent_deadline: draw.intent_deadline,
+                             college: college)
             .deliver_later
     end
   end

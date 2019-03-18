@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 * Remove code from drawStudentsUpdate to manually add students by username ([900](https://gitlab.com/yale-sdmp/vesta/issues/900)).
 * Remove stale records of DrawMemberships ([933](https://gitlab.com/yale-sdmp/vesta/issues/933)).
 * Change viewing and indexing policies for Rooms and Buildings to restrict to admin and up ([937](https://gitlab.com/yale-sdmp/vesta/issues/937)).
+* Fix issue with queued emails changing based on draw updates ([935](https://gitlab.com/yale-sdmp/vesta/issues/935)).
 
 ## v2.2.1 - 2019-02-20
 ### Added

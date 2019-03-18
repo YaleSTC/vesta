@@ -18,6 +18,9 @@ class LockingReminderJob < ApplicationJob
   private
 
   def send_email(user:, draw:)
-    StudentMailer.locking_reminder(user: user, draw: draw).deliver_now
+    locking_deadline = draw.locking_deadline
+    StudentMailer.locking_reminder(user: user,
+                                   locking_deadline: locking_deadline)
+                 .deliver_now
   end
 end

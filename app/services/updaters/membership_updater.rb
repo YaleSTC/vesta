@@ -45,7 +45,8 @@ class MembershipUpdater < Updater
   def send_joined_email
     # leaders are the ones who accept requests so we don't need to e-mail them
     return if object.status_before_last_save == 'requested'
-    StudentMailer.joined_group(joined: object.user, group: object.group,
+    StudentMailer.joined_group(joined: object.user,
+                               group_leader: object.group.leader,
                                college: College.current).deliver_later
   end
 

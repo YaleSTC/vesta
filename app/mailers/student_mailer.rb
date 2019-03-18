@@ -5,13 +5,15 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   # Send initial invitation to students in a draw
   #
   # @param user [User] the user to send the invitation to
-  # @param draw [Draw] the draw to pull settings from
+  # @param intent_locked [Boolean] the intent state of the Draw
+  # @param intent_deadline [Date] the intent deadline of the Draw
   # @param college [College] the college to pull settings from
-  def draw_invitation(user:, draw:, college: nil) # rubocop:disable MethodLength
+  # rubocop:disable MethodLength
+  def draw_invitation(user:, intent_locked:, intent_deadline:, college: nil)
     determine_college(college)
     @user = user
-    @intent_locked = draw.intent_locked?
-    @intent_deadline = format_date(draw.intent_deadline)
+    @intent_locked = intent_locked
+    @intent_deadline = format_date(intent_deadline)
     @login_str = if User.cas_auth?
                    ''
                  else
@@ -25,13 +27,14 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   # Send group formation notification to students in draw
   #
   # @param user [User] the user to send the invitation to
-  # @param draw [Draw] the draw to pull settings from
+  # @param intent_locked [Boolean] the intent state of the Draw
+  # @param intent_deadline [Date] the intent deadline of the Draw
   # @param college [College] the college to pull settings from
-  def group_formation(user:, draw:, college: nil) # rubocop:disable MethodLength
+  def group_formation(user:, intent_locked:, intent_deadline:, college: nil)
     determine_college(college)
     @user = user
-    @intent_locked = draw.intent_locked?
-    @intent_deadline = format_date(draw.intent_deadline)
+    @intent_locked = intent_locked
+    @intent_deadline = format_date(intent_deadline)
     @login_str = if User.cas_auth?
                    ''
                  else
@@ -106,11 +109,12 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
 
   # Send notification to a leader that a user joined their group
   #
-  # @param user [User] the group leader to send the notification to
+  # @param joined [User] the person joining the group
+  # @param group_leader [User] the group leader to send the notification to
   # @param college [College] the college to pull settings from
-  def joined_group(joined:, group:, college: nil)
+  def joined_group(joined:, group_leader:, college: nil)
     determine_college(college)
-    @user = group.leader
+    @user = group_leader
     @joined = joined
     subject = determine_subject("#{joined.full_name} has joined your group")
     mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
@@ -118,11 +122,12 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
 
   # Send notification to a leader that a user left their group
   #
-  # @param user [User] the group leader to send the notification to
+  # @param left [User] the user who is leaving the group
+  # @param group_leader [User] the group leader to send the notification to
   # @param college [College] the college to pull settings from
-  def left_group(left:, group:, college: nil)
+  def left_group(left:, group_leader:, college: nil)
     determine_college(college)
-    @user = group.leader
+    @user = group_leader
     @left = left
     subject = determine_subject("#{left.full_name} has left your group")
     mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
@@ -142,12 +147,12 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   # Send reminder to submit housing intent to a user
   #
   # @param user [User] the student to send the reminder to
-  # @param draw [Draw] the draw to pull settings from
+  # @param intent_deadline [Date] the intent_date of the draw
   # @param college [College] the college to pull settings from
-  def intent_reminder(user:, draw:, college: nil)
+  def intent_reminder(user:, intent_deadline:, college: nil)
     determine_college(college)
     @user = user
-    @intent_date = format_date(draw.intent_deadline)
+    @intent_date = format_date(intent_deadline)
     subject = determine_subject('Reminder to submit housing intent')
     mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
@@ -155,12 +160,12 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   # Send reminder to lock housing group to a user
   #
   # @param user [User] the student to send the reminder to
-  # @param draw [Draw] the draw to pull settings from
+  # @param locking_deadline [Date] the locking_deadline date of the draw
   # @param college [College] the college to pull settings from
-  def locking_reminder(user:, draw:, college: nil)
+  def locking_reminder(user:, locking_deadline:, college: nil)
     determine_college(college)
     @user = user
-    @locking_date = format_date(draw.locking_deadline)
+    @locking_date = format_date(locking_deadline)
     subject = determine_subject('Reminder to lock housing group')
     mail(to: @user.email, subject: subject, reply_to: @college.admin_email)
   end
