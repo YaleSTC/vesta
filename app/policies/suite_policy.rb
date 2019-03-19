@@ -2,10 +2,6 @@
 
 # Class for Suite permissions
 class SuitePolicy < ApplicationPolicy
-  def show?
-    !record.medical || user&.group&.suite == record || user.admin?
-  end
-
   def merge?
     perform_merge?
   end

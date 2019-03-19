@@ -10,16 +10,10 @@ RSpec.describe BuildingPolicy do
   context 'student' do
     let(:user) { build_stubbed(:user, role: 'student') }
 
-    permissions :show? do
-      it { is_expected.to permit(user, building) }
-    end
-    permissions :destroy?, :edit?, :update? do
+    permissions :show?, :destroy?, :edit?, :update? do
       it { is_expected.not_to permit(user, building) }
     end
-    permissions :index? do
-      it { is_expected.to permit(user, Building) }
-    end
-    permissions :new?, :create? do
+    permissions :index?, :new?, :create? do
       it { is_expected.not_to permit(user, Building) }
     end
   end
@@ -27,16 +21,10 @@ RSpec.describe BuildingPolicy do
   context 'housing rep' do
     let(:user) { build_stubbed(:user, role: 'rep') }
 
-    permissions :show? do
-      it { is_expected.to permit(user, building) }
-    end
-    permissions :destroy?, :edit?, :update? do
+    permissions :show?, :destroy?, :edit?, :update? do
       it { is_expected.not_to permit(user, building) }
     end
-    permissions :index? do
-      it { is_expected.to permit(user, Building) }
-    end
-    permissions :new?, :create? do
+    permissions :index?, :new?, :create? do
       it { is_expected.not_to permit(user, Building) }
     end
   end

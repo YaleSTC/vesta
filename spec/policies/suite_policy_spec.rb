@@ -10,16 +10,6 @@ RSpec.describe SuitePolicy do
   context 'student' do
     let(:user) { build_stubbed(:user, role: 'student') }
 
-    permissions :show? do
-      context 'non-medical suite' do
-        before { allow(suite).to receive(:medical).and_return(false) }
-        it { is_expected.to permit(user, suite) }
-      end
-      context 'medical suite' do
-        before { allow(suite).to receive(:medical).and_return(true) }
-        it { is_expected.not_to permit(user, suite) }
-      end
-    end
     permissions :new?, :create?, :view_draw? do
       it { is_expected.not_to permit(user, Suite) }
     end
@@ -32,16 +22,6 @@ RSpec.describe SuitePolicy do
   context 'housing rep' do
     let(:user) { build_stubbed(:user, role: 'rep') }
 
-    permissions :show? do
-      context 'non-medical suite' do
-        before { allow(suite).to receive(:medical).and_return(false) }
-        it { is_expected.to permit(user, suite) }
-      end
-      context 'medical suite' do
-        before { allow(suite).to receive(:medical).and_return(true) }
-        it { is_expected.not_to permit(user, suite) }
-      end
-    end
     permissions :new?, :create?, :view_draw? do
       it { is_expected.not_to permit(user, Suite) }
     end

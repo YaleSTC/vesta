@@ -10,10 +10,7 @@ RSpec.describe RoomPolicy do
   context 'student' do
     let(:user) { build_stubbed(:user, role: 'student') }
 
-    permissions :show? do
-      it { is_expected.to permit(user, room) }
-    end
-    permissions :destroy?, :edit?, :update? do
+    permissions :show?, :destroy?, :edit?, :update? do
       it { is_expected.not_to permit(user, room) }
     end
     permissions :new?, :create?, :index? do
@@ -24,10 +21,7 @@ RSpec.describe RoomPolicy do
   context 'housing rep' do
     let(:user) { build_stubbed(:user, role: 'rep') }
 
-    permissions :show? do
-      it { is_expected.to permit(user, room) }
-    end
-    permissions :new?, :create?, :index? do
+    permissions :show?, :new?, :create?, :index? do
       it { is_expected.not_to permit(user, Room) }
     end
     permissions :destroy?, :edit?, :update? do
