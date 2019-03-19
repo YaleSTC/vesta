@@ -24,7 +24,8 @@ class DrawMembership < ApplicationRecord
   has_one :room, through: :room_assignment
 
   before_validation :freeze_user_id, if: -> { will_save_change_to_user_id? }
-  validates :user, presence: true, uniqueness: { scope: :draw }
+  validates :user, presence: true
+  validates :user, uniqueness: { scope: :draw }, if: ->(dm) { dm.draw.present? }
   validates :intent, presence: true
   validate :validate_only_one_active_draw_membership
 

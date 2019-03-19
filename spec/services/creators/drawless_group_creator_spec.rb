@@ -54,6 +54,27 @@ RSpec.describe DrawlessGroupCreator do
     end
   end
 
+  context 'draw membership handling' do
+    let(:params) do
+      params_hash.merge(member_ids: [other_member.user_id.to_s, '3'])
+    end
+
+    before do
+      allow(DrawMembership).to receive(:where)
+        .with(user_id: '3', active: true)
+        .and_return([])
+      allow(DrawMembership).to receive(:new)
+        .with(user_id: '3', active: true)
+        .and_return(instance_spy(DrawMembership, user_id: 3, present?: true))
+    end
+
+    it 'creates a draw membership if one does not exist' do
+      described_class.new(params: params)
+      expect(DrawMembership).to have_received(:new).with(user_id: '3',
+                                                         active: true)
+    end
+  end
+
   context 'success' do
     it 'successfully creates a group' do
       params = instance_spy('ActionController::Parameters', to_h: params_hash)

@@ -30,6 +30,12 @@ RSpec.describe DrawMembership, type: :model do
       draw_membership = described_class.new(draw: draw, user: user)
       expect(draw_membership).not_to be_valid
     end
+    it 'allows for multiple drawless draw_memberships if others are inactive' do
+      user = create(:user)
+      create(:draw_membership, active: false, user: user, draw: nil)
+      dm = create(:draw_membership, active: true, user: user, draw: nil)
+      expect(dm).to be_valid
+    end
   end
 
   describe 'validations' do

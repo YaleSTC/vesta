@@ -6,10 +6,20 @@ RSpec.feature 'Special housing group creation' do
   context 'as admin' do
     let!(:leader) { create(:student) }
 
-    before { log_in(create(:admin)) }
+    before do
+      create(:suite_with_rooms, rooms_count: 1)
+      log_in(create(:admin))
+    end
 
     it 'succeeds' do
-      create(:suite_with_rooms, rooms_count: 1)
+      visit new_group_path
+      create_group(leader: leader, size: 1)
+      expect(page).to have_css('.group-name',
+                               text: "#{leader.full_name}'s Group")
+    end
+
+    it 'works with archived draw memberships' do
+      DrawMembership.create!(user_id: leader.id, active: false)
       visit new_group_path
       create_group(leader: leader, size: 1)
       expect(page).to have_css('.group-name',

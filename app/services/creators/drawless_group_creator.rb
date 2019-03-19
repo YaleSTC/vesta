@@ -43,9 +43,10 @@ class DrawlessGroupCreator
 
   def process_params
     @params[:draw_memberships] = find_or_create_draw_memberships
-    @params[:leader_draw_membership] = DrawMembership
-                                       .where(user_id: params[:leader],
-                                              active: true).first
+    return unless @params[:draw_memberships].present?
+    @params[:leader_draw_membership] = @params[:draw_memberships].select do |dm|
+      dm.user_id == params[:leader].to_i
+    end.first
   end
 
   def clean_params
@@ -58,7 +59,7 @@ class DrawlessGroupCreator
     return unless all_member_ids.present?
     all_member_ids.each_with_object([]) do |user_id, array|
       found_dm = DrawMembership.where(user_id: user_id, active: true).first
-      dm = found_dm || DrawMembership.create!(user_id: user_id)
+      dm = found_dm || DrawMembership.new(user_id: user_id, active: true)
       array << dm
     end
   end
@@ -69,7 +70,8 @@ class DrawlessGroupCreator
     (params[:member_ids] + [params[:leader]]).reject(&:empty?)
   end
 
-  # Note that this occurs within the transaction
+  # Note that this occurs within the transaction. The call to `update!` will
+  # persist any non-persisted draw memberships.
   def ensure_valid_members
     params[:draw_memberships].each do |dm|
       dm.remove_draw.update!(intent: 'on_campus')
