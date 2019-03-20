@@ -37,10 +37,12 @@ class Suite < ApplicationRecord
   validates :size, presence: true,
                    numericality: { greater_than_or_equal_to: 0 }
 
-  scope :available, lambda {
+  scope :unavailable, lambda {
     left_joins(suite_assignments: { group: :leader_draw_membership })
-      .where('draw_memberships.active = false OR suite_assignments.id IS NULL')
+      .where(draw_memberships: { active: true })
   }
+
+  scope :available, -> { where.not(id: unavailable.map(&:id)) }
 
   before_save :remove_draw_from_medical_suites,
               if: ->() { will_save_change_to_medical? }

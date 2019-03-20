@@ -59,6 +59,22 @@ RSpec.describe Suite, type: :model do
   end
 
   context 'scopes' do
+    describe '.unavailable' do
+      it 'returns suites assigned to active groups' do
+        suite = create(:group_with_suite).reload.suite
+        expect(described_class.unavailable).to match_array([suite])
+      end
+      it 'does not return suites assigned to archived groups' do
+        g = create(:group_with_suite)
+        g.draw.update!(active: false)
+        expect(described_class.unavailable).to match_array([])
+      end
+      it 'does not return suites that have never been assigned to groups' do
+        create(:suite_with_rooms)
+        expect(described_class.unavailable).to match_array([])
+      end
+    end
+
     describe '.available' do
       it 'returns all suites not assigned to groups' do
         available = create(:suite)
@@ -67,10 +83,29 @@ RSpec.describe Suite, type: :model do
       end
 
       it 'returns previously assigned suites with archived draws' do
+        available = suite_with_archived_group
+        create_archived_special_group_for_suite(available)
+        expect(described_class.available).to match_array([available])
+      end
+
+      it 'does not return unavailable suites with previously archived groups' do
+        unavailable = create(:group_with_suite).reload.suite
+        create_archived_special_group_for_suite(unavailable)
+        expect(described_class.available).to match_array([])
+      end
+
+      def suite_with_archived_group
         g = create(:group_with_suite)
         available = g.reload.suite
         g.draw.update!(active: false)
-        expect(described_class.available).to match_array([available])
+        available
+      end
+
+      def create_archived_special_group_for_suite(suite)
+        group = create(:drawless_group)
+        Suite.last.destroy! # drawless group factory creates an extra suite
+        create(:suite_assignment, group: group, suite: suite)
+        group.memberships.map { |m| m.draw_membership.update!(active: false) }
       end
     end
   end

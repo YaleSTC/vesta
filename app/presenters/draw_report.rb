@@ -102,8 +102,8 @@ class DrawReport < SimpleDelegator
   # @return [Hash{Building => ActiveRecord::Associations::CollectionProxy}] A
   #   hash mapping buildings to avaiable, non-medical suites of the given size
   def valid_suites(size:)
-    ValidSuitesQuery.new(suites.where(size: size).includes(:building)).call
-                    .group_by(&:building)
+    relation = suites.includes(:building).where(size: size)
+    ValidSuitesQuery.new(relation).call.group_by(&:building)
   end
 
   # Gets the available suites for a given draw, ordered by number and grouped by
