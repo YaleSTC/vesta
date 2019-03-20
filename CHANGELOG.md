@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v2.3.0 - 2019-03-20
 ### Added
 * Add DrawDuplicator service object to copy suite associations in draws without user data ([#668](https://gitlab.com/yale-sdmp/vesta/issues/668)).
 * Allow editing of room numbers and room type on Suites#show page ([#547](https://gitlab.com/yale-sdmp/vesta/issues/547)).
