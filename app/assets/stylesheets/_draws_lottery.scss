@@ -1,18 +1,17 @@
 table.lottery-forms-table {
+  border-collapse: collapse;
+
+  tbody { border: none; }
 
   .lottery-form {
-    @include grid-row;
-
-    vertical-align: center;
+    border-bottom-width: 2px;
 
     &.success { background-color: lighten($success-color, 72%); }
     &.notice { background-color: lighten($success-color, 72%); }
     &.failure { background-color: lighten($alert-color, 53%); }
     &.error { background-color: lighten($alert-color, 53%); }
 
-    .group-name {
-      font-size: 1.4em;
-      text-align: center;
-    }
+    th { width: 50%; }
+    td { width: 50%; }
   }
 }

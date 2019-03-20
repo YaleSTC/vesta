@@ -1,4 +1,4 @@
-<table aria-label="<%= label %>" class="lottery-forms-table">
+<table aria-label="<%= label %>" class="lottery-forms-table unstriped stack">
   <% lotteries.each do |lottery| %>
     <tr class="lottery-form">
       <th scope="col" class="lottery-owner"><%= link_to lottery.name, lottery_owner_url(lottery) %></th>
