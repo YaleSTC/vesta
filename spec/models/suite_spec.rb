@@ -262,13 +262,25 @@ RSpec.describe Suite, type: :model do
       expect(suite).not_to be_selectable
     end
 
+    it 'ignores archived draws' do
+      suite = create(:suite)
+      suite.draws << create(:draw_in_lottery)
+      suite.draws << create(:draw_in_selection)
+      suite.draws.each { |d| d.reload.update!(active: false) }
+      expect(suite).to be_selectable
+    end
+
     def mock_draws(statuses)
       default_statuses = { draft?: false, group_formation?: false,
                            lottery?: false, suite_selection?: false }
-      statuses.map do |s|
+      draws = instance_spy(ActiveRecord::Associations::CollectionProxy)
+      array = statuses.map do |s|
         status_hash = default_statuses.merge(s => true)
         instance_spy('draw', **status_hash)
       end
+      # We assume all mock draws are active
+      allow(draws).to receive(:where).and_return(array)
+      draws
     end
   end
 

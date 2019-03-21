@@ -117,11 +117,13 @@ class Suite < ApplicationRecord
   end
 
   # Return whether or not a suite can be selected in a new draw (e.g. it is not
-  # currently in any draw that is in the lottery or suite_selection phase)
+  # currently in any draw that is in the lottery or suite_selection phase and is
+  # active)
   #
   # @return [Boolean] whether or not the suite is selectable
   def selectable?
-    draws.all? { |draw| !(draw.lottery? || draw.suite_selection?) }
+    draws.where(active: true)
+         .all? { |draw| !(draw.lottery? || draw.suite_selection?) }
   end
 
   # Return the suite number, indicating if the suite is a medical suite or not
