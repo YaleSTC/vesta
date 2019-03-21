@@ -56,10 +56,10 @@ class DrawActivator
     draw.update!(status: status)
   end
 
-  def send_emails
+  def send_emails # rubocop:disable Metrics/AbcSize
     (draw.students + college.users.admin).each do |student|
       mailer.draw_invitation(user: student, intent_locked: draw.intent_locked?,
-                             intent_deadline: draw.intent_deadline,
+                             intent_deadline: draw.intent_deadline.to_s,
                              college: college)
             .deliver_later
     end

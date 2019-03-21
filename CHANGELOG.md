@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 * Fix archived draws appearing to be assigned to suites ([#902](https://gitlab.com/yale-sdmp/vesta/issues/902)).
 * Fix issue with duplicate available suites appearing ([#952](https://gitlab.com/yale-sdmp/vesta/issues/952)).
 * Fix Suite.available scope to properly return only available suites ([#948](https://gitlab.com/yale-sdmp/vesta/issues/948)).
+* Fix issue with passing dates to queued e-mails ([#943](https://gitlab.com/yale-sdmp/vesta/issues/943)).
 
 ### Changed
 * Rename group size locking to restrict size locking ([811](https://gitlab.com/yale-sdmp/vesta/issues/811)).

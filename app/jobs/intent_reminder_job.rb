@@ -18,7 +18,7 @@ class IntentReminderJob < ApplicationJob
 
   def send_email(user:, draw:)
     StudentMailer.intent_reminder(user: user,
-                                  intent_deadline: draw.intent_deadline)
+                                  intent_deadline: draw.intent_deadline.to_s)
                  .deliver_now
   end
 end

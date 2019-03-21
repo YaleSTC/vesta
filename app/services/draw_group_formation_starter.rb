@@ -51,10 +51,10 @@ class DrawGroupFormationStarter
     errors.add(:draw, 'must have at least one student.')
   end
 
-  def send_emails
+  def send_emails # rubocop:disable Metrics/AbcSize
     (draw.students + college.users.admin).each do |student|
       mailer.group_formation(user: student,
-                             intent_deadline: draw.intent_deadline,
+                             intent_deadline: draw.intent_deadline.to_s,
                              intent_locked: draw.intent_locked?,
                              college: college)
             .deliver_later

@@ -6,7 +6,7 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   #
   # @param user [User] the user to send the invitation to
   # @param intent_locked [Boolean] the intent state of the Draw
-  # @param intent_deadline [Date] the intent deadline of the Draw
+  # @param intent_deadline [String] the serialized intent deadline of the Draw
   # @param college [College] the college to pull settings from
   # rubocop:disable MethodLength
   def draw_invitation(user:, intent_locked:, intent_deadline:, college: nil)
@@ -28,7 +28,7 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   #
   # @param user [User] the user to send the invitation to
   # @param intent_locked [Boolean] the intent state of the Draw
-  # @param intent_deadline [Date] the intent deadline of the Draw
+  # @param intent_deadline [String] the serialized intent deadline of the Draw
   # @param college [College] the college to pull settings from
   def group_formation(user:, intent_locked:, intent_deadline:, college: nil)
     determine_college(college)
@@ -147,7 +147,7 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   # Send reminder to submit housing intent to a user
   #
   # @param user [User] the student to send the reminder to
-  # @param intent_deadline [Date] the intent_date of the draw
+  # @param intent_deadline [String] the serialized intent_date of the draw
   # @param college [College] the college to pull settings from
   def intent_reminder(user:, intent_deadline:, college: nil)
     determine_college(college)
@@ -160,7 +160,8 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   # Send reminder to lock housing group to a user
   #
   # @param user [User] the student to send the reminder to
-  # @param locking_deadline [Date] the locking_deadline date of the draw
+  # @param locking_deadline [String] the serialized locking_deadline date of the
+  #   draw
   # @param college [College] the college to pull settings from
   def locking_reminder(user:, locking_deadline:, college: nil)
     determine_college(college)
@@ -192,7 +193,8 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
 
   def format_date(date)
     return false unless date.present?
-    date.strftime('%B %e')
+    # convert date to a string to support both strings and dates
+    Date.parse(date.to_s).strftime('%B %e')
   end
 
   def finalizing_url_for(user)

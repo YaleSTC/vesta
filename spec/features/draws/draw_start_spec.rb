@@ -3,7 +3,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Draw activation' do
-  let(:draw) { create(:draw_with_members, status: 'draft') }
+  let(:draw) do
+    create(:draw_with_members, status: 'draft',
+                               intent_deadline: Time.zone.tomorrow)
+  end
 
   context 'as admin' do
     before do
