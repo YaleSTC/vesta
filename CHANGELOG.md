@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v2.3.1 - 2019-03-25
+### Fixed
+* Fix typos in e-mails ([#953](https://gitlab.com/yale-sdmp/vesta/issues/953)).
+
 ## v2.3.0 - 2019-03-20
 ### Added
 * Add DrawDuplicator service object to copy suite associations in draws without user data ([#668](https://gitlab.com/yale-sdmp/vesta/issues/668)).
