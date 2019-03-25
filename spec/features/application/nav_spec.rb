@@ -14,4 +14,24 @@ RSpec.feature 'Nav bar' do
       expect(page).not_to have_link('Login')
     end
   end
+
+  context 'as a student' do
+    context 'not part of a draw' do
+      it 'does not show My Draw' do
+        user = create(:user, role: 'student')
+        log_in user
+        expect(page).not_to have_link('My Draw', href: '#')
+      end
+    end
+  end
+
+  context 'as a rep' do
+    context 'no draws present' do
+      it 'does not show draws dropdown' do
+        user = create(:user, role: 'rep')
+        log_in user
+        expect(page).not_to have_link('Draws', href: '#')
+      end
+    end
+  end
 end
