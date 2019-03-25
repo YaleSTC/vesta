@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Changed
+* Hide the login link in the nav when a user is not in a specific college ([#909](https://gitlab.com/yale-sdmp/vesta/issues/909))
+
 ## v2.3.3 - 2019-04-01
 ### Fixed
 * Update RoomAssignmentForm to only query for active draw memberships ([#956](https://gitlab.com/yale-sdmp/vesta/issues/956)).
