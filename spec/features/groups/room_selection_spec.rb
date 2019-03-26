@@ -14,6 +14,13 @@ RSpec.feature 'Room Selection' do
       assign_rooms_to_members(group.suite_assignment.suite.rooms, group.members)
       expect(page).to have_content('Successfully assigned rooms')
     end
+
+    it 'does not permit assignment twice' do
+      visit root_path
+      click_on 'Assign Rooms'
+      assign_rooms_to_members(group.suite_assignment.suite.rooms, group.members)
+      expect(page).not_to have_link('Assign Rooms')
+    end
   end
 
   context 'as admin' do

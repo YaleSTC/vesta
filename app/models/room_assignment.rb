@@ -23,7 +23,8 @@ class RoomAssignment < ApplicationRecord
   # @param group [Group] the group in question
   # @return [RoomAssignment] a room assignment for the group's leader
   def self.from_group(group)
-    new(draw_membership: group.leader_draw_membership)
+    group.leader_draw_membership.room_assignment ||
+      new(draw_membership: group.leader_draw_membership)
   end
 
   private

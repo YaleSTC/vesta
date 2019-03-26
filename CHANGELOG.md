@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Fixed
+* Prevent users from being able to enter room assignments twice ([#950](https://gitlab.com/yale-sdmp/vesta/issues/950)).
+
 ## v2.3.1 - 2019-03-25
 ### Fixed
 * Fix typos in e-mails ([#953](https://gitlab.com/yale-sdmp/vesta/issues/953)).

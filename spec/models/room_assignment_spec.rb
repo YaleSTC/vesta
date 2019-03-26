@@ -44,11 +44,18 @@ RSpec.describe RoomAssignment, type: :model do
 
   describe '.from_group' do
     before { allow(described_class).to receive(:new) }
-    it 'instantiates a new room assignment' do
-      dm = instance_spy('drawmembership')
+
+    it 'instantiates a new room assignment if the group leader has none' do
+      dm = instance_spy('drawmembership', room_assignment: nil)
       g = instance_spy('group', leader_draw_membership: dm)
       described_class.from_group(g)
       expect(described_class).to have_received(:new).with(draw_membership: dm)
+    end
+    it "returns the leader's room assignment if it exists" do
+      ra = instance_spy(described_class)
+      dm = instance_spy('drawmembership', room_assignment: ra)
+      g = instance_spy('group', leader_draw_membership: dm)
+      expect(described_class.from_group(g)).to eq(ra)
     end
   end
 end
