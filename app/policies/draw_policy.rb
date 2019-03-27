@@ -23,7 +23,7 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def group_actions?
-    (user.admin? && !record.draft?) || record.group_formation?
+    user.admin? || record.group_formation?
   end
 
   def intent_actions?

@@ -273,7 +273,7 @@ RSpec.describe DrawPolicy do
 
     permissions :show?, :edit?, :update?, :destroy?, :toggle_size_restrict?,
                 :restrict_all_sizes?, :group_report?, :lock_all_groups?,
-                :duplicate? do
+                :duplicate?, :group_actions? do
       it { is_expected.to permit(user, draw) }
     end
     permissions :index?, :new?, :create? do
@@ -301,18 +301,6 @@ RSpec.describe DrawPolicy do
       context 'when draw is not in intent-selection' do
         before { allow(draw).to receive(:intent_selection?).and_return(false) }
         it { is_expected.not_to permit(user, draw) }
-      end
-    end
-
-    permissions :group_actions? do
-      context 'when draw is a draft' do
-        before { allow(draw).to receive(:draft?).and_return(true) }
-        it { is_expected.not_to permit(user, draw) }
-      end
-
-      context 'when draw is not a draft' do
-        before { allow(draw).to receive(:draft?).and_return(false) }
-        it { is_expected.to permit(user, draw) }
       end
     end
 

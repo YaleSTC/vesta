@@ -22,7 +22,7 @@
       <% end %>
       <%= link_to 'Proceed to group formation phase', proceed_to_group_formation_draw_path(@draw), method: :patch, class: 'button', data: { confirm: 'This will send an e-mail to all students in the draw inviting them to log in and start forming groups. Do you want to continue?' } %>
     <% elsif @draw.status == 'group_formation' %>
-      <% if policy(Group).new? && policy(@draw).group_actions? %>
+      <% if policy(Group).new? %>
         <%= link_to 'Add group to draw', new_draw_group_path(@draw), class: 'button secondary' %>
       <% end %>
       <% if policy(@draw).bulk_on_campus? %>

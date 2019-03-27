@@ -17,11 +17,10 @@ All notable changes to this project will be documented in this file.
 * Create query object for users by intent and add a model method to Draw ([#870](https://gitlab.com/yale-sdmp/vesta/issues/870)).
 * Create GroupWithoutSuites query object for GroupsReport ([627](https://gitlab.com/yale-sdmp/vesta/issues/627)).
 * Remove User non-essential display methods ([#852](https://gitlab.com/yale-sdmp/vesta/issues/852)).
+* Change DrawPolicy#group_actions to remove policy check against draft stage of the draw ([#722](https://gitlab.com/yale-sdmp/vesta/issues/722)).
 
 ### Fixed
 * Fix AdminDashboard membership creation failure ([#971](https://gitlab.com/yale-sdmp/vesta/merge_requests/1018)).
-
-### Fixed
 * Fix NoMethodError thrown by AdminDashboard Draw#show ([#965](https://gitlab.com/yale-sdmp/vesta/issues/965)).
 
 ## v2.3.3 - 2019-04-01
