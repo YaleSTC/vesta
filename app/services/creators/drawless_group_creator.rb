@@ -41,7 +41,8 @@ class DrawlessGroupCreator
 
   attr_reader :params, :group, :members_to_add
 
-  def process_params
+  def process_params # rubocop:disable Metrics/AbcSize
+    @params[:member_ids]&.delete_if { |member| member == @params[:leader] }
     @params[:draw_memberships] = find_or_create_draw_memberships
     return unless @params[:draw_memberships].present?
     @params[:leader_draw_membership] = @params[:draw_memberships].select do |dm|

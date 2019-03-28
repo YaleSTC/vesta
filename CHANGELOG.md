@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 * Update RoomAssignmentForm to only query for active draw memberships ([#956](https://gitlab.com/yale-sdmp/vesta/issues/956)).
 * Fix race condition allowing for orphaned lottery assignments ([#958](https://gitlab.com/yale-sdmp/vesta/issues/958)).
+* Allow leaders to be selected from the checklist of users and the dropdown in drawless group creation ([#957](https://gitlab.com/yale-sdmp/vesta/issues/957)).
 
 ## v2.3.2 - 2019-03-26
 ### Fixed

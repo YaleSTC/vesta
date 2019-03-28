@@ -30,6 +30,13 @@ RSpec.feature 'Special housing group creation' do
       visit new_group_path
       expect(page).not_to have_css('label', text: /\# transfer students/)
     end
+
+    it 'allows the leader to be in the users to add section' do
+      visit new_group_path
+      create_group(leader: leader, size: 1, members: [leader])
+      expect(page).to have_css('.group-name',
+                               text: "#{leader.full_name}'s Group")
+    end
   end
 
   def create_group(size:, leader:, members: [])
