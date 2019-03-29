@@ -10,8 +10,19 @@ set -e
 gem install bundler --conservative
 bundle check || bundle install
 
+# Copy .env and database example file
+cp .env{.example,}
+cp config/database.yml{.example,}
+
+# Print warning about uncommenting relevant lines in .env.example
+echo "-----------------------------------------------------------------------"
+echo
+echo "Please review .env and make sure all required lines are uncommented"
+echo
+
 # Set up database and add any development seed data
-bin/rake dev:prime
+bin/rails db:create
+bin/rails db:reset
 
 # Add binstubs to PATH via export PATH=".git/safe/../../bin:$PATH" in ~/.zshenv
 if [ ! -d .git/safe ] && echo $PATH | grep .git/safe > /dev/null; then
@@ -24,13 +35,3 @@ fi
 # Only if this isn't CI
 # if [ -z "$CI" ]; then
 # fi
-
-# Copy .env and database example file
-cp .env{.example,}
-cp config/database.yml{.example,}
-
-# Print warning about uncommenting relevant lines in .env.example
-echo "-----------------------------------------------------------------------"
-echo
-echo "Please review .env and make sure all required lines are uncommented"
-echo
