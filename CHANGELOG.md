@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Fixed
+* Update RoomAssignmentForm to only query for active draw memberships ([#920](https://gitlab.com/yale-sdmp/vesta/issues/956)).
+
 ## v2.3.2 - 2019-03-26
 ### Fixed
 * Prevent users from being able to enter room assignments twice ([#950](https://gitlab.com/yale-sdmp/vesta/issues/950)).

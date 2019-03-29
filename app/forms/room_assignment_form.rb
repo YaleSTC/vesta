@@ -177,7 +177,8 @@ class RoomAssignmentForm
     ActiveRecord::Base.transaction do
       params.each do |student_id, room_id|
         r_a = RoomAssignment.includes(:draw_membership)
-                            .find_by(draw_memberships: { user_id: student_id })
+                            .find_by(draw_memberships: { user_id: student_id,
+                                                         active: true })
         r_a.update!(room_id: room_id)
       end
     end
