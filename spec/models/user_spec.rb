@@ -183,26 +183,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#full_name_with_intent' do
-    it 'is the full name with the intent in parentheses' do
-      full_name_with_intent = 'Sydney Young (on campus)'
-      user = build_stubbed(:user, first_name: 'Sydney', last_name: 'Young')
-      allow(user).to receive(:draw_membership)
-        .and_return(build_stubbed(:draw_membership, intent: 'on_campus'))
-      expect(user.full_name_with_intent).to eq(full_name_with_intent)
-    end
-  end
-
-  describe '#pretty_intent' do
-    it 'is the intent not in snake case' do
-      user = build_stubbed(:user)
-      allow(user).to \
-        receive(:draw_membership)
-        .and_return(build_stubbed(:draw_membership, intent: 'on_campus'))
-      expect(user.pretty_intent).to eq('on campus')
-    end
-  end
-
   describe '#group' do
     it 'returns nil if no accepted membership' do
       group = create(:open_group)

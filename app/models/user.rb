@@ -102,22 +102,7 @@ class User < ApplicationRecord
   #
   # @return [String] First name plus last name
   def full_name
-    "#{name} #{last_name}"
-  end
-
-  # Returns the user's full name with their intent in parentheses
-  #
-  # @return [String] Full name with user's intent in parentheses
-  def full_name_with_intent
-    "#{full_name} (#{pretty_intent})"
-  end
-
-  # Returns the user's intent not in snake case (replaces underscores with
-  # spaces)
-  #
-  # @return [String] the non-snake case intent
-  def pretty_intent
-    intent.tr('_', ' ')
+    "#{first_name} #{last_name}"
   end
 
   # Returns true if the user is the leader of the given group

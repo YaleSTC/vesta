@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 * Make oversubscription handling notify unlucky groups ([#964](https://gitlab.com/yale-sdmp/vesta/issues/964)).
 * Create query object for users by intent and add a model method to Draw ([#870](https://gitlab.com/yale-sdmp/vesta/issues/870)).
 * Create GroupWithoutSuites query object for GroupsReport ([627](https://gitlab.com/yale-sdmp/vesta/issues/627)).
+* Remove User non-essential display methods ([#852](https://gitlab.com/yale-sdmp/vesta/issues/852)).
 
 ### Fixed
 * Fix AdminDashboard membership creation failure ([#971](https://gitlab.com/yale-sdmp/vesta/merge_requests/1018)).
