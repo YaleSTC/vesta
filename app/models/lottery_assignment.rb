@@ -19,9 +19,9 @@ class LotteryAssignment < ApplicationRecord
 
   validates :draw, presence: true
   validate :draw_in_lottery, on: :create, if: ->() { draw.present? }
-
   validate :groups_presence
   validate :groups_in_draw, if: ->() { draw.present? }
+  validate :groups_have_no_lotteries, on: :create
 
   after_create :assign_groups_if_clipped!, if: ->() { clip.present? }
 
@@ -83,6 +83,11 @@ class LotteryAssignment < ApplicationRecord
   def groups_in_draw
     return unless groups.any? { |g| g.draw != draw }
     errors.add(:groups, 'must be in the same draw')
+  end
+
+  def groups_have_no_lotteries
+    return if groups.all? { |g| g.lottery_assignment_id.blank? }
+    errors.add(:groups, 'already have a lottery number assigned')
   end
 
   def draw_in_lottery

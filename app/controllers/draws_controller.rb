@@ -102,7 +102,7 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def start_selection
-    result = DrawSelectionStarter.start(draw: @draw)
+    result = DrawSelectionStarter.start(draw: @draw.__getobj__)
     handle_action(action: 'show', **result)
   end
 

@@ -56,15 +56,16 @@ FactoryBot.define do
             suite nil
           end
           after(:create) do |g, e|
-            if g.draw.present?
-              g.draw.lottery!
-              create(:lottery_assignment, :defined_by_group, group: g)
-            end
             # ideally this gets the last suite added to the draw which SHOULD
             # be the one created in the above after(:build) callback
             suite_to_assign = e.suite || Suite.last
             create(:suite_assignment, group: g, suite: suite_to_assign)
-            g.lottery_assignment&.update_selected!
+            if g.draw.present?
+              g.draw.lottery!
+              create(:lottery_assignment, :defined_by_group, group: g)
+              g.lottery_assignment&.update_selected!
+              g.draw.suite_selection!
+            end
           end
         end
       end

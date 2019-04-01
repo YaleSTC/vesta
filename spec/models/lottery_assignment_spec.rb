@@ -30,40 +30,50 @@ RSpec.describe LotteryAssignment, type: :model do
     end
   end
 
-  describe 'draw must be in lottery on create' do
-    it do
-      draw = create(:draw_in_lottery)
-      lottery = build(:lottery_assignment, draw: draw)
-      expect(lottery).to be_valid
+  describe 'validations' do
+    describe 'draw must be in lottery on create' do
+      it do
+        draw = create(:draw_in_lottery)
+        lottery = build(:lottery_assignment, draw: draw)
+        expect(lottery).to be_valid
+      end
+      it 'fails in other states' do
+        draw = create(:draw_with_members, status: 'group_formation')
+        group = create(:group, :defined_by_draw, draw: draw)
+        lottery = build(:lottery_assignment, draw: draw, groups: [group])
+        expect(lottery).not_to be_valid
+      end
     end
-    it 'fails in other states' do
-      draw = create(:draw_with_members, status: 'group_formation')
-      group = create(:group, :defined_by_draw, draw: draw)
-      lottery = build(:lottery_assignment, draw: draw, groups: [group])
+
+    describe 'group validations' do
+      it 'must have at least one group' do
+        lottery = build(:lottery_assignment, clip: nil)
+        lottery.groups = []
+        expect(lottery).not_to be_valid
+      end
+    end
+
+    it 'number must be unique within a draw' do
+      existing = create(:lottery_assignment)
+      lottery = build(:lottery_assignment, draw: existing.draw,
+                                           number: existing.number)
       expect(lottery).not_to be_valid
     end
-  end
 
-  describe 'group validations' do
-    it 'must have at least one group' do
-      lottery = build(:lottery_assignment, clip: nil)
-      lottery.groups = []
+    it 'draw must match group draw' do
+      groups = create(:draw_in_lottery).groups
+      lottery = build(:lottery_assignment, draw: create(:draw_in_lottery),
+                                           groups: groups)
       expect(lottery).not_to be_valid
     end
-  end
 
-  it 'number must be unique within a draw' do
-    existing = create(:lottery_assignment)
-    lottery = build(:lottery_assignment, draw: existing.draw,
-                                         number: existing.number)
-    expect(lottery).not_to be_valid
-  end
-
-  it 'draw must match group draw' do
-    groups = create(:draw_in_lottery).groups
-    lottery = build(:lottery_assignment, draw: create(:draw_in_lottery),
-                                         groups: groups)
-    expect(lottery).not_to be_valid
+    it 'groups cannot already have lottery assignments' do
+      groups = create(:draw_in_lottery).groups
+      create(:lottery_assignment, draw: groups.last.draw, groups: [groups.last])
+      lottery = build(:lottery_assignment, clip: nil, draw: groups.last.draw,
+                                           groups: groups)
+      expect(lottery).not_to be_valid
+    end
   end
 
   describe 'frozen attributes' do
