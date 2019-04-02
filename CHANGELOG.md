@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Hide the login link in the nav when a user is not in a specific college ([#909](https://gitlab.com/yale-sdmp/vesta/issues/909)).
 * Hide the draws dropdown if there are no draws ([#884](https://gitlab.com/yale-sdmp/vesta/issues/884)).
 * Change login and logout to log in and log out when they are used as verbs ([#955](https://gitlab.com/yale-sdmp/vesta/issues/955)).
+* Add timeoutable to users and expiration date to cookies ([#963](https://gitlab.com/yale-sdmp/vesta/issues/963)).
 
 ## v2.3.3 - 2019-04-01
 ### Fixed
