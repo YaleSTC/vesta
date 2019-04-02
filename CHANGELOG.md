@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Changed
+* Add timeoutable to users and expiration date to cookies ([#963](https://gitlab.com/yale-sdmp/vesta/issues/963)).
+
 ## v2.3.3 - 2019-04-01
 ### Fixed
 * Update RoomAssignmentForm to only query for active draw memberships ([#956](https://gitlab.com/yale-sdmp/vesta/issues/956)).

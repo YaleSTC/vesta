@@ -34,6 +34,8 @@ RSpec.feature 'Draw email buttons' do
 
     it 'sends locking reminders' do
       time = Time.zone.now.strftime('%B %-e, %-l:%M %P')
+      # The session will time out after 24 hours so another log in is needed.
+      log_in(create(:admin))
       visit draw_path(draw)
       click_on 'Send locking reminder'
       expect(page).to have_content(time)

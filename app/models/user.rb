@@ -65,6 +65,8 @@ class User < ApplicationRecord
 
   enum role: %w(student admin rep superuser superadmin graduated)
 
+  devise :timeoutable, timeout_in: 24.hours
+
   before_save :downcase_username, if: :cas_auth?
 
   scope :active, -> { where.not(role: 'graduated') }
