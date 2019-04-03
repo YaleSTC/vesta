@@ -13,6 +13,25 @@ RSpec.describe Room, type: :model do
     it { is_expected.to have_many(:users) }
     it { is_expected.to validate_presence_of(:suite) }
 
+    describe 'scoping on active statuses' do
+      let(:group) { create(:full_group) }
+      let(:room) { create(:room) }
+
+      it 'returns only active room_assignments' do
+        ra = create(:room_assignment, room: room, user: group.members.first)
+        ra1 = create(:room_assignment, room: room, user: group.members.last)
+        ra.user.draw_membership.update!(active: false)
+        expect(room.active_room_assignments).to eq([ra1])
+      end
+
+      it 'does not return inactive students' do
+        ra = create(:room_assignment, room: room, user: group.members.first)
+        create(:room_assignment, room: room, user: group.members.last)
+        ra.user.draw_membership.update!(active: false)
+        expect(room.active_users).to eq([group.members.last])
+      end
+    end
+
     describe 'number uniqueness' do
       it 'allows duplicates that belong to separate suites' do
         number = 'L01'

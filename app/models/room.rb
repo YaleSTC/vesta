@@ -16,7 +16,11 @@ class Room < ApplicationRecord
   belongs_to :suite
   has_many :room_assignments, dependent: :destroy
   has_many :users, through: :room_assignments
-
+  has_many :active_room_assignments, lambda {
+    includes(:draw_membership)
+      .where(draw_memberships: { active: true })
+  }, class_name: 'RoomAssignment'
+  has_many :active_users, through: :active_room_assignments, source: :user
   delegate :building_name, to: :suite, allow_nil: true
 
   validates :suite, presence: true
