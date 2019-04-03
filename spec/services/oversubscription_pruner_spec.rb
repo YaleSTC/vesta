@@ -46,6 +46,14 @@ RSpec.describe OversubscriptionPruner do
         result = described_class.prune(draw_report: draw, sizes: [1])
         expect(result[:redirect_object]).to be_nil
       end
+
+      it 'destroys via the GroupDestroyer' do
+        draw = oversubscribed_draw(sizes: [1])
+        allow(GroupDestroyer).to receive(:destroy)
+        described_class.prune(draw_report: draw, sizes: [1])
+        expect(GroupDestroyer).to \
+          have_received(:destroy).exactly(-draw.oversubscription[1])
+      end
     end
 
     describe 'persistence error handling' do
@@ -72,7 +80,7 @@ RSpec.describe OversubscriptionPruner do
         errors = instance_spy(ActiveModel::Errors, full_messages: %W[#{msg}])
         group = instance_spy('group', errors: errors)
         exception = ActiveRecord::RecordNotDestroyed.new(nil, group)
-        allow(group).to receive(:destroy!).and_raise(exception)
+        allow(GroupDestroyer).to receive(:destroy).and_raise(exception)
         groups = instance_spy('ActiveRecord::Associations::CollectionProxy',
                               where: [group])
         instance_spy('DrawReport',

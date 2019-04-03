@@ -67,7 +67,9 @@ class OversubscriptionPruner
     # takes place within a transaction
     shuffle = draw_report.groups.where(size: size).shuffle(random: SecureRandom)
     unlucky = shuffle.pop(-draw_report.oversubscription[size])
-    unlucky.map(&:destroy!)
+    unlucky.each do |group|
+      GroupDestroyer.destroy(group: group)
+    end
     disbanded[size] = unlucky.map(&:name)
   end
 
