@@ -7,7 +7,7 @@ module ResultsHelper
   # @param room [Room] the room in question
   # @return [String] the occupant description
   def room_occupants(room)
-    students = room.users
+    students = room.active_users
     transfers = room.beds - students.count
     [students_str(students), transfers_str(transfers)].compact.join(', ')
   end
