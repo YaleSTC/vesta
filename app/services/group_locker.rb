@@ -13,14 +13,14 @@ class GroupLocker
   end
 
   # Lock a group by locking each membership
+  # Email both leader and group members
   #
   # @return [Hash{Symbol=>Array, Group, Hash}] The result of the finalizing
   def lock
     ActiveRecord::Base.transaction do
       group.update!(status: 'finalizing')
       group.full_memberships.reject(&:locked).each do |m|
-        m.update!(locked: true)
-        StudentMailer.group_locked(user: m.user).deliver_later
+        lock_and_email(m)
       end
     end
     success
@@ -43,5 +43,10 @@ class GroupLocker
   def success
     { redirect_object: [group.draw, group], record: group,
       msg: { success: "#{group.name} is locked." } }
+  end
+
+  def lock_and_email(member)
+    member.update!(locked: true)
+    StudentMailer.group_locked(user: member.user).deliver_later
   end
 end
