@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v2.4.0 - 2019-04-04
 ### Added
 * Add SID to users ([#669](https://gitlab.com/yale-sdmp/vesta/issues/669)).
 * Add new scope associations to room so that only non-archived data can be retrieved ([#960](https://gitlab.com/yale-sdmp/vesta/issues/960)).
