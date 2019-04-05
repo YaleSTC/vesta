@@ -4,9 +4,7 @@ require 'administrate/field/base'
 
 # Custon Enum Field for Administrate for enumerable attributes
 class EnumField < Administrate::Field::Base
-  def to_s
-    data
-  end
+  delegate :to_s, to: :data
 
   def select_field_values(form_builder)
     attr = attribute.to_s.pluralize
