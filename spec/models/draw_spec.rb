@@ -5,12 +5,12 @@ require 'rails_helper'
 RSpec.describe Draw, type: :model do
   describe 'basic validations' do
     it { is_expected.to validate_presence_of(:name) }
-    it { is_expected.to have_many(:draw_memberships) }
+    it { is_expected.to have_many(:draw_memberships).dependent(:destroy) }
     it { is_expected.to have_many(:students).through(:draw_memberships) }
-    it { is_expected.to have_many(:groups) }
-    it { is_expected.to have_many(:draw_suites) }
-    it { is_expected.to have_many(:lottery_assignments) }
-    it { is_expected.to have_many(:clips) }
+    it { is_expected.to have_many(:groups).dependent(:destroy) }
+    it { is_expected.to have_many(:draw_suites).dependent(:delete_all) }
+    it { is_expected.to have_many(:lottery_assignments).dependent(:destroy) }
+    it { is_expected.to have_many(:clips).dependent(:destroy) }
     it { is_expected.to have_many(:suites).through(:draw_suites) }
     it { is_expected.to validate_presence_of(:status) }
     it { is_expected.to validate_presence_of(:suite_selection_mode) }
@@ -43,12 +43,6 @@ RSpec.describe Draw, type: :model do
       dm = create(:draw_membership, draw: nil, old_draw_id: draw.id)
       draw.destroy
       expect(dm.reload.old_draw_id).to be_nil
-    end
-    it 'clears groups on destruction' do
-      group = create(:group)
-      draw = create(:draw, group_ids: group.id)
-      draw.destroy
-      expect { group.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 

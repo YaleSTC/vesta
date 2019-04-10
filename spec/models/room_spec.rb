@@ -48,7 +48,7 @@ RSpec.describe Room, type: :model do
     end
   end
 
-  it 'destroy the room assignment on destruction' do
+  it 'destroys the room assignment on destruction' do
     g = create(:group_with_suite).reload
     r = g.suite.rooms.first
     RoomAssignment.create!(draw_membership: g.leader_draw_membership, room: r)

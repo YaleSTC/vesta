@@ -8,7 +8,7 @@ RSpec.describe Building, type: :model do
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_uniqueness_of(:name) }
-    it { is_expected.to have_many(:suites) }
+    it { is_expected.to have_many(:suites).dependent(:destroy) }
   end
 
   describe '#suites_by_size' do

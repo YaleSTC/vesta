@@ -16,7 +16,7 @@ RSpec.describe LotteryAssignment, type: :model do
     it { is_expected.to validate_presence_of(:draw) }
     it { is_expected.to belong_to(:draw) }
 
-    it { is_expected.to have_many(:groups) }
+    it { is_expected.to have_many(:groups).dependent(:nullify) }
   end
 
   describe 'factories' do

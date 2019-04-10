@@ -10,7 +10,7 @@ RSpec.describe College do
     it { is_expected.to validate_presence_of(:admin_email) }
     it { is_expected.to validate_presence_of(:dean) }
     it { is_expected.to validate_uniqueness_of(:subdomain).case_insensitive }
-    it { is_expected.to have_many(:users) }
+    it { is_expected.to have_many(:users).dependent(:nullify) }
   end
 
   describe 'subdomain callbacks' do

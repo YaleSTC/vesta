@@ -64,7 +64,7 @@ RSpec.feature 'Draw suite selection' do
     end
 
     it 'shows the disband button when there are not enough suites' do
-      draw.suites.where.not(id: clip_suites.first.id).delete_all
+      draw.suites.where.not(id: clip_suites.first.id).destroy_all
       visit new_draw_suite_assignment_path(draw)
       expect(page).to have_link('Disband')
     end

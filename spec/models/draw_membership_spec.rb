@@ -15,8 +15,8 @@ RSpec.describe DrawMembership, type: :model do
 
     it { is_expected.to have_one(:membership) }
     it { is_expected.to have_one(:group).through(:membership) }
-    it { is_expected.to have_many(:memberships) }
-    it { is_expected.to have_one(:room_assignment) }
+    it { is_expected.to have_many(:memberships).dependent(:destroy) }
+    it { is_expected.to have_one(:room_assignment).dependent(:destroy) }
     it { is_expected.to have_one(:room).through(:room_assignment) }
 
     it { is_expected.to validate_presence_of(:user) }

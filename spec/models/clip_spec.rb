@@ -6,6 +6,8 @@ RSpec.describe Clip, type: :model do
   describe 'basic validations' do
     it { is_expected.to have_many(:groups) }
     it { is_expected.to belong_to(:draw) }
+    it { is_expected.to have_one(:lottery_assignment).dependent(:nullify) }
+    it { is_expected.to have_many(:clip_memberships).dependent(:delete_all) }
   end
 
   describe '#name' do
@@ -37,12 +39,6 @@ RSpec.describe Clip, type: :model do
       clip.clip_memberships.first.delete
       clip.reload.cleanup!
       expect(clip.reload).to eq(clip)
-    end
-    it 'all clip_memberships are deleted on clip destruction' do
-      clip = create(:clip)
-      clip_memberships = clip.clip_memberships
-      clip.destroy!
-      expect(clip_memberships).to eq([])
     end
   end
 

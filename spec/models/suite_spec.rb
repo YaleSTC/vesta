@@ -6,12 +6,12 @@ RSpec.describe Suite, type: :model do
   describe 'basic associations and validations' do
     it { is_expected.to validate_presence_of(:number) }
     it { is_expected.to belong_to(:building) }
-    it { is_expected.to have_many(:suite_assignments) }
+    it { is_expected.to have_many(:suite_assignments).dependent(:destroy) }
     it { is_expected.to have_many(:groups).through(:suite_assignments) }
     it { is_expected.to have_one(:suite_assignment) }
     it { is_expected.to have_one(:group).through(:suite_assignment) }
-    it { is_expected.to have_many(:rooms) }
-    it { is_expected.to have_many(:draw_suites) }
+    it { is_expected.to have_many(:rooms).dependent(:nullify) }
+    it { is_expected.to have_many(:draw_suites).dependent(:delete_all) }
     it { is_expected.to have_many(:draws).through(:draw_suites) }
 
     describe 'number uniqueness' do

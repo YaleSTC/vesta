@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190307151207) do
+ActiveRecord::Schema.define(version: 20190410195245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,18 +213,25 @@ ActiveRecord::Schema.define(version: 20190307151207) do
 
   add_foreign_key "clip_memberships", "clips"
   add_foreign_key "clip_memberships", "groups"
+  add_foreign_key "clips", "draws"
   add_foreign_key "draw_memberships", "draws"
   add_foreign_key "draw_memberships", "draws", column: "old_draw_id"
   add_foreign_key "draw_memberships", "shared.users", column: "user_id"
+  add_foreign_key "draw_suites", "draws"
+  add_foreign_key "draw_suites", "suites"
   add_foreign_key "groups", "draw_memberships", column: "leader_draw_membership_id"
+  add_foreign_key "groups", "draws"
   add_foreign_key "groups", "lottery_assignments"
   add_foreign_key "lottery_assignments", "clips"
   add_foreign_key "lottery_assignments", "draws"
   add_foreign_key "memberships", "draw_memberships"
+  add_foreign_key "memberships", "groups"
   add_foreign_key "room_assignments", "draw_memberships"
   add_foreign_key "room_assignments", "rooms"
+  add_foreign_key "rooms", "suites"
   add_foreign_key "suite_assignments", "groups"
   add_foreign_key "suite_assignments", "suites"
+  add_foreign_key "suites", "buildings"
   add_foreign_key "users", "colleges"
 
   create_view "lottery_base_views",  sql_definition: <<-SQL
