@@ -70,6 +70,11 @@ RSpec.feature 'Draw suite selection' do
       expect(page).to have_button('Remove suite')
     end
 
+    it 'has option to assign suite from group page' do
+      visit draw_group_path(draw, clip.groups.first)
+      expect(page).to have_link('Assign suite')
+    end
+
     it 'shows the disband button when there are not enough suites' do
       draw.suites.where.not(id: clip_suites.first.id).destroy_all
       visit new_draw_suite_assignment_path(draw)

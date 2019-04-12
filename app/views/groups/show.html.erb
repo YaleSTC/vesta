@@ -78,23 +78,31 @@
   <%= link_to 'Invite Members', new_invite_group_path(@group), class: 'button secondary' if policy(Membership.new(group: @group, user: current_user)).create_invite? %>
   <%= link_to 'Begin Locking Process for Group', finalize_draw_group_path(@draw, @group), method: :put, data: { confirm: 'This will begin the process of confirming this housing group and cannot be undone. Are you sure you want to proceed?' }, class: 'button' if policy(@group).finalize? %>
   <%= link_to 'Lock Group', lock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).lock? %>
-  <%= link_to 'Unlock All Members', unlock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).unlock? %>
+
   <% if @group.suite.present? && policy(@group.suite_assignment).destroy? %>
     <%= simple_form_for @group, url: group_suite_assignment_path(@group), method: :delete, html: { class: 'hidden-form' } do |f| %>
       <%= f.input :suite, as: :hidden, input_html: { value: '' } %>
       <%= f.submit 'Remove suite' %>
     <% end %>
   <% end %>
+  <% if !@group.suite.present? && policy(@group).reassign_suite? %>
+    <%= link_to 'Assign suite', new_group_suite_assignment_path(@group), class: 'button' %>
+  <% end %>
+
+  <%= link_to 'Unlock All Members', unlock_draw_group_path(@draw, @group), method: :put, class: 'button alert' if policy(@group).unlock? %>
+
   <% if policy(RoomAssignment.from_group(@group)).new? %>
     <%= link_to 'Assign rooms', new_group_room_assignment_path(@group), class: 'button' %>
   <% end %>
   <% if policy(RoomAssignment.from_group(@group)).edit? %>
     <%= link_to 'Edit room assignments', edit_group_room_assignment_path(@group), class: 'button' %>
   <% end %>
+
   <% if policy(@group).make_drawless? %>
     <%= link_to 'Make special group', make_drawless_draw_group_path(@draw, @group), method: :patch, data: { confirm: 'Are you sure you want to remove this group and its members from the draw?' },
       **with_tooltip(text: 'Remove this group and its members from the draw and convert it to a special group.', class_override: 'button alert') %>
   <% end %>
+
   <%= link_to('Disband', draw_group_path(@draw, @group), method: :delete, data: { confirm: 'Are you sure you want to disband this group?' }, class: 'button alert') if policy(@group).destroy? %>
 </div>
 <%= link_to 'Return to draw', draw_path(@draw) %>

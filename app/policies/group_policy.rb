@@ -64,6 +64,10 @@ class GroupPolicy < ApplicationPolicy
     select_suite?
   end
 
+  def reassign_suite?
+    assign_suite? && (record.draw.suite_selection? || record.draw.results?)
+  end
+
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       scope

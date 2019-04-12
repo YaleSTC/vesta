@@ -4,10 +4,11 @@
 class SuiteAssignmentPolicy < ApplicationPolicy
   def create?
     return can_drawless_assign? unless draw.present?
-    return false unless draw.suite_selection?
-    return student_can_select_suite? if draw.student_selection?
+    return false unless draw.suite_selection? || draw.results?
+    return student_can_select_suite? if draw.student_selection? &&
+                                        draw.suite_selection?
     # implicit admin single selection
-    user_has_uber_permission? && draw.suite_selection?
+    user_has_uber_permission?
   end
 
   def new?

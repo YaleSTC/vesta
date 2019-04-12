@@ -11,4 +11,6 @@
 
 <% if @draw %>
   <%= link_to 'Back to draw', draw_path(@draw) %>
+<% else %>
+  <%= link_to 'Back to group', group_path(@group) %>
 <% end %>
