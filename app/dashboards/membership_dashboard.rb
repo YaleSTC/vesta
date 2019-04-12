@@ -11,8 +11,9 @@ class MembershipDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
+    user: Field::HasOne,
     group: Field::BelongsTo,
-    user: Field::BelongsTo,
+    draw_membership: Field::BelongsTo,
     id: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -48,7 +49,7 @@ class MembershipDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i(
-    user
+    draw_membership
     group
     status
     locked
