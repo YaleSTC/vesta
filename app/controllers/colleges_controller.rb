@@ -3,8 +3,11 @@
 #
 # Controller for College resources
 class CollegesController < ApplicationController
-  prepend_before_action :set_college, except: %i(index new create archive)
+  prepend_before_action :set_current_college
+  prepend_before_action :set_college, except: %i(show index new create archive)
   skip_before_action :set_current_college, only: %i(index)
+
+  def show; end
 
   def index
     @colleges = College.all.order(name: :asc)
@@ -47,7 +50,8 @@ class CollegesController < ApplicationController
   end
 
   def unauthenticated?
-    action_name == 'index' && Apartment::Tenant.current == 'public'
+    (action_name == 'index' && Apartment::Tenant.current == 'public')\
+      || action_name == 'show'
   end
 
   def college_params

@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, unless: :unauthenticated?
   before_action :authorize_active, unless: :unauthenticated?
   before_action :authorize!, unless: :unauthenticated?
-  before_action :set_current_college
+  before_action :set_current_college, unless: :unauthenticated?
   before_action :authorize_current_college, unless: :unauthenticated?
   before_action :verify_tos_accepted, unless: :unauthenticated?
   before_action :set_active_draws, if: :user_signed_in?

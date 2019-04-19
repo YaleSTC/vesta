@@ -11,7 +11,7 @@ RSpec.feature 'Nav bar' do
     it 'does not render a login link' do
       visit colleges_url(host: env('APPLICATION_HOST'))
 
-      expect(page).not_to have_link('Login')
+      expect(page).not_to have_link('Log In')
     end
   end
 

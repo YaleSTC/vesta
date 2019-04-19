@@ -20,11 +20,11 @@ Rails.application.routes.draw do
 
   devise_for :users
   unauthenticated :user do
-    root to: 'high_voltage/pages#show', id: 'home', as: 'landing_page'
+    root to: 'colleges#show', id: 'home', as: 'landing_page'
   end
   root to: 'dashboards#show'
 
-  resources :colleges, only: %i(index new create edit update) do
+  resources :colleges, only: %i(show index new create edit update) do
     patch 'archive'
   end
 
