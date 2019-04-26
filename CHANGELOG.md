@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 * Add SID to users ([#669](https://gitlab.com/yale-sdmp/vesta/issues/669)).
 * Add new scope associations to room so that only non-archived data can be retrieved ([#960](https://gitlab.com/yale-sdmp/vesta/issues/960)).
 * Add foreign key contraints to schema and dependency handling for all associations ([#406](https://gitlab.com/yale-sdmp/vesta/issues/406)).
+* Add blank template suite import file ([#706](https://gitlab.com/yale-sdmp/vesta/issues/706)).
 
 ### Changed
 * Create method for lock_and_email ([#945](https://gitlab.com/yale-sdmp/vesta/issues/945)).

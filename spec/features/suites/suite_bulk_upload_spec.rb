@@ -13,6 +13,12 @@ RSpec.feature 'Suite CSV Import' do
       click_on 'Import'
       expect(building.suites.count).to eq(3)
     end
+    it 'has a link to template' do
+      building = create(:building)
+      visit building_path(building)
+      click_on 'Download template'
+      expect(page).to have_content('Number,Common,Single')
+    end
   end
 
   context 'student' do

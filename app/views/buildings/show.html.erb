@@ -15,6 +15,7 @@
   where Number is the identifier of the suite and Common, Single, and Double contain
   the room numbers for the rooms of that size, separated by spaces. Medical suites
   are indicated by placing any content in the Medical column.</p>
+  <p><%= link_to 'Download template', root_path << 'suite_import_template.csv' %></p>
   <p>
   <%= simple_form_for @suite_importer, url: suite_import_path do |f| %>
     <%= f.hidden_field :building_id, value: @building.id %>
