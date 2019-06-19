@@ -3,7 +3,9 @@
   <ul class="footer-links">
     <li><small><%= link_to 'Accessibility at Yale', 'https://usability.yale.edu/web-accessibility/accessibility-yale' %></small></li>
     <li><%= link_to 'Documentation', 'https://yale-sdmp.gitlab.io/vesta', target: '_blank' %></li>
-    <li><%= link_to 'Terms of Service', terms_of_service_path %></li>
+    <% if current_user %>
+    	<li><%= link_to 'Terms of Service', terms_of_service_path %></li>
+    <% end %>
     <li><%= link_to 'Contact Us', 'mailto:vesta-support@yale.edu' %></li>
   </ul>
 </footer>
