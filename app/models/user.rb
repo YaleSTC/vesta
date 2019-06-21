@@ -91,13 +91,6 @@ class User < ApplicationRecord
     Devise.friendly_token(length)
   end
 
-  # Returns the user's preferred name
-  #
-  # @return [String] Preferred name
-  def name
-    first_name
-  end
-
   # Returns the user's preferred full name
   #
   # @return [String] First name plus last name

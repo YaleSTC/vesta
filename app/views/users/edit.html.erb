@@ -1,5 +1,5 @@
-<% provide(:title, "Edit #{@user.name}") %>
-<h1>Edit <%= @user.name %></h1>
+<% provide(:title, "Edit #{@user.first_name}") %>
+<h1>Edit <%= @user.first_name %></h1>
 <% if policy(@user).edit? %>
   <%= simple_form_for @user do |f| %>
     <%= f.input :first_name %>

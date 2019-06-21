@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 * Fix AdminDashboard membership creation failure ([#971](https://gitlab.com/yale-sdmp/vesta/merge_requests/1018)).
 * Fix NoMethodError thrown by AdminDashboard Draw#show ([#965](https://gitlab.com/yale-sdmp/vesta/issues/965)).
+* Remove deprecated User name attribute ([#962](https://gitlab.com/yale-sdmp/vesta/issues/962)).
 
 ## v2.3.3 - 2019-04-01
 ### Fixed

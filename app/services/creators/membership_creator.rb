@@ -24,7 +24,7 @@ class MembershipCreator < Creator
     send_create_email unless status == 'accepted'
     { redirect_object: [group.draw, group], membership: obj,
       msg: { success: "Membership in #{group.name} created for "\
-        "#{user.name}." } }
+        "#{user.first_name}." } }
   end
 
   def error(e)

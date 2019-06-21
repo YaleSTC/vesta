@@ -17,7 +17,7 @@ class UserGenerator
 
   def generate
     Creator.new(klass: User, params: params,
-                name_method: :name).create![:redirect_object]
+                name_method: :first_name).create![:redirect_object]
   end
 
   make_callable :generate

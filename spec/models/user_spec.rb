@@ -167,16 +167,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#name' do
-    it 'is the first name' do
-      name = 'Sydney'
-      user = build_stubbed(:user, first_name: name)
-      expect(user.name).to eq(name)
-    end
-  end
-
   describe '#full_name' do
-    it 'is the name and last name' do
+    it 'is the first name and last name' do
       full_name = 'Sydney Young'
       user = build_stubbed(:user, first_name: 'Sydney', last_name: 'Young')
       expect(user.full_name).to eq(full_name)

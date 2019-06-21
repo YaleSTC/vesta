@@ -1,4 +1,4 @@
-<p>Hi <%= @user.name %>,</p>
+<p>Hi <%= @user.first_name %>,</p>
 <p>Welcome to Vesta! A new account has been created on your behalf and you can log in at <%= college_site_link(@res_college) %> <% if @password %>with the following auto-generated password: <%= @password %>; you'll be able to change it after you log in.<% else %>via CAS.<% end %></p>
 <p>Please e-mail <%= admin_mail_link(@res_college) %> if you have any questions.</p>
 <p>Sincerely, <%= @res_college.dean %></p>

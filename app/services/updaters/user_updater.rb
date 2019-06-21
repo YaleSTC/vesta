@@ -13,7 +13,7 @@ class UserUpdater < Updater
   # @param editing_self [Boolean] True if the user is editing themselves,
   #   false otherwise
   def initialize(user:, params:, editing_self:)
-    super(object: user, params: params, name_method: :name)
+    super(object: user, params: params, name_method: :first_name)
     @editing_self = editing_self
     handle_promotion_or_demotion
   end
