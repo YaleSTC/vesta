@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby "2.4.3"
 
-gem "autoprefixer-rails", "~> 7.1.1"
+gem "autoprefixer-rails", "~> 9.6.1"
 gem "delayed_job_active_record", "~> 4.1.2"
 gem 'devise', '~> 4.6.0'
 gem 'devise_cas_authenticatable', '~> 1.10.0'

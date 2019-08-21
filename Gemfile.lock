@@ -44,7 +44,6 @@ GEM
       actionpack (>= 4.2, < 5.2)
       actionview (>= 4.2, < 5.2)
       activerecord (>= 4.2, < 5.2)
-      autoprefixer-rails (>= 6.0)
       datetime_picker_rails (~> 0.0.7)
       jquery-rails (>= 4.0)
       kaminari (>= 1.0)
@@ -59,7 +58,8 @@ GEM
       io-like (~> 0.3.0)
     arel (8.0.0)
     ast (2.3.0)
-    autoprefixer-rails (7.1.1)
+      execjs
+    autoprefixer-rails (9.6.1)
       execjs
     awesome_print (1.7.0)
     babel-source (5.8.35)
@@ -362,7 +362,7 @@ PLATFORMS
 DEPENDENCIES
   administrate (~> 0.8.1)
   apartment (~> 2.0.0)
-  autoprefixer-rails (~> 7.1.1)
+  autoprefixer-rails (~> 9.6.1)
   awesome_print
   bullet (~> 5.9.0)
   bundler-audit (>= 0.5.0)
