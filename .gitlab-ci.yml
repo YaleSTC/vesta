@@ -16,7 +16,7 @@
 
   before_script:
     - apt-get update -q
-    - apt-get install nodejs -yqq
+    - curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -y nodejs
     - ruby -v
     - which ruby
 
