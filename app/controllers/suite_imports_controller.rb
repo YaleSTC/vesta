@@ -4,8 +4,10 @@
 class SuiteImportsController < ApplicationController
   def create
     building = Building.find(suite_importer_params[:building_id])
+    file = suite_importer_params[:file]
+    file_path = file.path unless file.nil?
     result = SuiteImportForm.import(building: building,
-                                    file: suite_importer_params[:file].path)
+                                    file: file_path)
     handle_action(path: building_path(building), **result)
   end
 

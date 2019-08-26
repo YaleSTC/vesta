@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 * Remove deprecated User name attribute ([#962](https://gitlab.com/yale-sdmp/vesta/issues/962)).
 * Refactor code to remove unused CSS styles ([#738](https://gitlab.com/yale-sdmp/vesta/issues/738)).
 * Add links to Vesta in the intent and group reminder emails. ([#931](https://gitlab.com/yale-sdmp/vesta/issues/931)).
+* Fix NoMethodError caused when importing suites with no csv file chosen ([#975](https://gitlab.com/yale-sdmp/vesta/issues/975)).
 
 ## v2.3.3 - 2019-04-01
 ### Fixed
