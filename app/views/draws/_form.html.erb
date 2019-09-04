@@ -1,4 +1,4 @@
-<%= simple_form_for @draw do |f| %>
+<%= simple_form_for draw do |f| %>
   <%= f.input :name %>
   <%= f.input :intent_deadline, include_blank: true,
       hint: 'Used to send emails and to display a deadline to students; will NOT prevent intent changes after the deadline.' %>

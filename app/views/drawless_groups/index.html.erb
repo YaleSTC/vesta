@@ -2,10 +2,10 @@
 <h1>Special Groups</h1>
 <h2 class="h3">Summary</h2>
 <div class="group-report">
-  <%= render 'draws/group_report', sizes: @sizes, groups: @groups_by_size,
+  <%= render partial: 'draws/group_report', locals: { sizes: @sizes, groups: @groups_by_size,
                                    actions_partial: 'drawless_groups/actions',
                                    path: groups_path, diff: nil, group_counts: nil,
-                                   suite_counts: nil %>
+                                   suite_counts: nil } %>
 </div>
 <hr />
 <% if policy(DrawlessGroup).new? %>
@@ -13,5 +13,5 @@
 <% end %>
 <% if policy(DrawlessGroup).archive? %>
   <%= link_to 'Archive all special groups', archive_groups_path, method: :patch,
-    data: { confirm: 'Are you sure you want to archive all special groups? This will freeze all student and group data and cannot be reversed.' }, class: 'button alert' %>
+      data: { confirm: 'Are you sure you want to archive all special groups? This will freeze all student and group data and cannot be reversed.' }, class: 'button alert' %>
 <% end %>

@@ -11,22 +11,22 @@
       <% end %>
   </thead>
   <tbody>
-    <% @draw.sizes.each do |size| %>
-      <tr class="<%= diff_class(@draw.oversubscription[size])%>">
+    <% draw.sizes.each do |size| %>
+      <tr class="<%= diff_class(draw.oversubscription[size])%>">
         <th scope="row"><%= size_str(size).capitalize.pluralize %></th>
-        <td data-role="suite-count"><%= @draw.suite_counts[size] %></td>
-        <td data-role="group-count"><%= @draw.group_counts[size] %></td>
-        <td data-role="locked-count"><%= @draw.locked_counts[size] %></td>
-        <td data-role="oversubscription"><%= @draw.oversubscription[size] %></td>
-        <% if policy(@draw).restrict_all_sizes? %>
-          <td class="actions"><%= toggle_size_restricted_btn(draw: @draw, size: size, path: path) %></td>
+        <td data-role="suite-count"><%= draw.suite_counts[size] %></td>
+        <td data-role="group-count"><%= draw.group_counts[size] %></td>
+        <td data-role="locked-count"><%= draw.locked_counts[size] %></td>
+        <td data-role="oversubscription"><%= draw.oversubscription[size] %></td>
+        <% if policy(draw).restrict_all_sizes? %>
+          <td class="actions"><%= toggle_size_restricted_btn(draw: draw, size: size, path: path) %></td>
         <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
-<% if policy(@draw).restrict_all_sizes? %>
+<% if policy(draw).restrict_all_sizes? %>
   <div>
-    <%= link_to 'Restrict all sizes', restrict_all_sizes_draw_path(@draw, redirect_path: draw_path(@draw)), method: :patch, **with_tooltip(text: 'This will restrict ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
+    <%= link_to 'Restrict all sizes', restrict_all_sizes_draw_path(draw, redirect_path: draw_path(draw)), method: :patch, **with_tooltip(text: 'This will restrict ALL group sizes, preventing new groups from being created.', class_override: 'button') %>
   </div>
 <% end %>

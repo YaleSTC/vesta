@@ -2,7 +2,7 @@
   <li>
     <a href="#">Draws</a>
     <ul class="menu vertical">
-      <% @active_draws.each do |draw| %>
+      <% active_draws.each do |draw| %>
         <li><%= link_to "#{draw.name}", draw_path(draw) %></li>
       <% end %>
       <li><%= link_to 'Create New Draw', new_draw_path %></li>

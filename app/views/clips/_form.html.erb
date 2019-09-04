@@ -1,4 +1,4 @@
-<%= simple_form_for @new_clip_form, url: group_clip_path, method: :post do |f| %>
+<%= simple_form_for new_clip_form, url: group_clip_path, method: :post do |f| %>
   <%= f.input :draw_id, as: :hidden %>
   <%= f.input :group_ids, as: :check_boxes, input_html: {'aria-label' => "Please select which groups you wish to clip with #{@group.name(:with_size)}"}, label: "Please select which groups you wish to clip with #{@group.name(:with_size)}:", collection: @groups%>
   <%= f.submit %>

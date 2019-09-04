@@ -11,11 +11,11 @@
       <div class="top-bar-left">
         <% if current_user %>
           <% if current_user.admin? %>
-            <%= render 'nav_admin' %>
+            <%= render partial: 'nav_admin', locals: { active_draws: active_draws } %>
           <% elsif current_user.rep? %>
-            <%= render 'nav_rep' %>
+            <%= render partial: 'nav_rep', locals: { active_draws: active_draws } %>
           <% else %>
-            <%= render 'nav_student' %>
+            <%= render partial: 'nav_student', locals: { active_draws: active_draws } %>
           <% end %>
         <% end %>
       </div>
@@ -27,7 +27,7 @@
             <% end %>
             <li><%= link_to 'My Profile', user_path(current_user)%></li>
             <li><%= link_to 'Log Out', destroy_user_session_path, method: :delete %></li>
-          <% elsif @current_college.present? %>
+          <% elsif current_college.present? %>
             <li><%= link_to 'Log In', new_user_session_path %></li>
           <% end %>
         </ul>

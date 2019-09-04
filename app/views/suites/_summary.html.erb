@@ -2,7 +2,7 @@
   <% next if suites[size].empty? %>
   <div class="suites-list" id="suites-<%= size_str(size).pluralize %>">
     <h3><%= headerize_size(size) %></h3>
-    <p><%= render partial: 'suites/size_link', collection: sizes.select { |s| s != size }, spacer_template: 'shared/slash' %></p>
+    <p><%= render partial: 'suites/size_link', collection: sizes.select { |s| s != size }, locals: { spacer_template: 'shared/slash' } %></p>
     <% unless suites[size].empty? %>
       <table aria-label="Suite Summary">
         <thead>
@@ -24,7 +24,7 @@
                 <td data-role="suite-doubles"><%= suite.doubles.count %></td>
                 <td data-role="suite-common"><%= suite.common_rooms.count %></td>
                 <td data-role="suite-draws">
-                  <%= render partial: 'suites/draw_link', collection: suite.draws.active, spacer_template: 'shared/comma' %>
+                  <%= render partial: 'suites/draw_link', collection: suite.draws.active, locals: { spacer_template: 'shared/comma' } %>
                 </td>
                 <td class="actions" data-role="suite-actions">
                   <%= link_to 'View', suite_path(suite), class: 'button' %>

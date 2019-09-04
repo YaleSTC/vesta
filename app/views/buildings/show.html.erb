@@ -4,7 +4,7 @@
 <% if @suites.empty? %>
   <p>No suites yet!</p>
 <% else %>
-  <%= render 'suites/summary', sizes: @suites.keys.sort, suites: @suites, label_method: :number_with_medical %>
+  <%= render partial: 'suites/summary', locals: { sizes: @suites.keys.sort, suites: @suites, label_method: :number_with_medical } %>
 <% end %>
 <hr />
 <p><%= link_to 'New Suite', new_building_suite_path(@building), class: 'button secondary' if policy(Suite).new? %></p>

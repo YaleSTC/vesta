@@ -1,6 +1,6 @@
-<%= simple_form_for @college do |f| %>
+<%= simple_form_for college do |f| %>
   <%= f.input :name %>
-  <% unless @college.persisted? %>
+  <% unless college.persisted? %>
     <%= f.input :subdomain, hint: 'The URL the college site will be accessible at, e.g. housing-sm for housing-sm.yalecollege.yale.edu' %>
   <% end %>
   <%= f.input :admin_email, label: 'Administrator e-mail', hint: 'Used in e-mails sent to students' %>

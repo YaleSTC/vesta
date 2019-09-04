@@ -1,4 +1,4 @@
 <% provide(:title, 'Create College') %>
 <h1>Create College</h1>
-<%= render "form", college: @college %>
+<%= render partial: "form", locals: { college: @college } %>
 

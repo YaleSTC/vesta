@@ -1,7 +1,7 @@
 <% provide(:title, "#{@group.name} - Edit Room Assignments") %>
 <h1><%= @group.name %> - Edit Room Assignments</h1>
 <%= simple_form_for @room_assignment_form, url: group_room_assignment_path(@group), method: :patch do |f| %>
-  <%= render 'form_fields', group: @group, f: f %>
+  <%= render partial: 'form_fields', locals: { group: @group, f: f } %>
   <%= f.submit 'Update room assignments' %>
 <% end %>
 <% if @group.draw %>

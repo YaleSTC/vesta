@@ -1,9 +1,11 @@
 <% provide(:title, 'All Buildings') %>
 <h1>All Buildings</h1>
 <% @buildings.each do |building| %>
-  <div><%= render 'summary_table', building: building %></div>
+  <div><%= render partial: 'summary_table', locals: { suites_by_size: @suites_by_size, building: building } %></div>
 <% end %>
 <hr />
 <% if policy(Building).new? %>
   <%= link_to 'Add new building', new_building_path, class: 'button secondary' %>
 <% end %>
+
+

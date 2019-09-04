@@ -1,5 +1,5 @@
 <% provide(:title, @group.name) %>
-<%= render 'group_details', group: @group %>
+<%= render partial: 'group_details', locals: { group: @group } %>
 <% if policy(@group).view_pending_members? %>
   <% unless @group.requests.empty? %>
     <h2 class="group-requests h4">Requests</h2>
@@ -41,7 +41,7 @@
   <h2>Clipping</h2>
   <% if @group.clip.present? %>
     <h3 class="clip-information h4">Your Clip</h3>
-    <%= render 'clips/clip_details', clip: @group.clip %>
+    <%= render partial: 'clips/clip_details', locals: { clip: @group.clip } %>
     <hr style="border-color: #DDDDDD;" />
   <% else %>
     <p>This group is not in a clip.<p>
@@ -112,6 +112,6 @@
   <h2 class="h4"><%= @same_size_groups_count %> <%= 'group'.pluralize(@same_size_groups_count) %> of size <%= @group.size %></h2>
   <h2 class="h4"><%= @compatible_suites_count %> available <%= size_str(@group.size).capitalize.pluralize(@compatible_suites_count) %></h2>
   <% unless @compatible_suites_count.zero? %>
-    <%= render 'groups/suites_table', suites: @compatible_suites.group_by(&:building) %>
+    <%= render partial: 'groups/suites_table', locals: { suites: @compatible_suites.group_by(&:building) } %>
   <% end %>
 <% end %>

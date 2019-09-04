@@ -1,4 +1,4 @@
 <% provide(:title, "Edit Room #{@room.number}") %>
 <h1>Edit Room <%= @room.number %></h1>
-<%= render "form", room: @room %>
+<%= render partial: "form", locals: { room: @room } %>
 <%= link_to 'Cancel', room_path(@room) %>

@@ -31,7 +31,8 @@ All notable changes to this project will be documented in this file.
 * Remove date restrictions on the intent_reminder? and lock_reminder? policies for draws ([711](https://gitlab.com/yale-sdmp/vesta/issues/711)).
 * Update to ruby 2.6.5 ([1025](https://gitlab.com/yale-sdmp/vesta/issues/1025)).
 * Update to rails 5.2.3 ([1026](https://gitlab.com/yale-sdmp/vesta/issues/1026)).
-
+* Make sure view partials don't reference instance variables
+ ([288](https://gitlab.com/yale-sdmp/vesta/issues/288)).
 
 ### Fixed
 * Fix AdminDashboard membership creation failure ([#971](https://gitlab.com/yale-sdmp/vesta/merge_requests/1018)).

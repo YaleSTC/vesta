@@ -5,7 +5,7 @@
 <p><a href="#admins">Admins</a> / <a href="#reps">Housing Committee</a> / <a href="#students">Students</a></p>
 <h2 id="admins">Admins</h2>
 <% if @users.has_key? 'admin' %>
-  <%= render 'table', users: @users['admin'], hide_actions: false %>
+  <%= render partial: 'table', locals: { users: @users['admin'], hide_actions: false } %>
 <% else %>
   <p>No admins!</p>
 <% end %>
@@ -13,7 +13,7 @@
 <h2 id="reps">Housing Committee (<%= @users['rep'].size %> total)</h2>
 <p><a href="#top">Back to top</a></p>
 <% if @users.has_key? 'rep' %>
-  <%= render 'table', users: @users['rep'], hide_actions: false %>
+  <%= render partial: 'table', locals: { users: @users['rep'], hide_actions: false } %>
 <% else %>
   <p>No housing committee members!</p>
 <% end %>
@@ -32,7 +32,7 @@
     <% @users['student'].keys.sort.each do |year| %>
       <div class="tabs-panel<%= @users['student'].keys.sort.first == year ? ' is-active' : '' %>" id="students-<%= year %>">
         <h3>Class of <%= year %> (<%= @users['student'][year].size %> total)</h3>
-        <%= render 'table', users: @users['student'][year], hide_actions: false %>
+        <%= render partial: 'table', locals: { users: @users['student'][year], hide_actions: false } %>
       </div>
     <% end %>
   </div>

@@ -17,12 +17,12 @@
   <% end %>
 </div>
 <div class="oversub-report">
-  <%= render 'oversub_report', draw: @draw, path: oversub_draw_path(@draw) %>
+  <%= render partial: 'oversub_report', locals: { draw: @draw, path: oversub_draw_path(@draw) } %>
 </div>
 <div class="group-report">
-  <%= render 'group_report', sizes: @draw.oversubscribed_sizes, groups: @draw.groups_by_size,
+  <%= render partial: 'group_report', locals: { draw: @draw, sizes: @draw.oversubscribed_sizes, groups: @draw.groups_by_size,
     diff: @draw.oversubscription, group_counts: @draw.group_counts,
     suite_counts: @draw.suite_counts, actions_partial: 'groups/actions',
-    path: oversub_draw_path(@draw) %>
+    path: oversub_draw_path(@draw) } %>
 </div>
 <%= link_to 'Return to draw', draw_path(@draw) %>

@@ -1,5 +1,5 @@
 <% provide(:title, @group.name) %>
-<%= render 'groups/group_details', group: @group %>
+<%= render partial: 'groups/group_details', locals: { group: @group } %>
 <% if policy(DrawlessGroup.new(@group)).select_suite? %>
   <% if @group.suite.present? %>
     <dl>
@@ -49,10 +49,10 @@
   </p>
   <% unless @compatible_suites_no_draw.count.zero? %>
     <h2 class="h4">Not in Any Draw</h2>
-    <%= render 'groups/suites_table', suites: @compatible_suites_no_draw %>
+    <%= render partial: 'groups/suites_table', locals: { suites: @compatible_suites_no_draw } %>
   <% end %>
   <% unless @compatible_suites_in_draw.count.zero? %>
     <h2 class="h4">In Draw(s)</h2>
-    <%= render 'groups/suites_table', suites: @compatible_suites_in_draw %>
+    <%= render partial: 'groups/suites_table', locals: { suites: @compatible_suites_in_draw } %>
   <% end %>
 <% end %>

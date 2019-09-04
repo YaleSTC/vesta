@@ -4,9 +4,9 @@
   <% @suite_sizes.each do |size| %>
     <div class="suites-fields" id="suites-fields-<%= size %>">
       <h2><%= headerize_size(size) %></h2>
-      <%= render 'suite_edit_fields', f: f, size: size, current_suites: @current_suites[size],
+      <%= render partial: 'suite_edit_fields', locals: { f: f, size: size, current_suites: @current_suites[size],
                                       drawless_suites: @drawless_suites[size],
-                                      drawn_suites: @drawn_suites[size], draw: @draw %>
+                                      drawn_suites: @drawn_suites[size], draw: @draw } %>
     </div>
     <hr />
   <% end %>

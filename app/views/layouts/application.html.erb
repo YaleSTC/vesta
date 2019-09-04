@@ -12,7 +12,7 @@
   </head>
   <body class="<%= body_class %>">
     <header>
-      <%= render "nav" %>
+      <%= render partial: "nav" , locals: { active_draws: @active_draws, current_college: @current_college } %>
     </header>
     <%= render "flashes" -%>
     <main class="row" id="main-content" role="main">

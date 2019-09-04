@@ -1,12 +1,12 @@
 <div class="form-inputs">
-  <%= f.input :size, collection: @suite_sizes %>
-  <% if policy(@group).change_leader? %>
-    <%= f.input :leader, label_method: :full_name, collection: @leader_students %>
+  <%= f.input :size, collection: suite_sizes %>
+  <% if policy(group).change_leader? %>
+    <%= f.input :leader, label_method: :full_name, collection: leader_students %>
   <% end %>
-  <% if policy(@group).advanced_edit? %>
-    <%= f.input :remove_ids, input_html: {'aria-label' => 'Please select users to remove'}, label: 'Users to remove', collection: @group.removable_members, label_method: :full_name, as: :check_boxes unless @group.removable_members.empty? %>
-    <%= f.input :member_ids, input_html: {'aria-label' => 'Please select users to add'}, label: 'Users to add', label_method: :full_name, as: :check_boxes, collection: @students %>
-    <% if @group.persisted? %>
+  <% if policy(group).advanced_edit? %>
+    <%= f.input :remove_ids, input_html: {'aria-label' => 'Please select users to remove'}, label: 'Users to remove', collection: group.removable_members, label_method: :full_name, as: :check_boxes unless group.removable_members.empty? %>
+    <%= f.input :member_ids, input_html: {'aria-label' => 'Please select users to add'}, label: 'Users to add', label_method: :full_name, as: :check_boxes, collection: students %>
+    <% if group.persisted? %>
       <%= f.input :transfers, label: '# transfer students' %>
     <% end %>
   <% end %>

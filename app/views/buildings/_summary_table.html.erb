@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @suites_by_size[building.id].each do |size, suites| %>
+    <% suites_by_size[building.id].each do |size, suites| %>
       <tr>
         <th scope="row" data-role="suite-size"><%= headerize_size(size) %></th>
         <td data-role="suite-count"><%= suites.count %></td>

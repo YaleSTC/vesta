@@ -11,4 +11,4 @@
 </ol>
 <br />
 <h3 class="h4">Available suites</h3>
-<%= render 'groups/suites_table', suites: valid_suites %>
+<%= render partial: 'groups/suites_table', locals: { suites: valid_suites } %>

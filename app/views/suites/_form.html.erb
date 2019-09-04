@@ -1,7 +1,7 @@
-<%= simple_form_for [@building, @suite] do |f| %>
+<%= simple_form_for [building, suite] do |f| %>
   <%= f.input :number %>
-  <% if @building %>
-    <%= f.hidden_field :building_id, value: @building.id %>
+  <% if building %>
+    <%= f.hidden_field :building_id, value: building.id %>
   <% else %>
     <%= f.association :building %>
   <% end %>

@@ -38,7 +38,7 @@
                   <% if current_user.admin? %>
                     <td data-role="group-transfers"><%= group.transfers %></td>
                   <% end %>
-                  <td class="actions" data-role="group-actions"><%= render actions_partial, group: group, path: path %></td>
+                  <td class="actions" data-role="group-actions"><%= render partial: actions_partial, locals: { group: group, path: path } %></td>
                 </tr>
               <% end %>
             </tbody>

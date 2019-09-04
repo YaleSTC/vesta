@@ -1,4 +1,4 @@
 <% provide(:title, 'Edit Special Group') %>
 <h1>Edit <%= @group.name %></h1>
-<%= render 'form', group: @group %>
+<%= render partial: 'form', locals: { suite_sizes: @suite_sizes, group: @group, students: @students, leader_students: @leader_students, draw: @draw } %>
 <%= link_to 'Cancel', group_path(@group) %>

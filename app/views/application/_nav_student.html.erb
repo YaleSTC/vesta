@@ -1,12 +1,12 @@
 <ul class="dropdown menu" data-dropdown-menu>
-  <% if @active_draws.any? %>
+  <% if active_draws.any? %>
     <li>
       <a href="#">Draws</a>
       <ul class="menu vertical">
         <% if current_user.draw && policy(current_user.draw).show? %>
           <li><%= link_to 'My Draw', draw_path(current_user.draw) %></li>
         <% end %>
-        <% @active_draws.each do |draw| %>
+        <% active_draws.each do |draw| %>
           <% next if current_user.draw == draw %>
           <% if policy(draw).show? %>
             <li><%= link_to "#{draw.name}", draw_path(draw) %></li>

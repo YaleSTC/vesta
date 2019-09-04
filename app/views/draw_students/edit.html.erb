@@ -27,7 +27,7 @@
 <% end %>
 <div class="students-list">
   <h2>Students in draw (<%= @students.count %> total)</h2>
-  <%= render 'users/table', users: @students, hide_actions: true %>
+  <%= render partial: 'users/table', locals: { users: @students, hide_actions: true } %>
 </div>
 <hr />
 <%= link_to 'Return to draw', draw_path(@draw) %>
