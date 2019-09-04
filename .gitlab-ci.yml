@@ -1,3 +1,6 @@
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
 .test_template: &test_definition
   image: ruby:2.4.3-stretch
 
@@ -39,16 +42,3 @@ style:
     - bundle check --path vendor/bundle || bundle install --path vendor/bundle
     - cp config/database.yml.gitlab config/database.yml
     - bundle exec rake check_style 'git diff origin/master --name-status'
-
-codequality:
-  image: docker:latest
-  stage: test
-  variables:
-    DOCKER_DRIVER: overlay
-  services:
-    - docker:dind
-  script:
-    - docker pull codeclimate/codeclimate
-    - docker run --env CODECLIMATE_CODE="$PWD" --volume "$PWD":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze -f json > codeclimate.json
-  artifacts:
-    paths: [codeclimate.json]
