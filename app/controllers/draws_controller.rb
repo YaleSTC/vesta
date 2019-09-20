@@ -9,7 +9,11 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
                                              lottery_confirmation
                                              oversubscription prune)
 
-  def show; end
+  def show
+    @suites_by_size =
+      @draw.suites_by_size
+           .transform_values! { |v| v.map { |s| SuiteDecorator.new(s) } }
+  end
 
   def new
     @draw = Draw.new
@@ -113,7 +117,9 @@ class DrawsController < ApplicationController # rubocop:disable ClassLength
   end
 
   def results
-    @suites_with_results = SuitesWithRoomsAssignedQuery.new(@draw.suites).call
+    @suites_with_results =
+      SuitesWithRoomsAssignedQuery.new(@draw.suites).call
+                                  .map { |suite| SuiteDecorator.new(suite) }
   end
 
   def group_export

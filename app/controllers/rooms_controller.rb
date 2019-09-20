@@ -61,6 +61,6 @@ class RoomsController < ApplicationController
   end
 
   def set_suite
-    @suite = Suite.find(params[:suite_id])
+    @suite = SuiteDecorator.new(Suite.find(params[:suite_id]))
   end
 end

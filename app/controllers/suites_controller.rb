@@ -11,6 +11,7 @@ class SuitesController < ApplicationController
     @building = @suite.building
     @group = @suite.group
     @merger_form = SuiteMergerForm.new(suite: @suite)
+    @suite = SuiteDecorator.new(@suite)
   end
 
   def new

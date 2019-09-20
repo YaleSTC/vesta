@@ -72,7 +72,7 @@
       <li class="accordion-item" data-accordion-item>
         <a href="#" class="accordion-title"><h2 class="h4">Suites</h2></a>
         <div class="accordion-content suite-report" data-tab-content>
-          <%= render 'suite_report', sizes: @draw.sizes, suites: @draw.suites_by_size,
+          <%= render 'suite_report', sizes: @draw.sizes, suites: @suites_by_size,
             diff: @draw.oversubscription, group_counts: @draw.group_counts, suite_counts: @draw.suite_counts,
             path: draw_path(@draw) %>
           <% if policy(DrawSuite.new(draw: @draw.__getobj__)).edit_collection? %>

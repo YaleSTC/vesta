@@ -8,7 +8,10 @@ class DrawSuitesController < ApplicationController
   def index
     suites = ValidSuitesQuery.new(@draw.suites.includes(:rooms)).call
     @all_sizes = SuiteSizesQuery.new(suites).call
-    @suites_by_size = SuitesBySizeQuery.new(suites).call
+    @suites_by_size =
+      SuitesBySizeQuery.new(suites).call.transform_values! do |v|
+        v.map { |s| SuiteDecorator.new(s) }
+      end
     @suites_by_size.default = []
   end
 
@@ -63,14 +66,29 @@ class DrawSuitesController < ApplicationController
 
   def sort_all_suites
     all_suites = ValidSuitesQuery.call
-    @current_suites = suite_hash_merge(
-      ValidSuitesQuery.new(@draw.suites.includes(:draws)).call
+    @current_suites = current_suites_hash_merge(@draw)
+    @drawless_suites = drawless_suites_hash_merge(all_suites)
+    @drawn_suites = drawn_suites_hash_merge(all_suites, @draw)
+  end
+
+  def current_suites_hash_merge(draw)
+    suite_hash_merge(
+      ValidSuitesQuery.new(draw.suites.includes(:draws)).call
+                      .map { |suite| SuiteDecorator.new(suite) }
     )
-    @drawless_suites = suite_hash_merge(
-      DrawlessSuitesQuery.new(all_suites).call
+  end
+
+  def drawless_suites_hash_merge(suites)
+    suite_hash_merge(
+      DrawlessSuitesQuery.new(suites).call
+                         .map { |suite| SuiteDecorator.new(suite) }
     )
-    @drawn_suites = suite_hash_merge(
-      SuitesInOtherDrawsQuery.new(all_suites).call(draw: @draw)
+  end
+
+  def drawn_suites_hash_merge(suites, draw)
+    suite_hash_merge(
+      SuitesInOtherDrawsQuery.new(suites).call(draw: draw)
+                             .map { |suite| SuiteDecorator.new(suite) }
     )
   end
 

@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 * Add blank template suite import file ([#706](https://gitlab.com/yale-sdmp/vesta/issues/706)).
 * Add 'About Us' page ([#591](https://gitlab.com/yale-sdmp/vesta/issues/591)).
 * Update feature specs to use navigation ([#399] (https://gitlab.com/yale-sdmp/vesta/issues/399)).
+* Add a suite decorator ([#581] (https://gitlab.com/yale-sdmp/vesta/issues/581)).
 
 ### Changed
 * Sort groups in results and suite selection tables by lottery number ([#968](https://gitlab.com/yale-sdmp/vesta/issues/968)).

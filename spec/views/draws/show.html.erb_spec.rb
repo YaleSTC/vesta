@@ -58,6 +58,7 @@ RSpec.describe 'draws/show.html.erb' do
     assign(:draw, draw)
     assign(:intent_metrics, {})
     assign(:groups_by_size, {})
+    assign(:suites_by_size, {})
     assign(:group_sizes, {})
     assign(:suite_sizes, {})
     assign(:ungrouped_students_by_intent, {})

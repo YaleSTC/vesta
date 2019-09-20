@@ -82,7 +82,9 @@ class DrawlessGroupsController < ApplicationController
   end
 
   def generate_suites_data
-    @compatible_suites = CompatibleSuitesQuery.call(@group).order(:number)
+    @compatible_suites =
+      CompatibleSuitesQuery.call(@group).order(:number)
+                           .map { |suite| SuiteDecorator.new(suite) }
     @compatible_suites_no_draw =
       @compatible_suites.select { |s| s.draws.active.empty? }
                         .group_by(&:building)

@@ -10,8 +10,9 @@ class GroupsController < ApplicationController
 
   def show # rubocop:disable Metrics/AbcSize
     @same_size_groups_count = @draw.groups.where(size: @group.size).count
-    @compatible_suites = CompatibleSuitesQuery.new(@draw.available_suites)
-                                              .call(@group)
+    @compatible_suites =
+      CompatibleSuitesQuery.new(@draw.available_suites).call(@group)
+                           .map { |suite| SuiteDecorator.new(suite) }
     @compatible_suites_count = @compatible_suites.count
     @clip_invites = @group.clip_memberships.includes(:clip)
                           .where(confirmed: false)

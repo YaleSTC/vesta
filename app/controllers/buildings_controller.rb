@@ -7,6 +7,9 @@ class BuildingsController < ApplicationController
   def show
     @suite_importer = SuiteImportForm.new(building: @building)
     @suites = SuitesBySizeQuery.new(@building.suites.includes(:rooms)).call
+                               .transform_values! do |v|
+                                 v.map { |s| SuiteDecorator.new(s) }
+                               end
   end
 
   def new

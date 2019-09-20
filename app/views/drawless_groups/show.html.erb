@@ -4,7 +4,7 @@
   <% if @group.suite.present? %>
     <dl>
       <dt>Suite</dt>
-      <dd><%= @group.suite.name %></dd>
+      <dd><%= SuiteDecorator.new(@group.suite).name %></dd>
     </dl>
     <% if policy(@group.suite_assignment).destroy? %>
       <%= link_to 'Remove suite', group_suite_assignment_path(@group), method: :delete, class: 'button alert' %>

@@ -4,16 +4,7 @@
   <span class="label secondary suite-medical" style="margin-bottom: 1em;"><%= medical_str(@suite.medical).capitalize %></span>
 <% end %>
 <ul>
-  <li>Status:
-    <% if @suite.available? %>
-      Available
-    <% else %>
-      Unavailable
-      <% if !@suite.medical || policy(@suite).medical? %>
-        (Assigned to <%= link_to @group.name, group_path(@group) %>)
-      <% end %>
-    <% end %>
-  </li>
+  <li>Status: <%= status_string(@suite, @user) %></li>
   <li>Size: <%= size_str(@suite.size).capitalize %></li>
   <li>Building: <%= link_to @building.name, building_path(@building) %></li>
   <li>Draws:

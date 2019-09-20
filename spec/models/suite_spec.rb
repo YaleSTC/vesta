@@ -165,41 +165,6 @@ RSpec.describe Suite, type: :model do
     end
   end
 
-  describe '#name_with_draws' do
-    it 'returns the name if the suite belongs to no draws' do
-      suite = build_stubbed(:suite)
-      allow(suite).to receive(:draws).and_return([])
-      expect(suite.name_with_draws).to eq(suite.name)
-    end
-    it 'returns the name if the suite only belongs to the passed draw' do
-      suite = create(:suite)
-      draw = create(:draw)
-      suite.draws << draw
-      expect(suite.name_with_draws(draw)).to eq(suite.name)
-    end
-    it 'ignores archived draws' do
-      suite = create(:suite)
-      draw = create(:draw)
-      suite.draws << draw
-      draw.update!(active: false)
-      expect(suite.name_with_draws).to eq(suite.name)
-    end
-    it 'returns the name with other draw names' do
-      suite = create(:suite)
-      draw = create(:draw)
-      suite.draws << draw
-      expected = "#{suite.name} (#{draw.name})"
-      expect(suite.name_with_draws).to eq(expected)
-    end
-    it 'excludes the passed draw' do
-      draw = create(:draw_with_members, suites_count: 1,
-                                        students_count: 0)
-      draw2 = create(:draw)
-      expected = "#{draw.suites.first.name} (#{draw.name})"
-      expect(draw.suites.first.name_with_draws(draw2)).to eq(expected)
-    end
-  end
-
   describe '#available?' do
     it 'returns true if the suite has no group assigned' do
       suite = build(:suite, group: nil)
@@ -281,45 +246,6 @@ RSpec.describe Suite, type: :model do
       # We assume all mock draws are active
       allow(draws).to receive(:where).and_return(array)
       draws
-    end
-  end
-
-  describe '#number_with_medical' do
-    let(:suite) { build_stubbed(:suite) }
-
-    it 'returns the number if not a medical suite' do
-      allow(suite).to receive(:medical).and_return(false)
-      expect(suite.number_with_medical).to eq(suite.number)
-    end
-    it 'indicates if the suite is a medical suite' do
-      allow(suite).to receive(:medical).and_return(true)
-      expected = "#{suite.number} (medical)"
-      expect(suite.number_with_medical).to eq(expected)
-    end
-  end
-
-  describe '#name' do
-    let(:suite) { build_stubbed(:suite) }
-    let(:building) { suite.building }
-
-    it 'returns the building name and suite number' do
-      expected = "#{building.name} #{suite.number}"
-      expect(suite.name).to eq(expected)
-    end
-  end
-
-  describe '#name_with_medical' do
-    let(:suite) { build_stubbed(:suite) }
-    let(:building) { suite.building }
-
-    it 'returns the building name and suite number' do
-      allow(suite).to receive(:medical).and_return(true)
-      expected = "#{building.name} #{suite.number} (medical)"
-      expect(suite.name_with_medical).to eq(expected)
-    end
-    it 'returns the name if not a medical suite' do
-      allow(suite).to receive(:medical).and_return(false)
-      expect(suite.name_with_medical).to eq(suite.name)
     end
   end
 

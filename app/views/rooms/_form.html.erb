@@ -4,7 +4,7 @@
   <% if @suite %>
     <%= f.hidden_field :suite_id, :value => @suite.id =%>
   <% else %>
-    <%= f.input :suite_id, as: :select, collection: Suite.all, label_method: :name %>
+    <%= f.input :suite_id, as: :select, collection: Suite.all.map { |suite| SuiteDecorator.new(suite) }, label_method: :name %>
   <% end %>
   <%= f.submit %>
 <% end %>

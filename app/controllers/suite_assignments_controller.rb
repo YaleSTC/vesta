@@ -66,11 +66,16 @@ class SuiteAssignmentsController < ApplicationController
     if @group.draw
       @suites = @group.draw.available_suites.where(size: @groups.map(&:size))
                       .includes(:building, :rooms, :draws)
-      @suites_by_size = create_hash(SuitesBySizeQuery.new(@suites).call)
+      suites_by_size = create_hash(SuitesBySizeQuery.new(@suites).call)
     else
-      @suites_by_size = create_hash(SuitesOutsideSuiteSelectionQuery.new
+      suites_by_size = create_hash(SuitesOutsideSuiteSelectionQuery.new
                         .call(@group).group_by(&:size))
     end
+    @suites_by_size = make_presenter(suites_by_size)
+  end
+
+  def make_presenter(suites)
+    suites.transform_values! { |v| v.map { |s| SuiteDecorator.new(s) } }
   end
 
   def set_suite_assignment_form

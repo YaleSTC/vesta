@@ -18,4 +18,33 @@ module SuitesHelper
     prefix = medical ? '' : 'non-'
     "#{prefix}medical suite"
   end
+
+  # Return a suite's availability status
+  #
+  # @return [String] the status "Available" or "Unavailable" with assignment
+  def status_string(suite, user)
+    group = suite.group
+    if suite.available?
+      'Available'
+    elsif suite.medical || group.draw.nil?
+      user.admin? ? group_unavailable_string(group) : 'Unavailable'
+    else
+      drawless_group_unavailable_string(group)
+    end
+  end
+
+  def group_unavailable_string(group)
+    # rubocop:disable Rails/OutputSafety
+    "Unavailable (Assigned to #{link_to group.name, group_path(group)})"
+      .html_safe
+    # rubocop:enable Rails/OutputSafety
+  end
+
+  def drawless_group_unavailable_string(group)
+    # rubocop:disable Rails/OutputSafety
+    'Unavailable (Assigned to ' \
+    "#{link_to group.name, draw_group_path(group.draw, group)})"
+      .html_safe
+    # rubocop:enable Rails/OutputSafety
+  end
 end

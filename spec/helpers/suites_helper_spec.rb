@@ -22,4 +22,40 @@ RSpec.describe SuitesHelper, type: :helper do
       expect(helper.medical_str(false)).to eq('non-medical suite')
     end
   end
+
+  describe '#status_string' do
+    let(:group) { create(:group) }
+    let(:suite) { create(:suite, group: group) }
+
+    it 'returns available if the suite is available' do
+      user = build_stubbed(:user)
+      setup_suite(suite, nil, false)
+      expect(helper.status_string(suite, user)).to eq('Available')
+    end
+
+    it 'returns unavailable with suite\'s assignment if group is not medical' do
+      user = build_stubbed(:user)
+      setup_suite(suite, group, false)
+      expected = "Unavailable (Assigned to #{suite.group.name})"
+      expect(strip_tags(helper.status_string(suite, user))).to eq(expected)
+    end
+
+    it 'returns unavailable with suite\'s assignment if group is medical' do
+      user = build_stubbed(:user, role: 'admin')
+      setup_suite(suite, group, true)
+      expected = "Unavailable (Assigned to #{suite.group.name})"
+      expect(strip_tags(helper.status_string(suite, user))).to eq(expected)
+    end
+
+    it 'returns unavailable if group is medical and user is not admin' do
+      user = build_stubbed(:user)
+      setup_suite(suite, group, true)
+      expect(helper.status_string(suite, user)).to eq('Unavailable')
+    end
+
+    def setup_suite(suite, group, medical)
+      suite.group = group
+      suite.medical = medical
+    end
+  end
 end
