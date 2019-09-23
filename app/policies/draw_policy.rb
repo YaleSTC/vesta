@@ -40,15 +40,11 @@ class DrawPolicy < ApplicationPolicy
   end
 
   def intent_reminder?
-    return false unless record.intent_deadline.present?
-    record.intent_selection? && user_has_uber_permission? && \
-      Time.zone.today <= record.intent_deadline
+    record.intent_selection? && user_has_uber_permission?
   end
 
   def locking_reminder?
-    return false unless record.locking_deadline.present?
-    record.group_formation? && user_has_uber_permission? && \
-      Time.zone.today <= record.locking_deadline
+    record.group_formation? && user_has_uber_permission?
   end
 
   def bulk_on_campus?

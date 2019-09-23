@@ -202,14 +202,14 @@ RSpec.describe DrawPolicy do
       before { allow(draw).to receive(:intent_selection?).and_return(true) }
       context 'no intent deadline' do
         before { allow(draw).to receive(:intent_deadline).and_return(nil) }
-        it { is_expected.not_to permit(user, draw) }
+        it { is_expected.to permit(user, draw) }
       end
       context 'after intent deadline' do
         before do
           allow(draw).to receive(:intent_deadline)
             .and_return(Time.zone.yesterday)
         end
-        it { is_expected.not_to permit(user, draw) }
+        it { is_expected.to permit(user, draw) }
       end
       context 'before/on intent deadline' do
         before do
@@ -226,14 +226,14 @@ RSpec.describe DrawPolicy do
         before do
           allow(draw).to receive(:locking_deadline).and_return(nil)
         end
-        it { is_expected.not_to permit(user, draw) }
+        it { is_expected.to permit(user, draw) }
       end
       context 'after intent deadline' do
         before do
           allow(draw).to receive(:locking_deadline)
             .and_return(Time.zone.yesterday)
         end
-        it { is_expected.not_to permit(user, draw) }
+        it { is_expected.to permit(user, draw) }
       end
       context 'before/on locking deadline' do
         before do
@@ -436,14 +436,14 @@ RSpec.describe DrawPolicy do
       before { allow(draw).to receive(:intent_selection?).and_return(true) }
       context 'no intent deadline' do
         before { allow(draw).to receive(:intent_deadline).and_return(nil) }
-        it { is_expected.not_to permit(user, draw) }
+        it { is_expected.to permit(user, draw) }
       end
       context 'after intent deadline' do
         before do
           allow(draw).to receive(:intent_deadline)
             .and_return(Time.zone.yesterday)
         end
-        it { is_expected.not_to permit(user, draw) }
+        it { is_expected.to permit(user, draw) }
       end
       context 'before/on intent deadline' do
         before do
@@ -460,14 +460,14 @@ RSpec.describe DrawPolicy do
         before do
           allow(draw).to receive(:locking_deadline).and_return(nil)
         end
-        it { is_expected.not_to permit(user, draw) }
+        it { is_expected.to permit(user, draw) }
       end
       context 'after intent deadline' do
         before do
           allow(draw).to receive(:locking_deadline)
             .and_return(Time.zone.yesterday)
         end
-        it { is_expected.not_to permit(user, draw) }
+        it { is_expected.to permit(user, draw) }
       end
       context 'before/on locking deadline' do
         before do
