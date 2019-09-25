@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 * Add information about pending group requests to user dashboard ([#696](https://gitlab.com/yale-sdmp/vesta/issues/696)).
 * Add building abbreviations ([#570](https://gitlab.com/yale-sdmp/vesta/issues/570)).
 * Assign Suites button still visible when no possible suites to assign ([#976](https://gitlab.com/yale-sdmp/vesta/issues/976)).
+* [Admin Dashboard] Add spec for draws create ([#1006](https://gitlab.com/yale-sdmp/vesta/issues/1006)).
 
 ### Changed
 * Change form cancel operation to standardize redirects to page referrer ([#979](https://gitlab.com/yale-sdmp/vesta/issues/979)).
