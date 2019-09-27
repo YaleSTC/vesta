@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   before_action :authorize_current_college, unless: :unauthenticated?
   before_action :verify_tos_accepted, unless: :unauthenticated?
   before_action :set_active_draws, if: :user_signed_in?
+  before_action :notify_masquerading, unless: :unauthenticated?
   after_action :verify_authorized, unless: :unauthenticated?
 
   rescue_from Pundit::NotAuthorizedError do |exception|
@@ -119,4 +120,19 @@ class ApplicationController < ActionController::Base
   def set_active_draws
     @active_draws ||= Draw.where(active: true)
   end
+
+  def notify_masquerading
+    return unless masquerading?
+    user = User.find(session['warden.user.user.key'][0][0])
+    msg = "Masquerading as #{user.full_name}. INFO: To end the masquerade \
+           session, click the 'Stop Masquerading' button on the upper right of \
+           the nav bar."
+    flash[:success] = msg
+  end
+
+  def masquerading?
+    session[:admin_id].present?
+  end
+
+  helper_method :masquerading?
 end

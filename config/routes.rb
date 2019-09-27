@@ -55,7 +55,15 @@ Rails.application.routes.draw do
     patch 'reset'
   end
 
+  resources :masquerades, only: %() do
+    collection do
+      delete 'end', to: 'masquerades#end', as: 'end'
+    end
+  end
+
   resources :users do
+    resources :masquerades, only: %i(new)
+
     member do
       get 'intent', to: 'users#edit_intent', as: 'edit_intent'
       patch 'intent', to: 'users#update_intent', as: 'update_intent'

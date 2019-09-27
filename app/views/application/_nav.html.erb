@@ -22,6 +22,9 @@
       <div class="top-bar-right">
         <ul class="menu">
           <% if current_user %>
+            <% if masquerading? %>
+              <li><%= link_to 'Stop Masquerading', end_masquerades_path, method: :delete %> </li>
+            <% end %>
             <li><%= link_to 'My Profile', user_path(current_user)%></li>
             <li><%= link_to 'Log Out', destroy_user_session_path, method: :delete %></li>
           <% elsif @current_college.present? %>

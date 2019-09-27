@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Added
+* Add masquerading to allow admins to impersonate other users ([#147](https://gitlab.com/yale-sdmp/vesta/issues/147)).
 * Add SID to users ([#669](https://gitlab.com/yale-sdmp/vesta/issues/669)).
 * Add new scope associations to room so that only non-archived data can be retrieved ([#960](https://gitlab.com/yale-sdmp/vesta/issues/960)).
 * Add foreign key contraints to schema and dependency handling for all associations ([#406](https://gitlab.com/yale-sdmp/vesta/issues/406)).

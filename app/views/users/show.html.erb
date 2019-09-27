@@ -20,6 +20,9 @@
     <% if policy(@user).destroy? %>
       <%= link_to 'Delete', user_path(@user), method: :delete, data: { confirm: 'Are you sure you want to delete this user?' }, class: 'button alert' %>
     <% end %>
+    <% if policy(:masquerade).new? %>
+      <%= link_to 'Masquerade', new_user_masquerade_path(@user), class: 'button', data: { confirm: "Are you sure you want to masquerade as this user? This will mean that all actions you perform will be as if you are that user." } %>
+    <% end %>
   </div>
 <% end %>
 <% if policy(@user).edit_password? %>
