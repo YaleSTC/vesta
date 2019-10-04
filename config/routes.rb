@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :lottery_assignments
     resources :suites
     resources :rooms
+    resources :room_assignments
     resources :buildings
     resources :colleges
 

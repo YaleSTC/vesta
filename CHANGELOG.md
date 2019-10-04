@@ -21,9 +21,10 @@ All notable changes to this project will be documented in this file.
 * [Admin Dashboard] Add spec for colleges index, show, create, update, and destroy ([#1010](https://gitlab.com/yale-sdmp/vesta/issues/1010)).
 * [Admin Dashboard] Add spec for draw_memberships index, show, create, update, and destroy ([#1004](https://gitlab.com/yale-sdmp/vesta/issues/1004)).
 * [Admin Dashboard] Add spec for building index, show, create, update, and destroy ([#1012](https://gitlab.com/yale-sdmp/vesta/issues/1012)).
-* [Admin Dashboard] Added spec for memberships index, show, create, update, and destroy ([#1008](https://gitlab.com/yale-sdmp/vesta/issues/1008)).
-* {Admin Dashboard] Added spec for lottery assignments index, show, create, update, destroy ([#1016](https://gitlab.com/yale-sdmp/vesta/issues/1016)).
-* [Admin Dashboard] Added spec for clips index, show, create, update, and destroy ([#1018](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
+* [Admin Dashboard] Add spec for memberships index, show, create, update, and destroy ([#1008](https://gitlab.com/yale-sdmp/vesta/issues/1008)).
+* [Admin Dashboard] Add spec for lottery assignments index, show, create, update, destroy ([#1016](https://gitlab.com/yale-sdmp/vesta/issues/1016)).
+* [Admin Dashboard] Add spec for clips index, show, create, update, and destroy ([#1018](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
+* [Admin Dashboard] Test and fix Room, add RoomAssignment ([#1015](https://gitlab.com/yale-sdmp/vesta/issues/1015)).
 
 ### Changed
 * Change form cancel operation to standardize redirects to page referrer ([#979](https://gitlab.com/yale-sdmp/vesta/issues/979)).
