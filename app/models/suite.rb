@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Model to represent the middle level of facility information
-# A suite is composed of mulitple rooms, which can be bedrooms or common rooms
+# A suite is composed of multiple rooms, which can be bedrooms or common rooms
 #
 # @attr [String] number The identifier of the Suite. Must be unique
 #   for Suites in the same Building.
@@ -31,6 +31,7 @@ class Suite < ApplicationRecord
           through: :suite_assignment
 
   delegate :name, to: :building, prefix: :building, allow_nil: true
+  delegate :id, to: :group, prefix: :group, allow_nil: true
 
   validates :building, presence: true
   validates :number, presence: true, uniqueness: { scope: :building }

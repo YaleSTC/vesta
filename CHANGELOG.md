@@ -25,6 +25,9 @@ All notable changes to this project will be documented in this file.
 * [Admin Dashboard] Add spec for lottery assignments index, show, create, update, destroy ([#1016](https://gitlab.com/yale-sdmp/vesta/issues/1016)).
 * [Admin Dashboard] Add spec for clips index, show, create, update, and destroy ([#1018](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
 * [Admin Dashboard] Test and fix Room, add RoomAssignment ([#1015](https://gitlab.com/yale-sdmp/vesta/issues/1015)).
+* [Admin Dashboard] Add spec for suite index, show, create, update, and destroy; repaired create and update ([#1024](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
+* [Admin Dashboard] Add spec for user index, show, create, update, and destroy; repaired create and update ([#1029](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
+* [Admin Dashboard] Add spec for group index, show, create, update, and destroy; repaired create and update ([#1031](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
 
 ### Changed
 * Change form cancel operation to standardize redirects to page referrer ([#979](https://gitlab.com/yale-sdmp/vesta/issues/979)).
