@@ -2,4 +2,4 @@
 <h1>Add Group</h1>
 <%= render partial: "form", locals: { suite: @suite, group: 
   @group, students: @students, leader_students: @leader_students, draw: @draw, suite_sizes: @suite_sizes } %>
-<%= link_to 'Cancel', draw_path(@draw) %>
+<%= render 'cancel_button' %>

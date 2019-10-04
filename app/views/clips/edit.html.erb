@@ -4,4 +4,4 @@
   <%= f.input :group_ids, as: :check_boxes, label: 'Please select the groups for this clip:', collection: @groups %>
   <%= f.submit %>
 <% end %>
-<%= link_to 'Cancel', clip_path(@clip) %>
+<%= render 'cancel_button' %>

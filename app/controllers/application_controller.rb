@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   before_action :verify_tos_accepted, unless: :unauthenticated?
   before_action :set_active_draws, if: :user_signed_in?
   before_action :notify_masquerading, unless: :unauthenticated?
+  before_action :assign_referrer
   after_action :verify_authorized, unless: :unauthenticated?
 
   rescue_from Pundit::NotAuthorizedError do |exception|
@@ -134,4 +135,11 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :masquerading?
+
+  # Determines redirect for back/cancel button
+  #
+  # @param referrer [String] the referring resource
+  def assign_referrer
+    @referrer = params[:referrer] || 'javascript:history.back()'
+  end
 end

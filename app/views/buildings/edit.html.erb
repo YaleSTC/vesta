@@ -1,4 +1,4 @@
 <% provide(:title, "Edit #{@building.full_name}") %>
 <h1>Edit <%= @building.name %></h1>
 <%= render partial: "form", locals: { building: @building } %>
-<%= link_to 'Cancel', building_path(@building) %>
+<%= render 'cancel_button' %>

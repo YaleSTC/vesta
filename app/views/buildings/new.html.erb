@@ -1,5 +1,4 @@
 <% provide(:title, 'Add Building') %>
 <h1>Add Building</h1>
 <%= render partial: "form", locals: { building: @building }%>
-<%= link_to 'Cancel', buildings_path %>
-
+<%= render 'cancel_button' %>

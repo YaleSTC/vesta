@@ -4,4 +4,4 @@
   <%= f.input :intent, collection: DrawMembership.intents.keys, label_method: :humanize, required: true, input_html: { class: "intent-selection-dropdown" }, :label_html => { :class => "intent-label" } %>
   <%= f.submit 'Submit Intent' %>
 <% end %>
-<%= link_to 'Cancel', user_path(@user) %>
+<%= render 'cancel_button' %>

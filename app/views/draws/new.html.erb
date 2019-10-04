@@ -1,4 +1,4 @@
 <% provide(:title, 'Add Draw') %>
 <h1>New Draw</h1>
 <%= render partial: "form", locals: { draw: @draw } %>
-<%= link_to 'Cancel', root_path %>
+<%= render 'cancel_button' %>

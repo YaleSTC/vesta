@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 * Add building abbreviations ([#570](https://gitlab.com/yale-sdmp/vesta/issues/570)).
 
 ### Changed
+* Change form cancel operation to standardize redirects to page referrer ([#979](https://gitlab.com/yale-sdmp/vesta/issues/979)).
 * Sort groups in results and suite selection tables by lottery number ([#968](https://gitlab.com/yale-sdmp/vesta/issues/968)).
 * Create method for lock_and_email ([#945](https://gitlab.com/yale-sdmp/vesta/issues/945)).
 * Hide the login link in the nav when a user is not in a specific college ([#909](https://gitlab.com/yale-sdmp/vesta/issues/909)).

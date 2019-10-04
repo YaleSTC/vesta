@@ -1,4 +1,4 @@
 <% provide(:title, "Edit Suite #{@suite.number}") %>
 <h1>Edit Suite <%= @suite.number %></h1>
 <%= render partial: "form", locals: { suite: @suite, building: @building } %>
-<%= link_to 'Cancel', suite_path(@suite) %>
+<%= render 'cancel_button' %>

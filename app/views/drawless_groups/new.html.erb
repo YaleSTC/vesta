@@ -1,4 +1,4 @@
 <% provide(:title, 'Add Special Group') %>
 <h1>Add Special Group</h1>
 <%= render 'form', suite_sizes: @suite_sizes, group: @group, students: @students, leader_students: @leader_students, draw: @draw %>
-<%= link_to 'Cancel', groups_path %>
+<%= render 'cancel_button' %>

@@ -1,7 +1,7 @@
 <% provide(:title, 'Edit Settings') %>
 <h1>Edit Settings</h1>
 <%= render partial: "form", locals: { college: @college } %>
-<%= link_to 'Cancel', root_path %>
+<%= render 'cancel_button' %>
 <% if policy(@college).archive? ||  policy(:terms_of_service).reset? %>
 <hr>
 <% end %>

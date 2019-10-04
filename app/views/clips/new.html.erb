@@ -1,4 +1,4 @@
 <% provide(:title, 'Add Clip') %>
 <h1>Add Clip</h1>
 <%= render partial: "form", locals: { new_clip_form: @new_clip_form } %>
-<%= link_to 'Cancel', draw_path(@draw) %>
+<%= render 'cancel_button' %>

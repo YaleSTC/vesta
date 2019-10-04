@@ -8,4 +8,4 @@
   <%= f.input :overwrite, as: :boolean, checked_value: true, unchecked_value: false, label: 'Update existing user roles', hint: 'Checking this box will overwrite roles for any users who already exist'%>
   <%= f.submit 'Submit' %>
 <% end %>
-<%= link_to 'Cancel', users_path %>
+<%= render 'cancel_button' %>
