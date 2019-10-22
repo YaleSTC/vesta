@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 * Update feature specs to use navigation ([#399] (https://gitlab.com/yale-sdmp/vesta/issues/399)).
 
 ### Changed
+* Sort groups in results and suite selection tables by lottery number ([#968](https://gitlab.com/yale-sdmp/vesta/issues/968)).
 * Create method for lock_and_email ([#945](https://gitlab.com/yale-sdmp/vesta/issues/945)).
 * Hide the login link in the nav when a user is not in a specific college ([#909](https://gitlab.com/yale-sdmp/vesta/issues/909)).
 * Hide the draws dropdown if there are no draws ([#884](https://gitlab.com/yale-sdmp/vesta/issues/884)).
