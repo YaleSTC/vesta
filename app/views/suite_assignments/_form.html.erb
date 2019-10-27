@@ -45,5 +45,7 @@
     </div>
     <hr />
   <% end %>
-  <%= f.submit 'Assign suites', data: { confirm: "Are you sure that you want to assign #{'this'.pluralize(@groups.size)} #{@groups.size} #{'suite'.pluralize(@groups.size)}?" } %>
+  <% if @suites_by_size[@group.size].count >= @groups_by_size[@group.size].count %>
+    <%= f.submit 'Assign suites', data: { confirm: "Are you sure that you want to assign #{'this'.pluralize(@groups.size)} #{@groups.size} #{'suite'.pluralize(@groups.size)}?" } %>
+  <% end %>
 <% end %>

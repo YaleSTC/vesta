@@ -97,6 +97,14 @@ RSpec.feature 'Draw suite selection' do
                                    filename: f, header_str: h_str)).to be_truthy
     end
 
+    it 'hides assign suites button when there are no available suites' do
+      other_suite.destroy!
+      visit draw_path(draw)
+      click_on 'Select suites'
+      assign_suites(clip.groups, clip_suites)
+      expect(page).to have_no_css('Assign suites')
+    end
+
     def assign_suites(groups, suites)
       suite_decorators = suites.map { |suite| SuiteDecorator.new(suite) }
       groups.each_with_index do |group, i|
