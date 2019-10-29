@@ -8,7 +8,12 @@ module Admin
         group: requested_resource,
         params: group_params
       )
-      handle_group_updater_result(result)
+      handle_result(result, :edit)
+    end
+
+    def create
+      result = GroupCreator.new(params: group_params).create
+      handle_result(result, :new)
     end
 
     private
@@ -23,16 +28,14 @@ module Admin
       p
     end
 
-    def handle_group_updater_result(result) # rubocop:disable AbcSize
+    def handle_result(result, action)
       result[:msg].each { |flash_type, msg_str| flash[flash_type] = msg_str }
-      result.delete(:msg)
       if result.delete(:redirect_object).present?
-        redirect_to admin_group_path(requested_resource)
+        redirect_to admin_group_path(result[:record] || requested_resource)
       else
-        render :edit, locals: {
-          page: Administrate::Page::Form.new(dashboard,
-                                             Group.find(requested_resource.id))
-        }
+        render action, locals: { page: Administrate::Page::Form.new(
+          dashboard, result[:record] || requested_resource
+        ) }
       end
     end
   end

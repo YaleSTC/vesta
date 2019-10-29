@@ -14,7 +14,11 @@ class GroupCreator < DrawlessGroupCreator
   end
 
   def add_draw_to_params
-    @draw = Draw.find(params[:leader_draw_membership]&.draw_id)
+    begin
+      @draw = Draw.find(params[:leader_draw_membership]&.draw_id)
+    rescue ActiveRecord::RecordNotFound
+      @draw = nil
+    end
     @params[:draw] = @draw
   end
 
