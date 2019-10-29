@@ -22,7 +22,6 @@ class GroupDashboard < Administrate::BaseDashboard
     id: Field::Number,
     size: Field::Number,
     status: EnumField,
-    leader_id: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     memberships_count: Field::Number,
@@ -47,7 +46,6 @@ class GroupDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = %i(
     id
     leader
-    leader_id
     size
     status
     memberships_count
