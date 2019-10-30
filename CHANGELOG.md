@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 * Make sure view partials don't reference instance variables
  ([288](https://gitlab.com/yale-sdmp/vesta/issues/288)).
  * Prevent browsing of archived data through the front-end ([896](https://gitlab.com/yale-sdmp/vesta/issues/896)).
+* Scope users to the current college on the admin dashboard ([#886](https://gitlab.com/yale-sdmp/vesta/issues/886)).
 
 ### Fixed
 * Fix AdminDashboard membership creation failure ([#971](https://gitlab.com/yale-sdmp/vesta/merge_requests/1018)).

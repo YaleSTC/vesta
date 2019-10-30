@@ -18,6 +18,10 @@ module Admin
 
     private
 
+    def scoped_resource
+      College.current.users
+    end
+
     def user_params
       params.require(:user).permit(:first_name, :last_name, :role,
                                    :email, :intent, :gender, :username,
