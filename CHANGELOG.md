@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 * [Admin Dashboard] Add spec for building index, show, create, update, and destroy ([#1012](https://gitlab.com/yale-sdmp/vesta/issues/1012)).
 * [Admin Dashboard] Added spec for memberships index, show, create, update, and destroy ([#1008](https://gitlab.com/yale-sdmp/vesta/issues/1008)).
 * {Admin Dashboard] Added spec for lottery assignments index, show, create, update, destroy ([#1016](https://gitlab.com/yale-sdmp/vesta/issues/1016)).
+* [Admin Dashboard] Added spec for clips index, show, create, update, and destroy ([#1018](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
 
 ### Changed
 * Change form cancel operation to standardize redirects to page referrer ([#979](https://gitlab.com/yale-sdmp/vesta/issues/979)).
