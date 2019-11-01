@@ -2,6 +2,7 @@
 
 require 'administrate/base_dashboard'
 
+# Administrate dashboard for DrawMemberships
 class DrawMembershipDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
@@ -61,10 +62,9 @@ class DrawMembershipDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i(
     user
-    draw
     old_draw
+    draw
     intent
-    active
   ).freeze
 
   # Overwrite this method to customize how draw memberships are displayed

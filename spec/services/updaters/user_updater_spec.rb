@@ -24,9 +24,9 @@ describe UserUpdater do
 
   describe 'failed update' do
     it 'returns an error if admins try to demote themselves' do
-      params = { role: 'rep' }
+      params = { role: 'admin' }
       user = create_admin(params)
-      updater = described_class.new(user: user, params: params,
+      updater = described_class.new(user: user, params: { role: 'student' },
                                     editing_self: true)
       expect(updater.update[:msg]).to have_key(:error)
     end

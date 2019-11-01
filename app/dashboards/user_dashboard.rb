@@ -12,9 +12,9 @@ class UserDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    draw: Field::BelongsTo,
+    draw_memberships: Field::HasMany,
+    draw_membership: Field::HasOne.with_options(except: :user),
     draw_name: Field::String.with_options(searchable: false),
-    draw_id: Field::Number,
     membership: Field::HasOne,
     group: Field::HasOne,
     memberships: Field::HasMany,
@@ -30,7 +30,6 @@ class UserDashboard < Administrate::BaseDashboard
     college: Field::BelongsTo,
     college_name: Field::String.with_options(searchable: false),
     class_year: Field::Number,
-    old_draw_id: Field::Number,
     tos_accepted: Field::DateTime,
     reset_password_sent_at: Field::DateTime,
     remember_created_at: Field::DateTime,
@@ -52,7 +51,6 @@ class UserDashboard < Administrate::BaseDashboard
     first_name
     last_name
     role
-    draw_id
     draw_name
     group
   ).freeze
@@ -65,12 +63,10 @@ class UserDashboard < Administrate::BaseDashboard
     role
     first_name
     last_name
-    intent
     username
     college
     class_year
-    draw
-    old_draw_id
+    draw_membership
     group
     membership
     memberships
@@ -95,11 +91,9 @@ class UserDashboard < Administrate::BaseDashboard
     role
     first_name
     last_name
-    intent
     username
     class_year
-    draw
-    old_draw_id
+    draw_membership
   ).freeze
 
   # Overwrite this method to customize how users are displayed

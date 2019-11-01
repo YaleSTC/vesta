@@ -35,7 +35,7 @@ All notable changes to this project will be documented in this file.
 * Add timeoutable to users and expiration date to cookies ([#963](https://gitlab.com/yale-sdmp/vesta/issues/963)).
 * Make oversubscription handling notify unlucky groups ([#964](https://gitlab.com/yale-sdmp/vesta/issues/964)).
 * Create query object for users by intent and add a model method to Draw ([#870](https://gitlab.com/yale-sdmp/vesta/issues/870)).
-* Create GroupWithoutSuites query object for GroupsReport ([627](https://gitlab.com/yale-sdmp/vesta/issues/627)).
+* Create GroupWithoutSuites query object for GroupsReport ([#627](https://gitlab.com/yale-sdmp/vesta/issues/627)).
 * Remove User non-essential display methods ([#852](https://gitlab.com/yale-sdmp/vesta/issues/852)).
 * Change DrawPolicy#group_actions to remove policy check against draft stage of the draw ([#722](https://gitlab.com/yale-sdmp/vesta/issues/722)).
 * Hide the Terms of Service link when user is not logged in ([#978](https://gitlab.com/yale-sdmp/vesta/issues/978)).

@@ -21,6 +21,7 @@ class UserUpdater < Updater
   def update # rubocop:disable AbcSize
     return error(self) unless valid?
     ActiveRecord::Base.transaction do
+      update_draw_membership if params[:draw_membership].present?
       update_intent if params[:intent].present?
       object.update!(**params)
       nullify_draw_info if object.saved_change_to_college_id?
@@ -67,6 +68,17 @@ class UserUpdater < Updater
     return unless object.group.present? && changing_college?
     errors.add(:base, "This user is in the group #{object.group.name}." \
                 'Please change this before continuing.')
+  end
+
+  def update_draw_membership
+    draw_membership_params = params[:draw_membership].symbolize_keys
+    draw_membership = object.draw_membership
+    if draw_membership_params[:draw_id].blank?
+      DrawMembership.delete(draw_membership)
+    elsif !draw_membership&.update!(**draw_membership_params)
+      DrawMembership.create!(user: object, **draw_membership_params)
+    end
+    params.delete(:draw_membership)
   end
 
   # This occurs within the transaction
