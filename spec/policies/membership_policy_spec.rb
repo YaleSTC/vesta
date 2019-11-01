@@ -22,45 +22,60 @@ RSpec.describe MembershipPolicy do
       end
 
       context 'has no group' do
+        let(:memberships) { instance_spy('Membership::ActiveRecord_Relation') }
+
         before do
           allow(user).to receive(:group).and_return(nil)
           allow(membership).to receive(:group).and_return(group)
         end
 
-        context 'but has no draw' do
-          before { allow(user).to receive(:draw).and_return(nil) }
+        context 'but has an active invite from the group' do
+          before do
+            allow(memberships).to receive(:where)
+              .and_return([instance_spy('membership')])
+          end
 
           it { is_expected.not_to permit(user, membership) }
         end
 
-        context 'and has a draw' do
-          before { allow(group).to receive(:draw).and_return(draw) }
+        context 'and has no active invites with this group' do
+          before { allow(memberships).to receive(:where).and_return([]) }
 
-          context 'but draws do not match' do
-            let(:other_draw) { build_stubbed(:draw) }
-
-            before { allow(user).to receive(:draw).and_return(other_draw) }
+          context 'but has no draw' do
+            before { allow(user).to receive(:draw).and_return(nil) }
 
             it { is_expected.not_to permit(user, membership) }
           end
 
-          context 'and draws match' do
-            before { allow(user).to receive(:draw).and_return(draw) }
+          context 'and has a draw' do
+            before { allow(group).to receive(:draw).and_return(draw) }
 
-            context 'but draw is not group-formation' do
-              before do
-                allow(draw).to receive(:group_formation?).and_return(false)
-              end
+            context 'but draws do not match' do
+              let(:other_draw) { build_stubbed(:draw) }
+
+              before { allow(user).to receive(:draw).and_return(other_draw) }
 
               it { is_expected.not_to permit(user, membership) }
             end
 
-            context 'and draw is group-formation' do
-              before do
-                allow(draw).to receive(:group_formation?).and_return(true)
+            context 'and draws match' do
+              before { allow(user).to receive(:draw).and_return(draw) }
+
+              context 'but draw is not group-formation' do
+                before do
+                  allow(draw).to receive(:group_formation?).and_return(false)
+                end
+
+                it { is_expected.not_to permit(user, membership) }
               end
 
-              it { is_expected.to permit(user, membership) }
+              context 'and draw is group-formation' do
+                before do
+                  allow(draw).to receive(:group_formation?).and_return(true)
+                end
+
+                it { is_expected.to permit(user, membership) }
+              end
             end
           end
         end
@@ -121,16 +136,30 @@ RSpec.describe MembershipPolicy do
           context "the user's membership" do
             before { allow(membership).to receive(:user).and_return(user) }
 
-            context 'but it is the leader of the group' do
-              before { allow(user).to receive(:leader_of?).and_return(true) }
+            context 'but the membership does not have an invited status' do
+              before do
+                allow(membership).to receive(:invited?).and_return(false)
+              end
 
               it { is_expected.not_to permit(user, membership) }
             end
 
-            context 'and it is not the leader of the group' do
-              before { allow(user).to receive(:leader_of?).and_return(false) }
+            context 'and the membership is in an invited state' do
+              before do
+                allow(membership).to receive(:invited?).and_return(true)
+              end
 
-              it { is_expected.to permit(user, membership) }
+              context 'but it is the leader of the group' do
+                before { allow(user).to receive(:leader_of?).and_return(true) }
+
+                it { is_expected.not_to permit(user, membership) }
+              end
+
+              context 'and it is not the leader of the group' do
+                before { allow(user).to receive(:leader_of?).and_return(false) }
+
+                it { is_expected.to permit(user, membership) }
+              end
             end
           end
 
@@ -149,7 +178,21 @@ RSpec.describe MembershipPolicy do
             context 'and it is the leader of the group' do
               before { allow(user).to receive(:leader_of?).and_return(true) }
 
-              it { is_expected.to permit(user, membership) }
+              context 'but the membership is not in requested status' do
+                before do
+                  allow(membership).to receive(:requested?).and_return(false)
+                end
+
+                it { is_expected.not_to permit(user, membership) }
+              end
+
+              context 'and the membership is being requested' do
+                before do
+                  allow(membership).to receive(:requested?).and_return(true)
+                end
+
+                it { is_expected.to permit(user, membership) }
+              end
             end
           end
         end

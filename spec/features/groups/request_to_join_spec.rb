@@ -11,6 +11,22 @@ RSpec.feature 'Students Joining Groups' do
       click_on 'Request To Join'
       expect(page).to have_content(/Membership.+created/)
     end
+
+    it 'does not have extra request to join button' do
+      group = create(:open_group)
+      log_in create(:student_in_draw, intent: 'on_campus', draw: group.draw)
+      visit draw_group_path(group.draw, group)
+      click_on 'Request To Join'
+      expect(page).not_to have_content(/Request To Join/)
+    end
+
+    it 'does not let you accept your own invitation' do
+      group = create(:open_group)
+      log_in create(:student_in_draw, intent: 'on_campus', draw: group.draw)
+      visit draw_group_path(group.draw, group)
+      click_on 'Request To Join'
+      expect(page).not_to have_content(/Accept Invitation/)
+    end
   end
 
   context 'requesting to join a full group' do

@@ -7,8 +7,8 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def request_to_join?
-    user.group.blank? && draws_match?(user, record) &&
-      record.group.draw.group_formation?
+    user.group.blank? && no_current_membership(user, record.group_id) &&
+      draws_match?(user, record) && record.group.draw.group_formation?
   end
 
   def create_invite?
@@ -25,8 +25,10 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def accept?
-    membership_can_be_accepted? && (user_can_affect_membership? ||
-      leader_can_affect_membership? || user_has_uber_permission?)
+    membership_can_be_accepted? &&
+      ((user_can_affect_membership? && record.invited?) ||
+      (leader_can_affect_membership? && record.requested?) ||
+      user_has_uber_permission?)
   end
 
   def finalize?
@@ -48,6 +50,10 @@ class MembershipPolicy < ApplicationPolicy
 
   def group_not_locking?(group)
     !group.finalizing? && !group.locked?
+  end
+
+  def no_current_membership(user, group_id)
+    user.memberships.where(group_id: group_id).blank?
   end
 
   def draws_match?(user, record)
