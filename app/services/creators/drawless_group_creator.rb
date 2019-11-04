@@ -7,6 +7,7 @@ class DrawlessGroupCreator
   include Callable
 
   validate :validate_suite_size_inclusion
+  validate :validate_leader_presence
   validate :validate_draw_membership_presence
 
   # Initialize a new SpecialGroupCreator
@@ -24,8 +25,8 @@ class DrawlessGroupCreator
   # @return [Hash{Symbol=>Group,Hash}] a results hash with a message to set in
   #   flash an either `nil` or the created group.
   def create
-    @group = Group.new(**params)
     return error(self) unless valid?
+    @group = Group.new(**params)
     ActiveRecord::Base.transaction do
       ensure_valid_members
       group.save!
@@ -105,6 +106,11 @@ class DrawlessGroupCreator
 
   def validate_draw_membership_presence
     return if params[:draw_memberships]&.all?(&:present?)
-    errors.add(:base, 'Users must have a valid draw membership.')
+    errors.add(:base, 'users must have a valid draw membership')
+  end
+
+  def validate_leader_presence
+    return if params[:leader_draw_membership].present?
+    errors.add(:base, 'must select a leader')
   end
 end

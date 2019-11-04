@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 * Fix broken Code Quality CI job ([#908](https://gitlab.com/yale-sdmp/vesta/issues/908)).
 * Fix building names not appearing for students in suites but without rooms ([#882](https://gitlab.com/yale-sdmp/vesta/issues/882)).
 * Fix bug that allowed a user to acccept their own request to join a group ([#1021](https://gitlab.com/yale-sdmp/vesta/issues/1021)).
+* Fix bug that caused error when creating a special group with no leader set ([#981](https://gitlab.com/yale-sdmp/vesta/issues/981)).
 
 ## v2.3.3 - 2019-04-01
 ### Fixed

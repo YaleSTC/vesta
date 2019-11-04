@@ -46,6 +46,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   enum status: %w(open closed finalizing locked)
 
   validates :status, presence: true
+  validates :leader, presence: true
   validates :size, presence: true,
                    numericality: { greater_than: 0 }
   validates :leader_draw_membership, presence: true,

@@ -52,6 +52,12 @@ RSpec.describe DrawlessGroupCreator do
         .and_return([params_hash[:size].to_i])
       expect(described_class.new(params: params)).to be_valid
     end
+
+    it 'is not valid if no leader is present' do
+      params = instance_spy('ActionController::Parameters',
+                            to_h: params_hash.merge(leader: nil))
+      expect(described_class.new(params: params)).not_to be_valid
+    end
   end
 
   context 'draw membership handling' do
