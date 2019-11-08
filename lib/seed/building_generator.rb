@@ -10,7 +10,7 @@ class BuildingGenerator
 
   def generate
     Creator.create!(params: params, klass: Building,
-                    name_method: :name)[:redirect_object]
+                    name_method: :full_name)[:redirect_object]
   end
 
   make_callable :generate
@@ -20,6 +20,6 @@ class BuildingGenerator
   attr_reader :params
 
   def gen_params(overrides: {})
-    @params ||= { name: FFaker::Education.school_name }.merge(overrides)
+    @params ||= { full_name: FFaker::Education.school_name }.merge(overrides)
   end
 end

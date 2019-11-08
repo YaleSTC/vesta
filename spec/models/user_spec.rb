@@ -284,7 +284,7 @@ RSpec.describe User, type: :model do
 
   describe '#building_name' do
     it 'returns the name of the building the group\'s suite is in' do
-      building = create(:building, name: 'test_name')
+      building = create(:building, full_name: 'test_name')
       group = create(:open_group, suite: create(:suite, building: building))
       user = create(:student_in_draw, draw: group.draw)
       create(:membership, user: user, group: group, status: 'accepted')

@@ -20,7 +20,7 @@ RSpec.feature 'Building editing' do
   end
 
   def update_building_name(new_name)
-    fill_in 'building_name', with: new_name
+    fill_in 'Full name', with: new_name
     click_on 'Save'
   end
 

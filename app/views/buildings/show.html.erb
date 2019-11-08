@@ -1,5 +1,5 @@
-<% provide(:title, @building.name) %>
-<h1 class="building-name"><%= @building.name %></h1>
+<% provide(:title, @building.full_name) %>
+<h1 class="building-name"><%= @building.full_name %></h1>
 <h2>Suites</h2>
 <% if @suites.empty? %>
   <p>No suites yet!</p>

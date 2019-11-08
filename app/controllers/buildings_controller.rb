@@ -23,7 +23,7 @@ class BuildingsController < ApplicationController
 
   def create
     result = Creator.create!(params: building_params, klass: Building,
-                             name_method: :name)
+                             name_method: :full_name)
     @building = result[:record]
     handle_action(action: 'new', **result)
   end
@@ -31,14 +31,14 @@ class BuildingsController < ApplicationController
   def edit; end
 
   def update
-    result = Updater.new(object: @building, name_method: :name,
+    result = Updater.new(object: @building, name_method: :full_name,
                          params: building_params).update
     @building = result[:record]
     handle_action(action: 'edit', **result)
   end
 
   def destroy
-    result = Destroyer.new(object: @building, name_method: :name).destroy
+    result = Destroyer.new(object: @building, name_method: :full_name).destroy
     handle_action(path: buildings_path, **result)
   end
 
@@ -53,7 +53,7 @@ class BuildingsController < ApplicationController
   end
 
   def building_params
-    params.require(:building).permit(:name)
+    params.require(:building).permit(:full_name, :abbreviation)
   end
 
   def set_building

@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :building do
-    sequence(:name) { |n| "Building#{n}" }
+    sequence(:full_name) { |n| "Building#{n}" }
   end
 end
