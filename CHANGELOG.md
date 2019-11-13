@@ -27,8 +27,9 @@ All notable changes to this project will be documented in this file.
 * Remove User non-essential display methods ([#852](https://gitlab.com/yale-sdmp/vesta/issues/852)).
 * Change DrawPolicy#group_actions to remove policy check against draft stage of the draw ([#722](https://gitlab.com/yale-sdmp/vesta/issues/722)).
 * Hide the Terms of Service link when user is not logged in ([#978](https://gitlab.com/yale-sdmp/vesta/issues/978)).
-* Allow export of all group members' emails (no longer restricted to group leaders only) ([888](https://gitlab.com/yale-sdmp/vesta/issues/888))
-* Remove date restrictions on the intent_reminder? and lock_reminder? policies for draws ([711](https://gitlab.com/yale-sdmp/vesta/issues/711))
+* Allow export of all group members' emails (no longer restricted to group leaders only) ([888](https://gitlab.com/yale-sdmp/vesta/issues/888)).
+* Remove date restrictions on the intent_reminder? and lock_reminder? policies for draws ([711](https://gitlab.com/yale-sdmp/vesta/issues/711)).
+* Update to ruby 2.6.5 ([1025](https://gitlab.com/yale-sdmp/vesta/issues/1025)).
 
 
 ### Fixed

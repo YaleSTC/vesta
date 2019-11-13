@@ -101,8 +101,8 @@ GEM
     database_cleaner (1.6.1)
     datetime_picker_rails (0.0.7)
       momentjs-rails (>= 2.8.1)
-    delayed_job (4.1.3)
-      activesupport (>= 3.0, < 5.2)
+    delayed_job (4.1.8)
+      activesupport (>= 3.0, < 6.1)
     delayed_job_active_record (4.1.2)
       activerecord (>= 3.0, < 5.2)
       delayed_job (>= 3.0, < 5)
@@ -141,7 +141,7 @@ GEM
       sprockets-es6 (>= 0.9.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    hashdiff (0.3.4)
+    hashdiff (1.0.0)
     high_voltage (3.0.0)
     honeybadger (3.1.2)
     i18n (1.7.0)
@@ -284,7 +284,7 @@ GEM
     rubycas-client (2.3.9)
       activesupport
     rubyzip (1.3.0)
-    safe_yaml (1.0.4)
+    safe_yaml (1.0.5)
     sass (3.4.25)
     sass-rails (5.0.7)
       railties (>= 4.0.0, < 6)
@@ -347,10 +347,10 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webmock (3.0.1)
+    webmock (3.7.6)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-      hashdiff
+      hashdiff (>= 0.4.0, < 2.0.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -422,7 +422,7 @@ DEPENDENCIES
   yard (~> 0.9.20)
 
 RUBY VERSION
-   ruby 2.4.3p205
+   ruby 2.6.5p114
 
 BUNDLED WITH
    1.17.3

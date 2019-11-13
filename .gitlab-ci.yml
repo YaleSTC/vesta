@@ -2,7 +2,7 @@ include:
   - template: Code-Quality.gitlab-ci.yml
 
 .test_template: &test_definition
-  image: ruby:2.4.3-stretch
+  image: ruby:2.6.5-stretch
 
   tags:
     - yale
