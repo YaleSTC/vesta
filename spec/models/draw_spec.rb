@@ -459,10 +459,10 @@ RSpec.describe Draw, type: :model do
   describe '#students_with_intent' do
     it 'calls StudentsWithIntentQuery' do
       draw = build_stubbed(:draw)
-      allow(StudentsWithIntentQuery).to receive(:call).with(%w(on_campus))
-      draw.students_with_intent(%w(on_campus))
-      expect(StudentsWithIntentQuery).to have_received(:call)
-        .with(%w(on_campus))
+      query = instance_spy('StudentsWithIntentQuery', call: [])
+      allow(StudentsWithIntentQuery).to receive(:new).and_return(query)
+      draw.students_with_intent(intents: %w(on_campus))
+      expect(query).to have_received(:call).with(intents: %w(on_campus))
     end
   end
 end

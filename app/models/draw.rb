@@ -244,8 +244,8 @@ class Draw < ApplicationRecord # rubocop:disable ClassLength
   # @param intents [Array<String>] specified intents to query for
   # @return [Array<User>] the users in the draw gathered by
   #   specified intent or intents
-  def students_with_intent(intents)
-    StudentsWithIntentQuery.call(intents)
+  def students_with_intent(intents:)
+    StudentsWithIntentQuery.new(students).call(intents: intents)
   end
 
   private
