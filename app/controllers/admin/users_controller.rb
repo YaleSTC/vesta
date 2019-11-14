@@ -8,8 +8,12 @@ module Admin
                                params: user_params.tap { |p| proc_params(p) },
                                editing_self: current_user == requested_resource)
                           .update
-      @user = result[:record]
-      handle_user_updater_result(result)
+      handle_result(result)
+    end
+
+    def create
+      result = UserCreator.create!(params: user_params)
+      handle_result(result)
     end
 
     private
@@ -28,15 +32,14 @@ module Admin
                               !current_user.superuser?
     end
 
-    def handle_user_updater_result(result)
+    def handle_result(result)
       result[:msg].each { |flash_type, msg_str| flash[flash_type] = msg_str }
-      result = result.except(:msg)
       if result.delete(:redirect_object).present?
-        redirect_to admin_user_path(requested_resource)
+        redirect_to admin_user_path(result[:user] || requested_resource)
       else
-        render :edit, locals: {
-          page: Administrate::Page::Form.new(dashboard, requested_resource)
-        }
+        render :edit, locals: { page: Administrate::Page::Form.new(
+          dashboard, result[:user] || requested_resource
+        ) }
       end
     end
   end

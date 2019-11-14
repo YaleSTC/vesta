@@ -42,7 +42,7 @@ class Group < ApplicationRecord # rubocop:disable ClassLength
   delegate :number, to: :lottery_assignment, prefix: :lottery, allow_nil: true
   delegate :number, to: :suite, prefix: :suite, allow_nil: true
   delegate :building_name, to: :suite, allow_nil: true
-  delegate :id, to: :leader, prefix: true
+  delegate :id, to: :leader, prefix: :leader, allow_nil: true
 
   enum status: %w(open closed finalizing locked)
 

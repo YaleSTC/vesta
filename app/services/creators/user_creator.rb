@@ -11,8 +11,9 @@ class UserCreator
   #   the UsersController.
   def initialize(params:, mailer: UserMailer)
     @params = params.to_h.symbolize_keys
+    @draw_membership_params = @params.delete(:draw_membership).to_h.symbolize_keys
     @mailer = mailer
-    @user = User.new(@params)
+    @user = User.new(**@params)
     set_password unless User.cas_auth?
     set_college unless user.superadmin?
   end
@@ -25,6 +26,7 @@ class UserCreator
   #   record as the :redirect_object value
   def create!
     user.save!
+    create_draw_membership!
     mailer.new_user_confirmation(user: user, password: password).deliver_later
     success
   rescue ActiveRecord::RecordInvalid => e
@@ -46,6 +48,11 @@ class UserCreator
 
   def set_college
     user.college = College.current
+  end
+
+  def create_draw_membership!
+    return unless @draw_membership_params[:draw_id].present?
+    DrawMembership.create!(user_id: @user.id, **@draw_membership_params)
   end
 
   def success
