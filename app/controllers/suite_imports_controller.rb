@@ -19,6 +19,6 @@ class SuiteImportsController < ApplicationController
 
   def suite_importer_params
     params.require(:suite_import_form).permit(:file, :building_id).to_h
-          .transform_keys(&:to_sym)
+          .symbolize_keys
   end
 end

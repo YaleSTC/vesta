@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 * Allow export of all group members' emails (no longer restricted to group leaders only) ([888](https://gitlab.com/yale-sdmp/vesta/issues/888)).
 * Remove date restrictions on the intent_reminder? and lock_reminder? policies for draws ([711](https://gitlab.com/yale-sdmp/vesta/issues/711)).
 * Update to ruby 2.6.5 ([1025](https://gitlab.com/yale-sdmp/vesta/issues/1025)).
+* Update to rails 5.2.3 ([1026](https://gitlab.com/yale-sdmp/vesta/issues/1026)).
 
 
 ### Fixed

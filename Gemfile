@@ -3,6 +3,7 @@ source "https://rubygems.org"
 ruby "2.6.5"
 
 gem "autoprefixer-rails", "~> 9.6.1"
+gem 'bootsnap', '~> 1.4.5'
 gem "delayed_job_active_record", "~> 4.1.2"
 gem 'devise', '~> 4.7.1'
 gem 'devise_cas_authenticatable', '~> 1.10.0'
@@ -15,7 +16,7 @@ gem "pg", "~> 0.20.0"
 gem "puma", "~> 3.9.1"
 gem "pundit", "~> 1.1.0"
 gem "rack-canonical-host"
-gem "rails", "~> 5.1.0"
+gem "rails", "~> 5.2.3"
 gem "recipient_interceptor"
 gem "sass-rails", "~> 5.0"
 gem "simple_form", "~> 5.0.1"
@@ -34,7 +35,7 @@ gem 'ffaker', '~> 2.5.0'
 gem 'foundation-rails', '~> 6.3.0.0'
 
 # Superuser dashboard
-gem 'administrate', '~> 0.8.1'
+gem 'administrate', '~> 0.10.0'
 
 group :development do
   gem "listen"

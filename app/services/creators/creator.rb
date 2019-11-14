@@ -17,7 +17,7 @@ class Creator
   #   name of the object (e.g. `#number` for Suite).
   def initialize(klass:, params:, name_method:)
     @klass = klass
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     @name_method = name_method
   end
 

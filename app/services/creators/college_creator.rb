@@ -15,7 +15,7 @@ class CollegeCreator
   # @param user_for_access [User] the user to be granted access to the new
   #   college
   def initialize(params:, user_for_access:)
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     @user_for_access = user_for_access
     @college = College.new(@params)
   end

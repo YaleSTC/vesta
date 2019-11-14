@@ -86,7 +86,7 @@ class LotteryAssignment < ApplicationRecord
   end
 
   def groups_have_no_lotteries
-    return if groups.all? { |g| g.lottery_assignment_id.blank? }
+    return if groups.all? { |g| g.lottery_assignment_id_was.blank? }
     errors.add(:groups, 'already have a lottery number assigned')
   end
 

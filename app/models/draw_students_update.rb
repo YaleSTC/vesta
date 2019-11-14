@@ -42,7 +42,7 @@ class DrawStudentsUpdate
   attr_reader :draw, :params, :students_to_add
 
   def process_params(params)
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     @params[:class_year] = nil if @params[:class_year]&.empty?
     @class_year = set_class_year
     @students_to_add = students_to_add_by_class_year

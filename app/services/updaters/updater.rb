@@ -15,7 +15,7 @@ class Updater
   #   name of the object (e.g. `#number` for Suite).
   def initialize(object:, params:, name_method:)
     @object = object
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     @name_method = name_method
   end
 

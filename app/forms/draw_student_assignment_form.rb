@@ -55,7 +55,7 @@ class DrawStudentAssignmentForm
   end
 
   def process_params(params)
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     @login = @params[:login]&.downcase
     @adding = @params[:adding] == 'true'
     @student = find_student

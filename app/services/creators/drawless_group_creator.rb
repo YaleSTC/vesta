@@ -14,7 +14,7 @@ class DrawlessGroupCreator
   #
   # @param params [#to_h] the params for the group
   def initialize(params:)
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     process_params
     clean_params
   end

@@ -48,7 +48,7 @@ class SuiteSplitForm
   attr_accessor :params, :new_suites
 
   def process_params(params)
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     valid_method_names.each do |k|
       @params[k] = '' unless @params[k]
       instance_variable_set("@#{k}", @params[k].upcase) unless @params[k].empty?

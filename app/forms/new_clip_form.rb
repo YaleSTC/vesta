@@ -64,7 +64,7 @@ class NewClipForm
   end
 
   def process_params(params:)
-    params = params.to_h.transform_keys(&:to_sym)
+    params = params.to_h.symbolize_keys
     @draw_id = params[:draw_id]
     assign_group_ids(params[:group_ids])
     @groups = Group.includes(:draw).where(id: group_ids)

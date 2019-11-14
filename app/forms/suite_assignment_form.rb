@@ -22,7 +22,7 @@ class SuiteAssignmentForm
   # @param params [#to_h] the controller params
   # @return [SuiteAssignment] the service object
   def prepare(params:)
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     @params.each do |k, v|
       next unless respond_to_missing?(k) && !v.empty?
       instance_variable_set("@#{k}", v)

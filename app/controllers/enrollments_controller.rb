@@ -25,7 +25,7 @@ class EnrollmentsController < ApplicationController
 
   def enrollment_params
     params.require(:enrollment).permit(:ids, :role, :overwrite).to_h
-          .transform_keys(&:to_sym)
+          .symbolize_keys
           .merge(querier: querier)
   end
 

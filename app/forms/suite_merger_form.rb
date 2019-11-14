@@ -61,7 +61,7 @@ class SuiteMergerForm
   attr_writer :other_suite
 
   def process_params(params)
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     @other_suite_number = @params[:other_suite_number]
     @other_suite = find_other_suite
     @params[:number] = '' unless @params[:number]

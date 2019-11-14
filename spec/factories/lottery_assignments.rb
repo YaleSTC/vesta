@@ -7,7 +7,7 @@ FactoryBot.define do
 
     trait :defined_by_draw do
       draw { create(:draw_in_lottery, groups_count: 1) }
-      groups { [draw.groups.first] }
+      groups { [create(:group_from_draw, draw: draw)] }
     end
 
     defined_by_draw

@@ -39,7 +39,7 @@ class GroupUpdater
   attr_accessor :pending_users, :group, :params
 
   def process_params(params)
-    @params = params.to_h.transform_keys(&:to_sym)
+    @params = params.to_h.symbolize_keys
     @pending_users = { add: users(:member_ids), remove: users(:remove_ids) }
     find_leader_draw_membership if params[:leader].present?
     cleanup_params
