@@ -79,7 +79,7 @@ group :staging, :production do
   gem "daemons", "~> 1.2.4"
   gem "rack-timeout"
   gem "rails_stdout_logging"
-  gem "rack-cors", "~> 1.0.2"
+  gem "rack-cors", "~> 1.0.5"
 end
 
 gem 'high_voltage'

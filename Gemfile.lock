@@ -210,7 +210,8 @@ GEM
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
-    rack-cors (1.0.2)
+    rack-cors (1.0.5)
+      rack (>= 1.6.0)
     rack-mini-profiler (0.10.5)
       rack (>= 1.2.0)
     rack-test (1.1.0)
@@ -393,7 +394,7 @@ DEPENDENCIES
   puma (~> 3.9.1)
   pundit (~> 1.1.0)
   rack-canonical-host
-  rack-cors (~> 1.0.2)
+  rack-cors (~> 1.0.5)
   rack-mini-profiler (~> 0.10.5)
   rack-timeout
   rails (~> 5.1.0)
