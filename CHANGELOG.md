@@ -48,6 +48,7 @@ All notable changes to this project will be documented in this file.
 * Fix bug that allowed a user to acccept their own request to join a group ([#1021](https://gitlab.com/yale-sdmp/vesta/issues/1021)).
 * Fix bug that caused error when creating a special group with no leader set ([#981](https://gitlab.com/yale-sdmp/vesta/issues/981)).
 * Fix bug in draw#students_with_intent ([#1027](https://gitlab.com/yale-sdmp/vesta/issues/1027)).
+* Make lottery notification e-mail more reliable ([#939](https://gitlab.com/yale-sdmp/vesta/issues/939)).
 
 ## v2.3.3 - 2019-04-01
 ### Fixed

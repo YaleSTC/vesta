@@ -69,10 +69,13 @@ class DrawSelectionStarter
   end
 
   def notify_all_students
-    students = draw.draw_memberships.on_campus.map(&:user)
+    students = students_on_campus
     admins = college.users.admin
-    (students + admins).each do |s|
-      mailer.lottery_notification(user: s, college: college).deliver_later
+    (students + admins).each do |user|
+      mailer.lottery_notification(user: user,
+                                  lottery_number: lottery_number(user),
+                                  lottery_numbers: lottery_numbers(user),
+                                  college: college).deliver_later
     end
   end
 
@@ -81,6 +84,19 @@ class DrawSelectionStarter
     draw.next_groups.each do |group|
       StudentMailer.selection_invite(user: group.leader).deliver_later
     end
+  end
+
+  def students_on_campus
+    draw.draw_memberships.on_campus.map(&:user)
+  end
+
+  def lottery_number(user)
+    user.group&.lottery_number
+  end
+
+  def lottery_numbers(user)
+    user.draw&.groups&.includes(:lottery_assignment)
+          &.where(size: user.group&.size)&.map(&:lottery_number)&.sort
   end
 
   def destroy_invalid_lotteries

@@ -176,10 +176,11 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   #
   # @param user [User] the student to send the notification to
   # @param college [College] the college to pull settings from
-  def lottery_notification(user:, college:)
+  def lottery_notification(user:, lottery_number:, lottery_numbers:, college:)
     @user = user
     determine_college(college)
-    @number = @user.group&.lottery_number
+    @number = lottery_number
+    @lottery_numbers = lottery_numbers
     @rank_str = determine_rank_str
     subj = determine_subject('Your group has been assigned a lottery number')
     mail(to: @user.email, subject: subj, reply_to: @college.admin_email)
@@ -206,17 +207,11 @@ class StudentMailer < ApplicationMailer # rubocop:disable ClassLength
   end
 
   def determine_rank_str
-    return 'rank - out of - of size -' unless lottery_numbers.present?
-    count = lottery_numbers.length
-    rank = lottery_numbers.index(@number) + 1
+    return 'rank - out of - of size -' unless @lottery_numbers.present?
+    count = @lottery_numbers.length
+    rank = @lottery_numbers.index(@number) + 1
     "\##{rank} out of #{count} #{'group'.pluralize(count)} of size "\
       "#{@user.group&.size}"
-  end
-
-  def lottery_numbers
-    @lottery_numbers ||=
-      @user.draw&.groups&.includes(:lottery_assignment)
-           &.where(size: @user.group&.size)&.map(&:lottery_number)&.sort
   end
 
   def determine_subject(subject)

@@ -51,12 +51,23 @@ RSpec.describe DrawSelectionStarter do
       expect(StudentMailer).to have_received(:selection_invite)
     end
 
-    it 'sends a notification to all students in the draw' do
-      draw = create(:draw_in_selection).tap(&:lottery!)
-      mailer = instance_spy('student_mailer')
-      described_class.start(draw: draw, mailer: mailer)
-      expect(mailer).to have_received(:lottery_notification)
-        .exactly(draw.draw_memberships.on_campus.count).times
+    context 'sending notifications to all students in the draw' do
+      let(:draw) { create(:draw_in_selection).tap(&:lottery!) }
+      let(:mailer) { instance_spy('student_mailer') }
+
+      it 'sends a notification the correct number of times' do
+        described_class.start(draw: draw, mailer: mailer)
+        expect(mailer).to have_received(:lottery_notification)
+          .exactly(draw.draw_memberships.on_campus.count).times
+      end
+
+      it 'sends a notification with the correct arguments' do
+        user, lottery_number, lottery_numbers, college = lottery_params(draw)
+        described_class.start(draw: draw, mailer: mailer)
+        expect(mailer).to have_received(:lottery_notification)
+          .with(user: user, lottery_number: lottery_number,
+                lottery_numbers: lottery_numbers, college: college)
+      end
     end
 
     it 'sets the object key to nil in the hash on failure' do
@@ -113,5 +124,18 @@ RSpec.describe DrawSelectionStarter do
   def valid_mock_draw_with_group
     group = instance_spy('group', leader: instance_spy('user'))
     instance_spy('draw', validity_stubs(valid: true, next_groups: [group]))
+  end
+
+  def lottery_params(draw)
+    user = draw.draw_memberships.on_campus.map(&:user)[0]
+    lottery_number = user.group&.lottery_number
+    lottery_numbers = lottery_numbers(draw, user)
+    college = College.current
+    [user, lottery_number, lottery_numbers, college]
+  end
+
+  def lottery_numbers(draw, user)
+    draw&.groups&.includes(:lottery_assignment)&.
+          where(size: user.group&.size)&.map(&:lottery_number)&.sort
   end
 end
