@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 * [Admin Dashboard] Add spec for suite index, show, create, update, and destroy; repaired create and update ([#1024](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
 * [Admin Dashboard] Add spec for user index, show, create, update, and destroy; repaired create and update ([#1029](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
 * [Admin Dashboard] Add spec for group index, show, create, update, and destroy; repaired create and update ([#1031](https://gitlab.com/yale-sdmp/vesta/issues/1018)).
+* [Admin Dashboard] Test RoomAssignment ([#1032](https://gitlab.com/yale-sdmp/vesta/issues/1032)).
 
 ### Changed
 * Change form cancel operation to standardize redirects to page referrer ([#979](https://gitlab.com/yale-sdmp/vesta/issues/979)).
