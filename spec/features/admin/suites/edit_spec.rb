@@ -6,7 +6,7 @@ RSpec.feature 'Admin dashboard suite update' do
   let(:suite) { create(:suite) }
 
   before do
-    create(:building, name: 'Test Building')
+    create(:building, full_name: 'Test Building')
     log_in create(:user, role: 'superuser')
     create(:student_in_draw, role: 'student')
   end

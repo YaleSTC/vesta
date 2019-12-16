@@ -10,7 +10,7 @@ RSpec.feature 'Room assignment show' do
   it 'succeeds' do
     room_assignment = create(:room_assignment, user: create(:group).leader)
     visit admin_room_assignments_path
-    click_on room_assignment.id
+    click_on room_assignment.id.to_s
     expect(page).to have_content("Show Room Assignment ##{room_assignment.id}")
   end
 end

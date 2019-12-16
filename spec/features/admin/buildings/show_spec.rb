@@ -7,7 +7,7 @@ RSpec.feature 'Building show' do
 
   before do
     log_in create(:user, role: 'superuser')
-    create(:building, name: building_name)
+    create(:building, full_name: building_name)
     visit admin_buildings_path
   end
 

@@ -10,7 +10,7 @@ RSpec.feature 'Building create' do
 
   it 'succeeds' do
     click_on 'New building'
-    fill_in 'Name', with: 'Test'
+    fill_in 'Full name', with: 'Test'
     click_on 'Create'
     expect(page).to have_content('Building was successfully created.')
   end

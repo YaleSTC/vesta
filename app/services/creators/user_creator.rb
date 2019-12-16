@@ -11,7 +11,8 @@ class UserCreator
   #   the UsersController.
   def initialize(params:, mailer: UserMailer)
     @params = params.to_h.symbolize_keys
-    @draw_membership_params = @params.delete(:draw_membership).to_h.symbolize_keys
+    @draw_membership_params = @params.delete(:draw_membership)
+                                     .to_h.symbolize_keys
     @mailer = mailer
     @user = User.new(**@params)
     set_password unless User.cas_auth?

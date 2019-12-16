@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.feature 'Suite create' do
   before do
-    create(:building, name: 'Test Building')
+    create(:building, full_name: 'Test Building')
     log_in create(:user, role: 'superuser')
     visit root_path
     click_on 'Admin Dashboard'

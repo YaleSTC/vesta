@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Room show' do
-  let(:room_number) { 1 }
+  let(:room_number) { -1 }
 
   before do
     log_in create(:user, role: 'superuser')
@@ -12,7 +12,7 @@ RSpec.feature 'Room show' do
   end
 
   it 'succeeds' do
-    click_on room_number
+    click_on room_number.to_s
     expect(page).to have_content("Show Room #{room_number}")
   end
 end

@@ -11,7 +11,7 @@ RSpec.feature 'Building update' do
   end
 
   it 'succeeds' do
-    fill_in 'Name', with: 'Test'
+    fill_in 'Full name', with: 'Test'
     click_on 'Save'
     expect(page).to have_content('Building was successfully updated.')
   end
