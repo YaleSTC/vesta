@@ -1,10 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v2.5.0 - 2019-12-17
 ### Added
-* Add SID to users ([#669](https://gitlab.com/yale-sdmp/vesta/issues/669)).
-* Add new scope associations to room so that only non-archived data can be retrieved ([#960](https://gitlab.com/yale-sdmp/vesta/issues/960)).
 * Add foreign key contraints to schema and dependency handling for all associations ([#406](https://gitlab.com/yale-sdmp/vesta/issues/406)).
 * Add blank template suite import file ([#706](https://gitlab.com/yale-sdmp/vesta/issues/706)).
 * Add 'About Us' page ([#591](https://gitlab.com/yale-sdmp/vesta/issues/591)).
@@ -37,7 +35,6 @@ All notable changes to this project will be documented in this file.
 * Hide the login link in the nav when a user is not in a specific college ([#909](https://gitlab.com/yale-sdmp/vesta/issues/909)).
 * Hide the draws dropdown if there are no draws ([#884](https://gitlab.com/yale-sdmp/vesta/issues/884)).
 * Change login and logout to log in and log out when they are used as verbs ([#955](https://gitlab.com/yale-sdmp/vesta/issues/955)).
-* Add timeoutable to users and expiration date to cookies ([#963](https://gitlab.com/yale-sdmp/vesta/issues/963)).
 * Make oversubscription handling notify unlucky groups ([#964](https://gitlab.com/yale-sdmp/vesta/issues/964)).
 * Create query object for users by intent and add a model method to Draw ([#870](https://gitlab.com/yale-sdmp/vesta/issues/870)).
 * Create GroupWithoutSuites query object for GroupsReport ([#627](https://gitlab.com/yale-sdmp/vesta/issues/627)).
@@ -66,6 +63,14 @@ All notable changes to this project will be documented in this file.
 * Fix bug that caused error when creating a special group with no leader set ([#981](https://gitlab.com/yale-sdmp/vesta/issues/981)).
 * Fix bug in draw#students_with_intent ([#1027](https://gitlab.com/yale-sdmp/vesta/issues/1027)).
 * Make lottery notification e-mail more reliable ([#939](https://gitlab.com/yale-sdmp/vesta/issues/939)).
+
+## v2.4.0 - 2019-04-04
+### Added
+* Add SID to users ([#669](https://gitlab.com/yale-sdmp/vesta/issues/669)).
+* Add new scope associations to room so that only non-archived data can be retrieved ([#960](https://gitlab.com/yale-sdmp/vesta/issues/960)).
+
+### Changed
+* Add timeoutable to users and expiration date to cookies ([#963](https://gitlab.com/yale-sdmp/vesta/issues/963)).
 
 ## v2.3.3 - 2019-04-01
 ### Fixed
