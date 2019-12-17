@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 ruby "2.6.5"
 
+gem "apartment", "~> 2.2.0"
 gem "autoprefixer-rails", "~> 9.6.1"
 gem 'bootsnap', '~> 1.4.5'
 gem "delayed_job_active_record", "~> 4.1.2"
@@ -26,7 +27,6 @@ gem "sprockets-es6"
 gem "title"
 gem "uglifier", "~> 3.2.0"
 gem "scenic", "~> 1.4.0"
-gem "apartment", "~> 2.0.0"
 
 # for UserGenerator
 gem 'ffaker', '~> 2.5.0'
@@ -78,7 +78,7 @@ end
 
 group :staging, :production do
   gem "daemons", "~> 1.2.4"
-  gem "rack-timeout"
+  gem "rack-timeout", "~> 0.4.2"
   gem "rails_stdout_logging"
   gem "rack-cors", "~> 1.0.2"
 end
