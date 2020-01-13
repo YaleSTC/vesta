@@ -21,7 +21,7 @@ class StudentsWithIntentQuery
   # @return [Array<User>] the users in the relation gathered by
   #   specified intent
   def call(intents:)
-    @relation.joins(:draw_memberships)
+    @relation.joins(:draw_membership)
              .where(draw_memberships: { intent: intents })
   end
 end
