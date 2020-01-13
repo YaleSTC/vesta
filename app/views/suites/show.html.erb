@@ -11,7 +11,7 @@
     <% if @draws.empty? %>
       None
     <% else %>
-      <%= render partial: 'draw_link', locals: { collection: @draws, spacer_template: 'shared/comma' } %>
+      <%= render partial: 'draw_link', collection: @draws, locals: { spacer_template: 'shared/comma' } %>
     <% end %>
   </li>
 </ul>

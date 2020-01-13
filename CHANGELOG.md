@@ -76,6 +76,7 @@ All notable changes to this project will be documented in this file.
 * Fix bug that caused error when creating a special group with no leader set ([#981](https://gitlab.com/yale-sdmp/vesta/issues/981)).
 * Fix bug in draw#students_with_intent ([#1027](https://gitlab.com/yale-sdmp/vesta/issues/1027)).
 * Make lottery notification e-mail more reliable ([#939](https://gitlab.com/yale-sdmp/vesta/issues/939)).
+* Fix broken partial reference in Suites#show ([#1036](https://gitlab.com/yale-sdmp/vesta/issues/1036)).
 
 ## v2.4.0 - 2019-04-04
 ### Added
