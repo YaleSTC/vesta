@@ -17,4 +17,10 @@ RSpec.describe StudentsWithIntentQuery do
     result = described_class.call(intents: %w(on_campus undeclared))
     expect(result).to match_array([user1, user3])
   end
+
+  it 'ignores inactive draw_memberships' do
+    create(:draw_membership, user: user1, intent: 'on_campus', active: false)
+    result = described_class.call(intents: %w(on_campus))
+    expect(result).to match_array([user1])
+  end
 end

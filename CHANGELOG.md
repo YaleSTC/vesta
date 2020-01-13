@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+### Fixed
+* Fix bugs in draw#students_with_intent [#1034](https://gitlab.com/yale-sdmp/vesta/issues/1034)).
+
 ## v2.5.1 - 2020-02-10
 ### Changed
 * Update language on the Terms of Service page ([#1042](https://gitlab.com/yale-sdmp/vesta/issues/1042)).
@@ -68,7 +72,7 @@ All notable changes to this project will be documented in this file.
 * Fix building names not appearing for students in suites but without rooms ([#882](https://gitlab.com/yale-sdmp/vesta/issues/882)).
 * Fix bug that allowed a user to acccept their own request to join a group ([#1021](https://gitlab.com/yale-sdmp/vesta/issues/1021)).
 * Fix bug that caused error when creating a special group with no leader set ([#981](https://gitlab.com/yale-sdmp/vesta/issues/981)).
-* Fix bug in draw#students_with_intent ([#1027](https://gitlab.com/yale-sdmp/vesta/issues/1027)).
+* Fix bugs in draw#students_with_intent ([#1027](https://gitlab.com/yale-sdmp/vesta/issues/1027).
 * Make lottery notification e-mail more reliable ([#939](https://gitlab.com/yale-sdmp/vesta/issues/939)).
 
 ## v2.4.0 - 2019-04-04
