@@ -71,7 +71,6 @@ group :test do
   gem "selenium-webdriver"
   gem "shoulda-matchers"
   gem "simplecov", "~> 0.13", require: false
-  gem "codeclimate-test-reporter", "~> 1.0.8"
   gem "timecop"
   gem "webmock"
 end

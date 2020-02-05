@@ -1,6 +1,3 @@
-include:
-  - template: Code-Quality.gitlab-ci.yml
-
 .test_template: &test_definition
   image: ruby:2.6.5-stretch
 
@@ -22,6 +19,8 @@ include:
     - curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -y nodejs
     - ruby -v
     - which ruby
+    - bundle check --path vendor/bundle || bundle install --path vendor/bundle
+    - cp config/database.yml.gitlab config/database.yml
 
   cache:
     paths:
@@ -30,15 +29,14 @@ include:
 spec:
   <<: *test_definition
   script:
-    - bundle check --path vendor/bundle || bundle install --path vendor/bundle
-    - cp config/database.yml.gitlab config/database.yml
-    - bundle exec rake
-  after_script:
-    - bundle exec codeclimate-test-reporter
+    - bundle exec rspec
 
 style:
   <<: *test_definition
   script:
-    - bundle check --path vendor/bundle || bundle install --path vendor/bundle
-    - cp config/database.yml.gitlab config/database.yml
     - bundle exec rake check_style 'git diff origin/master --name-status'
+
+audit:
+  <<: *test_definition
+  script:
+    - bundle exec rake bundler:audit
