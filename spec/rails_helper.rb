@@ -16,8 +16,6 @@ SUPPORT_PATH = %w(spec support ** *.rb).freeze
 Dir[Rails.root.join(*SUPPORT_PATH)].sort.each { |file| require file }
 
 module Features
-  # Extend this module in spec/support/features/*.rb
-  include Formulaic::Dsl
   # Capybara Config
   include Capybara::DSL
   # https://robots.thoughtbot.com/acceptance-tests-with-subdomains
