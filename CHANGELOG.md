@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v2.5.1 - 2020-02-10
+* Update language on the Terms of Service page ([#1042](https://gitlab.com/yale-sdmp/vesta/issues/1042)).
+
 ## v2.5.0 - 2019-12-17
 ### Added
 * Add foreign key contraints to schema and dependency handling for all associations ([#406](https://gitlab.com/yale-sdmp/vesta/issues/406)).
