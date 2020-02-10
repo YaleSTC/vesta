@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 * Remove the codeclimate pipeline and split out a bundle audit pipeline. ([#1040](https://gitlab.com/yale-sdmp/vesta/issues/1040)).
 * Clean up gemfile and remove extraneous gems ([#1041](https://gitlab.com/yale-sdmp/vesta/issues/1041)).
+* Update language on the Terms of Service page ([#1042](https://gitlab.com/yale-sdmp/vesta/issues/1042)).
 
 ## v2.5.0 - 2019-12-17
 ### Added

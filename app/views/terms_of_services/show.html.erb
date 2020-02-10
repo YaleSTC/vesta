@@ -1,7 +1,7 @@
 <% provide(:title, 'Terms of Service for Vesta') %>
 <h1>Vesta Terms of Service</h1>
 
-<p>IMPORTANT: Your participation in the housing process becomes binding once you or your group select a suite as a result of the draw. At that point you have entered into a contract with Yale and are subject to any and all fees should you choose to relinquish that space, per the undergraduate regulations. If you withdraw from the housing process after you or your group select a suite as a result of the draw, other penalties may apply per the <%= College.current.name %> Housing Rules. Please be sure to review the undergraduate regulations as well as the <%= College.current.name %> Housing Rules prior to entering the housing process.</p>
+<p>IMPORTANT: Your participation in the housing process becomes binding once you or your group select a suite as a result of the draw. At that point you have entered into a contract with Yale and are subject to any and all fees should you choose to relinquish that space, per the Undergraduate Regulations. If you withdraw from the housing process after you or your group select a suite as a result of the draw, other penalties may apply per the <%= College.current.name %> Housing Rules. Please be sure to review the Undergraduate Regulations as well as the <%= College.current.name %> Housing Rules prior to entering the housing process.</p>
 
 <% if policy(:terms_of_service).accept? %>
   <%= link_to 'Accept Terms of Service', accept_terms_of_service_path, method: :patch, class: 'button'%>
