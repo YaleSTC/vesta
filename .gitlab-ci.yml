@@ -10,7 +10,7 @@
   variables:
     POSTGRES_DB: gitlab_ci_test
     POSTGRES_USER: runner
-    POSTGRES_PASSWORD: ""
+    POSTGRES_HOST_AUTH_METHOD: trust
 
   stage: test
 
