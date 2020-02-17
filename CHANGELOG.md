@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## v2.5.1 - 2020-02-10
+### Changed
 * Update language on the Terms of Service page ([#1042](https://gitlab.com/yale-sdmp/vesta/issues/1042)).
+
+### Fixed
+* Fixed misconfigured rack-timeoutable gem in production environment ([#1045](https://gitlab.com/yale-sdmp/vesta/issues/1045)).
 
 ## v2.5.0 - 2019-12-17
 ### Added
