@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.6.5'
 
-gem 'administrate', '~> 0.10.0'
+gem 'administrate', '~> 0.13.0'
 gem 'apartment', '~> 2.2.0'
 gem 'autoprefixer-rails', '~> 9.6.1'
 gem 'bootsnap', '~> 1.4.5'
