@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 * Fixed misconfigured rack-timeoutable gem in production environment ([#1045](https://gitlab.com/yale-sdmp/vesta/issues/1045)).
+* Fixed bug in SuitesOutsideSuiteSelectionQuery ([#1048](https://gitlab.com/yale-sdmp/vesta/issues/1048)).
 
 ## v2.5.0 - 2019-12-17
 ### Added

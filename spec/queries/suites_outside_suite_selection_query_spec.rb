@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SuitesOutsideSuiteSelectionQuery do
-  let(:group) { create(:group) }
+  let(:group) { create(:group, size: 1) }
 
   it 'does not return suites with draws in suite selection' do
     draw = create(:draw, status: 'suite_selection')
@@ -24,6 +24,13 @@ RSpec.describe SuitesOutsideSuiteSelectionQuery do
 
   it 'returns suites of correct size that have draws not in suite selection' do
     draw = create(:draw, status: 'lottery')
+    suite = create(:suite, size: 1)
+    draw.suites << suite
+    expect(described_class.call(group)).to eq([suite])
+  end
+
+  it 'does not count archived draws' do
+    draw = create(:draw, status: 'suite_selection', active: false)
     suite = create(:suite, size: 1)
     draw.suites << suite
     expect(described_class.call(group)).to eq([suite])
