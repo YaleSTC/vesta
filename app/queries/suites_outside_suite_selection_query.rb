@@ -23,7 +23,8 @@ class SuitesOutsideSuiteSelectionQuery
   #   both drawless and are in a draw that isn't in suite selection
   def call(group)
     ids = @relation.where(size: group.size)
-                   .where(draws: { status: 'suite_selection' }).map(&:id)
+                   .where(draws: { status: 'suite_selection', active: true })
+                   .map(&:id)
     @relation.where(size: group.size).where.not(id: ids).order(:number)
   end
 end

@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## v2.5.2 - 2020-04-01
 ### Fixed
 * Fix bug in draw#students_with_intent [#1034](https://gitlab.com/yale-sdmp/vesta/issues/1034)).
+* Fix bug in SuitesOutsideSuiteSelectionQuery ([#1048](https://gitlab.com/yale-sdmp/vesta/issues/1048)).
+
 
 ## v2.5.1 - 2020-02-10
 ### Changed
