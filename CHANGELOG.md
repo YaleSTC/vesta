@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 * Updated rails from 5.2.3 to 5.2.4.3 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 * Updated puma from 3.12.2 to 3.12.6 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 * Updated administrate from 0.10.0 to 0.14.0 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
+* Updated json from 2.2.0 to 2.3.1 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 
 ## v2.5.2 - 2020-04-01
 ### Fixed
