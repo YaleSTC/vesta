@@ -8,6 +8,6 @@ RSpec.feature 'Clips index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Clips'
-    expect(page).to have_content('Clips - Back to Vesta')
+    expect(page).to have_content('Clips')
   end
 end

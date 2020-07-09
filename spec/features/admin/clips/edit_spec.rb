@@ -20,5 +20,5 @@ end
 
 def click_clip_edit(clip, new_group)
   find("a[href='#{edit_admin_clip_path(clip.id)}']").click
-  select(new_group.name, from: 'groups')
+  select(new_group.name, from: 'Groups')
 end

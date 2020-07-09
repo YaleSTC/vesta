@@ -8,6 +8,6 @@ RSpec.feature 'Group index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Groups'
-    expect(page).to have_content('Groups - Back to Vesta')
+    expect(page).to have_content('Groups')
   end
 end

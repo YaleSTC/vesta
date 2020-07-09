@@ -8,6 +8,6 @@ RSpec.feature 'Memberships index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Memberships'
-    expect(page).to have_content('Memberships - Back to Vesta')
+    expect(page).to have_content('Memberships')
   end
 end

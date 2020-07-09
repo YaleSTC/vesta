@@ -8,6 +8,6 @@ RSpec.feature 'College index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Colleges'
-    expect(page).to have_content('Colleges - Back to Vesta')
+    expect(page).to have_content('Colleges')
   end
 end

@@ -8,6 +8,6 @@ RSpec.feature 'Room index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Rooms'
-    expect(page).to have_content('Rooms - Back to Vesta')
+    expect(page).to have_content('Rooms')
   end
 end

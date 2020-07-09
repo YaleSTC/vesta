@@ -18,7 +18,7 @@ RSpec.feature 'Clip create' do
   def create_clip(draw, group)
     click_on 'New clip'
     select draw.name, from: 'Draw'
-    select group.name, from: 'groups'
+    select group.name, from: 'Groups'
     click_on 'Create'
   end
 end

@@ -19,7 +19,7 @@ RSpec.feature 'Lottery Assignment create' do
     click_on 'New lottery assignment'
     select draw.name, from: 'Draw'
     fill_in 'Number', with: '1'
-    select group.name, from: 'groups'
+    select group.name, from: 'Groups'
     click_on 'Create'
   end
 end

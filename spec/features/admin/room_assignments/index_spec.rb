@@ -11,7 +11,7 @@ RSpec.feature 'Room assignment index' do
 
   it 'succeeds' do
     click_on 'Room Assignments'
-    expect(page).to have_content('Room Assignments - Back to Vesta')
+    expect(page).to have_content('Room Assignments')
   end
   it 'displays the right number of room assignments' do
     3.times { create(:room_assignment, user: create(:group).leader) }

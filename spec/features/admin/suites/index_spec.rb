@@ -8,6 +8,6 @@ RSpec.feature 'Suite index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Suites'
-    expect(page).to have_content('Suites - Back to Vesta')
+    expect(page).to have_content('Suites')
   end
 end

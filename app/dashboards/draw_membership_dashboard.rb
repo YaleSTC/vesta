@@ -20,7 +20,6 @@ class DrawMembershipDashboard < Administrate::BaseDashboard
     room_assignment: Field::HasOne,
     room: Field::HasOne,
     id: Field::Number,
-    old_draw: Field::BelongsTo.with_options(class_name: 'Draw'),
     intent: EnumField,
     active: Field::Boolean,
     created_at: Field::DateTime,
@@ -52,7 +51,6 @@ class DrawMembershipDashboard < Administrate::BaseDashboard
     memberships
     room
     id
-    old_draw
     intent
     active
     created_at
@@ -64,7 +62,6 @@ class DrawMembershipDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i(
     user
-    old_draw
     draw
     intent
   ).freeze

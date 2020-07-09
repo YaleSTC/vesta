@@ -8,6 +8,6 @@ RSpec.feature 'Building index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Buildings'
-    expect(page).to have_content('Buildings - Back to Vesta')
+    expect(page).to have_content('Buildings')
   end
 end

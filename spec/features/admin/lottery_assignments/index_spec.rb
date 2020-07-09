@@ -8,6 +8,6 @@ RSpec.feature 'Lottery Assignments index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Lottery Assignments'
-    expect(page).to have_content('Lottery Assignments - Back to Vesta')
+    expect(page).to have_content('Lottery Assignments')
   end
 end

@@ -8,6 +8,6 @@ RSpec.feature 'Draw index' do
     visit root_path
     click_on 'Admin Dashboard'
     click_on 'Draws'
-    expect(page).to have_content('Draws - Back to Vesta')
+    expect(page).to have_content('Draws')
   end
 end
