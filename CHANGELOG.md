@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Changed
+* Updated rails from 5.2.3 to 5.2.4.3 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
+* Updated puma from 3.12.2 to 3.12.6 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
+
+## v2.5.2 - 2020-04-01
+### Fixed
+* Fix bug in draw#students_with_intent [#1034](https://gitlab.com/yale-sdmp/vesta/issues/1034)).
+* Fix bug in SuitesOutsideSuiteSelectionQuery ([#1048](https://gitlab.com/yale-sdmp/vesta/issues/1048)).
+
+## v2.5.1 - 2020-02-10
+### Changed
 * Remove the codeclimate pipeline and split out a bundle audit pipeline. ([#1040](https://gitlab.com/yale-sdmp/vesta/issues/1040)).
 * Clean up gemfile and remove extraneous gems ([#1041](https://gitlab.com/yale-sdmp/vesta/issues/1041)).
 * Update language on the Terms of Service page ([#1042](https://gitlab.com/yale-sdmp/vesta/issues/1042)).
