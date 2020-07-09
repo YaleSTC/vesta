@@ -63,5 +63,4 @@ end
 group :staging, :production do
   gem 'rack-cors', '~> 1.0.2'
   gem 'rack-timeout', '~> 0.4.2'
-  gem 'rails_stdout_logging', '~> 0.0.5'
 end
