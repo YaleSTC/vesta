@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 * Updated administrate from 0.10.0 to 0.14.0 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 * Updated json from 2.2.0 to 2.3.1 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 * Replaced deprecated sass-rails with sassc-rails [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
+* Updated foundation-rails from 6.3.0 to 6.5.3 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 
 ### Removed
 * Removed rails_stdout_logging gem [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).

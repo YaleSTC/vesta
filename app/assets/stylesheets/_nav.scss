@@ -1,8 +1,12 @@
 .top-bar {
-  a { color: $body-font-color; }
-  // Fix the dropdown triangle color
-  .dropdown.menu li.is-dropdown-submenu-parent a::after {
-    border-top-color: $body-font-color;
+  // Fix the dropdown underline and default color
+  a {
+    color: $body-font-color;
+    text-decoration: underline;
+  }
+
+  a:hover, a:focus {
+    text-decoration: none;
   }
 
   &-title {
