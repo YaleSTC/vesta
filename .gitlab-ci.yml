@@ -19,12 +19,14 @@
     - curl -sL https://deb.nodesource.com/setup_10.x | bash - && apt-get install -y nodejs
     - ruby -v
     - which ruby
-    - bundle check --path vendor/bundle || bundle install --path vendor/bundle
+    - gem install bundler --no-document
+    - bundle install -j $(nproc) --path vendor/ruby
     - cp config/database.yml.gitlab config/database.yml
 
   cache:
+    key: ${CI_COMMIT_REF_SLUG}
     paths:
-      - vendor/bundle
+      - vendor/ruby
 
 spec:
   <<: *test_definition
