@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Replaced deprecated sass-rails with sassc-rails [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 * Updated foundation-rails from 6.3.0 to 6.5.3 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 * Updated sprockets from 3.7.2 to 4.0.2 and removed sprockets-es6 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
+* Updated puma from 3.12.6 to 4.3.5 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
 
 ### Removed
 * Removed rails_stdout_logging gem [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
