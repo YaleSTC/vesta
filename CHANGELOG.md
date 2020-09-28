@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v5.2.3 - 2020-09-29
 ### Changed
 * Updated rails from 5.2.3 to 5.2.4.4 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)),[#1051](https://gitlab.com/yale-sdmp/vesta/issues/1051)).
 * Updated puma from 3.12.2 to 3.12.6 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
