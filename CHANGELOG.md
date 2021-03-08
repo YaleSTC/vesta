@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Changed
+* Updated rails from 5.2.4.4 to 5.2.4.5 [#1054](https://gitlab.com/yale-sdmp/vesta/issues/1050)),[#1051](https://gitlab.com/yale-sdmp/vesta/issues/1054)).
+
 ## v5.2.3 - 2020-09-29
 ### Changed
 * Updated rails from 5.2.3 to 5.2.4.4 [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)),[#1051](https://gitlab.com/yale-sdmp/vesta/issues/1051)).
