@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Changed
 * Updated rails from 5.2.4.4 to 5.2.4.5 [#1054](https://gitlab.com/yale-sdmp/vesta/issues/1050)),[#1051](https://gitlab.com/yale-sdmp/vesta/issues/1054)).
+* Updated to rails 5.2.5 [#1055](https://gitlab.com/yale-sdmp/vesta/issues/1055)
 
 ### Fixed
 * Fixed duplicate javascript included on page [#1050](https://gitlab.com/yale-sdmp/vesta/issues/1050)).
